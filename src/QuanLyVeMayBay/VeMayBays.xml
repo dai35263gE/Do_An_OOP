@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<VeMayBays>
+    <!-- Vé Thương Gia -->
+    <VeThuongGia>
+        <MaVe>VG001</MaVe>
+        <HoTenKH>Nguyễn Văn An</HoTenKH>
+        <CMND>001123456789</CMND>
+        <NgayBay>2024-01-15 08:00:00</NgayBay>
+        <GiaVe>3750000</GiaVe>
+        <MaChuyenBay>CB001</MaChuyenBay>
+        <SoGhe>1A</SoGhe>
+        <TrangThai>HOÀN TẤT</TrangThai>
+        <NgayDat>2024-01-10 14:30:00</NgayDat>
+        <DichVuDacBiet>Phòng chờ VIP, Ưu tiên lên máy bay</DichVuDacBiet>
+        <PhuThu>500000</PhuThu>
+        <SoKgHanhLyMienPhi>40</SoKgHanhLyMienPhi>
+        <PhongChoVIP>true</PhongChoVIP>
+        <LoaiDoUong>Rượu vang cao cấp</LoaiDoUong>
+    </VeThuongGia>
+    
+    <!-- Vé Phổ Thông -->
+    <VePhoThong>
+        <MaVe>VP001</MaVe>
+        <HoTenKH>Trần Thị Bình</HoTenKH>
+        <CMND>001234567890</CMND>
+        <NgayBay>2024-01-15 14:00:00</NgayBay>
+        <GiaVe>960000</GiaVe>
+        <MaChuyenBay>CB002</MaChuyenBay>
+        <SoGhe>15C</SoGhe>
+        <TrangThai>HOÀN TẤT</TrangThai>
+        <NgayDat>2024-01-11 09:15:00</NgayDat>
+        <HanhLyXachTay>true</HanhLyXachTay>
+        <SoKgHanhLyKyGui>20</SoKgHanhLyKyGui>
+        <PhiHanhLy>200000</PhiHanhLy>
+        <LoaiGhe>Cửa sổ</LoaiGhe>
+        <DoAn>true</DoAn>
+    </VePhoThong>
+    
+    <!-- Vé Tiết Kiệm -->
+    <VeTietKiem>
+        <MaVe>VT001</MaVe>
+        <HoTenKH>Lê Văn Cường</HoTenKH>
+        <CMND>001345678901</CMND>
+        <NgayBay>2024-01-16 09:30:00</NgayBay>
+        <GiaVe>480000</GiaVe>
+        <MaChuyenBay>CB003</MaChuyenBay>
+        <SoGhe>22B</SoGhe>
+        <TrangThai>ĐẶT</TrangThai>
+        <NgayDat>2024-01-12 16:45:00</NgayDat>
+        <SoGioDatTruoc>72</SoGioDatTruoc>
+        <TyLeGiam>0.2</TyLeGiam>
+        <HoanDoi>false</HoanDoi>
+        <PhiHoanDoi>300000</PhiHoanDoi>
+        <DieuKienGia>Không hoàn đổi, không đổi tên</DieuKienGia>
+    </VeTietKiem>
+</VeMayBays>
+
