@@ -55,6 +55,7 @@ public class KhachHang {
         this.ngayDangKy = new Date();
     }
     
+    
     // OVERLOAD CONSTRUCTOR với hạng khách hàng (từ XML)
     public KhachHang(String maKH, String hoTen, String soDT, String email, 
                     String cmnd, Date ngaySinh, String gioiTinh, String diaChi,

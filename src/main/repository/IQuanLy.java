@@ -22,7 +22,7 @@ public interface IQuanLy<T> {
     
     // Advanced search operations
     List<T> timKiemTheoTen(String ten);
-    List<T> timKiemTheoCMND(String cmnd);
+    T timKiemTheoCMND(String cmnd);
     List<T> timKiemTheoChuyenBay(String maChuyen);
     List<T> timKiemTheoKhoangGia(double min, double max);
     List<T> timKiemTheoNgayBay(Date ngay);

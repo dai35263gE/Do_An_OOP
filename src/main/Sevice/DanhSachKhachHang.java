@@ -103,14 +103,13 @@ public class DanhSachKhachHang implements IQuanLy<KhachHang>, IFileHandler {
     }
 
     @Override
-    public List<KhachHang> timKiemTheoCMND(String cmnd) {
-        List<KhachHang> ketQua = new ArrayList<>();
+    public KhachHang timKiemTheoCMND(String cmnd) {
         for (KhachHang kh : danhSach) {
             if (kh.getCmnd().equals(cmnd)) {
-                ketQua.add(kh);
+                return kh;
             }
         }
-        return ketQua;
+        return null;
     }
 
     // PHƯƠNG THỨC MỚI: Tìm kiếm theo email

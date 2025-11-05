@@ -10,7 +10,7 @@
         <GiaVe>3500000</GiaVe>
         <MaChuyen>CB001</MaChuyen>
         <SoGhe>1A</SoGhe>
-        <TrangThai>HOÀN TẤT</TrangThai>
+        <TrangThai>HOAN TAT</TrangThai>
         <NgayDat>2024-01-10 14:30:00</NgayDat>
         <DichVuDacBiet>Phòng chờ VIP, Ưu tiên lên máy bay</DichVuDacBiet>
         <PhuThu>500000</PhuThu>
@@ -28,7 +28,7 @@
         <GiaVe>960000</GiaVe>
         <MaChuyen>CB002</MaChuyen>
         <SoGhe>15C</SoGhe>
-        <TrangThai>HOÀN TẤT</TrangThai>
+        <TrangThai>HOAN TAT</TrangThai>
         <NgayDat>2024-01-11 09:15:00</NgayDat>
         <HanhLyXachTay>true</HanhLyXachTay>
         <SoKgHanhLyKyGui>20</SoKgHanhLyKyGui>
@@ -46,7 +46,7 @@
         <GiaVe>540000</GiaVe>
         <MaChuyen>CB003</MaChuyen>
         <SoGhe>22B</SoGhe>
-        <TrangThai>ĐẶT</TrangThai>
+        <TrangThai>DA BAY</TrangThai>
         <NgayDat>2024-01-12 16:45:00</NgayDat>
         <SoGioDatTruoc>72</SoGioDatTruoc>
         <TyLeGiam>0.1</TyLeGiam>
@@ -65,7 +65,7 @@
         <GiaVe>2100000</GiaVe>
         <MaChuyen>CB005</MaChuyen>
         <SoGhe>2A</SoGhe>
-        <TrangThai>ĐẶT</TrangThai>
+        <TrangThai>HUY</TrangThai>
         <NgayDat>2024-01-13 10:20:00</NgayDat>
         <DichVuDacBiet>Phòng chờ VIP, Xe đưa đón</DichVuDacBiet>
         <PhuThu>400000</PhuThu>
@@ -83,7 +83,7 @@
         <GiaVe>1800000</GiaVe>
         <MaChuyen>CB006</MaChuyen>
         <SoGhe>18D</SoGhe>
-        <TrangThai>HOÀN TẤT</TrangThai>
+        <TrangThai>HOAN TAT</TrangThai>
         <NgayDat>2024-01-14 15:45:00</NgayDat>
         <HanhLyXachTay>true</HanhLyXachTay>
         <SoKgHanhLyKyGui>25</SoKgHanhLyKyGui>
@@ -101,7 +101,7 @@
         <GiaVe>1260000</GiaVe>
         <MaChuyen>CB005</MaChuyen>
         <SoGhe>25C</SoGhe>
-        <TrangThai>ĐẶT</TrangThai>
+        <TrangThai>HUY</TrangThai>
         <NgayDat>2024-01-15 08:30:00</NgayDat>
         <SoGioDatTruoc>48</SoGioDatTruoc>
         <TyLeGiam>0.1</TyLeGiam>
@@ -119,7 +119,7 @@
         <GiaVe>2200000</GiaVe>
         <MaChuyen>CB004</MaChuyen>
         <SoGhe>12F</SoGhe>
-        <TrangThai>HOÀN TẤT</TrangThai>
+        <TrangThai>HOAN TAT</TrangThai>
         <NgayDat>2024-01-10 11:20:00</NgayDat>
         <HanhLyXachTay>true</HanhLyXachTay>
         <SoKgHanhLyKyGui>15</SoKgHanhLyKyGui>
@@ -137,7 +137,7 @@
         <GiaVe>720000</GiaVe>
         <MaChuyen>CB002</MaChuyen>
         <SoGhe>28A</SoGhe>
-        <TrangThai>ĐẶT</TrangThai>
+        <TrangThai>DAT</TrangThai>
         <NgayDat>2024-01-13 17:10:00</NgayDat>
         <SoGioDatTruoc>36</SoGioDatTruoc>
         <TyLeGiam>0.1</TyLeGiam>

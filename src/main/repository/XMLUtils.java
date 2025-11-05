@@ -143,7 +143,7 @@ public static List<Map<String, String>> docFileXML(String tenFile) {
             Element element = (Element) node;
             
             // Thông tin chung của tất cả vé
-            String[] commonTags = {"MaVe", "HoTenKH", "CMND", "NgayBay", "GiaVe", 
+            String[] commonTags = {"MaVe", "MaKH","HoTenKH", "CMND", "NgayBay", "GiaVe", 
                                  "MaChuyen", "SoGhe", "TrangThai", "NgayDat"};
             
             for (String tag : commonTags) {

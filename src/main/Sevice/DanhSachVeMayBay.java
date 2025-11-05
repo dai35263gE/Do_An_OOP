@@ -19,8 +19,6 @@ import repository.IFileHandler;
 import repository.IQuanLy;
 import repository.IThongKe;
 import repository.XMLUtils;
-
-import java.io.*;
 import java.text.SimpleDateFormat;
 
 public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThongKe {
@@ -114,24 +112,20 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
     }
     
     @Override
-    public List<VeMayBay> timKiemTheoCMND(String cmnd) {
-        return danhSach.stream()
-                      .filter(ve -> ve.getCmnd().equals(cmnd))
-                      .toList();
+    public VeMayBay timKiemTheoCMND(String cmnd) {
+        return danhSach.stream().filter(ve -> ve.getCmnd().equals(cmnd)).findFirst().get();
     }
     
     @Override
     public List<VeMayBay> timKiemTheoChuyenBay(String maChuyen) {
         return danhSach.stream()
-                      .filter(ve -> ve.getmaChuyen().equalsIgnoreCase(maChuyen))
+                      .filter(ve -> ve.getMaChuyen().equalsIgnoreCase(maChuyen))
                       .toList();
     }
     
     @Override
     public List<VeMayBay> timKiemTheoKhoangGia(double min, double max) {
-        return danhSach.stream()
-                      .filter(ve -> ve.getGiaVe() >= min && ve.getGiaVe() <= max)
-                      .toList();
+        return danhSach.stream().filter(ve -> ve.getGiaVe() >= min && ve.getGiaVe() <= max).toList();
     }
     
     @Override
@@ -160,7 +154,7 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
                     ketQua.removeIf(ve -> !ve.getTrangThai().equals(value));
                     break;
                 case "maChuyen":
-                    ketQua.removeIf(ve -> !ve.getmaChuyen().equals(value));
+                    ketQua.removeIf(ve -> !ve.getMaChuyen().equals(value));
                     break;
                 case "tuNgay":
                     Date tuNgay = (Date) value;
@@ -337,7 +331,7 @@ boolean docFileXML1(String tenFile) {
             switch (loaiVe) {
                 case "VeThuongGia":
                     return new VeThuongGia(
-                        maVe, hoTenKH, cmnd, ngayBay, giaVe, maChuyen, soGhe,
+                        maVe,maKH, hoTenKH, cmnd, ngayBay, giaVe, maChuyen, soGhe,trangThai,
                         data.get("DichVuDacBiet"),
                         XMLUtils.stringToDouble(data.get("PhuThu")),
                         XMLUtils.stringToInt(data.get("SoKgHanhLyMienPhi")),
@@ -347,7 +341,7 @@ boolean docFileXML1(String tenFile) {
                     
                 case "VePhoThong":
                     return new VePhoThong(
-                        maVe, hoTenKH, cmnd, ngayBay, giaVe, maChuyen, soGhe,
+                        maVe,maKH, hoTenKH, cmnd, ngayBay, giaVe, maChuyen, soGhe,trangThai,
                         XMLUtils.stringToBoolean(data.get("HanhLyXachTay")),
                         XMLUtils.stringToInt(data.get("SoKgHanhLyKyGui")),
                         XMLUtils.stringToDouble(data.get("PhiHanhLy")),
@@ -357,7 +351,7 @@ boolean docFileXML1(String tenFile) {
                     
                 case "VeTietKiem":
                     return new VeTietKiem(
-                        maVe, hoTenKH, cmnd, ngayBay, giaVe, maChuyen, soGhe,
+                        maVe,maKH, hoTenKH, cmnd, ngayBay, giaVe, maChuyen, soGhe,trangThai,
                         XMLUtils.stringToInt(data.get("SoGioDatTruoc")),
                         XMLUtils.stringToDouble(data.get("TyLeGiam")),
                         XMLUtils.stringToBoolean(data.get("HoanDoi")),
@@ -370,7 +364,7 @@ boolean docFileXML1(String tenFile) {
                     return null;
             }
         } catch (Exception e) {
-            System.out.println("❌ Lỗi tạo vé từ XML data: " + e.getMessage());
+            System.out.println("❌ Loi tao ve tu XML data: " + e.getMessage());
             return null;
         }
     }
@@ -390,7 +384,7 @@ boolean docFileXML1(String tenFile) {
                 data.put("CMND", ve.getCmnd());
                 data.put("NgayBay", XMLUtils.dateToString(ve.getNgayBay()));
                 data.put("GiaVe", String.valueOf(ve.getGiaVe()));
-                data.put("MaChuyen", ve.getmaChuyen());
+                data.put("MaChuyen", ve.getMaChuyen());
                 data.put("SoGhe", ve.getSoGhe());
                 data.put("TrangThai", ve.getTrangThai());
                 data.put("NgayDat", XMLUtils.dateToString(ve.getNgayDat()));
@@ -451,8 +445,7 @@ boolean docFileXML1(String tenFile) {
     
     @Override
     public double tinhDoanhThuTheoLoai(String loai) {
-        return danhSach.stream()
-                      .filter(ve -> ve.loaiVe().equals(loai) && 
+        return danhSach.stream().filter(ve -> ve.loaiVe().equals(loai) && 
                                    ve.getTrangThai().equals(VeMayBay.TRANG_THAI_HOAN_TAT))
                       .mapToDouble(VeMayBay::tinhTongTien)
                       .sum();
@@ -502,7 +495,7 @@ boolean docFileXML1(String tenFile) {
     public Map<String, Integer> thongKeTheoChuyenBay() {
         Map<String, Integer> thongKe = new HashMap<>();
         for (VeMayBay ve : danhSach) {
-            String chuyenBay = ve.getmaChuyen();
+            String chuyenBay = ve.getMaChuyen();
             thongKe.put(chuyenBay, thongKe.getOrDefault(chuyenBay, 0) + 1);
         }
         return thongKe;
@@ -513,7 +506,7 @@ boolean docFileXML1(String tenFile) {
         Map<String, Double> thongKe = new HashMap<>();
         for (VeMayBay ve : danhSach) {
             if (ve.getTrangThai().equals(VeMayBay.TRANG_THAI_HOAN_TAT)) {
-                String chuyenBay = ve.getmaChuyen();
+                String chuyenBay = ve.getMaChuyen();
                 thongKe.put(chuyenBay, thongKe.getOrDefault(chuyenBay, 0.0) + ve.tinhTongTien());
             }
         }
@@ -774,7 +767,7 @@ boolean docFileXML1(String tenFile) {
     
     public static void main(String[] args) {
         DanhSachVeMayBay ds = new DanhSachVeMayBay();
-        ds.docFile("src/resources/data/3_VeMayBays.xml");
+        ds.docFileXML1("src/resources/data/3_VeMayBays.xml");
         ds.hienThiTatCa();
         System.out.print((long)ds.tinhTongDoanhThu());
         

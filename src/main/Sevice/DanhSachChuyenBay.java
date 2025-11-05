@@ -460,10 +460,10 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
 
     // SỬA: Sửa các phương thức không áp dụng
     @Override
-    public List<ChuyenBay> timKiemTheoCMND(String cmnd) {
+    public ChuyenBay timKiemTheoCMND(String cmnd) {
         // Không áp dụng cho chuyến bay
         System.out.println("Phương thức không áp dụng cho chuyến bay");
-        return new ArrayList<>();
+        return danhSach.get(0);
     }
 
     @Override

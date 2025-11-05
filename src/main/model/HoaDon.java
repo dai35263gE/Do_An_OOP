@@ -41,7 +41,6 @@ public class HoaDon {
                   double thue, double khuyenMai, String phuongThucTT) {
         this.maHoaDon = generateMaHoaDon();
         this.ngayLap = new Date();
-        
         setMaVe(maVe);
         setMaKH(maKH);
         setMaNV(maNV);

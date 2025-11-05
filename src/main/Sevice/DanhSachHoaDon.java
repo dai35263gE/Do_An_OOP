@@ -77,9 +77,9 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler {
     }
     
     @Override
-    public List<HoaDon> timKiemTheoCMND(String cmnd) {
+    public HoaDon timKiemTheoCMND(String cmnd) {
         // Không áp dụng trực tiếp
-        return new ArrayList<>();
+        return danhSach.get(0);
     }
     
     @Override
@@ -305,12 +305,10 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler {
     // SỬA: Phương thức đọc file XML
     private boolean docFileXML1(String tenFile) {
         try {
-            System.out.println("🔄 Bắt đầu đọc file hóa đơn: " + tenFile);
-            
             List<Map<String, String>> dataList = XMLUtils.docFileXML(tenFile);
             
             if (dataList == null || dataList.isEmpty()) {
-                System.out.println("❌ Không có dữ liệu trong file XML");
+                System.out.println("❌ Khong co du lieu trong file");
                 return false;
             }
             
@@ -319,7 +317,6 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler {
                 try {
                     // Kiểm tra dữ liệu bắt buộc
                     if (data.get("MaHoaDon") == null || data.get("MaHoaDon").isEmpty()) {
-                        System.out.println("⚠️ Bỏ qua dòng thiếu mã hóa đơn");
                         continue;
                     }
                     
@@ -342,9 +339,7 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler {
                     if (!tonTai(hd.getMaHoaDon())) {
                         danhSach.add(hd);
                         count++;
-                        System.out.println("✅ Đã thêm hóa đơn: " + hd.getMaHoaDon());
                     } else {
-                        System.out.println("⚠️ Bỏ qua hóa đơn trùng mã: " + hd.getMaHoaDon());
                     }
                     
                 } catch (Exception e) {
@@ -353,11 +348,9 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler {
                 }
             }
             
-            System.out.println("🎉 Đã đọc thành công " + count + " hóa đơn từ file XML.");
             return count > 0;
             
         } catch (Exception e) {
-            System.out.println("💥 Lỗi đọc file XML: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -526,10 +519,5 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler {
         
         List<HoaDon> chuaThanhToan = getHoaDonChuaThanhToan();
         System.out.println("⏳ Hóa đơn chưa thanh toán: " + chuaThanhToan.size());
-    }
-    public static void main(String[] args) {
-        DanhSachHoaDon ds = new DanhSachHoaDon();
-        ds.docFileXML1("src/resources/data/4_HoaDons.xml");
-        ds.hienThiTheoTrangThai("ĐÃ_THANH_TOÁN");
     }
 }
