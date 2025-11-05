@@ -43,8 +43,6 @@ public static List<Map<String, String>> docFileXML(String tenFile) {
             return docVeMayBays(doc);
         } else if (rootElementName.equals("HoaDons")) { // THÊM DÒNG NÀY
             return docHoaDons(doc);
-        } else if (rootElementName.equals("NhanViens")) { // THÊM LUÔN NHÂN VIÊN
-            return docNhanViens(doc);
         } else {
             System.out.println("Không hỗ trợ định dạng XML: " + rootElementName);
         }
@@ -78,7 +76,7 @@ public static List<Map<String, String>> docFileXML(String tenFile) {
                 danhSach.add(data);
             }
         }
-        System.out.println("Đọc " + danhSach.size() + " chuyến bay từ XML");
+        System.out.println("Doc " + danhSach.size() + " chuyen bay tu XML");
         return danhSach;
     }
 
@@ -104,7 +102,7 @@ public static List<Map<String, String>> docFileXML(String tenFile) {
                 danhSach.add(data);
             }
         }
-        System.out.println("Đọc " + danhSach.size() + " khách hàng từ XML");
+        System.out.println("Doc " + danhSach.size() + " khach hang tu XML");
         return danhSach;
     }
 
@@ -130,7 +128,7 @@ public static List<Map<String, String>> docFileXML(String tenFile) {
             danhSach.add(docVeMayBay(veTietKiemList.item(i), "VeTietKiem"));
         }
         
-        System.out.println("Đọc " + danhSach.size() + " vé máy bay từ XML");
+        System.out.println("Doc " + danhSach.size() + " ve may bay tu XML");
         return danhSach;
     }
 
@@ -203,39 +201,10 @@ public static List<Map<String, String>> docFileXML(String tenFile) {
             danhSach.add(data);
         }
     }
-    System.out.println("Đọc " + danhSach.size() + " hóa đơn từ XML");
+    System.out.println("Doc " + danhSach.size() + " hoa don tu XML");
     return danhSach;
 }
 
-
-
-// ========== ĐỌC DỮ LIỆU NHÂN VIÊN ========== (Bổ sung thêm)
-private static List<Map<String, String>> docNhanViens(Document doc) {
-    List<Map<String, String>> danhSach = new ArrayList<>();
-    NodeList nodeList = doc.getElementsByTagName("NhanVien");
-    
-    for (int i = 0; i < nodeList.getLength(); i++) {
-        Node node = nodeList.item(i);
-        if (node.getNodeType() == Node.ELEMENT_NODE) {
-            Element element = (Element) node;
-            Map<String, String> data = new HashMap<>();
-
-            String[] tags = {
-                "MaNV", "HoTen", "SoDT", "Email", "CMND", 
-                "NgaySinh", "GioiTinh", "DiaChi", 
-                "ChucVu", "LuongCoBan", "NgayVaoLam", "TrangThai"
-            };
-            
-            for (String tag : tags) {
-                data.put(tag, getElementValue(element, tag));
-            }
-            
-            danhSach.add(data);
-        }
-    }
-    System.out.println("Đọc " + danhSach.size() + " nhân viên từ XML");
-    return danhSach;
-}
 
 // ========== CẬP NHẬT PHƯƠNG THỨC getChildElementName ==========
 private static String getChildElementName(String rootElementName) {

@@ -35,7 +35,7 @@
         <SoGheTrong>12</SoGheTrong>
         <MaMayBay>VN-C789</MaMayBay>
         <GiaCoBan>600000</GiaCoBan>
-        <TrangThai>CHƯA BAY</TrangThai>
+        <TrangThai>HỦY</TrangThai>
     </ChuyenBay>
     <ChuyenBay>
         <MaChuyen>CB004</MaChuyen>
@@ -73,6 +73,6 @@
         <SoGheTrong>28</SoGheTrong>
         <MaMayBay>VN-F678</MaMayBay>
         <GiaCoBan>1800000</GiaCoBan>
-        <TrangThai>CHƯA BAY</TrangThai>
+        <TrangThai>ĐÃ BAY</TrangThai>
     </ChuyenBay>
 </ChuyenBays>

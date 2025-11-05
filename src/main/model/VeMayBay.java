@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 public abstract class VeMayBay implements Comparable<VeMayBay> {
     protected String maVe;
+    protected String maHD;
     protected String maKH;
     protected String hoTenKH;
     protected String cmnd;
@@ -254,5 +255,9 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
     
     public boolean coTheSuDung() {
         return !TRANG_THAI_HUY.equals(trangThai) && !TRANG_THAI_DA_BAY.equals(trangThai);
+    }
+    public String getMaHoaDon() { return maHD; }
+    public void setMaHoaDon(String maHD) { 
+        this.maHD = maHD;
     }
 }

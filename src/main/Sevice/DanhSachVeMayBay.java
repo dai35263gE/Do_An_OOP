@@ -254,8 +254,6 @@ public boolean docFile(String tenFile) {
 // PHƯƠNG THỨC ĐỌC FILE XML - ĐÃ SỬA
 boolean docFileXML1(String tenFile) {
     try {
-        System.out.println("🔄 Bắt đầu đọc file vé máy bay: " + tenFile);
-        
         List<Map<String, String>> dataList = XMLUtils.docFileXML(tenFile);
         
         if (dataList == null || dataList.isEmpty()) {
@@ -263,46 +261,28 @@ boolean docFileXML1(String tenFile) {
             return false;
         }
         
-        System.out.println("📖 Tìm thấy " + dataList.size() + " bản ghi trong file XML");
-        
         int countSuccess = 0;
-        int countError = 0;
-        int countDuplicate = 0;
-        
         for (Map<String, String> data : dataList) {
             try {
                 
                 VeMayBay ve = taoVeTuDataXML(data);
                 if (ve == null) {
-                    System.out.println("❌ Không thể tạo vé từ dữ liệu: " + data.get("MaVe"));
-                    countError++;
                     continue;
                 }
                 
                 // KIỂM TRA TRÙNG MÃ VÉ
-                if (tonTai(ve.getMaVe())) {
-                    System.out.println("⚠️ Bỏ qua vé trùng mã: " + ve.getMaVe());
-                    countDuplicate++;
-                    continue;
+                if (tonTai(ve.getMaVe())) {  continue;
                 }
                 
                 // THÊM VÀO DANH SÁCH
                 danhSach.add(ve);
                 countSuccess++;
-                System.out.println("✅ Đã thêm vé: " + ve.getMaVe() + " - " + ve.loaiVe());
                 
             } catch (Exception e) {
                 System.out.println("❌ Lỗi xử lý vé: " + data.get("MaVe") + " - " + e.getMessage());
-                countError++;
             }
         }
-        
-        // THỐNG KÊ KẾT QUẢ
-        System.out.println("\n🎉 KẾT QUẢ ĐỌC FILE:");
-        System.out.println("✅ Thành công: " + countSuccess + " vé");
-        System.out.println("❌ Lỗi: " + countError + " vé");
-        System.out.println("⚠️ Trùng: " + countDuplicate + " vé");
-        System.out.println("📊 Tổng trong danh sách: " + danhSach.size() + " vé");
+
         
         return countSuccess > 0;
         
@@ -772,4 +752,35 @@ boolean docFileXML1(String tenFile) {
         System.out.print((long)ds.tinhTongDoanhThu());
         
     }
+    // Thêm vào class DanhSachVeMayBay
+public int demSoLuongTheoChuyenBay(String maChuyen) {
+    if (maChuyen == null || danhSach == null) return 0;
+    
+    int count = 0;
+    for (VeMayBay ve : danhSach) {
+        if (maChuyen.equals(ve.getMaChuyen())) {
+            count++;
+        }
+    }
+    return count;
+}
+public List<VeMayBay> timKiemTheoMaHoaDon(String maHoaDon) {
+    List<VeMayBay> ketQua = new ArrayList<>();
+    for (VeMayBay ve : danhSach) {
+        if (ve.getMaHoaDon() != null && ve.getMaHoaDon().equals(maHoaDon)) {
+            ketQua.add(ve);
+        }
+    }
+    return ketQua;
+}
+public List<VeMayBay> timKiemTheoMaKH(String maKH) {
+    List<VeMayBay> ketQua = new ArrayList<>();
+    for (VeMayBay ve : danhSach) {
+        if (ve.getMaKH() != null && ve.getMaKH().equals(maKH)) {
+            ketQua.add(ve);
+        }
+    }
+    return ketQua;
+}
+
 }

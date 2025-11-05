@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import repository.IFileHandler;
 import repository.IQuanLy;
 import model.HoaDon;
+import model.VeMayBay;
 import repository.XMLUtils;
 
 public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler {
@@ -520,4 +521,13 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler {
         List<HoaDon> chuaThanhToan = getHoaDonChuaThanhToan();
         System.out.println("⏳ Hóa đơn chưa thanh toán: " + chuaThanhToan.size());
     }
+    public List<HoaDon> timKiemTheoMaKH(String maKH) {
+    List<HoaDon> ketQua = new ArrayList<>();
+    for (HoaDon ve : danhSach) {
+        if (ve.getMaKH() != null && ve.getMaKH().equals(maKH)) {
+            ketQua.add(ve);
+        }
+    }
+    return ketQua;
+}
 }

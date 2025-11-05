@@ -10,7 +10,6 @@ package Sevice;
  */
 // File: DanhSachChuyenBay.java
 import java.util.List;
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -333,8 +332,6 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
                     e.printStackTrace();
                 }
             }
-
-            System.out.println("Đã đọc thành công " + count + " chuyến bay từ file XML.");
             return true;
 
         } catch (Exception e) {

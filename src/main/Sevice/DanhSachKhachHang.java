@@ -233,7 +233,6 @@ public class DanhSachKhachHang implements IQuanLy<KhachHang>, IFileHandler {
         }
 
         System.out.println("===== DANH SÁCH TẤT CẢ KHÁCH HÀNG =====");
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         for (int i = 0; i < danhSach.size(); i++) {
             KhachHang kh = danhSach.get(i);
             System.out.printf("%d. %s - %s - %s - %s - Điểm: %d - Hạng: %s%n",
@@ -338,10 +337,8 @@ public class DanhSachKhachHang implements IQuanLy<KhachHang>, IFileHandler {
     // SỬA: Phương thức đọc file XML
     private boolean docFileXML1(String tenFile) {
         try {
-            System.out.println("🔄 Bắt đầu đọc file khách hàng: " + tenFile);
             
             List<Map<String, String>> dataList = XMLUtils.docFileXML(tenFile);
-
             if (dataList == null || dataList.isEmpty()) {
                 System.out.println("❌ Không có dữ liệu trong file XML");
                 return false;
@@ -385,7 +382,6 @@ public class DanhSachKhachHang implements IQuanLy<KhachHang>, IFileHandler {
                     if (!tonTai(kh.getMaKH())) {
                         danhSach.add(kh);
                         count++;
-                        System.out.println("✅ Đã thêm khách hàng: " + kh.getMaKH());
                     } else {
                         System.out.println("⚠️ Bỏ qua khách hàng trùng mã: " + kh.getMaKH());
                     }
@@ -396,7 +392,6 @@ public class DanhSachKhachHang implements IQuanLy<KhachHang>, IFileHandler {
                 }
             }
 
-            System.out.println("🎉 Đã đọc thành công " + count + " khách hàng từ file XML.");
             return count > 0;
 
         } catch (Exception e) {
