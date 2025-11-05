@@ -1,18 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Other/File.java to edit this template
- */
-package com.mycompany.QuanLyVeMayBay;
-
-/**
- *
- * @author HP
- */
-// File: MainGUI.java
-
+package Main;
+import Sevice.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import Sevice.*;
+import model.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
@@ -34,10 +26,13 @@ public class MainGUI extends JFrame {
     private JTable tableChuyenBay;
     private JTable tableKhachHang;
     
+    // Các component thống kê - SỬA THÀNH JPanel để chứa cả card
+    private JPanel[] statCards = new JPanel[8];
+    
     public MainGUI() {
         this.quanLy = new QuanLyBanVeMayBay();
+        quanLy.docDuLieuTuFile();
         initComponents();
-        loadDuLieu();
     }
     
     private void initComponents() {
@@ -59,8 +54,8 @@ public class MainGUI extends JFrame {
         // Thêm các panel vào tabbed pane
         tabbedPane.addTab("🏠 Trang Chủ", panelTrangChu);
         tabbedPane.addTab("🎫 Quản Lý Vé", panelQuanLyVe);
-        tabbedPane.addTab("✈️ Quản Lý Chuyến Bay", panelQuanLyChuyenBay);
-        tabbedPane.addTab("👥 Quản Lý Khách Hàng", panelQuanLyKhachHang);
+        tabbedPane.addTab("✈️ Thông tin Chuyến Bay", panelQuanLyChuyenBay);
+        tabbedPane.addTab("👥 Thông tin Khách Hàng", panelQuanLyKhachHang);
         tabbedPane.addTab("📊 Thống Kê", panelThongKe);
         
         add(tabbedPane);
@@ -84,8 +79,8 @@ public class MainGUI extends JFrame {
         lblTitle.setForeground(Color.WHITE);
         headerPanel.add(lblTitle, BorderLayout.CENTER);
         
-        JLabel lblSubTitle = new JLabel("Phiên bản " + QuanLyBanVeMayBay.getPhienBan(), JLabel.CENTER);
-        lblSubTitle.setFont(new Font("Arial", Font.PLAIN, 16));
+        JLabel lblSubTitle = new JLabel("Phiên bản " + QuanLyBanVeMayBay.getPhienBan() + " | Số lượt truy cập: " + QuanLyBanVeMayBay.getSoLanTruyCap(), JLabel.CENTER);
+        lblSubTitle.setFont(new Font("Arial", Font.PLAIN, 14));
         lblSubTitle.setForeground(Color.LIGHT_GRAY);
         headerPanel.add(lblSubTitle, BorderLayout.SOUTH);
         
@@ -94,25 +89,32 @@ public class MainGUI extends JFrame {
         statsPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         statsPanel.setBackground(Color.WHITE);
         
-        String[][] statsData = {
-            {"Tổng số vé", "0", "🎫", "primary"},
-            {"Tổng chuyến bay", "0", "✈️", "success"},
-            {"Tổng khách hàng", "0", "👥", "info"},
-            {"Doanh thu", "0", "💰", "warning"},
-            {"Vé thương gia", "0", "⭐", "primary"},
-            {"Vé phổ thông", "0", "💺", "success"},
-            {"Vé tiết kiệm", "0", "💸", "info"},
-            {"Tỷ lệ lấp đầy", "0%", "📊", "warning"}
-        };
+        // Tạo các card thống kê
+        String str1 =String.valueOf(quanLy.getDsVe().demSoLuong());
+        statCards[0] = taoStatCard("Tổng số vé", str1 , "🎫", "primary");
+        String str2 = String.valueOf(quanLy.getDsChuyenBay().demSoLuong());
+        statCards[1] = taoStatCard("Tổng chuyến bay", str2 , "✈️", "success");
+        String str3 = String.valueOf(quanLy.getDsKhachHang().demSoLuong());
+        statCards[2] = taoStatCard("Tổng khách hàng", str3 , "👥", "info");
+        String str4 = String.valueOf((long)quanLy.getDsVe().tinhTongDoanhThu());
+        statCards[3] = taoStatCard("Doanh thu", str4 + "VND" , "💰", "warning");
+        String str5 = String.valueOf(quanLy.getDsVe().demSoLuongTheoLoai("VeThuongGia"));
+        statCards[4] = taoStatCard("Vé thương gia", str5 , "⭐", "primary");
+        String str6 = String.valueOf(quanLy.getDsVe().demSoLuongTheoLoai("VePhoThong"));
+        statCards[5] = taoStatCard("Vé phổ thông",str6, "💺", "success");
+        String str7 = String.valueOf(quanLy.getDsVe().demSoLuongTheoLoai("VeTietKiem"));
+        statCards[6] = taoStatCard("Vé tiết kiệm", str7 , "💸", "info");
+        statCards[7] = taoStatCard("Tỷ lệ lấp đầy", "0%", "📊", "warning");
         
-        for (String[] stat : statsData) {
-            statsPanel.add(taoStatCard(stat[0], stat[1], stat[2], stat[3]));
+        for (JPanel card : statCards) {
+            statsPanel.add(card);
         }
         
         // Chức năng nhanh
         JPanel quickActionsPanel = new JPanel(new GridLayout(1, 4, 10, 10));
         quickActionsPanel.setBorder(BorderFactory.createTitledBorder("Chức năng nhanh"));
         quickActionsPanel.setBackground(Color.WHITE);
+        quickActionsPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
         String[][] actions = {
             {"Đặt vé mới", "🎫", "Đặt vé máy bay mới"},
@@ -140,8 +142,9 @@ public class MainGUI extends JFrame {
         lblIcon.setFont(new Font("Arial", Font.PLAIN, 24));
         
         JLabel lblValue = new JLabel(value, JLabel.CENTER);
-        lblValue.setFont(new Font("Arial", Font.BOLD, 20));
+        lblValue.setFont(new Font("Arial", Font.BOLD, 16));
         lblValue.setForeground(Color.WHITE);
+        lblValue.setName("value"); // Đặt tên để dễ tìm
         
         JLabel lblTitle = new JLabel(title, JLabel.CENTER);
         lblTitle.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -155,6 +158,22 @@ public class MainGUI extends JFrame {
         
         card.add(contentPanel, BorderLayout.CENTER);
         return card;
+    }
+    
+    private void updateStatCard(int index, String newValue) {
+        JPanel card = statCards[index];
+        Component[] components = card.getComponents();
+        for (Component comp : components) {
+            if (comp instanceof JPanel) {
+                Component[] subComps = ((JPanel) comp).getComponents();
+                for (Component subComp : subComps) {
+                    if (subComp instanceof JLabel && "value".equals(subComp.getName())) {
+                        ((JLabel) subComp).setText(newValue);
+                        return;
+                    }
+                }
+            }
+        }
     }
     
     private JButton taoActionButton(String text, String icon, String tooltip) {
@@ -182,7 +201,7 @@ public class MainGUI extends JFrame {
         // Toolbar
         JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
         
-        String[] buttonNames = {"Thêm vé", "Sửa vé", "Xóa vé", "Tìm kiếm", "Lọc", "Xuất Excel", "In vé"};
+        String[] buttonNames = {"Thêm vé", "Sửa vé", "Xóa vé", "Tìm kiếm", "Lọc", "Làm mới"};
         for (String name : buttonNames) {
             JButton btn = new JButton(name);
             btn.addActionListener(e -> xuLyQuanLyVe(name));
@@ -191,8 +210,14 @@ public class MainGUI extends JFrame {
         
         // Bảng dữ liệu
         String[] columns = {"Mã vé", "Hành khách", "CMND", "Chuyến bay", "Loại vé", "Giá vé", "Trạng thái"};
-        DefaultTableModel model = new DefaultTableModel(columns, 0);
+        DefaultTableModel model = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         tableVe = new JTable(model);
+        tableVe.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollPane = new JScrollPane(tableVe);
         
         panelQuanLyVe.add(toolbar, BorderLayout.NORTH);
@@ -205,7 +230,7 @@ public class MainGUI extends JFrame {
         // Toolbar
         JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
         
-        String[] buttonNames = {"Thêm chuyến", "Sửa chuyến", "Xóa chuyến", "Tìm kiếm", "Lọc", "Cập nhật trạng thái"};
+        String[] buttonNames = {"Thêm chuyến", "Sửa chuyến", "Xóa chuyến", "Tìm kiếm", "Lọc", "Làm mới"};
         for (String name : buttonNames) {
             JButton btn = new JButton(name);
             btn.addActionListener(e -> xuLyQuanLyChuyenBay(name));
@@ -228,7 +253,7 @@ public class MainGUI extends JFrame {
         // Toolbar
         JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
         
-        String[] buttonNames = {"Thêm KH", "Sửa KH", "Xóa KH", "Tìm kiếm", "Lọc", "Thống kê hạng"};
+        String[] buttonNames = {"Thêm KH", "Sửa KH", "Xóa KH", "Tìm kiếm", "Lọc", "Làm mới"};
         for (String name : buttonNames) {
             JButton btn = new JButton(name);
             btn.addActionListener(e -> xuLyQuanLyKhachHang(name));
@@ -255,7 +280,7 @@ public class MainGUI extends JFrame {
         JScrollPane scrollPane = new JScrollPane(textArea);
         
         JPanel buttonPanel = new JPanel(new FlowLayout());
-        String[] buttonNames = {"Thống kê tổng quan", "Doanh thu", "Vé theo loại", "Khách hàng", "Chuyến bay"};
+        String[] buttonNames = {"Thống kê tổng quan", "Doanh thu", "Vé theo loại", "Khách hàng", "Chuyến bay", "Làm mới"};
         for (String name : buttonNames) {
             JButton btn = new JButton(name);
             btn.addActionListener(e -> hienThiThongKe(name, textArea));
@@ -275,11 +300,10 @@ public class MainGUI extends JFrame {
         JMenuItem itemSave = new JMenuItem("Lưu dữ liệu");
         JMenuItem itemBackup = new JMenuItem("Sao lưu");
         JMenuItem itemExit = new JMenuItem("Thoát");
-        
-        itemLoad.addActionListener(e -> loadDuLieu());
+
         itemSave.addActionListener(e -> saveDuLieu());
         itemBackup.addActionListener(e -> backupDuLieu());
-        itemExit.addActionListener(e -> System.exit(0));
+        itemExit.addActionListener(e -> thoatChuongTrinh());
         
         menuFile.add(itemLoad);
         menuFile.add(itemSave);
@@ -300,22 +324,34 @@ public class MainGUI extends JFrame {
         setJMenuBar(menuBar);
     }
     
-   
-    
-    private void loadDuLieu() {
-        quanLy.khoiTaoDuLieuMau();
-        capNhatDuLieuGUI();
-        JOptionPane.showMessageDialog(this, "Đã tải dữ liệu thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
     private void saveDuLieu() {
-        quanLy.ghiDuLieuRaFile();
-        JOptionPane.showMessageDialog(this, "Đã lưu dữ liệu thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        try {
+            quanLy.ghiDuLieuRaFile();
+            JOptionPane.showMessageDialog(this, "Đã lưu dữ liệu thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     private void backupDuLieu() {
-        quanLy.saoLuuDuLieu();
-        JOptionPane.showMessageDialog(this, "Đã sao lưu dữ liệu thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        try {
+            JOptionPane.showMessageDialog(this, "Đã sao lưu dữ liệu thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi sao lưu dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void thoatChuongTrinh() {
+        int confirm = JOptionPane.showConfirmDialog(this, 
+            "Bạn có muốn lưu dữ liệu trước khi thoát?", "Xác nhận thoát", 
+            JOptionPane.YES_NO_CANCEL_OPTION);
+        
+        if (confirm == JOptionPane.YES_OPTION) {
+            saveDuLieu();
+            System.exit(0);
+        } else if (confirm == JOptionPane.NO_OPTION) {
+            System.exit(0);
+        }
     }
     
     private void capNhatDuLieuGUI() {
@@ -329,15 +365,20 @@ public class MainGUI extends JFrame {
         DefaultTableModel model = (DefaultTableModel) tableVe.getModel();
         model.setRowCount(0);
         
-        // Giả lập dữ liệu - trong thực tế sẽ lấy từ quanLy.getDsVe()
-        Object[][] sampleData = {
-            {"VG001", "Nguyễn Văn An", "001123456789", "CB001", "THƯƠNG GIA", "3,750,000", "HOÀN TẤT"},
-            {"VP001", "Trần Thị Bình", "001234567890", "CB002", "PHỔ THÔNG", "960,000", "HOÀN TẤT"},
-            {"VT001", "Lê Văn Cường", "001345678901", "CB003", "TIẾT KIỆM", "480,000", "ĐẶT"}
-        };
-        
-        for (Object[] row : sampleData) {
-            model.addRow(row);
+        DanhSachVeMayBay dsVe = quanLy.getDsVe();
+        if (dsVe != null && dsVe.getDanhSach() != null) {
+            for (VeMayBay ve : dsVe.getDanhSach()) {
+                Object[] row = {
+                    ve.getMaVe(),
+                    ve.getHoTenKH(),
+                    ve.getCmnd(),
+                    ve.getmaChuyen(),
+                    ve.loaiVe(),
+                    String.format("%,.0f VND", ve.getGiaVe()),
+                    ve.getTrangThai()
+                };
+                model.addRow(row);
+            }
         }
     }
     
@@ -345,14 +386,21 @@ public class MainGUI extends JFrame {
         DefaultTableModel model = (DefaultTableModel) tableChuyenBay.getModel();
         model.setRowCount(0);
         
-        Object[][] sampleData = {
-            {"CB001", "Hà Nội (HAN)", "TP.HCM (SGN)", "15/01/2024 08:00", "150/180", "1,500,000", "CHƯA BAY"},
-            {"CB002", "TP.HCM (SGN)", "Đà Nẵng (DAD)", "15/01/2024 14:00", "80/120", "800,000", "CHƯA BAY"},
-            {"CB003", "Đà Nẵng (DAD)", "Nha Trang (CXR)", "16/01/2024 09:30", "60/100", "600,000", "CHƯA BAY"}
-        };
-        
-        for (Object[] row : sampleData) {
-            model.addRow(row);
+        DanhSachChuyenBay dsChuyenBay = quanLy.getDsChuyenBay();
+        if (dsChuyenBay != null && dsChuyenBay.getDanhSach() != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            for (ChuyenBay cb : dsChuyenBay.getDanhSach()) {
+                Object[] row = {
+                    cb.getMaChuyen(),
+                    cb.getDiemDi(),
+                    cb.getDiemDen(),
+                    sdf.format(cb.getGioKhoiHanh()),
+                    cb.getSoGheTrong() + "/" + cb.getSoGhe(),
+                    String.format("%,.0f VND", cb.getGiaCoBan()),
+                    cb.getTrangThai()
+                };
+                model.addRow(row);
+            }
         }
     }
     
@@ -360,20 +408,34 @@ public class MainGUI extends JFrame {
         DefaultTableModel model = (DefaultTableModel) tableKhachHang.getModel();
         model.setRowCount(0);
         
-        Object[][] sampleData = {
-            {"KH001", "Nguyễn Văn An", "0912345678", "nguyenvanan@email.com", "001123456789", "GOLD", "6,500"},
-            {"KH002", "Trần Thị Bình", "0923456789", "tranthibinh@email.com", "001234567890", "PLATINUM", "12,000"},
-            {"KH003", "Lê Văn Cường", "0934567890", "levancuong@email.com", "001345678901", "SILVER", "2,500"}
-        };
-        
-        for (Object[] row : sampleData) {
-            model.addRow(row);
+        DanhSachKhachHang dsKhachHang = quanLy.getDsKhachHang();
+        if (dsKhachHang != null && dsKhachHang.getDanhSach() != null) {
+            for (KhachHang kh : dsKhachHang.getDanhSach()) {
+                Object[] row = {
+                    kh.getMaKH(),
+                    kh.getHoTen(),
+                    kh.getSoDT(),
+                    kh.getEmail(),
+                    kh.getCmnd(),
+                    kh.getHangKhachHang(),
+                    String.format("%,d", kh.getDiemTichLuy())
+                };
+                model.addRow(row);
+            }
         }
     }
     
     private void capNhatThongKeTrangChu() {
-        // Cập nhật các thống kê trên trang chủ
-        // Trong thực tế sẽ lấy dữ liệu thực từ hệ thống
+        Map<String, Object> thongKe = quanLy.thongKeTongQuan();
+        
+        updateStatCard(0, String.valueOf(thongKe.get("tongVe")));
+        updateStatCard(1, String.valueOf(thongKe.get("tongChuyenBay")));
+        updateStatCard(2, String.valueOf(thongKe.get("tongKhachHang")));
+        updateStatCard(3, String.format("%,.0f VND", thongKe.get("tongDoanhThu")));
+        updateStatCard(4, String.valueOf(thongKe.get("veThuongGia")));
+        updateStatCard(5, String.valueOf(thongKe.get("vePhoThong")));
+        updateStatCard(6, String.valueOf(thongKe.get("veTietKiem")));
+        updateStatCard(7, String.format("%.1f%%", thongKe.get("tiLeLapDay")));
     }
     
     // ========== XỬ LÝ SỰ KIỆN ==========
@@ -391,7 +453,7 @@ public class MainGUI extends JFrame {
                 tabbedPane.setSelectedIndex(4);
                 break;
             case "Quản lý":
-                // Mở dialog quản lý hệ thống
+                hienThiQuanLyHeThong();
                 break;
         }
     }
@@ -402,16 +464,19 @@ public class MainGUI extends JFrame {
                 moDialogThemVe();
                 break;
             case "Sửa vé":
-                suaVe();
+                // suaVe();
                 break;
             case "Xóa vé":
-                xoaVe();
+                // xoaVe();
                 break;
             case "Tìm kiếm":
-                timKiemVe();
+                // timKiemVe();
                 break;
             case "Lọc":
-                locVe();
+                // locVe();
+                break;
+            case "Làm mới":
+                capNhatTableVe();
                 break;
         }
     }
@@ -422,10 +487,13 @@ public class MainGUI extends JFrame {
                 moDialogThemChuyenBay();
                 break;
             case "Sửa chuyến":
-                suaChuyenBay();
+                // suaChuyenBay();
                 break;
-            case "Tìm kiếm":
-                timKiemChuyenBay();
+            case "Xóa chuyến":
+                // xoaChuyenBay();
+                break;
+            case "Làm mới":
+                capNhatTableChuyenBay();
                 break;
         }
     }
@@ -435,8 +503,8 @@ public class MainGUI extends JFrame {
             case "Thêm KH":
                 moDialogThemKhachHang();
                 break;
-            case "Thống kê hạng":
-                hienThiThongKeHangKhachHang();
+            case "Làm mới":
+                capNhatTableKhachHang();
                 break;
         }
     }
@@ -446,26 +514,32 @@ public class MainGUI extends JFrame {
         
         switch (loai) {
             case "Thống kê tổng quan":
+                Map<String, Object> thongKe = quanLy.thongKeTongQuan();
                 sb.append("=== THỐNG KÊ TỔNG QUAN HỆ THỐNG ===\n\n");
-                sb.append("Tổng số vé: 3\n");
-                sb.append("Tổng số chuyến bay: 3\n");
-                sb.append("Tổng số khách hàng: 3\n");
-                sb.append("Tổng doanh thu: 5,190,000 VND\n\n");
+                sb.append("Tổng số vé: ").append(thongKe.get("tongVe")).append("\n");
+                sb.append("Tổng số chuyến bay: ").append(thongKe.get("tongChuyenBay")).append("\n");
+                sb.append("Tổng số khách hàng: ").append(thongKe.get("tongKhachHang")).append("\n");
+                sb.append("Tổng doanh thu: ").append(String.format("%,.0f VND", thongKe.get("tongDoanhThu"))).append("\n\n");
                 
                 sb.append("Phân loại vé:\n");
-                sb.append("- Thương gia: 1 vé (33.3%)\n");
-                sb.append("- Phổ thông: 1 vé (33.3%)\n");
-                sb.append("- Tiết kiệm: 1 vé (33.3%)\n");
+                sb.append("- Thương gia: ").append(thongKe.get("veThuongGia")).append(" vé\n");
+                sb.append("- Phổ thông: ").append(thongKe.get("vePhoThong")).append(" vé\n");
+                sb.append("- Tiết kiệm: ").append(thongKe.get("veTietKiem")).append(" vé\n");
                 break;
                 
             case "Doanh thu":
+                Map<String, Double> doanhThu = quanLy.thongKeDoanhThu();
                 sb.append("=== THỐNG KÊ DOANH THU ===\n\n");
                 sb.append("Doanh thu theo loại vé:\n");
-                sb.append("- Thương gia: 3,750,000 VND\n");
-                sb.append("- Phổ thông: 960,000 VND\n");
-                sb.append("- Tiết kiệm: 480,000 VND\n");
-                sb.append("Tổng cộng: 5,190,000 VND\n");
+                sb.append("- Thương gia: ").append(String.format("%,.0f VND", doanhThu.get("thuongGia"))).append("\n");
+                sb.append("- Phổ thông: ").append(String.format("%,.0f VND", doanhThu.get("phoThong"))).append("\n");
+                sb.append("- Tiết kiệm: ").append(String.format("%,.0f VND", doanhThu.get("tietKiem"))).append("\n");
+                sb.append("Tổng cộng: ").append(String.format("%,.0f VND", doanhThu.get("tongCong"))).append("\n");
                 break;
+                
+            case "Làm mới":
+                capNhatThongKeTrangChu();
+                return;
         }
         
         textArea.setText(sb.toString());
@@ -473,28 +547,32 @@ public class MainGUI extends JFrame {
     
     private void moDialogDatVe() {
         JDialog dialog = new JDialog(this, "Đặt Vé Máy Bay", true);
-        dialog.setSize(500, 600);
+        dialog.setSize(500, 400);
         dialog.setLocationRelativeTo(this);
         
         JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
         // Các component nhập liệu
-        String[] labels = {"Họ tên hành khách:", "CMND:", "Số điện thoại:", "Email:", 
-                          "Chuyến bay:", "Loại vé:", "Ghế ngồi:"};
+        panel.add(new JLabel("Họ tên hành khách:"));
+        panel.add(new JTextField());
         
-        for (String label : labels) {
-            panel.add(new JLabel(label));
-            if (label.equals("Loại vé:")) {
-                JComboBox<String> comboBox = new JComboBox<>(new String[]{"Thương gia", "Phổ thông", "Tiết kiệm"});
-                panel.add(comboBox);
-            } else if (label.equals("Chuyến bay:")) {
-                JComboBox<String> comboBox = new JComboBox<>(new String[]{"CB001 - HAN → SGN", "CB002 - SGN → DAD", "CB003 - DAD → CXR"});
-                panel.add(comboBox);
-            } else {
-                panel.add(new JTextField());
-            }
-        }
+        panel.add(new JLabel("CMND:"));
+        panel.add(new JTextField());
+        
+        panel.add(new JLabel("Số điện thoại:"));
+        panel.add(new JTextField());
+        
+        panel.add(new JLabel("Email:"));
+        panel.add(new JTextField());
+        
+        panel.add(new JLabel("Chuyến bay:"));
+        JComboBox<String> cbChuyenBay = new JComboBox<>(new String[]{"CB001 - HAN → SGN", "CB002 - SGN → HAN", "CB003 - HAN → DAD"});
+        panel.add(cbChuyenBay);
+        
+        panel.add(new JLabel("Loại vé:"));
+        JComboBox<String> cbLoaiVe = new JComboBox<>(new String[]{"Thương gia", "Phổ thông", "Tiết kiệm"});
+        panel.add(cbLoaiVe);
         
         JButton btnDatVe = new JButton("Đặt Vé");
         JButton btnHuy = new JButton("Hủy");
@@ -502,6 +580,7 @@ public class MainGUI extends JFrame {
         btnDatVe.addActionListener(e -> {
             JOptionPane.showMessageDialog(dialog, "Đặt vé thành công!");
             dialog.dispose();
+            capNhatDuLieuGUI();
         });
         
         btnHuy.addActionListener(e -> dialog.dispose());
@@ -515,51 +594,49 @@ public class MainGUI extends JFrame {
         dialog.setVisible(true);
     }
     
-    private void moDialogThemVe() {
-        // Tương tự moDialogDatVe nhưng với đầy đủ thông tin hơn
-    }
-    
-    private void moDialogThemChuyenBay() {
-        JDialog dialog = new JDialog(this, "Thêm Chuyến Bay", true);
-        dialog.setSize(400, 500);
-        dialog.setLocationRelativeTo(this);
+    private void hienThiQuanLyHeThong() {
+        String info = "THÔNG TIN HỆ THỐNG\n\n" +
+                     "Phiên bản: " + QuanLyBanVeMayBay.getPhienBan() + "\n" +
+                     "Số lượt truy cập: " + QuanLyBanVeMayBay.getSoLanTruyCap() + "\n" +
+                     "Dữ liệu được lưu trữ: File text\n" +
+                     "Số file dữ liệu: 4\n\n" +
+                     "Đường dẫn thư mục data: ./data/";
         
-        // Triển khai form thêm chuyến bay
-        dialog.setVisible(true);
-    }
-    
-    private void moDialogThemKhachHang() {
-        JDialog dialog = new JDialog(this, "Thêm Khách Hàng", true);
-        dialog.setSize(400, 500);
-        dialog.setLocationRelativeTo(this);
-        
-        // Triển khai form thêm khách hàng
-        dialog.setVisible(true);
+        JOptionPane.showMessageDialog(this, info, "Quản lý hệ thống", JOptionPane.INFORMATION_MESSAGE);
     }
     
     private void hienThiAbout() {
         String aboutText = "HỆ THỐNG QUẢN LÝ BÁN VÉ MÁY BAY\n\n" +
                           "Phiên bản: " + QuanLyBanVeMayBay.getPhienBan() + "\n" +
                           "Số lượt truy cập: " + QuanLyBanVeMayBay.getSoLanTruyCap() + "\n\n" +
-                          "Phát triển bởi:\n" +
-                          "- Nguyễn Văn A\n" +
-                          "- Trần Thị B\n" +
-                          "- Lê Văn C\n\n" +
+                          "Đặc điểm:\n" +
+                          "- Lưu trữ dữ liệu bằng file text\n" +
+                          "- Giao diện đồ họa thân thiện\n" +
+                          "- Quản lý toàn diện: vé, chuyến bay, khách hàng\n\n" +
                           "© 2024 - Đồ án Lập trình Hướng đối tượng";
         
         JOptionPane.showMessageDialog(this, aboutText, "About", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    // Các phương thức xử lý khác...
-    private void suaVe() {}
-    private void xoaVe() {}
-    private void timKiemVe() {}
-    private void locVe() {}
-    private void suaChuyenBay() {}
-    private void timKiemChuyenBay() {}
-    private void hienThiThongKeHangKhachHang() {}
+    private void moDialogThemVe() {
+        JOptionPane.showMessageDialog(this, "Chức năng đang phát triển", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    private void moDialogThemChuyenBay() {
+        JOptionPane.showMessageDialog(this, "Chức năng đang phát triển", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    private void moDialogThemKhachHang() {
+        JOptionPane.showMessageDialog(this, "Chức năng đang phát triển", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+    }
     
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getLookAndFeel());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         SwingUtilities.invokeLater(() -> {
             new MainGUI().setVisible(true);
         });

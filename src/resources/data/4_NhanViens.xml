@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NhanViens>
+    <NhanVien>
+        <MaNV>NV001</MaNV>
+        <HoTen>Trần Văn Nam</HoTen>
+        <SoDT>0911222333</SoDT>
+        <Email>tranvannam@airline.com</Email>
+        <CMND>00111222333</CMND>
+        <NgaySinh>1990-03-15</NgaySinh>
+        <GioiTinh>Nam</GioiTinh>
+        <DiaChi>123 Lý Thường Kiệt, Hà Nội</DiaChi>
+        <ChucVu>NHAN_VIEN_BAN_VE</ChucVu>
+        <LuongCoBan>8000000</LuongCoBan>
+        <NgayVaoLam>2022-01-10</NgayVaoLam>
+        <TrangThai>DANG_LAM_VIEC</TrangThai>
+    </NhanVien>
+    
+    <NhanVien>
+        <MaNV>NV002</MaNV>
+        <HoTen>Lê Thị Hồng</HoTen>
+        <SoDT>0922333444</SoDT>
+        <Email>lethihong@airline.com</Email>
+        <CMND>00122333444</CMND>
+        <NgaySinh>1992-07-20</NgaySinh>
+        <GioiTinh>Nữ</GioiTinh>
+        <DiaChi>456 Nguyễn Huệ, TP.HCM</DiaChi>
+        <ChucVu>NHAN_VIEN_BAN_VE</ChucVu>
+        <LuongCoBan>7500000</LuongCoBan>
+        <NgayVaoLam>2022-06-15</NgayVaoLam>
+        <TrangThai>DANG_LAM_VIEC</TrangThai>
+    </NhanVien>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<HoaDons>
+    <!-- Hóa đơn từ các vé thương gia -->
+    <HoaDon>
+        <MaHoaDon>HDVG001</MaHoaDon>
+        <NgayLap>2024-01-10 14:30:00</NgayLap>
+        <MaVe>VG001</MaVe>
+        <MaKH>KH001</MaKH>
+        <MaNV>NV001</MaNV>
+        <TongTien>3500000</TongTien>
+        <Thue>350000</Thue>
+        <KhuyenMai>175000</KhuyenMai>
+        <ThanhTien>3675000</ThanhTien>
+        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+    </HoaDon>
+    
+    <HoaDon>
+        <MaHoaDon>HDVG002</MaHoaDon>
+        <NgayLap>2024-01-13 10:20:00</NgayLap>
+        <MaVe>VG002</MaVe>
+        <MaKH>KH004</MaKH>
+        <MaNV>NV002</MaNV>
+        <TongTien>2100000</TongTien>
+        <Thue>210000</Thue>
+        <KhuyenMai>105000</KhuyenMai>
+        <ThanhTien>2205000</ThanhTien>
+        <PhuongThucTT>THẺ_TÍN_DỤNG</PhuongThucTT>
+        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+    </HoaDon>
+    
+    <!-- Hóa đơn từ các vé phổ thông -->
+    <HoaDon>
+        <MaHoaDon>HDPT001</MaHoaDon>
+        <NgayLap>2024-01-11 09:15:00</NgayLap>
+        <MaVe>VP001</MaVe>
+        <MaKH>KH002</MaKH>
+        <MaNV>NV001</MaNV>
+        <TongTien>1160000</TongTien>
+        <Thue>92800</Thue>
+        <KhuyenMai>58000</KhuyenMai>
+        <ThanhTien>1206800</ThanhTien>
+        <PhuongThucTT>TIỀN_MẶT</PhuongThucTT>
+        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+    </HoaDon>
+    
+    <HoaDon>
+        <MaHoaDon>HDPT002</MaHoaDon>
+        <NgayLap>2024-01-14 15:45:00</NgayLap>
+        <MaVe>VP002</MaVe>
+        <MaKH>KH005</MaKH>
+        <MaNV>NV003</MaNV>
+        <TongTien>2050000</TongTien>
+        <Thue>164000</Thue>
+        <KhuyenMai>102500</KhuyenMai>
+        <ThanhTien>2111500</ThanhTien>
+        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+    </HoaDon>
+    
+    <HoaDon>
+        <MaHoaDon>HDPT003</MaHoaDon>
+        <NgayLap>2024-01-10 11:20:00</NgayLap>
+        <MaVe>VP003</MaVe>
+        <MaKH>KH007</MaKH>
+        <MaNV>NV002</MaNV>
+        <TongTien>2350000</TongTien>
+        <Thue>188000</Thue>
+        <KhuyenMai>117500</KhuyenMai>
+        <ThanhTien>2420500</ThanhTien>
+        <PhuongThucTT>VÍ_ĐIỆN_TỬ</PhuongThucTT>
+        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+    </HoaDon>
+    
+    <!-- Hóa đơn từ các vé tiết kiệm -->
+    <HoaDon>
+        <MaHoaDon>HDTK001</MaHoaDon>
+        <NgayLap>2024-01-12 16:45:00</NgayLap>
+        <MaVe>VT001</MaVe>
+        <MaKH>KH003</MaKH>
+        <MaNV>NV001</MaNV>
+        <TongTien>486000</TongTien>
+        <Thue>24300</Thue>
+        <KhuyenMai>24300</KhuyenMai>
+        <ThanhTien>486000</ThanhTien>
+        <PhuongThucTT>TIỀN_MẶT</PhuongThucTT>
+        <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
+    </HoaDon>
+    
+    <HoaDon>
+        <MaHoaDon>HDTK002</MaHoaDon>
+        <NgayLap>2024-01-15 08:30:00</NgayLap>
+        <MaVe>VT002</MaVe>
+        <MaKH>KH006</MaKH>
+        <MaNV>NV004</MaNV>
+        <TongTien>1134000</TongTien>
+        <Thue>56700</Thue>
+        <KhuyenMai>56700</KhuyenMai>
+        <ThanhTien>1134000</ThanhTien>
+        <PhuongThucTT>THẺ_TÍN_DỤNG</PhuongThucTT>
+        <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
+    </HoaDon>
+    
+    <HoaDon>
+        <MaHoaDon>HDTK003</MaHoaDon>
+        <NgayLap>2024-01-13 17:10:00</NgayLap>
+        <MaVe>VT003</MaVe>
+        <MaKH>KH008</MaKH>
+        <MaNV>NV005</MaNV>
+        <TongTien>648000</TongTien>
+        <Thue>32400</Thue>
+        <KhuyenMai>32400</KhuyenMai>
+        <ThanhTien>648000</ThanhTien>
+        <PhuongThucTT>VÍ_ĐIỆN_TỬ</PhuongThucTT>
+        <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
+    </HoaDon>
+    
+    <!-- Hóa đơn bổ sung -->
+    <HoaDon>
+        <MaHoaDon>HDVG003</MaHoaDon>
+        <NgayLap>2024-01-16 09:45:00</NgayLap>
+        <MaVe>VG003</MaVe>
+        <MaKH>KH002</MaKH>
+        <MaNV>NV003</MaNV>
+        <TongTien>2800000</TongTien>
+        <Thue>280000</Thue>
+        <KhuyenMai>140000</KhuyenMai>
+        <ThanhTien>2940000</ThanhTien>
+        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+    </HoaDon>
+    
+    <HoaDon>
+        <MaHoaDon>HDPT004</MaHoaDon>
+        <NgayLap>2024-01-17 13:20:00</NgayLap>
+        <MaVe>VP004</MaVe>
+        <MaKH>KH001</MaKH>
+        <MaNV>NV004</MaNV>
+        <TongTien>950000</TongTien>
+        <Thue>76000</Thue>
+        <KhuyenMai>47500</KhuyenMai>
+        <ThanhTien>978500</ThanhTien>
+        <PhuongThucTT>TIỀN_MẶT</PhuongThucTT>
+        <TrangThai>HỦY</TrangThai>
+    </HoaDon>
+</HoaDons>

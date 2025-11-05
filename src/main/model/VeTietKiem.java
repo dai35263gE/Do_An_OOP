@@ -2,8 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Other/File.java to edit this template
  */
-package com.mycompany.QuanLyVeMayBay;
-
+package model;
 /**
  *
  * @author HP
@@ -39,7 +38,7 @@ public class VeTietKiem extends VeMayBay {
     
     @Override
     public String loaiVe() {
-        return "TIẾT KIỆM";
+        return "VeTietKiem";
     }
     
     @Override
