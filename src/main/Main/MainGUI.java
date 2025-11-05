@@ -212,7 +212,7 @@ public class MainGUI extends JFrame {
         // Toolbar
         JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-        String[] buttonNames = { "Thêm vé", "Sửa vé", "Xóa vé", "Tìm kiếm", "Lọc", "Làm mới" };
+        String[] buttonNames = { "Thêm vé", "Sửa vé", "Xóa vé", "Tìm kiếm", "Lọc", "Làm mới", "Xem chi tiết" };
         for (String name : buttonNames) {
             JButton btn = new JButton(name);
             btn.addActionListener(e -> xuLyQuanLyVe(name));
@@ -220,7 +220,7 @@ public class MainGUI extends JFrame {
         }
 
         // Bảng dữ liệu
-        String[] columns = { "Mã vé", "Hành khách", "CMND", "Chuyến bay", "Loại vé", "Giá vé", "Trạng thái" };
+        String[] columns = { "Mã vé","Mã KH", "Hành khách", "CMND", "Chuyến bay","Số ghế","Giờ khởi hành", "Loại vé", "Giá vé", "Trạng thái"};
         DefaultTableModel model = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -235,109 +235,6 @@ public class MainGUI extends JFrame {
         panelQuanLyVe.add(scrollPane, BorderLayout.CENTER);
         capNhatTableVe();
     }
-
-    private void taoPanelQuanLyChuyenBay() {
-        panelQuanLyChuyenBay = new JPanel(new BorderLayout());
-
-        // Toolbar
-        JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-        String[] buttonNames = { "Thêm chuyến", "Sửa chuyến", "Xóa chuyến", "Tìm kiếm", "Lọc", "Làm mới" };
-        for (String name : buttonNames) {
-            JButton btn = new JButton(name);
-            btn.addActionListener(e -> xuLyQuanLyChuyenBay(name));
-            toolbar.add(btn);
-        }
-
-        // Bảng dữ liệu
-        String[] columns = { "Mã chuyến", "Điểm đi", "Điểm đến", "Giờ khởi hành", "Ghế trống", "Giá cơ bản",
-                "Trạng thái" };
-        DefaultTableModel model = new DefaultTableModel(columns, 0);
-        tableChuyenBay = new JTable(model);
-        JScrollPane scrollPane = new JScrollPane(tableChuyenBay);
-
-        panelQuanLyChuyenBay.add(toolbar, BorderLayout.NORTH);
-        panelQuanLyChuyenBay.add(scrollPane, BorderLayout.CENTER);
-    }
-
-    private void taoPanelQuanLyKhachHang() {
-        panelQuanLyKhachHang = new JPanel(new BorderLayout());
-
-        // Toolbar
-        JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-        String[] buttonNames = { "Thêm KH", "Sửa KH", "Xóa KH", "Tìm kiếm", "Lọc", "Làm mới" };
-        for (String name : buttonNames) {
-            JButton btn = new JButton(name);
-            btn.addActionListener(e -> xuLyQuanLyKhachHang(name));
-            toolbar.add(btn);
-        }
-
-        // Bảng dữ liệu
-        String[] columns = { "Mã KH", "Họ tên", "SĐT", "Email", "CMND", "Hạng", "Điểm tích lũy" };
-        DefaultTableModel model = new DefaultTableModel(columns, 0);
-        tableKhachHang = new JTable(model);
-        JScrollPane scrollPane = new JScrollPane(tableKhachHang);
-
-        panelQuanLyKhachHang.add(toolbar, BorderLayout.NORTH);
-        panelQuanLyKhachHang.add(scrollPane, BorderLayout.CENTER);
-    }
-
-    private void taoPanelThongKe() {
-        panelThongKe = new JPanel(new BorderLayout());
-
-        JTextArea textArea = new JTextArea();
-        textArea.setFont(new Font("Consolas", Font.PLAIN, 12));
-        textArea.setEditable(false);
-
-        JScrollPane scrollPane = new JScrollPane(textArea);
-
-        JPanel buttonPanel = new JPanel(new FlowLayout());
-        String[] buttonNames = { "Thống kê tổng quan", "Doanh thu", "Vé theo loại", "Khách hàng", "Chuyến bay",
-                "Làm mới" };
-        for (String name : buttonNames) {
-            JButton btn = new JButton(name);
-            btn.addActionListener(e -> hienThiThongKe(name, textArea));
-            buttonPanel.add(btn);
-        }
-
-        panelThongKe.add(buttonPanel, BorderLayout.NORTH);
-        panelThongKe.add(scrollPane, BorderLayout.CENTER);
-    }
-
-    private void taoMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-
-        // Menu File
-        JMenu menuFile = new JMenu("File");
-        JMenuItem itemLoad = new JMenuItem("Tải dữ liệu");
-        JMenuItem itemSave = new JMenuItem("Lưu dữ liệu");
-        JMenuItem itemBackup = new JMenuItem("Sao lưu");
-        JMenuItem itemExit = new JMenuItem("Thoát");
-
-        itemSave.addActionListener(e -> saveDuLieu());
-        itemBackup.addActionListener(e -> backupDuLieu());
-        itemExit.addActionListener(e -> thoatChuongTrinh());
-
-        menuFile.add(itemLoad);
-        menuFile.add(itemSave);
-        menuFile.add(itemBackup);
-        menuFile.addSeparator();
-        menuFile.add(itemExit);
-
-        // Menu Help
-        JMenu menuHelp = new JMenu("Help");
-        JMenuItem itemAbout = new JMenuItem("About");
-        itemAbout.addActionListener(e -> hienThiAbout());
-
-        menuHelp.add(itemAbout);
-
-        menuBar.add(menuFile);
-        menuBar.add(menuHelp);
-
-        setJMenuBar(menuBar);
-    }
-
     private void saveDuLieu() {
         try {
             quanLy.ghiDuLieuRaFile();
@@ -386,11 +283,15 @@ public class MainGUI extends JFrame {
         DanhSachVeMayBay dsVe = quanLy.getDsVe();
         if (dsVe != null && dsVe.getDanhSach() != null) {
             for (VeMayBay ve : dsVe.getDanhSach()) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 Object[] row = {
                         ve.getMaVe(),
+                        ve.getMaKH(),
                         ve.getHoTenKH(),
                         ve.getCmnd(),
                         ve.getMaChuyen(),
+                        ve.getSoGhe(),
+                        sdf.format(ve.getNgayBay()),
                         ve.loaiVe(),
                         String.format("%,.0f VND", ve.getGiaVe()),
                         ve.getTrangThai()
@@ -494,6 +395,9 @@ public class MainGUI extends JFrame {
                 break;
             case "Làm mới":
                 capNhatTableVe();
+                break;
+            case "Xem chi tiết":
+                xemChiTietVe();
                 break;
         }
     }
@@ -1158,29 +1062,7 @@ public class MainGUI extends JFrame {
     dialog.setVisible(true);
 }
 
-    // Phương thức hỗ trợ tính giá vé tự động
-    private void tinhGiaVeTuDong(JComboBox<String> cbLoaiVe, ChuyenBay chuyenBay, JTextField txtGiaVe) {
-        String loaiVe = (String) cbLoaiVe.getSelectedItem();
-        double giaCoBan = chuyenBay.getGiaCoBan();
-        double heSoGia = 1.0;
-
-        switch (loaiVe) {
-            case "THƯƠNG GIA":
-                heSoGia = 2.0;
-                break;
-            case "PHỔ THÔNG":
-                heSoGia = 1.2;
-                break;
-            case "TIẾT KIỆM":
-                heSoGia = 0.9;
-                break;
-        }
-
-        double giaVe = giaCoBan * heSoGia;
-        txtGiaVe.setText(String.valueOf((int) giaVe));
-    }
 private void xoaVe() {
-    // Kiểm tra có vé nào được chọn không
     int selectedRow = tableVe.getSelectedRow();
     if (selectedRow == -1) {
         JOptionPane.showMessageDialog(this, 
@@ -1226,13 +1108,13 @@ private void xoaVe() {
     txtThongTin.setMargin(new Insets(10, 10, 10, 10));
     
     String thongTinChiTiet = String.format(
-        "📋 THÔNG TIN VÉ SẼ XÓA:\n\n" +
+        "THÔNG TIN VÉ SẼ XÓA:\n\n" +
         "🔸 Mã vé: %s\n" +
         "🔸 Hành khách: %s\n" +
         "🔸 Chuyến bay: %s\n" +
         "🔸 Trạng thái: %s\n" +
         "🔸 Giá vé: %,d VND\n\n" +
-        "⚠️  CẢNH BÁO: Thao tác này không thể hoàn tác!",
+        " CẢNH BÁO: Thao tác này không thể hoàn tác!",
         maVe,
         hoTen,
         chuyenBay,
@@ -1249,7 +1131,7 @@ private void xoaVe() {
     panelCanhBao.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
     panelCanhBao.setBackground(new Color(255, 250, 230));
     
-    JLabel lblCanhBao = new JLabel("⚠️  LƯU Ý QUAN TRỌNG:");
+    JLabel lblCanhBao = new JLabel(" LƯU Ý QUAN TRỌNG:");
     lblCanhBao.setFont(new Font("Arial", Font.BOLD, 12));
     lblCanhBao.setForeground(new Color(255, 140, 0));
     
@@ -1325,7 +1207,7 @@ private void xoaVe() {
                 
                 // Hiển thị thông báo thành công
                 String message = String.format(
-                    "✅ Xóa vé thành công!\n\n" +
+                    " Xóa vé thành công!\n\n" +
                     "Mã vé: %s\n" +
                     "Hành khách: %s\n" +
                     "Chuyến bay: %s",
@@ -1361,20 +1243,6 @@ private void xoaVe() {
     
     dialogXacNhan.setVisible(true);
 }
-
-// Phương thức kiểm tra vé có trong hóa đơn không
-// private boolean veCoTrongHoaDon(String maVe) {
-//     DanhSachHoaDon dsHoaDon = quanLy.getDsHoaDon();
-//     if (dsHoaDon != null && dsHoaDon.getDanhSach() != null) {
-//         for (HoaDon hd : dsHoaDon.getDanhSach()) {
-//             // Giả sử HoaDon có phương thức getDanhSachMaVe()
-//             if (hd.getDanhSachMaVe() != null && hd.getDanhSachMaVe().contains(maVe)) {
-//                 return true;
-//             }
-//         }
-//     }
-//     return false;
-// }
     private void hienThiAbout() {
         String aboutText = "HỆ THỐNG QUẢN LÝ BÁN VÉ MÁY BAY\n\n" +
                 "Phiên bản: " + QuanLyBanVeMayBay.getPhienBan() + "\n" +
@@ -1938,6 +1806,319 @@ private void hienThiXemTruocSapXep() {
     dialogXemTruoc.add(panelButton, BorderLayout.SOUTH);
     dialogXemTruoc.setVisible(true);
 }
+private void xemChiTietVe() {
+    // Kiểm tra có vé nào được chọn không
+    int selectedRow = tableVe.getSelectedRow();
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this,
+                "Vui lòng chọn một vé để xem chi tiết!",
+                "Thông báo", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    // Lấy thông tin vé được chọn
+    String maVe = (String) tableVe.getValueAt(selectedRow, 0);
+    VeMayBay ve = quanLy.getDsVe().timKiemTheoMa(maVe);
+
+    if (ve == null) {
+        JOptionPane.showMessageDialog(this,
+                "Không tìm thấy thông tin vé!",
+                "Lỗi", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Tạo dialog chi tiết
+    JDialog dialog = new JDialog(this, "Chi Tiết Vé Máy Bay - " + maVe, true);
+    dialog.setSize(800, 700);
+    dialog.setLocationRelativeTo(this);
+    dialog.setLayout(new BorderLayout());
+
+    // Tạo tabbed pane để phân loại thông tin
+    JTabbedPane tabbedPane = new JTabbedPane();
+    
+    // Tab 1: Thông tin chung
+    tabbedPane.addTab("📋 Thông Tin Chung", taoThongTinChungPanel(ve));
+    
+    // Tab 2: Thông tin chuyến bay
+    tabbedPane.addTab("✈️ Chuyến Bay", taoThongTinChuyenBayPanel(ve));
+    
+    // Tab 3: Thông tin khách hàng
+    tabbedPane.addTab("👤 Khách Hàng", taoThongTinKhachHangPanel(ve));
+    
+    // Tab 4: Thông tin đặc biệt theo loại vé
+    if (ve instanceof VeThuongGia) {
+        tabbedPane.addTab("⭐ Thương Gia", taoThongTinThuongGiaPanel((VeThuongGia) ve));
+    } else if (ve instanceof VePhoThong) {
+        tabbedPane.addTab("💺 Phổ Thông", taoThongTinPhoThongPanel((VePhoThong) ve));
+    }
+
+    // Panel button
+    JPanel panelButton = new JPanel(new FlowLayout());
+    JButton btnIn = new JButton("🖨️ In Thông Tin");
+    JButton btnDong = new JButton("Đóng");
+
+    btnIn.setBackground(new Color(70, 130, 180));
+    btnIn.setForeground(Color.WHITE);
+
+    btnDong.addActionListener(e -> dialog.dispose());
+
+    panelButton.add(btnIn);
+    panelButton.add(btnDong);
+
+    dialog.add(tabbedPane, BorderLayout.CENTER);
+    dialog.add(panelButton, BorderLayout.SOUTH);
+    dialog.setVisible(true);
+}
+
+private JPanel taoThongTinChungPanel(VeMayBay ve) {
+    JPanel panel = new JPanel(new GridBagLayout());
+    panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    panel.setBackground(Color.WHITE);
+    
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.fill = GridBagConstraints.HORIZONTAL;
+    gbc.insets = new Insets(8, 8, 8, 8);
+    gbc.anchor = GridBagConstraints.WEST;
+    gbc.gridwidth = 1;
+
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    String ngayBayStr = ve.getNgayBay() != null ? sdf.format(ve.getNgayBay()) : "Chưa xác định";
+
+    // Tiêu đề
+    gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+    JLabel lblTitle = new JLabel("THÔNG TIN CHI TIẾT VÉ MÁY BAY");
+    lblTitle.setFont(new Font("Arial", Font.BOLD, 18));
+    lblTitle.setForeground(new Color(70, 130, 180));
+    panel.add(lblTitle, gbc);
+
+    gbc.gridwidth = 1;
+    gbc.gridy = 1;
+    gbc.gridx = 0;
+
+    // Tất cả thông tin trong 1 cột
+    addInfoRow(panel, gbc, 1, "🔸 Mã Vé:", ve.getMaVe());
+    addInfoRow(panel, gbc, 2, "🔸 Loại Vé:", ve.loaiVe());
+    addInfoRow(panel, gbc, 3, "🔸 Trạng Thái:", getTrangThaiWithIcon(ve.getTrangThai()));
+    addInfoRow(panel, gbc, 4, "🔸 Ngày Bay:", ngayBayStr);
+    addInfoRow(panel, gbc, 5, "🔸 Số Ghế:", ve.getSoGhe());
+    addInfoRow(panel, gbc, 6, "🔸 Giá Vé:", String.format("%,d VND", (int) ve.getGiaVe()));
+    addInfoRow(panel, gbc, 7, "🔸 Mã KH:", ve.getMaKH());
+    addInfoRow(panel, gbc, 8, "🔸 Hành Khách:", ve.getHoTenKH());
+    addInfoRow(panel, gbc, 9, "🔸 CMND:", ve.getCmnd());
+    addInfoRow(panel, gbc, 10, "🔸 Mã Chuyến:", ve.getMaChuyen());
+    
+    // Hiển thị thời gian còn lại nếu chưa bay
+    if ("ĐẶT".equals(ve.getTrangThai())) {
+        ChuyenBay cb = quanLy.getDsChuyenBay().timKiemTheoMa(ve.getMaChuyen());
+        if (cb != null) {
+            long diffHours = (cb.getGioKhoiHanh().getTime() - new Date().getTime()) / (60 * 60 * 1000);
+            if (diffHours > 0) {
+                addInfoRow(panel, gbc, 11, "⏰ Còn lại:", String.format("%d giờ", diffHours));
+            }
+        }
+    }
+
+    return panel;
+}
+
+private JPanel taoThongTinChuyenBayPanel(VeMayBay ve) {
+    JPanel panel = new JPanel(new GridBagLayout());
+    panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    panel.setBackground(Color.WHITE);
+    
+    // Tạo GridBagConstraints mới cho panel này
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.fill = GridBagConstraints.HORIZONTAL;
+    gbc.insets = new Insets(8, 8, 8, 8);
+    gbc.anchor = GridBagConstraints.WEST;
+
+    // Lấy thông tin chuyến bay
+    ChuyenBay cb = quanLy.getDsChuyenBay().timKiemTheoMa(ve.getMaChuyen());
+    
+    if (cb == null) {
+        JLabel lblError = new JLabel("Không tìm thấy thông tin chuyến bay!");
+        lblError.setForeground(Color.RED);
+        panel.add(lblError);
+        return panel;
+    }
+
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+    // Tiêu đề
+    gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+    JLabel lblTitle = new JLabel("THÔNG TIN CHUYẾN BAY");
+    lblTitle.setFont(new Font("Arial", Font.BOLD, 16));
+    lblTitle.setForeground(new Color(70, 130, 180));
+    panel.add(lblTitle, gbc);
+
+    gbc.gridwidth = 1;
+    gbc.gridy = 1;
+
+    // Thông tin chuyến bay
+    addInfoRow(panel, gbc, 1, "✈️ Mã Chuyến:", cb.getMaChuyen());
+    addInfoRow(panel, gbc, 2, "📍 Điểm Đi:", cb.getDiemDi());
+    addInfoRow(panel, gbc, 3, "🎯 Điểm Đến:", cb.getDiemDen());
+    addInfoRow(panel, gbc, 4, "🕒 Khởi Hành:", sdf.format(cb.getGioKhoiHanh()));
+    addInfoRow(panel, gbc, 5, "💺 Ghế Trống:", cb.getSoGheTrong() + "/" + cb.getSoGhe());
+    addInfoRow(panel, gbc, 6, "💰 Giá Cơ Bản:", String.format("%,d VND", (int) cb.getGiaCoBan()));
+    addInfoRow(panel, gbc, 7, "📊 Trạng Thái:", cb.getTrangThai());
+
+    return panel;
+}
+
+private JPanel taoThongTinKhachHangPanel(VeMayBay ve) {
+    JPanel panel = new JPanel(new GridBagLayout());
+    panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    panel.setBackground(Color.WHITE);
+    
+    // Tạo GridBagConstraints mới cho panel này
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.fill = GridBagConstraints.HORIZONTAL;
+    gbc.insets = new Insets(8, 8, 8, 8);
+    gbc.anchor = GridBagConstraints.WEST;
+
+    // Lấy thông tin khách hàng
+    KhachHang kh = quanLy.getDsKhachHang().timKiemTheoCMND(ve.getCmnd());
+    
+    if (kh == null) {
+        JLabel lblError = new JLabel("Không tìm thấy thông tin khách hàng!");
+        lblError.setForeground(Color.RED);
+        panel.add(lblError);
+        return panel;
+    }
+
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+    // Tiêu đề
+    gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+    JLabel lblTitle = new JLabel("THÔNG TIN KHÁCH HÀNG");
+    lblTitle.setFont(new Font("Arial", Font.BOLD, 16));
+    lblTitle.setForeground(new Color(70, 130, 180));
+    panel.add(lblTitle, gbc);
+
+    gbc.gridwidth = 1;
+    gbc.gridy = 1;
+
+    // Thông tin khách hàng
+    addInfoRow(panel, gbc, 1, "👤 Mã KH:", kh.getMaKH());
+    addInfoRow(panel, gbc, 2, "📛 Họ Tên:", kh.getHoTen());
+    addInfoRow(panel, gbc, 3, "📞 Điện Thoại:", kh.getSoDT());
+    addInfoRow(panel, gbc, 4, "📧 Email:", kh.getEmail());
+    addInfoRow(panel, gbc, 5, "🆔 CMND:", kh.getCmnd());
+    addInfoRow(panel, gbc, 6, "⭐ Hạng:", kh.getHangKhachHang());
+    addInfoRow(panel, gbc, 7, "🏆 Điểm Tích Lũy:", String.format("%,d điểm", kh.getDiemTichLuy()));
+    if (kh.getNgaySinh() != null) {
+        addInfoRow(panel, gbc, 8, "🎂 Ngày Sinh:", sdf.format(kh.getNgaySinh()));
+    }
+
+    return panel;
+}
+
+private JPanel taoThongTinThuongGiaPanel(VeThuongGia ve) {
+    JPanel panel = new JPanel(new GridBagLayout());
+    panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    panel.setBackground(new Color(255, 250, 240));
+    
+    // Tạo GridBagConstraints mới cho panel này
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.fill = GridBagConstraints.HORIZONTAL;
+    gbc.insets = new Insets(8, 8, 8, 8);
+    gbc.anchor = GridBagConstraints.WEST;
+
+    // Tiêu đề
+    gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+    JLabel lblTitle = new JLabel("ĐẶC QUYỀN HẠNG THƯƠNG GIA");
+    lblTitle.setFont(new Font("Arial", Font.BOLD, 16));
+    lblTitle.setForeground(new Color(218, 165, 32));
+    panel.add(lblTitle, gbc);
+
+    gbc.gridwidth = 1;
+    gbc.gridy = 1;
+
+    // Thông tin dịch vụ thương gia
+    addInfoRow(panel, gbc, 1, "⭐ Dịch Vụ:", ve.getDichVuDacBiet());
+    addInfoRow(panel, gbc, 2, "💰 Phí Dịch Vụ:", String.format("%,d VND", (int) ve.getPhuThu()));
+    addInfoRow(panel, gbc, 3, "🎒 Hành Lý:", ve.getSoKgHanhLyMienPhi() + " kg");
+    addInfoRow(panel, gbc, 4, "🚀 Phòng chờ:", ve.isPhongChoVIP() ? "Có" : "Không");
+    addInfoRow(panel, gbc, 5, "🍷 Đồ Uống:", ve.getLoaiDoUong());
+    
+    // Thông tin bổ sung
+    gbc.gridy = 6; gbc.gridwidth = 2;
+    JTextArea txtBenefits = new JTextArea(4, 40);
+    txtBenefits.setText("✨ ĐẶC QUYỀN:\n" +
+                       "• Phòng chờ thương gia riêng biệt\n" +
+                       "• Hành lý miễn phí lên đến " + ve.getSoKgHanhLyMienPhi() + "kg\n" +
+                       "• Ưu tiên làm thủ tục và lên máy bay\n" +
+                       "• Thực đơn đa dạng với đồ uống cao cấp\n" +
+                       "• Ghế ngả hoàn toàn thành giường nằm");
+    txtBenefits.setEditable(false);
+    txtBenefits.setBackground(new Color(255, 250, 240));
+    txtBenefits.setFont(new Font("Arial", Font.PLAIN, 12));
+    panel.add(txtBenefits, gbc);
+
+    return panel;
+}
+
+private JPanel taoThongTinPhoThongPanel(VePhoThong ve) {
+    JPanel panel = new JPanel(new GridBagLayout());
+    panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    panel.setBackground(new Color(240, 248, 255));
+    
+    // Tạo GridBagConstraints mới cho panel này
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.fill = GridBagConstraints.HORIZONTAL;
+    gbc.insets = new Insets(8, 8, 8, 8);
+    gbc.anchor = GridBagConstraints.WEST;
+
+    // Tiêu đề
+    gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+    JLabel lblTitle = new JLabel("THÔNG TIN HẠNG PHỔ THÔNG");
+    lblTitle.setFont(new Font("Arial", Font.BOLD, 16));
+    lblTitle.setForeground(new Color(30, 144, 255));
+    panel.add(lblTitle, gbc);
+
+    gbc.gridwidth = 1;
+    gbc.gridy = 1;
+
+    // Thông tin vé phổ thông
+    addInfoRow(panel, gbc, 1, "💺 Vị Trí Ghế:", ve.getLoaiGhe());
+    addInfoRow(panel, gbc, 2, "🍽️ Dịch Vụ Ăn:", ve.isDoAn() ? "Có" : "Không");
+    addInfoRow(panel, gbc, 3, "🎒 Hành Lý:", String.format("%,d VND", ve.getSoKgHanhLyKyGui()));
+    addInfoRow(panel, gbc, 4, "🚀 Túi xách:", ve.isHanhLyXachTay() ? "Có" : "Không");
+    
+    return panel;
+}
+
+// Phương thức hỗ trợ thêm dòng thông tin - SỬA LẠI
+// Phương thức hỗ trợ thêm dòng thông tin - SỬA LẠI cho 1 cột
+private void addInfoRow(JPanel panel, GridBagConstraints gbc, int row, String label, String value) {
+    // Reset grid position - chỉ có 1 cột
+    gbc.gridx = 0;
+    gbc.gridy = row;
+    gbc.gridwidth = 1;
+    
+    JLabel lbl = new JLabel(label);
+    lbl.setFont(new Font("Arial", Font.BOLD, 12));
+    lbl.setPreferredSize(new Dimension(150, 20)); // Cố định chiều rộng label
+    panel.add(lbl, gbc);
+
+    gbc.gridx = 1;
+    JLabel lblValue = new JLabel(value);
+    lblValue.setFont(new Font("Arial", Font.PLAIN, 12));
+    panel.add(lblValue, gbc);
+}
+
+// Phương thức hiển thị icon trạng thái
+private String getTrangThaiWithIcon(String trangThai) {
+    switch (trangThai) {
+        case "ĐẶT": return "✅ " + trangThai;
+        case "HOÀN TẤT": return "🎫 " + trangThai;
+        case "HỦY": return "❌ " + trangThai;
+        case "ĐÃ BAY": return "✈️ " + trangThai;
+        default: return trangThai;
+    }
+}
+
 
     private void moDialogThemChuyenBay() {
         JOptionPane.showMessageDialog(this, "Chức năng đang phát triển", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
@@ -1957,5 +2138,106 @@ private void hienThiXemTruocSapXep() {
         SwingUtilities.invokeLater(() -> {
             new MainGUI().setVisible(true);
         });
+    }
+    private void taoPanelQuanLyChuyenBay() {
+        panelQuanLyChuyenBay = new JPanel(new BorderLayout());
+
+        // Toolbar
+        JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        String[] buttonNames = { "Thêm chuyến", "Sửa chuyến", "Xóa chuyến", "Tìm kiếm", "Lọc", "Làm mới" };
+        for (String name : buttonNames) {
+            JButton btn = new JButton(name);
+            btn.addActionListener(e -> xuLyQuanLyChuyenBay(name));
+            toolbar.add(btn);
+        }
+
+        // Bảng dữ liệu
+        String[] columns = { "Mã chuyến", "Điểm đi", "Điểm đến", "Giờ khởi hành", "Ghế trống", "Giá cơ bản",
+                "Trạng thái" };
+        DefaultTableModel model = new DefaultTableModel(columns, 0);
+        tableChuyenBay = new JTable(model);
+        JScrollPane scrollPane = new JScrollPane(tableChuyenBay);
+
+        panelQuanLyChuyenBay.add(toolbar, BorderLayout.NORTH);
+        panelQuanLyChuyenBay.add(scrollPane, BorderLayout.CENTER);
+    }
+
+    private void taoPanelQuanLyKhachHang() {
+        panelQuanLyKhachHang = new JPanel(new BorderLayout());
+
+        // Toolbar
+        JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        String[] buttonNames = { "Thêm KH", "Sửa KH", "Xóa KH", "Tìm kiếm", "Lọc", "Làm mới" };
+        for (String name : buttonNames) {
+            JButton btn = new JButton(name);
+            btn.addActionListener(e -> xuLyQuanLyKhachHang(name));
+            toolbar.add(btn);
+        }
+
+        // Bảng dữ liệu
+        String[] columns = { "Mã KH", "Họ tên", "SĐT", "Email", "CMND", "Hạng", "Điểm tích lũy" };
+        DefaultTableModel model = new DefaultTableModel(columns, 0);
+        tableKhachHang = new JTable(model);
+        JScrollPane scrollPane = new JScrollPane(tableKhachHang);
+
+        panelQuanLyKhachHang.add(toolbar, BorderLayout.NORTH);
+        panelQuanLyKhachHang.add(scrollPane, BorderLayout.CENTER);
+    }
+
+    private void taoPanelThongKe() {
+        panelThongKe = new JPanel(new BorderLayout());
+
+        JTextArea textArea = new JTextArea();
+        textArea.setFont(new Font("Consolas", Font.PLAIN, 12));
+        textArea.setEditable(false);
+
+        JScrollPane scrollPane = new JScrollPane(textArea);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        String[] buttonNames = { "Thống kê tổng quan", "Doanh thu", "Vé theo loại", "Khách hàng", "Chuyến bay",
+                "Làm mới" };
+        for (String name : buttonNames) {
+            JButton btn = new JButton(name);
+            btn.addActionListener(e -> hienThiThongKe(name, textArea));
+            buttonPanel.add(btn);
+        }
+
+        panelThongKe.add(buttonPanel, BorderLayout.NORTH);
+        panelThongKe.add(scrollPane, BorderLayout.CENTER);
+    }
+
+    private void taoMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+
+        // Menu File
+        JMenu menuFile = new JMenu("File");
+        JMenuItem itemLoad = new JMenuItem("Tải dữ liệu");
+        JMenuItem itemSave = new JMenuItem("Lưu dữ liệu");
+        JMenuItem itemBackup = new JMenuItem("Sao lưu");
+        JMenuItem itemExit = new JMenuItem("Thoát");
+
+        itemSave.addActionListener(e -> saveDuLieu());
+        itemBackup.addActionListener(e -> backupDuLieu());
+        itemExit.addActionListener(e -> thoatChuongTrinh());
+
+        menuFile.add(itemLoad);
+        menuFile.add(itemSave);
+        menuFile.add(itemBackup);
+        menuFile.addSeparator();
+        menuFile.add(itemExit);
+
+        // Menu Help
+        JMenu menuHelp = new JMenu("Help");
+        JMenuItem itemAbout = new JMenuItem("About");
+        itemAbout.addActionListener(e -> hienThiAbout());
+
+        menuHelp.add(itemAbout);
+
+        menuBar.add(menuFile);
+        menuBar.add(menuHelp);
+
+        setJMenuBar(menuBar);
     }
 }
