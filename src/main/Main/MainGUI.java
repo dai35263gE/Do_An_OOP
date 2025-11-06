@@ -2211,7 +2211,6 @@ private String getTrangThaiWithIcon(String trangThai) {
 
         panelThongKe.add(buttonPanel, BorderLayout.NORTH);
         panelThongKe.add(scrollPane, BorderLayout.CENTER);
-        capNhatDuLieuGUI();
     }
 
     private void taoMenuBar() {
