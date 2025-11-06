@@ -2164,6 +2164,7 @@ private String getTrangThaiWithIcon(String trangThai) {
 
         panelQuanLyChuyenBay.add(toolbar, BorderLayout.NORTH);
         panelQuanLyChuyenBay.add(scrollPane, BorderLayout.CENTER);
+        capNhatTableChuyenBay();
     }
 
     private void taoPanelQuanLyKhachHang() {
@@ -2187,6 +2188,7 @@ private String getTrangThaiWithIcon(String trangThai) {
 
         panelQuanLyKhachHang.add(toolbar, BorderLayout.NORTH);
         panelQuanLyKhachHang.add(scrollPane, BorderLayout.CENTER);
+        capNhatTableKhachHang();
     }
 
     private void taoPanelThongKe() {
@@ -2209,6 +2211,7 @@ private String getTrangThaiWithIcon(String trangThai) {
 
         panelThongKe.add(buttonPanel, BorderLayout.NORTH);
         panelThongKe.add(scrollPane, BorderLayout.CENTER);
+        capNhatDuLieuGUI();
     }
 
     private void taoMenuBar() {
