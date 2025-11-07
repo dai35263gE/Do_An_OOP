@@ -8,11 +8,8 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 public abstract class VeMayBay implements Comparable<VeMayBay> {
-    protected String maVe;
-    protected String maHD;
     protected String maKH;
-    protected String hoTenKH;
-    protected String cmnd;
+    protected String maVe;
     protected Date ngayBay;
     protected double giaVe;
     protected String maChuyen;
@@ -20,109 +17,117 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
     protected String trangThai;
     protected Date ngayDat;
     
-    // Constants - Sửa thành enum để type-safe
-    public static final String TRANG_THAI_DAT = "DAT";
-    public static final String TRANG_THAI_HUY = "HUY";
-    public static final String TRANG_THAI_HOAN_TAT = "HOAN TAT";
-    public static final String TRANG_THAI_DA_BAY = "DA BAY";
+    // Constants
+    public static final String TRANG_THAI_DA_DAT = "ĐÃ_ĐẶT";
+    public static final String TRANG_THAI_DA_THANH_TOAN = "ĐÃ_THANH_TOÁN";
+    public static final String TRANG_THAI_DA_HUY = "ĐÃ_HỦY";
+    public static final String TRANG_THAI_DA_BAY = "ĐÃ_BAY";
     
-    // Thêm hằng số cho validation
-    private static final int THOI_GIAN_HUY_TOI_THIEU = 24;
-    private static final int THOI_GIAN_DOI_TOI_THIEU = 48; 
+    // Thời gian tối thiểu để hủy vé (4 tiếng trước giờ bay)
+    private static final long THOI_GIAN_HUY_TOI_THIEU = 4 * 60 * 60 * 1000; // 4 tiếng tính bằng milliseconds
     
     // Regex patterns for validation
     private static final Pattern MA_VE_PATTERN = Pattern.compile("^(VG|VP|VT)[0-9]{3}$");
     private static final Pattern SO_GHE_PATTERN = Pattern.compile("^[0-9]{1,2}[A-Z]$");
-    private static final Pattern CMND_PATTERN = Pattern.compile("^[0-9]{12}$");
     
     // CONSTRUCTOR CHÍNH
-    public VeMayBay(String maVe, String maKH, String hoTenKH, String cmnd, Date ngayBay, double giaVe, String maChuyen,  String soGhe,String trangThai) {
+    public VeMayBay(String maKH, String maVe, Date ngayBay, double giaVe, String maChuyen, String soGhe) {
+        this.maKH = maKH;
         setMaVe(maVe);
-        setMaKH(maKH);
-        setHoTenKH(hoTenKH);
-        setCmnd(cmnd);
         setNgayBay(ngayBay);
         setGiaVe(giaVe);
         setMaChuyen(maChuyen);
-        setTrangThai(trangThai); // Đặt trạng thái trước khi setSoGhe
         setSoGhe(soGhe);
         this.ngayDat = new Date();
+        this.trangThai = TRANG_THAI_DA_DAT;
     }
-    
 
-    
+    public VeMayBay() {
+        //TODO Auto-generated constructor stub
+    }
+
     // Abstract methods
     public abstract double tinhThue();
     public abstract String loaiVe();
     public abstract String chiTietLoaiVe();
     public abstract double tinhTongTien();
     
-    // Template method pattern - CẢI THIỆN
-    public final void inThongTinVe() {
-        System.out.println("=== THÔNG TIN VÉ MÁY BAY ===");
-        System.out.println("Mã vé: " + maVe);
-        System.out.println("Mã KH: " + (maKH != null ? maKH : "N/A"));
-        System.out.println("Loại vé: " + loaiVe());
-        System.out.println("Hành khách: " + hoTenKH);
-        System.out.println("CMND: " + cmnd);
-        System.out.println("Chuyến bay: " + maChuyen);
-        System.out.println("Ngày bay: " + (ngayBay != null ? ngayBay : "N/A"));
-        System.out.println("Ghế: " + soGhe);
-        System.out.println("Giá vé: " + String.format("%,.0f VND", giaVe));
-        System.out.println("Thuế: " + String.format("%,.0f VND", tinhThue()));
-        System.out.println("Tổng tiền: " + String.format("%,.0f VND", tinhTongTien()));
-        System.out.println("Chi tiết: " + chiTietLoaiVe());
-        System.out.println("Trạng thái: " + trangThai);
-        System.out.println("Ngày đặt: " + (ngayDat != null ? ngayDat : "N/A"));
-    }
-    
-    // BUSINESS METHODS - CẢI THIỆN
+    // BUSINESS METHODS - Tối ưu cho GUI
     public boolean coTheHuy() {
         if (ngayBay == null) return true;
-        if (!trangThai.equals(TRANG_THAI_DAT) && !trangThai.equals(TRANG_THAI_HOAN_TAT)) {
-            return false; // Chỉ có thể hủy vé đang đặt hoặc hoàn tất
+        if (!trangThai.equals(TRANG_THAI_DA_DAT) && !trangThai.equals(TRANG_THAI_DA_THANH_TOAN)) {
+            return false; // Chỉ có thể hủy vé đã đặt hoặc đã thanh toán
         }
         
-        long diff = ngayBay.getTime() - System.currentTimeMillis();
-        long hours = diff / (1000 * 60 * 60);
-        
-        return hours > THOI_GIAN_HUY_TOI_THIEU;
+        long thoiGianConLai = ngayBay.getTime() - System.currentTimeMillis();
+        return thoiGianConLai > THOI_GIAN_HUY_TOI_THIEU;
+    }
+    
+    public String getThongBaoKhongTheHuy() {
+        if (trangThai.equals(TRANG_THAI_DA_HUY)) {
+            return "Vé đã bị hủy";
+        }
+        if (trangThai.equals(TRANG_THAI_DA_BAY)) {
+            return "Chuyến bay đã hoàn thành";
+        }
+        if (ngayBay != null) {
+            long thoiGianConLai = ngayBay.getTime() - System.currentTimeMillis();
+            if (thoiGianConLai <= THOI_GIAN_HUY_TOI_THIEU) {
+                return "Không thể hủy vé khi còn dưới 4 tiếng trước giờ bay";
+            }
+        }
+        return null;
     }
     
     public boolean coTheDoi() {
         if (ngayBay == null) return true;
-        if (!trangThai.equals(TRANG_THAI_DAT) && !trangThai.equals(TRANG_THAI_HOAN_TAT)) {
+        if (!trangThai.equals(TRANG_THAI_DA_DAT) && !trangThai.equals(TRANG_THAI_DA_THANH_TOAN)) {
             return false;
         }
         
-        long diff = ngayBay.getTime() - System.currentTimeMillis();
-        long hours = diff / (1000 * 60 * 60);
-        
-        return hours > THOI_GIAN_DOI_TOI_THIEU;
+        long thoiGianConLai = ngayBay.getTime() - System.currentTimeMillis();
+        return thoiGianConLai > THOI_GIAN_HUY_TOI_THIEU * 2; // Đổi vé cần nhiều thời gian hơn
+    }
+    
+    public void datVe() throws IllegalStateException {
+        if (!trangThai.equals(TRANG_THAI_DA_DAT)) {
+            throw new IllegalStateException("Vé không thể đặt. Trạng thái hiện tại: " + trangThai);
+        }
+        this.trangThai = TRANG_THAI_DA_DAT;
+        this.ngayDat = new Date();
     }
     
     public void huyVe() throws IllegalStateException {
         if (!coTheHuy()) {
-            throw new IllegalStateException("Da qua thoi gian huy ve.");
+            String thongBao = getThongBaoKhongTheHuy();
+            throw new IllegalStateException(thongBao != null ? thongBao : "Không thể hủy vé");
         }
-        this.trangThai = TRANG_THAI_HUY;
+        this.trangThai = TRANG_THAI_DA_HUY;
     }
     
-    public void hoanTatVe() {
-        if (trangThai.equals(TRANG_THAI_HUY) ||  trangThai.equals(TRANG_THAI_DA_BAY)) {
-            throw new IllegalStateException("Khong the hoan tat.");
+    public void thanhToanVe() {
+        if (!trangThai.equals(TRANG_THAI_DA_DAT)) {
+            throw new IllegalStateException("Chỉ có thể thanh toán vé đã đặt");
         }
-        this.trangThai = TRANG_THAI_HOAN_TAT;
+        this.trangThai = TRANG_THAI_DA_THANH_TOAN;
     }
     
     public void capNhatTrangThaiBay() {
         Date now = new Date();
-        if (ngayBay != null && now.after(ngayBay) && trangThai.equals(TRANG_THAI_HOAN_TAT)) {
+        if (ngayBay != null && now.after(ngayBay) && 
+            (trangThai.equals(TRANG_THAI_DA_THANH_TOAN) || trangThai.equals(TRANG_THAI_DA_DAT))) {
             this.trangThai = TRANG_THAI_DA_BAY;
         }
     }
     
-    // VALIDATION METHODS - BỔ SUNG
+    public boolean daBay() {
+        return TRANG_THAI_DA_BAY.equals(trangThai);
+    }
+    
+    public boolean coTheSuDung() {
+        return !TRANG_THAI_DA_HUY.equals(trangThai) && !TRANG_THAI_DA_BAY.equals(trangThai);
+    }
+    // VALIDATION METHODS
     public static boolean validateMaVe(String maVe) {
         return maVe != null && MA_VE_PATTERN.matcher(maVe).matches();
     }
@@ -131,22 +136,56 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
         return soGhe != null && SO_GHE_PATTERN.matcher(soGhe).matches();
     }
     
-    public static boolean validateCmnd(String cmnd) {
-        return cmnd != null && CMND_PATTERN.matcher(cmnd).matches();
-    }
     private boolean isTrangThaiHopLe(String trangThai) {
         return trangThai != null && 
-               (trangThai.equals(TRANG_THAI_DAT) || 
-                trangThai.equals(TRANG_THAI_HUY) || 
-                trangThai.equals(TRANG_THAI_HOAN_TAT) ||
+               (
+                trangThai.equals(TRANG_THAI_DA_DAT) || 
+                trangThai.equals(TRANG_THAI_DA_THANH_TOAN) ||
+                trangThai.equals(TRANG_THAI_DA_HUY) ||
                 trangThai.equals(TRANG_THAI_DA_BAY));
     }
     
     public boolean kiemTraVeHopLe() {
         return validateMaVe(maVe) &&
-            hoTenKH != null && !hoTenKH.trim().isEmpty() && validateCmnd(cmnd) && ngayBay != null && ngayBay.after(new Date()) &&
-            giaVe > 0 && maChuyen != null && !maChuyen.trim().isEmpty() && validateSoGhe(soGhe) && isTrangThaiHopLe(trangThai);
+               ngayBay != null && 
+               ngayBay.after(new Date()) &&
+               giaVe > 0 && 
+               maChuyen != null && !maChuyen.trim().isEmpty() && 
+               validateSoGhe(soGhe) && 
+               isTrangThaiHopLe(trangThai);
     }
+    
+    public String getThongTinChiTiet() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Mã vé: ").append(maVe).append("\n");
+        sb.append("Loại vé: ").append(loaiVe()).append("\n");
+        sb.append("Chuyến bay: ").append(maChuyen).append("\n");
+        sb.append("Ngày bay: ").append(ngayBay).append("\n");
+        sb.append("Ghế: ").append(soGhe).append("\n");
+        sb.append("Giá vé: ").append(String.format("%,.0f VND", giaVe)).append("\n");
+        sb.append("Thuế: ").append(String.format("%,.0f VND", tinhThue())).append("\n");
+        sb.append("Tổng tiền: ").append(String.format("%,.0f VND", tinhTongTien())).append("\n");
+        sb.append("Chi tiết: ").append(chiTietLoaiVe()).append("\n");
+        sb.append("Trạng thái: ").append(trangThai).append("\n");
+        sb.append("Ngày đặt: ").append(ngayDat).append("\n");
+        return sb.toString();
+    }
+    
+    public Object[] toRowData() {
+        // Phù hợp để hiển thị trong JTable
+        return new Object[] {
+            maVe,
+            loaiVe(),
+            maChuyen,
+            ngayBay,
+            soGhe,
+            String.format("%,.0f VND", giaVe),
+            String.format("%,.0f VND", tinhTongTien()),
+            trangThai,
+            ngayDat,
+        };
+    }
+    
     @Override
     public int compareTo(VeMayBay other) {
         if (this.ngayBay == null && other.ngayBay == null) {
@@ -170,34 +209,18 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
         return maVe != null ? maVe.hashCode() : 0;
     }
     
-    // Getters and Setters với VALIDATION cải tiến
+    @Override
+    public String toString() {
+        return String.format("%s - %s - %s - %s", maVe, loaiVe(), maChuyen, trangThai);
+    }
+    
+    // Getters and Setters với VALIDATION
     public String getMaVe() { return maVe; }
     public void setMaVe(String maVe) { 
-        if (!validateMaVe(maVe.trim())) {
-            throw new IllegalArgumentException("Ma ve khong hop le. Format: VG001, VP001, VT001");
+        if (!validateMaVe(maVe)) {
+            throw new IllegalArgumentException("Mã vé không hợp lệ. Format: VG001, VP123, VT456");
         }
         this.maVe = maVe.trim().toUpperCase();
-    }
-    
-    public String getMaKH() { return maKH; }
-    public void setMaKH(String maKH) { 
-        this.maKH = maKH != null ? maKH.trim().toUpperCase() : null;
-    }
-    
-    public String getHoTenKH() { return hoTenKH; }
-    public void setHoTenKH(String hoTenKH) { 
-        this.hoTenKH = hoTenKH.trim();
-    }
-    
-    public String getCmnd() { return cmnd; }
-    public void setCmnd(String cmnd) { 
-        if (cmnd == null || cmnd.trim().isEmpty()) {
-            throw new IllegalArgumentException("CMND khong duoc de trong");
-        }
-        if (!validateCmnd(cmnd.trim())) {
-            throw new IllegalArgumentException("CMND khong hop le.");
-        }
-        this.cmnd = cmnd.trim();
     }
     
     public Date getNgayBay() { return ngayBay; }
@@ -208,7 +231,7 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
     public double getGiaVe() { return giaVe; }
     public void setGiaVe(double giaVe) { 
         if (giaVe <= 0) {
-            throw new IllegalArgumentException("Gia ve phai lon hon 0");
+            throw new IllegalArgumentException("Giá vé phải lớn hơn 0");
         }
         this.giaVe = giaVe;
     }
@@ -216,7 +239,7 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
     public String getMaChuyen() { return maChuyen; }
     public void setMaChuyen(String maChuyen) { 
         if (maChuyen == null || maChuyen.trim().isEmpty()) {
-            throw new IllegalArgumentException("Ma chuyen bay khong duoc de trong");
+            throw new IllegalArgumentException("Mã chuyến bay không được để trống");
         }
         this.maChuyen = maChuyen.trim().toUpperCase();
     }
@@ -224,10 +247,10 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
     public String getSoGhe() { return soGhe; }
     public void setSoGhe(String soGhe) { 
         if (soGhe == null || soGhe.trim().isEmpty()) {
-            throw new IllegalArgumentException("So ghe khong duoc de trong");
+            throw new IllegalArgumentException("Số ghế không được để trống");
         }
         if (!validateSoGhe(soGhe.trim())) {
-            throw new IllegalArgumentException("So ghe khong hop le. Format: 1A, 12B, 25C");
+            throw new IllegalArgumentException("Số ghế không hợp lệ. Format: 1A, 12B, 25C");
         }
         this.soGhe = soGhe.trim().toUpperCase();
     }
@@ -235,13 +258,11 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
     public String getTrangThai() { return trangThai; }
     public void setTrangThai(String trangThai) { 
         if (!isTrangThaiHopLe(trangThai)) {
-            throw new IllegalArgumentException("Trang thai ve khong hop le, phai la: " + 
-                TRANG_THAI_DAT + ", " + TRANG_THAI_HUY + ", " + 
-                TRANG_THAI_HOAN_TAT + ", " + TRANG_THAI_DA_BAY);
+            throw new IllegalArgumentException("Trạng thái vé không hợp lệ");
         }
         this.trangThai = trangThai;
     }
-    
+    public String getmaKH() { return maKH; }
     public Date getNgayDat() { return ngayDat; }
     public void setNgayDat(Date ngayDat) { 
         if (ngayDat != null && ngayDat.after(new Date())) {
@@ -249,15 +270,44 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
         }
         this.ngayDat = ngayDat;
     }
-    public boolean daBay() {
-        return TRANG_THAI_DA_BAY.equals(trangThai);
+    
+    // Additional utility methods for GUI
+    public boolean isConTrong() {
+        return TRANG_THAI_DA_HUY.equals(trangThai);
     }
     
-    public boolean coTheSuDung() {
-        return !TRANG_THAI_HUY.equals(trangThai) && !TRANG_THAI_DA_BAY.equals(trangThai);
+    public boolean isDaDat() {
+        return TRANG_THAI_DA_DAT.equals(trangThai);
     }
-    public String getMaHoaDon() { return maHD; }
-    public void setMaHoaDon(String maHD) { 
-        this.maHD = maHD;
+    
+    public boolean isDaThanhToan() {
+        return TRANG_THAI_DA_THANH_TOAN.equals(trangThai);
+    }
+    
+    public boolean isDaHuy() {
+        return TRANG_THAI_DA_HUY.equals(trangThai);
+    }
+    
+    public long getThoiGianConLai() {
+        if (ngayBay == null) return Long.MAX_VALUE;
+        return ngayBay.getTime() - System.currentTimeMillis();
+    }
+    
+    public String getThoiGianConLaiFormatted() {
+        long milliseconds = getThoiGianConLai();
+        if (milliseconds == Long.MAX_VALUE) return "Không xác định";
+        
+        long seconds = milliseconds / 1000;
+        long minutes = seconds / 60;
+        long hours = minutes / 60;
+        long days = hours / 24;
+        
+        if (days > 0) {
+            return String.format("%d ngày %d giờ", days, hours % 24);
+        } else if (hours > 0) {
+            return String.format("%d giờ %d phút", hours, minutes % 60);
+        } else {
+            return String.format("%d phút", minutes);
+        }
     }
 }

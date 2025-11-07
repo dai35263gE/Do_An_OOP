@@ -4,27 +4,27 @@
  */
 package model;
 
+import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.UUID;
+
 /**
  *
  * @author HP
  */
 // File: HoaDon.java
-
-import java.util.Date;
-import java.util.UUID;
-
 public class HoaDon {
     private String maHoaDon;
     private Date ngayLap;
-    private String maVe;
-    private String maKH;
-    private String maNV;
     private double tongTien;
     private double thue;
     private double khuyenMai;
     private double thanhTien;
     private String phuongThucTT;
     private String trangThai;
+    private KhachHang khachHang;
+    private List<VeMayBay> danhSachVe;
     
     // Constants
     public static final String TT_CHUA_TT = "CHƯA_THANH_TOÁN";
@@ -36,16 +36,14 @@ public class HoaDon {
     public static final String PT_THE = "THẺ_TÍN_DỤNG";
     public static final String PT_VI_DIEN_TU = "VÍ_ĐIỆN_TỬ";
     
-    // CONSTRUCTOR CHÍNH - THÊM VALIDATION
-    public HoaDon(String maVe, String maKH, String maNV, double tongTien, 
-                  double thue, double khuyenMai, String phuongThucTT) {
+    // CONSTRUCTOR CHÍNH
+    public HoaDon(KhachHang khachHang, List<VeMayBay> danhSachVe, double khuyenMai, String phuongThucTT) {
         this.maHoaDon = generateMaHoaDon();
         this.ngayLap = new Date();
-        setMaVe(maVe);
-        setMaKH(maKH);
-        setMaNV(maNV);
-        setTongTien(tongTien);
-        setThue(thue);
+        this.khachHang = khachHang;
+        this.danhSachVe = danhSachVe;
+        setTongTien(calculateTongTien());
+        setThue(calculateThue());
         setKhuyenMai(khuyenMai);
         setPhuongThucTT(phuongThucTT);
         
@@ -53,20 +51,54 @@ public class HoaDon {
         this.trangThai = TT_CHUA_TT;
     }
     
-    // OVERLOAD CONSTRUCTOR - tự động tính thuế
-    public HoaDon(String maVe, String maKH, String maNV, double tongTien, 
-                  double khuyenMai, String phuongThucTT) {
-        this(maVe, maKH, maNV, tongTien, tongTien * 0.08, khuyenMai, phuongThucTT);
+    // OVERLOAD CONSTRUCTOR - không có khuyến mãi
+    public HoaDon(KhachHang khachHang, List<VeMayBay> danhSachVe, String phuongThucTT) {
+this(khachHang, danhSachVe, 0, phuongThucTT);
     }
-    
+    public HoaDon(VeMayBay vmb) {
+    this.maHoaDon = generateMaHoaDon();
+    this.ngayLap = new Date();
+    this.danhSachVe = new ArrayList<>();
+    danhSachVe.add(vmb);
+    this.trangThai = TT_CHUA_TT;
+}
+    public HoaDon(String maHoaDon, Date ngayLap, KhachHang khachHang, double tongTien, double thue, double khuyenMai, String phuongThucTT, String trangThai, List<VeMayBay> DSVe) {
+    this.maHoaDon = maHoaDon;
+    this.ngayLap = ngayLap;
+    this.khachHang = khachHang;
+    this.danhSachVe = new ArrayList<>();
+    this.tongTien = tongTien;
+    this.thue = thue;
+    this.khuyenMai = khuyenMai;
+    this.phuongThucTT = phuongThucTT;
+    this.trangThai = trangThai;
+    this.thanhTien = calculateThanhTien();
+    this.danhSachVe = DSVe;
+}
     // BUSINESS METHODS
     private String generateMaHoaDon() {
         return "HD" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
     
+    private double calculateTongTien() {
+        double tong = 0;
+        for (VeMayBay ve : danhSachVe) {
+            tong += ve.getGiaVe();
+        }
+        return tong;
+    }
+    
+    private double calculateThue() {
+        return tongTien * 0.08; // Thuế 8%
+    }
+    
     private double calculateThanhTien() {
         return tongTien + thue - khuyenMai;
     }
+    // Thêm phương thức setThanhTien vào class HoaDon (nếu chưa có)
+public void setThanhTien(double thanhTien) {
+    this.thanhTien = thanhTien;
+}
     
     public void thanhToan() throws IllegalStateException {
         if (trangThai.equals(TT_DA_TT)) {
@@ -76,6 +108,11 @@ public class HoaDon {
             throw new IllegalStateException("Không thể thanh toán hóa đơn đã hủy");
         }
         this.trangThai = TT_DA_TT;
+        
+        // Cập nhật trạng thái vé sau khi thanh toán
+        for (VeMayBay ve : danhSachVe) {
+            ve.setTrangThai("ĐÃ_THANH_TOÁN");
+        }
     }
     
     public void huyHoaDon() throws IllegalStateException {
@@ -85,7 +122,18 @@ public class HoaDon {
         if (trangThai.equals(TT_HUY)) {
             throw new IllegalStateException("Hóa đơn đã bị hủy");
         }
+        
+        // Kiểm tra điều kiện hủy
+        if (!coTheHuy()) {
+            throw new IllegalStateException("Không thể hủy hóa đơn vì có vé đã quá thời gian hủy");
+        }
+        
         this.trangThai = TT_HUY;
+        
+        // Cập nhật trạng thái vé và xóa liên kết với hóa đơn
+        for (VeMayBay ve : danhSachVe) {
+            ve.setTrangThai("CÓ_THỂ_ĐẶT");
+        }
     }
     
     public void apDungKhuyenMai(double khuyenMaiMoi) {
@@ -99,87 +147,93 @@ public class HoaDon {
         this.thanhTien = calculateThanhTien();
     }
     
-    public void capNhatTongTien(double tongTienMoi) {
-        if (trangThai.equals(TT_DA_TT)) {
-            throw new IllegalStateException("Không thể cập nhật hóa đơn đã thanh toán");
+    public boolean coTheHuy() {
+        // Kiểm tra từng vé trong hóa đơn
+        for (VeMayBay ve : danhSachVe) {
+            if (!ve.coTheHuy()) {
+                return false;
+            }
         }
-        setTongTien(tongTienMoi);
-        this.thanhTien = calculateThanhTien();
+        return true;
     }
     
-    public boolean coTheHuy() {
-        // Có thể hủy nếu chưa thanh toán và chưa quá 24h
+    
+    public void xoaVe(VeMayBay ve) {
         if (trangThai.equals(TT_DA_TT)) {
-            return false;
+            throw new IllegalStateException("Không thể xóa vé khỏi hóa đơn đã thanh toán");
         }
         
-        Date now = new Date();
-        long diff = now.getTime() - ngayLap.getTime();
-        long hours = diff / (1000 * 60 * 60);
-        
-        return hours <= 24;
+        if (danhSachVe.remove(ve)) {
+            
+            // Cập nhật lại tổng tiền và thành tiền
+            this.tongTien = calculateTongTien();
+            this.thue = calculateThue();
+            this.thanhTien = calculateThanhTien();
+        }
     }
     
     public double tinhPhanTramKhuyenMai() {
         return tongTien > 0 ? (khuyenMai / tongTien) * 100 : 0;
     }
     
+    public int tinhDiemTichLuy() {
+        return (int) (thanhTien / 10000); // 1 điểm cho mỗi 10,000 VND
+    }
+    
     public void inHoaDon() {
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║           HÓA ĐƠN BÁN VÉ              ║");
-        System.out.println("╠════════════════════════════════════════╣");
-        System.out.println("║ Mã HĐ: " + String.format("%-30s", maHoaDon) + "║");
-        System.out.println("║ Ngày lập: " + String.format("%-27s", ngayLap) + "║");
-        System.out.println("║ Mã vé: " + String.format("%-30s", maVe) + "║");
-        System.out.println("║ Mã KH: " + String.format("%-30s", maKH) + "║");
-        System.out.println("║ Mã NV: " + String.format("%-30s", maNV) + "║");
-        System.out.println("╠════════════════════════════════════════╣");
-        System.out.println("║ Tổng tiền: " + String.format("%,-25.0f VND", tongTien) + "║");
-        System.out.println("║ Thuế: " + String.format("%,-30.0f VND", thue) + "║");
-        System.out.println("║ Khuyến mãi: " + String.format("%,-23.0f VND", khuyenMai) + "║");
-        System.out.println("║ " + String.format("%-38s", "(" + String.format("%.1f", tinhPhanTramKhuyenMai()) + "%)") + "║");
-        System.out.println("╠════════════════════════════════════════╣");
-        System.out.println("║ Thành tiền: " + String.format("%,-23.0f VND", thanhTien) + "║");
-        System.out.println("╠════════════════════════════════════════╣");
-        System.out.println("║ Phương thức TT: " + String.format("%-21s", phuongThucTT) + "║");
-        System.out.println("║ Trạng thái: " + String.format("%-25s", trangThai) + "║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("╔════════════════════════════════════════════════════╗");
+        System.out.println("║                 HÓA ĐƠN BÁN VÉ                    ║");
+        System.out.println("╠════════════════════════════════════════════════════╣");
+        System.out.println("║ Mã HĐ: " + String.format("%-42s", maHoaDon) + "║");
+        System.out.println("║ Ngày lập: " + String.format("%-39s", ngayLap) + "║");
+        System.out.println("║ Khách hàng: " + String.format("%-36s", khachHang.getHoTen()) + "║");
+        System.out.println("╠════════════════════════════════════════════════════╣");
+        
+        // Hiển thị danh sách vé
+        System.out.println("║ Danh sách vé: " + String.format("%-34s", "") + "║");
+        for (int i = 0; i < danhSachVe.size(); i++) {
+            VeMayBay ve = danhSachVe.get(i);
+            System.out.println("║   " + (i + 1) + ". " + String.format("%-38s", 
+                ve.getMaVe() + " - " + String.format("%,.0f VND", ve.getGiaVe())) + "║");
+        }
+        
+        System.out.println("╠════════════════════════════════════════════════════╣");
+        System.out.println("║ Tổng tiền: " + String.format("%,-35.0f VND", tongTien) + "║");
+        System.out.println("║ Thuế: " + String.format("%,-40.0f VND", thue) + "║");
+        System.out.println("║ Khuyến mãi: " + String.format("%,-33.0f VND", khuyenMai) + "║");
+        System.out.println("║ " + String.format("%-50s", "(" + String.format("%.1f", tinhPhanTramKhuyenMai()) + "%)") + "║");
+        System.out.println("╠════════════════════════════════════════════════════╣");
+        System.out.println("║ Thành tiền: " + String.format("%,-33.0f VND", thanhTien) + "║");
+        System.out.println("║ Điểm tích lũy: " + String.format("%-31d điểm", tinhDiemTichLuy()) + "║");
+        System.out.println("╠════════════════════════════════════════════════════╣");
+        System.out.println("║ Phương thức TT: " + String.format("%-31s", phuongThucTT) + "║");
+        System.out.println("║ Trạng thái: " + String.format("%-35s", trangThai) + "║");
+        System.out.println("╚════════════════════════════════════════════════════╝");
     }
     
     public String getHoaDonText() {
-        return String.format(
-            "HÓA ĐƠN BÁN VÉ\n" +
-            "Mã HĐ: %s\n" +
-            "Ngày lập: %s\n" +
-            "Mã vé: %s | Mã KH: %s | Mã NV: %s\n" +
-            "Tổng tiền: %,.0f VND\n" +
-            "Thuế: %,.0f VND\n" +
-            "Khuyến mãi: %,.0f VND (%.1f%%)\n" +
-            "Thành tiền: %,.0f VND\n" +
-            "Phương thức: %s | Trạng thái: %s",
-            maHoaDon, ngayLap, maVe, maKH, maNV, 
-            tongTien, thue, khuyenMai, tinhPhanTramKhuyenMai(), thanhTien,
-            phuongThucTT, trangThai
-        );
-    }
-    
-    @Override
-    public String toString() {
-        return String.format("HoaDon[%s: %s - %,.0f VND - %s]", 
-                           maHoaDon, maVe, thanhTien, trangThai);
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        HoaDon that = (HoaDon) obj;
-        return maHoaDon != null && maHoaDon.equals(that.maHoaDon);
-    }
-    
-    @Override
-    public int hashCode() {
-        return maHoaDon != null ? maHoaDon.hashCode() : 0;
+        StringBuilder sb = new StringBuilder();
+        sb.append("HÓA ĐƠN BÁN VÉ\n");
+        sb.append("Mã HĐ: ").append(maHoaDon).append("\n");
+        sb.append("Ngày lập: ").append(ngayLap).append("\n");
+        sb.append("Khách hàng: ").append(khachHang.getHoTen()).append("\n");
+        sb.append("Số lượng vé: ").append(danhSachVe.size()).append("\n");
+        
+        for (int i = 0; i < danhSachVe.size(); i++) {
+            VeMayBay ve = danhSachVe.get(i);
+            sb.append("Vé ").append(i + 1).append(": ").append(ve.getMaVe())
+              .append(" - ").append(String.format("%,.0f VND", ve.getGiaVe())).append("\n");
+        }
+        
+        sb.append("Tổng tiền: ").append(String.format("%,.0f VND", tongTien)).append("\n");
+        sb.append("Thuế: ").append(String.format("%,.0f VND", thue)).append("\n");
+        sb.append("Khuyến mãi: ").append(String.format("%,.0f VND", khuyenMai))
+          .append(" (").append(String.format("%.1f", tinhPhanTramKhuyenMai())).append("%)\n");
+        sb.append("Thành tiền: ").append(String.format("%,.0f VND", thanhTien)).append("\n");
+        sb.append("Điểm tích lũy: ").append(tinhDiemTichLuy()).append(" điểm\n");
+        sb.append("Phương thức: ").append(phuongThucTT).append(" | Trạng thái: ").append(trangThai);
+        
+        return sb.toString();
     }
     
     // Getters and Setters với VALIDATION
@@ -188,33 +242,9 @@ public class HoaDon {
     public Date getNgayLap() { return ngayLap; }
     public void setNgayLap(Date ngayLap) { 
         if (ngayLap != null && ngayLap.after(new Date())) {
-            throw new IllegalArgumentException("Ngày lập không thể ở tương lai");
+            throw new IllegalArgumentException("Ngay lap khong the o tuong lai");
         }
         this.ngayLap = ngayLap;
-    }
-    
-    public String getMaVe() { return maVe; }
-    public void setMaVe(String maVe) { 
-        if (maVe == null || maVe.trim().isEmpty()) {
-            throw new IllegalArgumentException("Mã vé không được để trống");
-        }
-        this.maVe = maVe.trim().toUpperCase();
-    }
-    
-    public String getMaKH() { return maKH; }
-    public void setMaKH(String maKH) { 
-        if (maKH == null || maKH.trim().isEmpty()) {
-            throw new IllegalArgumentException("Mã KH không được để trống");
-        }
-        this.maKH = maKH.trim().toUpperCase();
-    }
-    
-    public String getMaNV() { return maNV; }
-    public void setMaNV(String maNV) { 
-        if (maNV == null || maNV.trim().isEmpty()) {
-            throw new IllegalArgumentException("Mã NV không được để trống");
-        }
-        this.maNV = maNV.trim().toUpperCase();
     }
     
     public double getTongTien() { return tongTien; }
@@ -223,7 +253,6 @@ public class HoaDon {
             throw new IllegalArgumentException("Tổng tiền không được âm");
         }
         this.tongTien = tongTien;
-        this.thanhTien = calculateThanhTien();
     }
     
     public double getThue() { return thue; }
@@ -269,8 +298,26 @@ public class HoaDon {
         }
         this.trangThai = trangThai;
     }
-    // Thêm phương thức tính điểm tích lũy dựa trên thành tiền
-public int tinhDiemTichLuy() {
-    return (int) (thanhTien / 10000); // 1 điểm cho mỗi 10,000 VND
+    
+    public void setKhachHang(KhachHang khachHang) { 
+        if (khachHang == null) {
+            throw new IllegalArgumentException("Khách hàng không được null");
+        }
+        this.khachHang = khachHang;
+    }
+    
+    public List<VeMayBay> getDanhSachVe() { return new ArrayList<>(danhSachVe); }
+    
+    public int getSoLuongVe() { return danhSachVe.size(); }
+
+// PHƯƠNG THỨC GET AN TOÀN
+public KhachHang getKhachHang() {
+    if (khachHang == null) {
+        // Trả về khách hàng mặc định nếu null
+        return new KhachHang("KH000", "Khách hàng mặc định", "0000000000", 
+                           "default@email.com", "000000000000", new Date(), 
+                           "Nam", "Địa chỉ mặc định", "default", "password");
+    }
+    return khachHang;
 }
 }

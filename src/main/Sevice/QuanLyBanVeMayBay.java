@@ -3,7 +3,6 @@ package Sevice;
 import model.*;
 import java.util.*;
 import java.text.SimpleDateFormat;
-import java.io.*;
 
 public class QuanLyBanVeMayBay {
     private DanhSachVeMayBay dsVe;
@@ -23,7 +22,6 @@ public class QuanLyBanVeMayBay {
         soLanTruyCap++;
     }
     
-    // Static methods
     public static int getSoLanTruyCap() {
         return soLanTruyCap;
     }
@@ -32,7 +30,6 @@ public class QuanLyBanVeMayBay {
     }
     
     
-    // Các phương thức thống kê cho GUI
     public Map<String, Object> thongKeTongQuan() {
         Map<String, Object> thongKe = new HashMap<>();
         
@@ -134,19 +131,6 @@ public class QuanLyBanVeMayBay {
             System.out.println("Đã ghi dữ liệu ra file!");
         } catch (Exception e) {
             System.out.println("Lỗi khi ghi dữ liệu ra file: " + e.getMessage());
-        }
-    }
-    
-    public void saoLuuDuLieu() {
-        try {
-            String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            dsVe.ghiFile("backup/ve_" + timestamp + ".txt");
-            dsChuyenBay.ghiFile("backup/chuyenbay_" + timestamp + ".txt");
-            dsKhachHang.ghiFile("backup/khachhang_" + timestamp + ".txt");
-            dsHoaDon.ghiFile("backup/hoadon_" + timestamp + ".txt");
-            System.out.println("Sao lưu dữ liệu thành công!");
-        } catch (Exception e) {
-            System.out.println("Lỗi khi sao lưu dữ liệu: " + e.getMessage());
         }
     }
     

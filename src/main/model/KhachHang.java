@@ -4,27 +4,21 @@
  */
 package model;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 /**
  *
  * @author HP
  */
 // File: KhachHang.java
-
-import java.util.Date;
-import java.util.regex.Pattern;
-
-public class KhachHang {
-    private String maKH;
-    private String hoTen;
-    private String soDT;
-    private String email;
-    private String cmnd;
-    private Date ngaySinh;
-    private String gioiTinh;
-    private String diaChi;
+public class KhachHang extends NguoiDung {
     private String hangKhachHang;
     private int diemTichLuy;
     private Date ngayDangKy;
+    private List<HoaDon> lichSuHoaDon;
+    private List<VeMayBay> veDaDat;
     
     // Constants
     public static final String HANG_BRONZE = "BRONZE";
@@ -32,41 +26,122 @@ public class KhachHang {
     public static final String HANG_GOLD = "GOLD";
     public static final String HANG_PLATINUM = "PLATINUM";
     
-    // Regex patterns for validation
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
-    private static final Pattern PHONE_PATTERN = Pattern.compile("^(03|05|07|08|09)[0-9]{8}$");
-    private static final Pattern CMND_PATTERN = Pattern.compile("^[0-9]{9}$|^[0-9]{12}$");
+    // Ngưỡng điểm cho các hạng
+    private static final int DIEM_SILVER = 1000;
+    private static final int DIEM_GOLD = 5000;
+    private static final int DIEM_PLATINUM = 10000;
     
-    public KhachHang(String maKH, String hoTen, String soDT, String email, 
-                    String cmnd, Date ngaySinh, String gioiTinh, String diaChi) {
+    // Thời gian tối thiểu để hủy vé (4 tiếng)
+    private static final long THOI_GIAN_HUY_TOI_THIEU = 4 * 60 * 60 * 1000;
+
+    // CONSTRUCTOR
+    public KhachHang(String ma, String hoTen, String soDT, String email, 
+                    String cmnd, Date ngaySinh, String gioiTinh, String diaChi,
+                    String tenDangNhap, String matKhau) {
         
-        // VALIDATION trong constructor
-        setMaKH(maKH);
-        setHoTen(hoTen);
-        setSoDT(soDT);
-        setEmail(email);
-        setCmnd(cmnd);
-        setNgaySinh(ngaySinh);
-        setGioiTinh(gioiTinh);
-        setDiaChi(diaChi);
+        super(ma, hoTen, soDT, email, cmnd, ngaySinh, gioiTinh, diaChi, tenDangNhap, matKhau);
         
         this.hangKhachHang = HANG_BRONZE;
         this.diemTichLuy = 0;
         this.ngayDangKy = new Date();
+        this.lichSuHoaDon = new ArrayList<>();
+        this.veDaDat = new ArrayList<>();
     }
     
-    
-    // OVERLOAD CONSTRUCTOR với hạng khách hàng (từ XML)
-    public KhachHang(String maKH, String hoTen, String soDT, String email, 
+    // OVERLOAD CONSTRUCTOR - từ database
+    public KhachHang(String ma, String hoTen, String soDT, String email, 
                     String cmnd, Date ngaySinh, String gioiTinh, String diaChi,
-                    String hangKhachHang, int diemTichLuy, Date ngayDangKy) {
-        this(maKH, hoTen, soDT, email, cmnd, ngaySinh, gioiTinh, diaChi);
+                    String tenDangNhap, String matKhau, String hangKhachHang, 
+                    int diemTichLuy, Date ngayDangKy) {
+        
+        super(ma, hoTen, soDT, email, cmnd, ngaySinh, gioiTinh, diaChi, tenDangNhap, matKhau);
+        
         setHangKhachHang(hangKhachHang);
         setDiemTichLuy(diemTichLuy);
         setNgayDangKy(ngayDangKy);
+        this.lichSuHoaDon = new ArrayList<>();
+        this.veDaDat = new ArrayList<>();
     }
     
-    // BUSINESS METHODS - chỉ liên quan đến bản thân khách hàng
+
+    // ABSTRACT METHODS IMPLEMENTATION
+    @Override
+    public String getVaiTro() {
+        return "KHACH_HANG";
+    }
+    
+    @Override
+    public String getPhanQuyen() {
+        return "KHACH_HANG_BASIC";
+    }
+    
+    @Override
+    public boolean coTheThucHienChucNang(String chucNang) {
+        switch (chucNang) {
+            case "DAT_VE":
+            case "HUY_VE":
+            case "XEM_HOA_DON":
+            case "XEM_VE_DA_DAT":
+            case "TRA_CUU_CHUYEN_BAY":
+            case "CHINH_SUA_THONG_TIN":
+            case "DOI_MAT_KHAU":
+                return true;
+            default:
+                return false;
+        }
+    }
+    
+    // BUSINESS METHODS - Chức năng khách hàng
+    public boolean datVe(VeMayBay ve) {
+        if (!coTheThucHienChucNang("DAT_VE")) {
+            return false;
+        }
+        
+        try {
+            ve.datVe();
+            veDaDat.add(ve);
+            return true;
+        } catch (IllegalStateException e) {
+            return false;
+        }
+    }
+    
+    public boolean huyVe(VeMayBay ve) {
+        if (!coTheThucHienChucNang("HUY_VE")) {
+            return false;
+        }
+        
+        if (!veDaDat.contains(ve)) {
+            return false; // Vé không thuộc về khách hàng này
+        }
+        
+        try {
+            ve.huyVe();
+            veDaDat.remove(ve);
+            return true;
+        } catch (IllegalStateException e) {
+            return false;
+        }
+    }
+    
+    public String kiemTraKhaNangHuyVe(VeMayBay ve) {
+        if (!veDaDat.contains(ve)) {
+            return "Vé không thuộc về khách hàng này";
+        }
+        
+        return ve.getThongBaoKhongTheHuy();
+    }
+    
+    public void themHoaDon(HoaDon hoaDon) {
+        if (hoaDon != null && !lichSuHoaDon.contains(hoaDon)) {
+            lichSuHoaDon.add(hoaDon);
+            
+            // Cộng điểm tích lũy từ hóa đơn
+            int diemThuong = hoaDon.tinhDiemTichLuy();
+            tangDiemTichLuy(diemThuong);
+        }
+    }
+    
     public void tangDiemTichLuy(int diem) {
         if (diem < 0) {
             throw new IllegalArgumentException("Điểm tích lũy không được âm");
@@ -75,23 +150,24 @@ public class KhachHang {
         capNhatHangKhachHang();
     }
     
-    public void giamDiemTichLuy(int diem) {
+    public boolean suDungDiemTichLuy(int diem) {
         if (diem < 0) {
-            throw new IllegalArgumentException("Điểm giảm không được âm");
+            throw new IllegalArgumentException("Điểm sử dụng không được âm");
         }
         if (diem > this.diemTichLuy) {
-            throw new IllegalArgumentException("Không đủ điểm để giảm");
+            return false; // Không đủ điểm
         }
         this.diemTichLuy -= diem;
         capNhatHangKhachHang();
+        return true;
     }
     
     private void capNhatHangKhachHang() {
-        if (diemTichLuy >= 10000) {
+        if (diemTichLuy >= DIEM_PLATINUM) {
             hangKhachHang = HANG_PLATINUM;
-        } else if (diemTichLuy >= 5000) {
+        } else if (diemTichLuy >= DIEM_GOLD) {
             hangKhachHang = HANG_GOLD;
-        } else if (diemTichLuy >= 1000) {
+        } else if (diemTichLuy >= DIEM_SILVER) {
             hangKhachHang = HANG_SILVER;
         } else {
             hangKhachHang = HANG_BRONZE;
@@ -107,39 +183,120 @@ public class KhachHang {
         }
     }
     
-    // VALIDATION METHODS - static để dùng chung
-    public static boolean validateEmail(String email) {
-        return email != null && EMAIL_PATTERN.matcher(email).matches();
+    public double tinhMucGiamGia(double tongTien) {
+        return tongTien * tinhTyLeGiamGia();
     }
     
-    public static boolean validatePhone(String phone) {
-        return phone != null && PHONE_PATTERN.matcher(phone).matches();
+    // TRA CỨU VÀ XEM THÔNG TIN
+    public List<HoaDon> getLichSuHoaDon() {
+        return new ArrayList<>(lichSuHoaDon);
     }
     
-    public static boolean validateCMND(String cmnd) {
-        return cmnd != null && CMND_PATTERN.matcher(cmnd).matches();
+    public List<VeMayBay> getVeDaDat() {
+        return new ArrayList<>(veDaDat);
     }
     
-    // UTILITY METHODS - chỉ liên quan đến bản thân
-    public boolean kiemTraDuTuoi(int tuoiToiThieu) {
-        if (ngaySinh == null) return false;
+    public List<VeMayBay> getVeChuaBay() {
+        List<VeMayBay> result = new ArrayList<>();
+        for (VeMayBay ve : veDaDat) {
+            if (!ve.daBay() && ve.coTheSuDung()) {
+                result.add(ve);
+            }
+        }
+        return result;
+    }
+    
+    public List<VeMayBay> getVeDaBay() {
+        List<VeMayBay> result = new ArrayList<>();
+        for (VeMayBay ve : veDaDat) {
+            if (ve.daBay()) {
+                result.add(ve);
+            }
+        }
+        return result;
+    }
+    
+    public List<VeMayBay> getVeCoTheHuy() {
+        List<VeMayBay> result = new ArrayList<>();
+        for (VeMayBay ve : veDaDat) {
+            if (ve.coTheHuy()) {
+                result.add(ve);
+            }
+        }
+        return result;
+    }
+    
+    public HoaDon timHoaDonTheoMa(String maHoaDon) {
+        for (HoaDon hd : lichSuHoaDon) {
+            if (hd.getMaHoaDon().equals(maHoaDon)) {
+                return hd;
+            }
+        }
+        return null;
+    }
+    
+    public VeMayBay timVeTheoMa(String maVe) {
+        for (VeMayBay ve : veDaDat) {
+            if (ve.getMaVe().equals(maVe)) {
+                return ve;
+            }
+        }
+        return null;
+    }
+    
+    // CHỈNH SỬA THÔNG TIN CÁ NHÂN
+    public boolean capNhatThongTinCaNhan(String hoTenMoi, String soDTMoi, String emailMoi, 
+                                        String diaChiMoi, String gioiTinhMoi) {
+        if (!coTheThucHienChucNang("CHINH_SUA_THONG_TIN")) {
+            return false;
+        }
         
-        Date now = new Date();
-        long diff = now.getTime() - ngaySinh.getTime();
-        long age = diff / (1000L * 60 * 60 * 24 * 365);
-        
-        return age >= tuoiToiThieu;
+        try {
+            if (hoTenMoi != null && !hoTenMoi.trim().isEmpty()) {
+                setHoTen(hoTenMoi);
+            }
+            if (soDTMoi != null && !soDTMoi.trim().isEmpty()) {
+                setSoDT(soDTMoi);
+            }
+            if (emailMoi != null && !emailMoi.trim().isEmpty()) {
+                setEmail(emailMoi);
+            }
+            if (diaChiMoi != null && !diaChiMoi.trim().isEmpty()) {
+                setDiaChi(diaChiMoi);
+            }
+            if (gioiTinhMoi != null && !gioiTinhMoi.trim().isEmpty()) {
+                setGioiTinh(gioiTinhMoi);
+            }
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
     
-    public int tinhTuoi() {
-        if (ngaySinh == null) return 0;
-        
-        Date now = new Date();
-        long diff = now.getTime() - ngaySinh.getTime();
-        return (int) (diff / (1000L * 60 * 60 * 24 * 365));
+    // THỐNG KÊ CÁ NHÂN
+    public int getTongSoChuyenBay() {
+        return veDaDat.size();
     }
     
-    public long tinhSoNgayThanhVien() {
+    public int getSoChuyenBayDaBay() {
+        return getVeDaBay().size();
+    }
+    
+    public int getSoChuyenBaySapBay() {
+        return getVeChuaBay().size();
+    }
+    
+    public double getTongChiTieu() {
+        double tong = 0;
+        for (HoaDon hd : lichSuHoaDon) {
+            if (hd.getTrangThai().equals(HoaDon.TT_DA_TT)) {
+                tong += hd.getThanhTien();
+            }
+        }
+        return tong;
+    }
+    
+    public long getSoNgayThanhVien() {
         if (ngayDangKy == null) return 0;
         
         Date now = new Date();
@@ -147,99 +304,41 @@ public class KhachHang {
         return diff / (1000L * 60 * 60 * 24);
     }
     
+    // UTILITY METHODS CHO GUI
+    public Object[] toRowData() {
+        return new Object[] {
+            getMa(),
+            getHoTen(),
+            getSoDT(),
+            getEmail(),
+            hangKhachHang,
+            diemTichLuy,
+            String.format("%,.0f VND", getTongChiTieu()),
+            getSoNgayThanhVien() + " ngày"
+        };
+    }
+    
+    public String getThongTinThanhVien() {
+        return String.format(
+            "Hạng: %s\nĐiểm tích lũy: %d\nTỷ lệ giảm giá: %.1f%%\nNgày đăng ký: %s\nSố ngày thành viên: %d",
+            hangKhachHang, diemTichLuy, tinhTyLeGiamGia() * 100, ngayDangKy, getSoNgayThanhVien()
+        );
+    }
+    
+    public String getThongKeCaNhan() {
+        return String.format(
+            "Tổng số chuyến bay: %d\nĐã bay: %d\nSắp bay: %d\nTổng chi tiêu: %,.0f VND",
+            getTongSoChuyenBay(), getSoChuyenBayDaBay(), getSoChuyenBaySapBay(), getTongChiTieu()
+        );
+    }
+    
     @Override
     public String toString() {
         return String.format("KhachHang[%s: %s, %s, %d điểm, %s]", 
-                           maKH, hoTen, soDT, diemTichLuy, hangKhachHang);
+                           getMa(), getHoTen(), getSoDT(), diemTichLuy, hangKhachHang);
     }
     
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        KhachHang that = (KhachHang) obj;
-        return maKH != null && maKH.equals(that.maKH);
-    }
-    
-    @Override
-    public int hashCode() {
-        return maKH != null ? maKH.hashCode() : 0;
-    }
-    
-    // Getters and Setters với VALIDATION
-    public String getMaKH() { return maKH; }
-    public void setMaKH(String maKH) { 
-        if (maKH == null || maKH.trim().isEmpty()) {
-            throw new IllegalArgumentException("Mã KH không được để trống");
-        }
-        this.maKH = maKH.trim().toUpperCase();
-    }
-    
-    public String getHoTen() { return hoTen; }
-    public void setHoTen(String hoTen) { 
-        if (hoTen == null || hoTen.trim().isEmpty()) {
-            throw new IllegalArgumentException("Họ tên không được để trống");
-        }
-        this.hoTen = hoTen.trim();
-    }
-    
-    public String getSoDT() { return soDT; }
-    public void setSoDT(String soDT) { 
-        if (soDT == null || soDT.trim().isEmpty()) {
-            throw new IllegalArgumentException("Số ĐT không được để trống");
-        }
-        if (!validatePhone(soDT.trim())) {
-            throw new IllegalArgumentException("Số điện thoại không hợp lệ: " + soDT);
-        }
-        this.soDT = soDT.trim();
-    }
-    
-    public String getEmail() { return email; }
-    public void setEmail(String email) { 
-        if (email == null || email.trim().isEmpty()) {
-            throw new IllegalArgumentException("Email không được để trống");
-        }
-        if (!validateEmail(email.trim())) {
-            throw new IllegalArgumentException("Email không hợp lệ: " + email);
-        }
-        this.email = email.trim().toLowerCase();
-    }
-    
-    public String getCmnd() { return cmnd; }
-    public void setCmnd(String cmnd) { 
-        if (cmnd == null || cmnd.trim().isEmpty()) {
-            throw new IllegalArgumentException("CMND không được để trống");
-        }
-        if (!validateCMND(cmnd.trim())) {
-            throw new IllegalArgumentException("CMND không hợp lệ: " + cmnd);
-        }
-        this.cmnd = cmnd.trim();
-    }
-    
-    public Date getNgaySinh() { return ngaySinh; }
-    public void setNgaySinh(Date ngaySinh) { 
-        if (ngaySinh != null && ngaySinh.after(new Date())) {
-            throw new IllegalArgumentException("Ngày sinh không thể ở tương lai");
-        }
-        this.ngaySinh = ngaySinh;
-    }
-    
-    public String getGioiTinh() { return gioiTinh; }
-    public void setGioiTinh(String gioiTinh) { 
-        if (gioiTinh == null || (!gioiTinh.equals("Nam") && !gioiTinh.equals("Nữ"))) {
-            throw new IllegalArgumentException("Giới tính phải là 'Nam' hoặc 'Nữ'");
-        }
-        this.gioiTinh = gioiTinh;
-    }
-    
-    public String getDiaChi() { return diaChi; }
-    public void setDiaChi(String diaChi) { 
-        if (diaChi == null || diaChi.trim().isEmpty()) {
-            throw new IllegalArgumentException("Địa chỉ không được để trống");
-        }
-        this.diaChi = diaChi.trim();
-    }
-    
+    // GETTERS AND SETTERS
     public String getHangKhachHang() { return hangKhachHang; }
     public void setHangKhachHang(String hangKhachHang) { 
         if (!hangKhachHang.equals(HANG_BRONZE) && 
@@ -266,5 +365,20 @@ public class KhachHang {
             throw new IllegalArgumentException("Ngày đăng ký không thể ở tương lai");
         }
         this.ngayDangKy = ngayDangKy;
+    }
+    
+    // Additional utility methods for GUI
+    public boolean isHangBronze() { return HANG_BRONZE.equals(hangKhachHang); }
+    public boolean isHangSilver() { return HANG_SILVER.equals(hangKhachHang); }
+    public boolean isHangGold() { return HANG_GOLD.equals(hangKhachHang); }
+    public boolean isHangPlatinum() { return HANG_PLATINUM.equals(hangKhachHang); }
+    
+    public String getHangKhachHangText() {
+        switch (hangKhachHang) {
+            case HANG_PLATINUM: return "Bạch Kim";
+            case HANG_GOLD: return "Vàng";
+            case HANG_SILVER: return "Bạc";
+            default: return "Đồng";
+        }
     }
 }

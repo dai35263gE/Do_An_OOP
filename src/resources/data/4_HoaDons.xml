@@ -1,146 +1,213 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <HoaDons>
-    <!-- Hóa đơn từ các vé thương gia -->
     <HoaDon>
-        <MaHoaDon>HDVG001</MaHoaDon>
-        <NgayLap>2024-01-10 14:30:00</NgayLap>
-        <MaVe>VG001</MaVe>
-        <MaKH>KH001</MaKH>
-        <MaNV>NV001</MaNV>
-        <TongTien>3500000</TongTien>
-        <Thue>350000</Thue>
-        <KhuyenMai>175000</KhuyenMai>
-        <ThanhTien>3675000</ThanhTien>
+        <MaHoaDon>HD001</MaHoaDon>
+        <NgayLap>2024-01-15 09:30:00</NgayLap>
+        <TongTien>2500000</TongTien>
+        <Thue>200000</Thue>
+        <KhuyenMai>100000</KhuyenMai>
+        <ThanhTien>2600000</ThanhTien>
         <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
         <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+        <MaKH>KH001</MaKH>
+        <HoTen>Nguyễn Văn An</HoTen>
+        <SoDT>0912345678</SoDT>
+        <Email>nguyenvanan@email.com</Email>
+        <CMND>001123456789</CMND>
+        <NgaySinh>1990-05-15</NgaySinh>
+        <GioiTinh>Nam</GioiTinh>
+        <DiaChi>Hà Nội</DiaChi>
+        <TenDangNhap>nguyenvanan</TenDangNhap>
+        <MatKhau>password123</MatKhau>
+        <DanhSachMaVe>VG001,VG002</DanhSachMaVe>
     </HoaDon>
-    
     <HoaDon>
-        <MaHoaDon>HDVG002</MaHoaDon>
-        <NgayLap>2024-01-13 10:20:00</NgayLap>
-        <MaVe>VG002</MaVe>
-        <MaKH>KH004</MaKH>
-        <MaNV>NV002</MaNV>
-        <TongTien>2100000</TongTien>
-        <Thue>210000</Thue>
-        <KhuyenMai>105000</KhuyenMai>
-        <ThanhTien>2205000</ThanhTien>
-        <PhuongThucTT>THẺ_TÍN_DỤNG</PhuongThucTT>
-        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
-    </HoaDon>
-    
-    <!-- Hóa đơn từ các vé phổ thông -->
-    <HoaDon>
-        <MaHoaDon>HDPT001</MaHoaDon>
-        <NgayLap>2024-01-11 09:15:00</NgayLap>
-        <MaVe>VP001</MaVe>
-        <MaKH>KH002</MaKH>
-        <MaNV>NV001</MaNV>
-        <TongTien>1160000</TongTien>
-        <Thue>92800</Thue>
-        <KhuyenMai>58000</KhuyenMai>
-        <ThanhTien>1206800</ThanhTien>
+        <MaHoaDon>HD002</MaHoaDon>
+        <NgayLap>2024-01-16 14:20:00</NgayLap>
+        <TongTien>1800000</TongTien>
+        <Thue>144000</Thue>
+        <KhuyenMai>50000</KhuyenMai>
+        <ThanhTien>1894000</ThanhTien>
         <PhuongThucTT>TIỀN_MẶT</PhuongThucTT>
         <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+        <MaKH>KH002</MaKH>
+        <HoTen>Trần Thị Bình</HoTen>
+        <SoDT>0923456789</SoDT>
+        <Email>tranthibinh@email.com</Email>
+        <CMND>001234567890</CMND>
+        <NgaySinh>1985-08-20</NgaySinh>
+        <GioiTinh>Nữ</GioiTinh>
+        <DiaChi>TP.HCM</DiaChi>
+        <TenDangNhap>tranthibinh</TenDangNhap>
+        <MatKhau>password456</MatKhau>
+        <DanhSachMaVe>VG003 VT007</DanhSachMaVe>
     </HoaDon>
-    
     <HoaDon>
-        <MaHoaDon>HDPT002</MaHoaDon>
-        <NgayLap>2024-01-14 15:45:00</NgayLap>
-        <MaVe>VP002</MaVe>
-        <MaKH>KH005</MaKH>
-        <MaNV>NV003</MaNV>
-        <TongTien>2050000</TongTien>
-        <Thue>164000</Thue>
-        <KhuyenMai>102500</KhuyenMai>
-        <ThanhTien>2111500</ThanhTien>
-        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <MaHoaDon>HD003</MaHoaDon>
+        <NgayLap>2024-01-17 10:15:00</NgayLap>
+        <TongTien>3200000</TongTien>
+        <Thue>256000</Thue>
+        <KhuyenMai>150000</KhuyenMai>
+        <ThanhTien>3306000</ThanhTien>
+        <PhuongThucTT>THẺ_TÍN_DỤNG</PhuongThucTT>
         <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
-    </HoaDon>
-    
-    <HoaDon>
-        <MaHoaDon>HDPT003</MaHoaDon>
-        <NgayLap>2024-01-10 11:20:00</NgayLap>
-        <MaVe>VP003</MaVe>
-        <MaKH>KH007</MaKH>
-        <MaNV>NV002</MaNV>
-        <TongTien>2350000</TongTien>
-        <Thue>188000</Thue>
-        <KhuyenMai>117500</KhuyenMai>
-        <ThanhTien>2420500</ThanhTien>
-        <PhuongThucTT>VÍ_ĐIỆN_TỬ</PhuongThucTT>
-        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
-    </HoaDon>
-    
-    <!-- Hóa đơn từ các vé tiết kiệm -->
-    <HoaDon>
-        <MaHoaDon>HDTK001</MaHoaDon>
-        <NgayLap>2024-01-12 16:45:00</NgayLap>
-        <MaVe>VT001</MaVe>
         <MaKH>KH003</MaKH>
-        <MaNV>NV001</MaNV>
-        <TongTien>486000</TongTien>
-        <Thue>24300</Thue>
-        <KhuyenMai>24300</KhuyenMai>
-        <ThanhTien>486000</ThanhTien>
-        <PhuongThucTT>TIỀN_MẶT</PhuongThucTT>
-        <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
+        <HoTen>Lê Văn Cường</HoTen>
+        <SoDT>0934567890</SoDT>
+        <Email>levancuong@email.com</Email>
+        <CMND>001345678901</CMND>
+        <NgaySinh>1992-12-10</NgaySinh>
+        <GioiTinh>Nam</GioiTinh>
+        <DiaChi>Đà Nẵng</DiaChi>
+        <TenDangNhap>levancuong</TenDangNhap>
+        <MatKhau>password789</MatKhau>
+        <DanhSachMaVe>VG004,VP005</DanhSachMaVe>
     </HoaDon>
-    
     <HoaDon>
-        <MaHoaDon>HDTK002</MaHoaDon>
-        <NgayLap>2024-01-15 08:30:00</NgayLap>
-        <MaVe>VT002</MaVe>
-        <MaKH>KH006</MaKH>
-        <MaNV>NV004</MaNV>
-        <TongTien>1134000</TongTien>
-        <Thue>56700</Thue>
-        <KhuyenMai>56700</KhuyenMai>
-        <ThanhTien>1134000</ThanhTien>
-        <PhuongThucTT>THẺ_TÍN_DỤNG</PhuongThucTT>
-        <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
-    </HoaDon>
-    
-    <HoaDon>
-        <MaHoaDon>HDTK003</MaHoaDon>
-        <NgayLap>2024-01-13 17:10:00</NgayLap>
-        <MaVe>VT003</MaVe>
-        <MaKH>KH008</MaKH>
-        <MaNV>NV005</MaNV>
-        <TongTien>648000</TongTien>
-        <Thue>32400</Thue>
-        <KhuyenMai>32400</KhuyenMai>
-        <ThanhTien>648000</ThanhTien>
+        <MaHoaDon>HD004</MaHoaDon>
+        <NgayLap>2024-01-18 16:45:00</NgayLap>
+        <TongTien>1500000</TongTien>
+        <Thue>120000</Thue>
+        <KhuyenMai>0</KhuyenMai>
+        <ThanhTien>1620000</ThanhTien>
         <PhuongThucTT>VÍ_ĐIỆN_TỬ</PhuongThucTT>
         <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
+        <MaKH>KH004</MaKH>
+        <HoTen>Phạm Thị Dung</HoTen>
+        <SoDT>0945678901</SoDT>
+        <Email>phamthidung@email.com</Email>
+        <CMND>001456789012</CMND>
+        <NgaySinh>1988-03-25</NgaySinh>
+        <GioiTinh>Nữ</GioiTinh>
+        <DiaChi>Cần Thơ</DiaChi>
+        <TenDangNhap>phamthidung</TenDangNhap>
+        <MatKhau>password012</MatKhau>
+        <DanhSachMaVe>VP006</DanhSachMaVe>
     </HoaDon>
-    
-    <!-- Hóa đơn bổ sung -->
     <HoaDon>
-        <MaHoaDon>HDVG003</MaHoaDon>
-        <NgayLap>2024-01-16 09:45:00</NgayLap>
-        <MaVe>VG003</MaVe>
-        <MaKH>KH002</MaKH>
-        <MaNV>NV003</MaNV>
+        <MaHoaDon>HD005</MaHoaDon>
+        <NgayLap>2024-01-19 11:30:00</NgayLap>
         <TongTien>2800000</TongTien>
-        <Thue>280000</Thue>
-        <KhuyenMai>140000</KhuyenMai>
-        <ThanhTien>2940000</ThanhTien>
+        <Thue>224000</Thue>
+        <KhuyenMai>200000</KhuyenMai>
+        <ThanhTien>2824000</ThanhTien>
         <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
         <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+        <MaKH>KH005</MaKH>
+        <HoTen>Hoàng Văn Em</HoTen>
+        <SoDT>0956789012</SoDT>
+        <Email>hoangvanem@email.com</Email>
+        <CMND>001567890123</CMND>
+        <NgaySinh>1995-07-18</NgaySinh>
+        <GioiTinh>Nam</GioiTinh>
+        <DiaChi>Hải Phòng</DiaChi>
+        <TenDangNhap>hoangvanem</TenDangNhap>
+        <MatKhau>password345</MatKhau>
+        <DanhSachMaVe>VT007,VG003</DanhSachMaVe>
     </HoaDon>
-    
     <HoaDon>
-        <MaHoaDon>HDPT004</MaHoaDon>
-        <NgayLap>2024-01-17 13:20:00</NgayLap>
-        <MaVe>VP004</MaVe>
-        <MaKH>KH001</MaKH>
-        <MaNV>NV004</MaNV>
-        <TongTien>950000</TongTien>
-        <Thue>76000</Thue>
-        <KhuyenMai>47500</KhuyenMai>
-        <ThanhTien>978500</ThanhTien>
+        <MaHoaDon>HD006</MaHoaDon>
+        <NgayLap>2024-01-20 13:20:00</NgayLap>
+        <TongTien>1900000</TongTien>
+        <Thue>152000</Thue>
+        <KhuyenMai>0</KhuyenMai>
+        <ThanhTien>2052000</ThanhTien>
         <PhuongThucTT>TIỀN_MẶT</PhuongThucTT>
         <TrangThai>HỦY</TrangThai>
+        <MaKH>KH006</MaKH>
+        <HoTen>Vũ Thị Phương</HoTen>
+        <SoDT>0967890123</SoDT>
+        <Email>vuthiphuong@email.com</Email>
+        <CMND>001678901234</CMND>
+        <NgaySinh>1993-09-05</NgaySinh>
+        <GioiTinh>Nữ</GioiTinh>
+        <DiaChi>Nha Trang</DiaChi>
+        <TenDangNhap>vuthiphuong</TenDangNhap>
+        <MatKhau>password678</MatKhau>
+        <DanhSachMaVe>VG006</DanhSachMaVe>
+    </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD007</MaHoaDon>
+        <NgayLap>2024-01-21 15:10:00</NgayLap>
+        <TongTien>4200000</TongTien>
+        <Thue>336000</Thue>
+        <KhuyenMai>300000</KhuyenMai>
+        <ThanhTien>4236000</ThanhTien>
+        <PhuongThucTT>THẺ_TÍN_DỤNG</PhuongThucTT>
+        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+        <MaKH>KH007</MaKH>
+        <HoTen>Đặng Văn Giang</HoTen>
+        <SoDT>0978901234</SoDT>
+        <Email>dangvangiang@email.com</Email>
+        <CMND>001789012345</CMND>
+        <NgaySinh>1987-11-30</NgaySinh>
+        <GioiTinh>Nam</GioiTinh>
+        <DiaChi>Vũng Tàu</DiaChi>
+        <TenDangNhap>dangvangiang</TenDangNhap>
+        <MatKhau>password901</MatKhau>
+        <DanhSachMaVe>VP003,VG002,VP001</DanhSachMaVe>
+    </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD008</MaHoaDon>
+        <NgayLap>2024-01-22 08:45:00</NgayLap>
+        <TongTien>1200000</TongTien>
+        <Thue>96000</Thue>
+        <KhuyenMai>50000</KhuyenMai>
+        <ThanhTien>1246000</ThanhTien>
+        <PhuongThucTT>VÍ_ĐIỆN_TỬ</PhuongThucTT>
+        <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
+        <MaKH>KH008</MaKH>
+        <HoTen>Mai Thị Hoa</HoTen>
+        <SoDT>0989012345</SoDT>
+        <Email>maithihoa@email.com</Email>
+        <CMND>001890123456</CMND>
+        <NgaySinh>1991-04-12</NgaySinh>
+        <GioiTinh>Nữ</GioiTinh>
+        <DiaChi>Huế</DiaChi>
+        <TenDangNhap>maithihoa</TenDangNhap>
+        <MatKhau>password234</MatKhau>
+        <DanhSachMaVe>VG005</DanhSachMaVe>
+    </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD009</MaHoaDon>
+        <NgayLap>2024-01-23 17:30:00</NgayLap>
+        <TongTien>3500000</TongTien>
+        <Thue>280000</Thue>
+        <KhuyenMai>250000</KhuyenMai>
+        <ThanhTien>3530000</ThanhTien>
+        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+        <MaKH>KH009</MaKH>
+        <HoTen>Bùi Văn Ích</HoTen>
+        <SoDT>0990123456</SoDT>
+        <Email>buivanich@email.com</Email>
+        <CMND>001901234567</CMND>
+        <NgaySinh>1989-06-22</NgaySinh>
+        <GioiTinh>Nam</GioiTinh>
+        <DiaChi>Quảng Ninh</DiaChi>
+        <TenDangNhap>buivanich</TenDangNhap>
+        <MatKhau>password567</MatKhau>
+        <DanhSachMaVe>VG006,VP007</DanhSachMaVe>
+    </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD010</MaHoaDon>
+        <NgayLap>2024-01-24 12:00:00</NgayLap>
+        <TongTien>2000000</TongTien>
+        <Thue>160000</Thue>
+        <KhuyenMai>100000</KhuyenMai>
+        <ThanhTien>2060000</ThanhTien>
+        <PhuongThucTT>TIỀN_MẶT</PhuongThucTT>
+        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+        <MaKH>KH010</MaKH>
+        <HoTen>Lý Thị Kim</HoTen>
+        <SoDT>0901234567</SoDT>
+        <Email>lythikim@email.com</Email>
+        <CMND>001012345678</CMND>
+        <NgaySinh>1994-02-14</NgaySinh>
+        <GioiTinh>Nữ</GioiTinh>
+        <DiaChi>Bình Dương</DiaChi>
+        <TenDangNhap>lythikim</TenDangNhap>
+        <MatKhau>password890</MatKhau>
+        <DanhSachMaVe>VT003</DanhSachMaVe>
     </HoaDon>
 </HoaDons>

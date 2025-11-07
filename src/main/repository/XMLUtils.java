@@ -13,48 +13,48 @@ public class XMLUtils {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final SimpleDateFormat dateOnlyFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-    // ========== CẬP NHẬT PHƯƠNG THỨC docFileXML ==========
-public static List<Map<String, String>> docFileXML(String tenFile) {
-    List<Map<String, String>> danhSach = new ArrayList<>();
-    try {
-        File file = new File(tenFile);
-        if (!file.exists()) {
-            System.out.println("File không tồn tại: " + tenFile);
-            return danhSach;
+    // ========== ĐỌC FILE XML ==========
+    public static List<Map<String, String>> docFileXML(String tenFile) {
+        List<Map<String, String>> danhSach = new ArrayList<>();
+        try {
+            File file = new File(tenFile);
+            if (!file.exists()) {
+                System.out.println("File không tồn tại: " + tenFile);
+                return danhSach;
+            }
+
+            String fixedXmlContent = fixDuplicateXmlDeclaration(file);
+            
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            
+            Document doc = builder.parse(new ByteArrayInputStream(fixedXmlContent.getBytes()));
+            doc.getDocumentElement().normalize();
+
+            String rootElementName = doc.getDocumentElement().getNodeName();
+            
+            switch (rootElementName) {
+                case "ChuyenBays":
+                    return docChuyenBays(doc);
+                case "KhachHangs":
+                    return docKhachHangs(doc);
+                case "VeMayBays":
+                    return docVeMayBays(doc);
+                case "HoaDons":
+                    return docHoaDons(doc);
+                default:
+                    System.out.println("Không hỗ trợ định dạng XML: " + rootElementName);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Lỗi đọc file XML: " + tenFile);
+            e.printStackTrace();
         }
 
-        // Sửa lỗi file có 2 dòng khai báo XML
-        String fixedXmlContent = fixDuplicateXmlDeclaration(file);
-        
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        
-        Document doc = builder.parse(new ByteArrayInputStream(fixedXmlContent.getBytes()));
-        doc.getDocumentElement().normalize();
-
-        String rootElementName = doc.getDocumentElement().getNodeName();
-        
-        // Xác định loại dữ liệu dựa trên root element - CẬP NHẬT THÊM HoaDons
-        if (rootElementName.equals("ChuyenBays")) {
-            return docChuyenBays(doc);
-        } else if (rootElementName.equals("KhachHangs")) {
-            return docKhachHangs(doc);
-        } else if (rootElementName.equals("VeMayBays")) {
-            return docVeMayBays(doc);
-        } else if (rootElementName.equals("HoaDons")) { // THÊM DÒNG NÀY
-            return docHoaDons(doc);
-        } else {
-            System.out.println("Không hỗ trợ định dạng XML: " + rootElementName);
-        }
-
-    } catch (Exception e) {
-        System.out.println("Lỗi đọc file XML: " + tenFile);
-        e.printStackTrace();
+        return danhSach;
     }
 
-    return danhSach;
-}
-    // Đọc dữ liệu ChuyenBays
+    // ========== ĐỌC CHUYẾN BAY ==========
     private static List<Map<String, String>> docChuyenBays(Document doc) {
         List<Map<String, String>> danhSach = new ArrayList<>();
         NodeList nodeList = doc.getElementsByTagName("ChuyenBay");
@@ -65,9 +65,10 @@ public static List<Map<String, String>> docFileXML(String tenFile) {
                 Element element = (Element) node;
                 Map<String, String> data = new HashMap<>();
 
-                String[] tags = {"MaChuyen", "DiemDi", "DiemDen", "GioKhoiHanh", 
-                               "GioDen", "SoGhe", "SoGheTrong", "MaMayBay", 
-                               "GiaCoBan", "TrangThai"};
+                String[] tags = {
+                    "MaChuyen", "DiemDi", "DiemDen", "GioKhoiHanh", 
+                    "GioDen", "SoGhe", "MaMayBay", "GiaCoBan", "TrangThai"
+                };
                 
                 for (String tag : tags) {
                     data.put(tag, getElementValue(element, tag));
@@ -76,11 +77,11 @@ public static List<Map<String, String>> docFileXML(String tenFile) {
                 danhSach.add(data);
             }
         }
-        System.out.println("Doc " + danhSach.size() + " chuyen bay tu XML");
+        System.out.println("Đọc " + danhSach.size() + " chuyến bay từ XML");
         return danhSach;
     }
 
-    // Đọc dữ liệu KhachHangs
+    // ========== ĐỌC KHÁCH HÀNG ==========
     private static List<Map<String, String>> docKhachHangs(Document doc) {
         List<Map<String, String>> danhSach = new ArrayList<>();
         NodeList nodeList = doc.getElementsByTagName("KhachHang");
@@ -91,9 +92,11 @@ public static List<Map<String, String>> docFileXML(String tenFile) {
                 Element element = (Element) node;
                 Map<String, String> data = new HashMap<>();
 
-                String[] tags = {"MaKH", "HoTen", "SoDT", "Email", "CMND", 
-                               "NgaySinh", "GioiTinh", "DiaChi", 
-                               "HangKhachHang", "DiemTichLuy", "NgayDangKy"};
+                String[] tags = {
+                    "MaKH", "HoTen", "SoDT", "Email", "CMND", 
+                    "NgaySinh", "GioiTinh", "DiaChi", "TenDangNhap", "MatKhau",
+                    "HangKhachHang", "DiemTichLuy", "NgayDangKy"
+                };
                 
                 for (String tag : tags) {
                     data.put(tag, getElementValue(element, tag));
@@ -102,11 +105,11 @@ public static List<Map<String, String>> docFileXML(String tenFile) {
                 danhSach.add(data);
             }
         }
-        System.out.println("Doc " + danhSach.size() + " khach hang tu XML");
+        System.out.println("Đọc " + danhSach.size() + " khách hàng từ XML");
         return danhSach;
     }
 
-    // Đọc dữ liệu VeMayBays (hỗ trợ nhiều loại vé)
+    // ========== ĐỌC VÉ MÁY BAY ==========
     private static List<Map<String, String>> docVeMayBays(Document doc) {
         List<Map<String, String>> danhSach = new ArrayList<>();
         
@@ -128,11 +131,10 @@ public static List<Map<String, String>> docFileXML(String tenFile) {
             danhSach.add(docVeMayBay(veTietKiemList.item(i), "VeTietKiem"));
         }
         
-        System.out.println("Doc " + danhSach.size() + " ve may bay tu XML");
+        System.out.println("Đọc " + danhSach.size() + " vé máy bay từ XML");
         return danhSach;
     }
 
-    // Đọc thông tin chung cho các loại vé
     private static Map<String, String> docVeMayBay(Node node, String loaiVe) {
         Map<String, String> data = new HashMap<>();
         data.put("LoaiVe", loaiVe);
@@ -141,8 +143,10 @@ public static List<Map<String, String>> docFileXML(String tenFile) {
             Element element = (Element) node;
             
             // Thông tin chung của tất cả vé
-            String[] commonTags = {"MaVe", "MaKH","HoTenKH", "CMND", "NgayBay", "GiaVe", 
-                                 "MaChuyen", "SoGhe", "TrangThai", "NgayDat"};
+            String[] commonTags = {
+                "MaVe","MaKhachHang", "NgayBay", "GiaVe", "MaChuyen", "SoGhe", 
+                "TrangThai", "NgayDat"
+            };
             
             for (String tag : commonTags) {
                 data.put(tag, getElementValue(element, tag));
@@ -151,24 +155,30 @@ public static List<Map<String, String>> docFileXML(String tenFile) {
             // Thông tin riêng cho từng loại vé
             switch (loaiVe) {
                 case "VeThuongGia":
-                    String[] thuongGiaTags = {"DichVuDacBiet", "PhuThu", "SoKgHanhLyMienPhi", 
-                                            "PhongChoVIP", "LoaiDoUong"};
+                    String[] thuongGiaTags = {
+                        "DichVuDacBiet", "PhuThu", "SoKgHanhLyMienPhi", 
+                        "PhongChoVIP", "LoaiDoUong"
+                    };
                     for (String tag : thuongGiaTags) {
                         data.put(tag, getElementValue(element, tag));
                     }
                     break;
                     
                 case "VePhoThong":
-                    String[] phoThongTags = {"HanhLyXachTay", "SoKgHanhLyKyGui", 
-                                           "PhiHanhLy", "LoaiGhe", "DoAn"};
+                    String[] phoThongTags = {
+                        "HanhLyXachTay", "SoKgHanhLyKyGui", 
+                        "PhiHanhLy", "LoaiGhe", "DoAn"
+                    };
                     for (String tag : phoThongTags) {
                         data.put(tag, getElementValue(element, tag));
                     }
                     break;
                     
                 case "VeTietKiem":
-                    String[] tietKiemTags = {"SoGioDatTruoc", "TyLeGiam", "HoanDoi", 
-                                           "PhiHoanDoi", "DieuKienGia"};
+                    String[] tietKiemTags = {
+                        "SoGioDatTruoc", "TyLeGiam", "HoanDoi", 
+                        "PhiHoanDoi", "DieuKienGia"
+                    };
                     for (String tag : tietKiemTags) {
                         data.put(tag, getElementValue(element, tag));
                     }
@@ -178,7 +188,9 @@ public static List<Map<String, String>> docFileXML(String tenFile) {
         
         return data;
     }
-    private static List<Map<String, String>> docHoaDons(Document doc) {
+
+    // ========== ĐỌC HÓA ĐƠN ==========
+   private static List<Map<String, String>> docHoaDons(Document doc) {
     List<Map<String, String>> danhSach = new ArrayList<>();
     NodeList nodeList = doc.getElementsByTagName("HoaDon");
     
@@ -188,92 +200,55 @@ public static List<Map<String, String>> docFileXML(String tenFile) {
             Element element = (Element) node;
             Map<String, String> data = new HashMap<>();
 
-            String[] tags = {
-                "MaHoaDon", "NgayLap", "MaVe", "MaKH", "MaNV", 
-                "TongTien", "Thue", "KhuyenMai", "ThanhTien", 
-                "PhuongThucTT", "TrangThai"
+            // Thông tin cơ bản hóa đơn
+            String[] hoaDonTags = {
+                "MaHoaDon", "NgayLap", "TongTien", "Thue", "KhuyenMai", 
+                "ThanhTien", "PhuongThucTT", "TrangThai"
             };
             
-            for (String tag : tags) {
+            for (String tag : hoaDonTags) {
                 data.put(tag, getElementValue(element, tag));
             }
+            
+            // Thông tin khách hàng
+            String[] khachHangTags = {
+                "MaKH", "HoTen", "SoDT", "Email", "CMND", 
+                "NgaySinh", "GioiTinh", "DiaChi", "TenDangNhap", "MatKhau"
+            };
+            
+            for (String tag : khachHangTags) {
+                data.put(tag, getElementValue(element, tag));
+            }
+            
+            // Thông tin vé (chỉ lưu mã vé)
+            data.put("DanhSachMaVe", getElementValue(element, "DanhSachMaVe"));
             
             danhSach.add(data);
         }
     }
-    System.out.println("Doc " + danhSach.size() + " hoa don tu XML");
+    System.out.println("Đọc " + danhSach.size() + " hóa đơn từ XML");
     return danhSach;
 }
 
-
-// ========== CẬP NHẬT PHƯƠNG THỨC getChildElementName ==========
-private static String getChildElementName(String rootElementName) {
-    switch (rootElementName) {
-        case "ChuyenBays": return "ChuyenBay";
-        case "KhachHangs": return "KhachHang";
-        case "VeMayBays": return "VeMayBay";
-        case "HoaDons": return "HoaDon"; // THÊM DÒNG NÀY
-        case "NhanViens": return "NhanVien"; // THÊM DÒNG NÀY
-        default: return "Item";
-    }
-}
-
-    // Lấy giá trị của một element
-    private static String getElementValue(Element element, String tagName) {
-        NodeList nodeList = element.getElementsByTagName(tagName);
-        if (nodeList.getLength() > 0) {
-            Node node = nodeList.item(0);
-            return node.getTextContent().trim();
-        }
-        return "";
-    }
-
-    // Sửa lỗi duplicate XML declaration
-    private static String fixDuplicateXmlDeclaration(File file) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        StringBuilder content = new StringBuilder();
-        String line;
-        boolean firstDeclaration = true;
-        
-        while ((line = reader.readLine()) != null) {
-            if (line.trim().startsWith("<?xml")) {
-                if (firstDeclaration) {
-                    content.append(line).append("\n");
-                    firstDeclaration = false;
-                }
-                // Bỏ qua các dòng khai báo XML tiếp theo
-            } else {
-                content.append(line).append("\n");
-            }
-        }
-        reader.close();
-        
-        return content.toString();
-    }
-
-    // ========== GHI DỮ LIỆU RA XML ==========
+    // ========== GHI FILE XML ==========
     public static boolean ghiFileXML(String tenFile, List<Map<String, String>> dataList, String rootElementName) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.newDocument();
 
-            // Tạo root element
             Element rootElement = doc.createElement(rootElementName);
             doc.appendChild(rootElement);
 
-            // Xác định loại element con dựa trên root element
             String childElementName = getChildElementName(rootElementName);
             
-            // Thêm các phần tử con
             for (Map<String, String> data : dataList) {
                 Element itemElement = doc.createElement(childElementName);
                 
                 for (Map.Entry<String, String> entry : data.entrySet()) {
-                    // Không ghi LoaiVe vào XML (chỉ dùng để phân biệt khi đọc)
-                    if (!"LoaiVe".equals(entry.getKey())) {
+                    if (!shouldSkipField(entry.getKey(), rootElementName)) {
                         Element fieldElement = doc.createElement(entry.getKey());
-                        fieldElement.appendChild(doc.createTextNode(entry.getValue()));
+                        fieldElement.appendChild(doc.createTextNode(entry.getValue() != null ? entry.getValue() : ""));
                         itemElement.appendChild(fieldElement);
                     }
                 }
@@ -302,11 +277,91 @@ private static String getChildElementName(String rootElementName) {
         }
     }
 
+    // ========== GHI THEO ĐỐI TƯỢNG CỤ THỂ ==========
+    
+    // Ghi danh sách chuyến bay
+    public static boolean ghiChuyenBays(String tenFile, List<Map<String, String>> chuyenBays) {
+        return ghiFileXML(tenFile, chuyenBays, "ChuyenBays");
+    }
 
+    // Ghi danh sách khách hàng
+    public static boolean ghiKhachHangs(String tenFile, List<Map<String, String>> khachHangs) {
+        return ghiFileXML(tenFile, khachHangs, "KhachHangs");
+    }
+
+    // Ghi danh sách vé máy bay
+    public static boolean ghiVeMayBays(String tenFile, List<Map<String, String>> veMayBays) {
+        return ghiFileXML(tenFile, veMayBays, "VeMayBays");
+    }
+
+    // Ghi danh sách hóa đơn
+    public static boolean ghiHoaDons(String tenFile, List<Map<String, String>> hoaDons) {
+        return ghiFileXML(tenFile, hoaDons, "HoaDons");
+    }
+
+    // ========== PHƯƠNG THỨC HỖ TRỢ ==========
+    
+    private static String getChildElementName(String rootElementName) {
+        switch (rootElementName) {
+            case "ChuyenBays": return "ChuyenBay";
+            case "KhachHangs": return "KhachHang";
+            case "VeMayBays": return "VeMayBay";
+            case "HoaDons": return "HoaDon";
+            default: return "Item";
+        }
+    }
+
+    private static boolean shouldSkipField(String fieldName, String rootElementName) {
+        // Không ghi trường LoaiVe vào XML (chỉ dùng để phân biệt khi đọc)
+        if ("LoaiVe".equals(fieldName)) {
+            return true;
+        }
+        
+        // Đối với vé máy bay, chỉ ghi các trường phù hợp với loại vé
+        if ("VeMayBays".equals(rootElementName)) {
+            // Xác định loại vé dựa trên dữ liệu (cần xử lý đặc biệt)
+            // Xử lý này sẽ được thực hiện ở lớp gọi
+        }
+        
+        return false;
+    }
+
+    private static String getElementValue(Element element, String tagName) {
+        NodeList nodeList = element.getElementsByTagName(tagName);
+        if (nodeList.getLength() > 0) {
+            Node node = nodeList.item(0);
+            return node.getTextContent().trim();
+        }
+        return "";
+    }
+
+    private static String fixDuplicateXmlDeclaration(File file) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        StringBuilder content = new StringBuilder();
+        String line;
+        boolean firstDeclaration = true;
+        
+        while ((line = reader.readLine()) != null) {
+            if (line.trim().startsWith("<?xml")) {
+                if (firstDeclaration) {
+                    content.append(line).append("\n");
+                    firstDeclaration = false;
+                }
+            } else {
+                content.append(line).append("\n");
+            }
+        }
+        reader.close();
+        
+        return content.toString();
+    }
 
     // ========== PHƯƠNG THỨC CHUYỂN ĐỔI ==========
     public static Date stringToDate(String dateString) {
         try {
+            if (dateString == null || dateString.trim().isEmpty()) {
+                return null;
+            }
             if (dateString.contains(" ")) {
                 return dateFormat.parse(dateString);
             } else {
@@ -314,15 +369,17 @@ private static String getChildElementName(String rootElementName) {
             }
         } catch (Exception e) {
             System.out.println("Lỗi chuyển đổi ngày: " + dateString);
-            return new Date();
+            return null;
         }
     }
 
     public static String dateToString(Date date) {
+        if (date == null) return "";
         return dateFormat.format(date);
     }
 
     public static String dateToDateOnlyString(Date date) {
+        if (date == null) return "";
         return dateOnlyFormat.format(date);
     }
 
@@ -344,5 +401,43 @@ private static String getChildElementName(String rootElementName) {
 
     public static boolean stringToBoolean(String value) {
         return "true".equalsIgnoreCase(value) || "1".equals(value);
+    }
+
+    // ========== PHƯƠNG THỨC TẠO DỮ LIỆU MẪU ==========
+    public static Map<String, String> taoChuyenBayData(String maChuyen, String diemDi, String diemDen, 
+                                                     Date gioKhoiHanh, Date gioDen, int soGhe, 
+                                                     String maMayBay, double giaCoBan, String trangThai) {
+        Map<String, String> data = new HashMap<>();
+        data.put("MaChuyen", maChuyen);
+        data.put("DiemDi", diemDi);
+        data.put("DiemDen", diemDen);
+        data.put("GioKhoiHanh", dateToString(gioKhoiHanh));
+        data.put("GioDen", dateToString(gioDen));
+        data.put("SoGhe", String.valueOf(soGhe));
+        data.put("MaMayBay", maMayBay);
+        data.put("GiaCoBan", String.valueOf(giaCoBan));
+        data.put("TrangThai", trangThai);
+        return data;
+    }
+
+    public static Map<String, String> taoKhachHangData(String maKH, String hoTen, String soDT, String email,
+                                                     String cmnd, Date ngaySinh, String gioiTinh, String diaChi,
+                                                     String tenDangNhap, String matKhau, String hangKhachHang,
+                                                     int diemTichLuy, Date ngayDangKy) {
+        Map<String, String> data = new HashMap<>();
+        data.put("MaKH", maKH);
+        data.put("HoTen", hoTen);
+        data.put("SoDT", soDT);
+        data.put("Email", email);
+        data.put("CMND", cmnd);
+        data.put("NgaySinh", dateToDateOnlyString(ngaySinh));
+        data.put("GioiTinh", gioiTinh);
+        data.put("DiaChi", diaChi);
+        data.put("TenDangNhap", tenDangNhap);
+        data.put("MatKhau", matKhau);
+        data.put("HangKhachHang", hangKhachHang);
+        data.put("DiemTichLuy", String.valueOf(diemTichLuy));
+        data.put("NgayDangKy", dateToDateOnlyString(ngayDangKy));
+        return data;
     }
 }

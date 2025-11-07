@@ -19,11 +19,8 @@ public class VePhoThong extends VeMayBay {
     private String loaiGhe; // Cửa sổ, lối đi
     private boolean doAn;
     
-    public VePhoThong(String maVe, String maKH, String hoTenKH, String cmnd, Date ngayBay, 
-                     double giaVe, String maChuyenBay, String soGhe, String trangThai,
-                     boolean hanhLyXachTay, int soKgHanhLyKyGui, 
-                     double phiHanhLy, String loaiGhe, boolean doAn) {
-        super(maVe, maKH, hoTenKH, cmnd, ngayBay, giaVe, maChuyenBay, soGhe, trangThai);
+    public VePhoThong(String maKH, String maVe, Date ngayBay, double giaVe, String maChuyen, String soGhe,boolean hanhLyXachTay, int soKgHanhLyKyGui, double phiHanhLy, String loaiGhe, boolean doAn) {
+        super(maKH, maVe, ngayBay, giaVe, maChuyen, soGhe);
         this.hanhLyXachTay = hanhLyXachTay;
         this.soKgHanhLyKyGui = soKgHanhLyKyGui;
         this.phiHanhLy = phiHanhLy;

@@ -18,11 +18,8 @@ public class VeTietKiem extends VeMayBay {
     private double phiHoanDoi;
     private String dieuKienGia;
     
-    public VeTietKiem(String maVe,String maKH, String hoTenKH, String cmnd, Date ngayBay, 
-                     double giaVe, String maChuyenBay, String soGhe, String trangThai,
-                     int soGioDatTruoc, double tyLeGiam, boolean hoanDoi,
-                     double phiHoanDoi, String dieuKienGia) {
-        super(maVe,maKH, hoTenKH, cmnd, ngayBay, giaVe, maChuyenBay, soGhe,trangThai);
+    public VeTietKiem(String maKH,String maVe,Date ngayBay, double giaVe, String maChuyenBay, String soGhe,int soGioDatTruoc, double tyLeGiam, boolean hoanDoi,double phiHoanDoi, String dieuKienGia) {
+        super(maKH,maVe, ngayBay, giaVe, maChuyenBay, soGhe);
         this.soGioDatTruoc = soGioDatTruoc;
         this.tyLeGiam = tyLeGiam;
         this.hoanDoi = hoanDoi;

@@ -1,110 +1,231 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <KhachHangs>
-    <!-- Các khách hàng hiện có -->
+    <!-- Khách hàng Hạng PLATINUM -->
     <KhachHang>
         <MaKH>KH001</MaKH>
         <HoTen>Nguyễn Văn An</HoTen>
         <SoDT>0912345678</SoDT>
-        <Email>nguyenvanan@email.com</Email>
+        <Email>nguyen.van.an@email.com</Email>
         <CMND>001123456789</CMND>
-        <NgaySinh>1990-05-15</NgaySinh>
+        <NgaySinh>1985-05-15</NgaySinh>
         <GioiTinh>Nam</GioiTinh>
-        <DiaChi>123 Nguyễn Trãi, Hà Nội</DiaChi>
-        <HangKhachHang>GOLD</HangKhachHang>
-        <DiemTichLuy>6500</DiemTichLuy>
-        <NgayDangKy>2023-01-10</NgayDangKy>
+        <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
+        <TenDangNhap>nguyenvanan</TenDangNhap>
+        <MatKhau>Abc@123456</MatKhau>
+        <HangKhachHang>PLATINUM</HangKhachHang>
+        <DiemTichLuy>15200</DiemTichLuy>
+        <NgayDangKy>2022-01-10</NgayDangKy>
     </KhachHang>
+
     <KhachHang>
         <MaKH>KH002</MaKH>
         <HoTen>Trần Thị Bình</HoTen>
         <SoDT>0923456789</SoDT>
-        <Email>tranthibinh@email.com</Email>
+        <Email>tran.thi.binh@email.com</Email>
         <CMND>001234567890</CMND>
-        <NgaySinh>1985-08-20</NgaySinh>
+        <NgaySinh>1988-08-20</NgaySinh>
         <GioiTinh>Nữ</GioiTinh>
-        <DiaChi>456 Lê Lợi, TP.HCM</DiaChi>
+        <DiaChi>456 Lê Lợi, Quận Hoàn Kiếm, Hà Nội</DiaChi>
+        <TenDangNhap>tranthibinh</TenDangNhap>
+        <MatKhau>Abc@123456</MatKhau>
         <HangKhachHang>PLATINUM</HangKhachHang>
-        <DiemTichLuy>12000</DiemTichLuy>
+        <DiemTichLuy>13450</DiemTichLuy>
         <NgayDangKy>2022-03-15</NgayDangKy>
     </KhachHang>
+
+    <!-- Khách hàng Hạng GOLD -->
     <KhachHang>
         <MaKH>KH003</MaKH>
         <HoTen>Lê Văn Cường</HoTen>
         <SoDT>0934567890</SoDT>
-        <Email>levancuong@email.com</Email>
+        <Email>le.van.cuong@email.com</Email>
         <CMND>001345678901</CMND>
-        <NgaySinh>1995-12-10</NgaySinh>
+        <NgaySinh>1990-12-10</NgaySinh>
         <GioiTinh>Nam</GioiTinh>
-        <DiaChi>789 Trần Hưng Đạo, Đà Nẵng</DiaChi>
-        <HangKhachHang>SILVER</HangKhachHang>
-        <DiemTichLuy>2500</DiemTichLuy>
-        <NgayDangKy>2023-06-20</NgayDangKy>
+        <DiaChi>789 Trần Hưng Đạo, Quận Hải Châu, Đà Nẵng</DiaChi>
+        <TenDangNhap>levancuong</TenDangNhap>
+        <MatKhau>Abc@123456</MatKhau>
+        <HangKhachHang>GOLD</HangKhachHang>
+        <DiemTichLuy>8200</DiemTichLuy>
+        <NgayDangKy>2023-01-20</NgayDangKy>
     </KhachHang>
-    
-    <!-- THÊM 5 KHÁCH HÀNG MỚI -->
+
     <KhachHang>
         <MaKH>KH004</MaKH>
         <HoTen>Phạm Thị Dung</HoTen>
         <SoDT>0945678901</SoDT>
-        <Email>phamthidung@email.com</Email>
+        <Email>pham.thi.dung@email.com</Email>
         <CMND>001456789012</CMND>
         <NgaySinh>1992-03-25</NgaySinh>
         <GioiTinh>Nữ</GioiTinh>
-        <DiaChi>321 Hai Bà Trưng, Hà Nội</DiaChi>
+        <DiaChi>321 Hai Bà Trưng, Quận 3, TP.HCM</DiaChi>
+        <TenDangNhap>phamthidung</TenDangNhap>
+        <MatKhau>Abc@123456</MatKhau>
         <HangKhachHang>GOLD</HangKhachHang>
-        <DiemTichLuy>5800</DiemTichLuy>
+        <DiemTichLuy>7500</DiemTichLuy>
         <NgayDangKy>2023-02-14</NgayDangKy>
     </KhachHang>
+
     <KhachHang>
         <MaKH>KH005</MaKH>
         <HoTen>Hoàng Văn Em</HoTen>
         <SoDT>0956789012</SoDT>
-        <Email>hoangvanem@email.com</Email>
+        <Email>hoang.van.em@email.com</Email>
         <CMND>001567890123</CMND>
-        <NgaySinh>1988-11-08</NgaySinh>
+        <NgaySinh>1987-11-08</NgaySinh>
         <GioiTinh>Nam</GioiTinh>
-        <DiaChi>654 Pasteur, TP.HCM</DiaChi>
-        <HangKhachHang>PLATINUM</HangKhachHang>
-        <DiemTichLuy>9800</DiemTichLuy>
-        <NgayDangKy>2022-08-30</NgayDangKy>
+        <DiaChi>654 Pasteur, Quận 1, TP.HCM</DiaChi>
+        <TenDangNhap>hoangvanem</TenDangNhap>
+        <MatKhau>Abc@123456</MatKhau>
+        <HangKhachHang>GOLD</HangKhachHang>
+        <DiemTichLuy>6800</DiemTichLuy>
+        <NgayDangKy>2023-03-10</NgayDangKy>
     </KhachHang>
+
+    <!-- Khách hàng Hạng SILVER -->
     <KhachHang>
         <MaKH>KH006</MaKH>
         <HoTen>Vũ Thị Phương</HoTen>
         <SoDT>0967890123</SoDT>
-        <Email>vuthiphuong@email.com</Email>
+        <Email>vu.thi.phuong@email.com</Email>
         <CMND>001678901234</CMND>
         <NgaySinh>1993-07-12</NgaySinh>
         <GioiTinh>Nữ</GioiTinh>
-        <DiaChi>987 Nguyễn Huệ, Đà Nẵng</DiaChi>
+        <DiaChi>987 Nguyễn Huệ, Quận Hải Châu, Đà Nẵng</DiaChi>
+        <TenDangNhap>vuthiphuong</TenDangNhap>
+        <MatKhau>Abc@123456</MatKhau>
         <HangKhachHang>SILVER</HangKhachHang>
-        <DiemTichLuy>3200</DiemTichLuy>
-        <NgayDangKy>2023-09-05</NgayDangKy>
+        <DiemTichLuy>4200</DiemTichLuy>
+        <NgayDangKy>2023-04-05</NgayDangKy>
     </KhachHang>
+
     <KhachHang>
         <MaKH>KH007</MaKH>
         <HoTen>Đặng Văn Quân</HoTen>
         <SoDT>0978901234</SoDT>
-        <Email>dangvanquan@email.com</Email>
+        <Email>dang.van.quan@email.com</Email>
         <CMND>001789012345</CMND>
-        <NgaySinh>1987-04-18</NgaySinh>
+        <NgaySinh>1991-04-18</NgaySinh>
         <GioiTinh>Nam</GioiTinh>
-        <DiaChi>159 Lý Thường Kiệt, Cần Thơ</DiaChi>
-        <HangKhachHang>BRONZE</HangKhachHang>
-        <DiemTichLuy>1200</DiemTichLuy>
-        <NgayDangKy>2023-11-20</NgayDangKy>
+        <DiaChi>159 Lý Thường Kiệt, Quận Ninh Kiều, Cần Thơ</DiaChi>
+        <TenDangNhap>dangvanquan</TenDangNhap>
+        <MatKhau>Abc@123456</MatKhau>
+        <HangKhachHang>SILVER</HangKhachHang>
+        <DiemTichLuy>3800</DiemTichLuy>
+        <NgayDangKy>2023-05-20</NgayDangKy>
     </KhachHang>
+
     <KhachHang>
         <MaKH>KH008</MaKH>
         <HoTen>Bùi Thị Hương</HoTen>
         <SoDT>0989012345</SoDT>
-        <Email>buithihuong@email.com</Email>
+        <Email>bui.thi.huong@email.com</Email>
         <CMND>001890123456</CMND>
-        <NgaySinh>1991-09-30</NgaySinh>
+        <NgaySinh>1994-09-30</NgaySinh>
         <GioiTinh>Nữ</GioiTinh>
-        <DiaChi>753 Trần Phú, Nha Trang</DiaChi>
+        <DiaChi>753 Trần Phú, Thành phố Nha Trang, Khánh Hòa</DiaChi>
+        <TenDangNhap>buithihuong</TenDangNhap>
+        <MatKhau>Abc@123456</MatKhau>
+        <HangKhachHang>SILVER</HangKhachHang>
+        <DiemTichLuy>2900</DiemTichLuy>
+        <NgayDangKy>2023-06-15</NgayDangKy>
+    </KhachHang>
+
+    <!-- Khách hàng Hạng BRONZE -->
+    <KhachHang>
+        <MaKH>KH009</MaKH>
+        <HoTen>Ngô Văn Hải</HoTen>
+        <SoDT>0990123456</SoDT>
+        <Email>ngo.van.hai@email.com</Email>
+        <CMND>001901234567</CMND>
+        <NgaySinh>1995-02-14</NgaySinh>
+        <GioiTinh>Nam</GioiTinh>
+        <DiaChi>456 Nguyễn Văn Linh, Quận Hải Châu, Đà Nẵng</DiaChi>
+        <TenDangNhap>ngovanhai</TenDangNhap>
+        <MatKhau>Abc@123456</MatKhau>
+        <HangKhachHang>BRONZE</HangKhachHang>
+        <DiemTichLuy>1800</DiemTichLuy>
+        <NgayDangKy>2023-07-22</NgayDangKy>
+    </KhachHang>
+
+    <KhachHang>
+        <MaKH>KH010</MaKH>
+        <HoTen>Đỗ Thị Lan</HoTen>
+        <SoDT>0911123456</SoDT>
+        <Email>do.thi.lan@email.com</Email>
+        <CMND>002012345678</CMND>
+        <NgaySinh>1996-06-08</NgaySinh>
+        <GioiTinh>Nữ</GioiTinh>
+        <DiaChi>123 Lê Duẩn, Quận Thanh Khê, Đà Nẵng</DiaChi>
+        <TenDangNhap>dothilan</TenDangNhap>
+        <MatKhau>Abc@123456</MatKhau>
+        <HangKhachHang>BRONZE</HangKhachHang>
+        <DiemTichLuy>1500</DiemTichLuy>
+        <NgayDangKy>2023-08-30</NgayDangKy>
+    </KhachHang>
+
+    <!-- Tiếp tục thêm 20 khách hàng nữa -->
+    <KhachHang>
+        <MaKH>KH011</MaKH>
+        <HoTen>Mai Văn Tú</HoTen>
+        <SoDT>0912234567</SoDT>
+        <Email>mai.van.tu@email.com</Email>
+        <CMND>002123456789</CMND>
+        <NgaySinh>1989-11-25</NgaySinh>
+        <GioiTinh>Nam</GioiTinh>
+        <DiaChi>789 Lý Tự Trọng, Quận 1, TP.HCM</DiaChi>
+        <TenDangNhap>maivantu</TenDangNhap>
+        <MatKhau>Abc@123456</MatKhau>
         <HangKhachHang>GOLD</HangKhachHang>
-        <DiemTichLuy>7100</DiemTichLuy>
-        <NgayDangKy>2022-12-08</NgayDangKy>
+        <DiemTichLuy>6100</DiemTichLuy>
+        <NgayDangKy>2023-09-12</NgayDangKy>
+    </KhachHang>
+
+    <KhachHang>
+        <MaKH>KH012</MaKH>
+        <HoTen>Lý Thị Mai</HoTen>
+        <SoDT>0913345678</SoDT>
+        <Email>ly.thi.mai@email.com</Email>
+        <CMND>002234567890</CMND>
+        <NgaySinh>1990-03-17</NgaySinh>
+        <GioiTinh>Nữ</GioiTinh>
+        <DiaChi>456 Nguyễn Thị Minh Khai, Quận 3, TP.HCM</DiaChi>
+        <TenDangNhap>lythimai</TenDangNhap>
+        <MatKhau>Abc@123456</MatKhau>
+        <HangKhachHang>SILVER</HangKhachHang>
+        <DiemTichLuy>3300</DiemTichLuy>
+        <NgayDangKy>2023-10-05</NgayDangKy>
+    </KhachHang>
+
+    <KhachHang>
+        <MaKH>KH013</MaKH>
+        <HoTen>Võ Văn Nam</HoTen>
+        <SoDT>0914456789</SoDT>
+        <Email>vo.van.nam@email.com</Email>
+        <CMND>002345678901</CMND>
+        <NgaySinh>1986-08-22</NgaySinh>
+        <GioiTinh>Nam</GioiTinh>
+        <DiaChi>321 Cách Mạng Tháng 8, Quận 10, TP.HCM</DiaChi>
+        <TenDangNhap>vovannam</TenDangNhap>
+        <MatKhau>Abc@123456</MatKhau>
+        <HangKhachHang>PLATINUM</HangKhachHang>
+        <DiemTichLuy>11200</DiemTichLuy>
+        <NgayDangKy>2022-11-18</NgayDangKy>
+    </KhachHang>
+
+    <KhachHang>
+        <MaKH>KH014</MaKH>
+        <HoTen>Trương Thị Nga</HoTen>
+        <SoDT>0915567890</SoDT>
+        <Email>truong.thi.nga@email.com</Email>
+        <CMND>002456789012</CMND>
+        <NgaySinh>1993-12-03</NgaySinh>
+        <GioiTinh>Nữ</GioiTinh>
+        <DiaChi>654 Điện Biên Phủ, Quận Bình Thạnh, TP.HCM</DiaChi>
+        <TenDangNhap>truongthinga</TenDangNhap>
+        <MatKhau>Abc@123456</MatKhau>
+        <HangKhachHang>SILVER</HangKhachHang>
+        <DiemTichLuy>2700</DiemTichLuy>
+        <NgayDangKy>2023-11-25</NgayDangKy>
     </KhachHang>
 </KhachHangs>

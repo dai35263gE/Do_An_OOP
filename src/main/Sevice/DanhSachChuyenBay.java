@@ -1,22 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Other/File.java to edit this template
- */
 package Sevice;
 
-/**
- *
- * @author HP
- */
-// File: DanhSachChuyenBay.java
-import java.util.List;
+import java.util.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import model.ChuyenBay;
 import repository.IFileHandler;
@@ -28,73 +14,69 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
     private ArrayList<ChuyenBay> danhSach;
     private static final int MAX_SIZE = 1000;
 
-    public ArrayList<ChuyenBay> getDanhSachChuyenBay() {
-        return this.danhSach;
-    }
-
     public DanhSachChuyenBay() {
         danhSach = new ArrayList<>();
+    }
+
+    // ========== GETTERS ==========
+    public ArrayList<ChuyenBay> getDanhSachChuyenBay() {
+        return new ArrayList<>(danhSach);
+    }
+
+    public List<ChuyenBay> getDanhSach() {
+        return new ArrayList<>(danhSach);
     }
 
     // ========== IMPLEMENT IQUANLY ==========
     @Override
     public boolean them(ChuyenBay chuyenBay) {
         if (danhSach.size() >= MAX_SIZE) {
-            System.out.println("Danh sách chuyến bay đã đầy!");
-            return false;
+            throw new IllegalStateException("Danh sách chuyến bay đã đầy!");
         }
 
         if (tonTai(chuyenBay.getMaChuyen())) {
-            System.out.println("Mã chuyến bay đã tồn tại!");
-            return false;
+            throw new IllegalArgumentException("Mã chuyến bay đã tồn tại: " + chuyenBay.getMaChuyen());
         }
 
-        // Kiểm tra trùng lịch bay
         if (kiemTraTrungLich(chuyenBay)) {
-            System.out.println("Trùng lịch bay với chuyến khác!");
-            return false;
+            throw new IllegalArgumentException("Trùng lịch bay với chuyến khác!");
         }
 
-        danhSach.add(chuyenBay);
-        System.out.println("Thêm chuyến bay thành công!");
-        return true;
+        return danhSach.add(chuyenBay);
     }
 
     @Override
     public boolean xoa(String maChuyen) {
-        for (Iterator<ChuyenBay> iterator = danhSach.iterator(); iterator.hasNext();) {
-            ChuyenBay cb = iterator.next();
-            if (cb.getMaChuyen().equals(maChuyen)) {
-                // Kiểm tra nếu đã có vé đặt cho chuyến này
-                if (cb.getSoGheTrong() != cb.getSoGhe()) {
-                    System.out.println("Không thể xóa! Đã có vé được đặt cho chuyến này.");
-                    return false;
-                }
-                iterator.remove();
-                System.out.println("Xóa chuyến bay thành công!");
-                return true;
-            }
+        ChuyenBay chuyenBay = timKiemTheoMa(maChuyen);
+        if (chuyenBay == null) {
+            throw new IllegalArgumentException("Không tìm thấy chuyến bay với mã: " + maChuyen);
         }
-        System.out.println("Không tìm thấy chuyến bay với mã: " + maChuyen);
-        return false;
+
+        if (chuyenBay.getSoGheTrong() != chuyenBay.getSoGhe()) {
+            throw new IllegalStateException("Không thể xóa! Đã có vé được đặt cho chuyến này.");
+        }
+
+        return danhSach.remove(chuyenBay);
     }
 
     @Override
     public boolean sua(String maChuyen, ChuyenBay chuyenBayMoi) {
-        for (int i = 0; i < danhSach.size(); i++) {
-            if (danhSach.get(i).getMaChuyen().equals(maChuyen)) {
-                // Kiểm tra trùng lịch (trừ chính nó)
-                if (kiemTraTrungLich(chuyenBayMoi, maChuyen)) {
-                    System.out.println("Trùng lịch bay với chuyến khác!");
-                    return false;
-                }
-                danhSach.set(i, chuyenBayMoi);
-                System.out.println("Cập nhật chuyến bay thành công!");
-                return true;
-            }
+        ChuyenBay chuyenBayCu = timKiemTheoMa(maChuyen);
+        if (chuyenBayCu == null) {
+            throw new IllegalArgumentException("Không tìm thấy chuyến bay với mã: " + maChuyen);
         }
-        System.out.println("Không tìm thấy chuyến bay với mã: " + maChuyen);
-        return false;
+
+        if (!maChuyen.equals(chuyenBayMoi.getMaChuyen()) && tonTai(chuyenBayMoi.getMaChuyen())) {
+            throw new IllegalArgumentException("Mã chuyến bay mới đã tồn tại!");
+        }
+
+        if (kiemTraTrungLich(chuyenBayMoi, maChuyen)) {
+            throw new IllegalArgumentException("Trùng lịch bay với chuyến khác!");
+        }
+
+        int index = danhSach.indexOf(chuyenBayCu);
+        danhSach.set(index, chuyenBayMoi);
+        return true;
     }
 
     @Override
@@ -107,88 +89,28 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
 
     @Override
     public List<ChuyenBay> timKiemTheoTen(String ten) {
-        // Tìm theo điểm đi/đến
-        List<ChuyenBay> ketQua = new ArrayList<>();
-        for (ChuyenBay cb : danhSach) {
-            if (cb.getDiemDi().toLowerCase().contains(ten.toLowerCase())
-                    || cb.getDiemDen().toLowerCase().contains(ten.toLowerCase())) {
-                ketQua.add(cb);
-            }
-        }
-        return ketQua;
-    }
-
-    // PHƯƠNG THỨC MỚI: Tìm kiếm theo tuyến bay
-    public List<ChuyenBay> timKiemTheoTuyen(String diemDi, String diemDen) {
-        List<ChuyenBay> ketQua = new ArrayList<>();
-        for (ChuyenBay cb : danhSach) {
-            if (cb.getDiemDi().equalsIgnoreCase(diemDi)
-                    && cb.getDiemDen().equalsIgnoreCase(diemDen)) {
-                ketQua.add(cb);
-            }
-        }
-        return ketQua;
+        String keyword = ten.toLowerCase();
+        return danhSach.stream()
+                .filter(cb -> cb.getDiemDi().toLowerCase().contains(keyword) ||
+                             cb.getDiemDen().toLowerCase().contains(keyword))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<ChuyenBay> timKiemTheoNgayBay(Date ngay) {
-        List<ChuyenBay> ketQua = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String ngayCanTim = sdf.format(ngay);
 
-        for (ChuyenBay cb : danhSach) {
-            String ngayChuyen = sdf.format(cb.getGioKhoiHanh());
-            if (ngayChuyen.equals(ngayCanTim)) {
-                ketQua.add(cb);
-            }
-        }
-        return ketQua;
+        return danhSach.stream()
+                .filter(cb -> sdf.format(cb.getGioKhoiHanh()).equals(ngayCanTim))
+                .collect(Collectors.toList());
     }
 
-    // TÌM KIẾM NÂNG CAO - ĐA TIÊU CHÍ
-    public List<ChuyenBay> timKiemChuyenBay(Map<String, Object> filters) {
-        List<ChuyenBay> ketQua = new ArrayList<>(danhSach);
-
-        for (Map.Entry<String, Object> entry : filters.entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-
-            switch (key) {
-                case "diemDi":
-                    ketQua.removeIf(cb -> !cb.getDiemDi().equalsIgnoreCase(value.toString()));
-                    break;
-                case "diemDen":
-                    ketQua.removeIf(cb -> !cb.getDiemDen().equalsIgnoreCase(value.toString()));
-                    break;
-                case "tuNgay":
-                    Date tuNgay = (Date) value;
-                    ketQua.removeIf(cb -> cb.getGioKhoiHanh().before(tuNgay));
-                    break;
-                case "denNgay":
-                    Date denNgay = (Date) value;
-                    ketQua.removeIf(cb -> cb.getGioKhoiHanh().after(denNgay));
-                    break;
-                case "conCho":
-                    boolean conCho = (boolean) value;
-                    if (conCho) {
-                        ketQua.removeIf(cb -> !cb.conGheTrong());
-                    }
-                    break;
-                case "maMayBay":
-                    ketQua.removeIf(cb -> !cb.getMaMayBay().equals(value));
-                    break;
-                case "giaMin":
-                    double giaMin = (double) value;
-                    ketQua.removeIf(cb -> cb.getGiaCoBan() < giaMin);
-                    break;
-                case "giaMax":
-                    double giaMax = (double) value;
-                    ketQua.removeIf(cb -> cb.getGiaCoBan() > giaMax);
-                    break;
-            }
-        }
-
-        return ketQua;
+    @Override
+    public List<ChuyenBay> timKiemTheoKhoangGia(double min, double max) {
+        return danhSach.stream()
+                .filter(cb -> cb.getGiaCoBan() >= min && cb.getGiaCoBan() <= max)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -213,7 +135,7 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
     public void hienThiTheoTrangThai(String trangThai) {
         List<ChuyenBay> ketQua = danhSach.stream()
                 .filter(cb -> cb.getTrangThai().equals(trangThai))
-                .toList();
+                .collect(Collectors.toList());
 
         if (ketQua.isEmpty()) {
             System.out.println("Không có chuyến bay nào với trạng thái: " + trangThai);
@@ -255,45 +177,103 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
         danhSach.sort(Comparator.comparing(ChuyenBay::getGioKhoiHanh));
     }
 
-    // SỬA: Thêm phương thức phân trang
+    // ========== PHƯƠNG THỨC TÌM KIẾM NÂNG CAO CHO GUI ==========
+    public List<ChuyenBay> timKiemTheoTuyen(String diemDi, String diemDen) {
+        return danhSach.stream()
+                .filter(cb -> cb.getDiemDi().equalsIgnoreCase(diemDi) &&
+                             cb.getDiemDen().equalsIgnoreCase(diemDen))
+                .collect(Collectors.toList());
+    }
+
+    public List<ChuyenBay> timKiemGanDung(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return new ArrayList<>(danhSach);
+        }
+        
+        String keywordLower = keyword.toLowerCase().trim();
+        
+        return danhSach.stream()
+                .filter(cb -> cb.getMaChuyen().toLowerCase().contains(keywordLower) ||
+                             cb.getDiemDi().toLowerCase().contains(keywordLower) ||
+                             cb.getDiemDen().toLowerCase().contains(keywordLower) ||
+                             cb.getMaMayBay().toLowerCase().contains(keywordLower) ||
+                             cb.getTrangThai().toLowerCase().contains(keywordLower))
+                .collect(Collectors.toList());
+    }
+
+    public List<ChuyenBay> timKiemChuyenBay(Map<String, Object> filters) {
+        List<ChuyenBay> ketQua = new ArrayList<>(danhSach);
+
+        for (Map.Entry<String, Object> entry : filters.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+
+            if (value == null || value.toString().isEmpty()) {
+                continue;
+            }
+
+            switch (key) {
+                case "diemDi":
+                    ketQua.removeIf(cb -> !cb.getDiemDi().equalsIgnoreCase(value.toString()));
+                    break;
+                case "diemDen":
+                    ketQua.removeIf(cb -> !cb.getDiemDen().equalsIgnoreCase(value.toString()));
+                    break;
+                case "tuNgay":
+                    Date tuNgay = (Date) value;
+                    ketQua.removeIf(cb -> cb.getGioKhoiHanh().before(tuNgay));
+                    break;
+                case "denNgay":
+                    Date denNgay = (Date) value;
+                    ketQua.removeIf(cb -> cb.getGioKhoiHanh().after(denNgay));
+                    break;
+                case "conCho":
+                    boolean conCho = (boolean) value;
+                    if (conCho) {
+                        ketQua.removeIf(cb -> !cb.conGheTrong());
+                    }
+                    break;
+                case "maMayBay":
+                    ketQua.removeIf(cb -> !cb.getMaMayBay().equals(value));
+                    break;
+                case "giaMin":
+                    double giaMin = (double) value;
+                    ketQua.removeIf(cb -> cb.getGiaCoBan() < giaMin);
+                    break;
+                case "giaMax":
+                    double giaMax = (double) value;
+                    ketQua.removeIf(cb -> cb.getGiaCoBan() > giaMax);
+                    break;
+                case "trangThai":
+                    ketQua.removeIf(cb -> !cb.getTrangThai().equals(value));
+                    break;
+            }
+        }
+
+        return ketQua;
+    }
+
+    // ========== PHÂN TRANG CHO GUI ==========
     public List<ChuyenBay> phanTrang(int trang, int kichThuocTrang) {
         int batDau = (trang - 1) * kichThuocTrang;
         int ketThuc = Math.min(batDau + kichThuocTrang, danhSach.size());
         
-        if (batDau >= danhSach.size()) {
+        if (batDau >= danhSach.size() || batDau < 0) {
             return new ArrayList<>();
         }
         
-        return danhSach.subList(batDau, ketThuc);
+        return new ArrayList<>(danhSach.subList(batDau, ketThuc));
     }
 
-    // SỬA: Thêm phương thức tìm kiếm gần đúng
-    public List<ChuyenBay> timKiemGanDung(String keyword) {
-        List<ChuyenBay> ketQua = new ArrayList<>();
-        String keywordLower = keyword.toLowerCase();
-        
-        for (ChuyenBay cb : danhSach) {
-            if (cb.getMaChuyen().toLowerCase().contains(keywordLower) ||
-                cb.getDiemDi().toLowerCase().contains(keywordLower) ||
-                cb.getDiemDen().toLowerCase().contains(keywordLower) ||
-                cb.getMaMayBay().toLowerCase().contains(keywordLower) ||
-                cb.getTrangThai().toLowerCase().contains(keywordLower)) {
-                ketQua.add(cb);
-            }
-        }
-        return ketQua;
+    public int getTongSoTrang(int kichThuocTrang) {
+        return (int) Math.ceil((double) danhSach.size() / kichThuocTrang);
     }
 
     // ========== IMPLEMENT IFILEHANDLER ==========
     @Override
     public boolean docFile(String tenFile) {
-        return docFileXML1(tenFile);
-    }
-
-    // SỬA: Sửa phương thức đọc file XML
-    private boolean docFileXML1(String tenFile) {
         try {
-            List<Map<String, String>> dataList = docFileXML(tenFile);
+            List<Map<String, String>> dataList = XMLUtils.docFileXML(tenFile);
 
             if (dataList.isEmpty()) {
                 System.out.println("Không có dữ liệu trong file XML");
@@ -303,7 +283,6 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
             int count = 0;
             for (Map<String, String> data : dataList) {
                 try {
-                    // Tạo đối tượng ChuyenBay từ dữ liệu XML
                     ChuyenBay cb = new ChuyenBay(
                             data.get("MaChuyen"),
                             data.get("DiemDi"),
@@ -316,38 +295,29 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
                             XMLUtils.stringToDouble(data.get("GiaCoBan"))
                     );
 
-                    // Cập nhật trạng thái
                     cb.setTrangThai(data.get("TrangThai"));
 
-                    // Thêm vào danh sách (kiểm tra trùng trước khi thêm)
                     if (!tonTai(cb.getMaChuyen())) {
                         danhSach.add(cb);
                         count++;
-                    } else {
-                        System.out.println("Bỏ qua chuyến bay trùng mã: " + cb.getMaChuyen());
                     }
 
                 } catch (Exception e) {
-                    System.out.println("Lỗi tạo ChuyenBay từ XML: " + e.getMessage());
-                    e.printStackTrace();
+                    System.err.println("Lỗi tạo ChuyenBay từ XML: " + e.getMessage());
                 }
             }
+            
+            System.out.println("Đã tải " + count + " chuyến bay từ file XML");
             return true;
 
         } catch (Exception e) {
-            System.out.println("Lỗi đọc file XML: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Lỗi đọc file XML: " + e.getMessage());
             return false;
         }
     }
 
     @Override
     public boolean ghiFile(String tenFile) {
-        return ghiFileXML(tenFile);
-    }
-
-    // SỬA: Sửa phương thức ghi file XML
-    private boolean ghiFileXML(String tenFile) {
         try {
             List<Map<String, String>> dataList = new ArrayList<>();
 
@@ -367,32 +337,27 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
                 dataList.add(data);
             }
 
-            return ghiFileXML(tenFile, dataList, "ChuyenBays");
+            return XMLUtils.ghiFileXML(tenFile, dataList, "ChuyenBays");
 
         } catch (Exception e) {
-            System.out.println("Lỗi ghi file XML: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Lỗi ghi file XML: " + e.getMessage());
             return false;
         }
     }
 
-    // ========== PHƯƠNG THỨC NGHIỆP VỤ ==========
+    // ========== PHƯƠNG THỨC NGHIỆP VỤ CHO GUI ==========
     private boolean kiemTraTrungLich(ChuyenBay chuyenBayMoi) {
         return kiemTraTrungLich(chuyenBayMoi, null);
     }
 
     private boolean kiemTraTrungLich(ChuyenBay chuyenBayMoi, String maLoaiTru) {
         for (ChuyenBay cb : danhSach) {
-            // Bỏ qua chuyến bay đang chỉnh sửa
             if (maLoaiTru != null && cb.getMaChuyen().equals(maLoaiTru)) {
                 continue;
             }
 
-            // Kiểm tra trùng máy bay và thời gian
             if (cb.getMaMayBay().equals(chuyenBayMoi.getMaMayBay())) {
-                long thoiGianTrung = Math.abs(cb.getGioKhoiHanh().getTime()
-                        - chuyenBayMoi.getGioKhoiHanh().getTime());
-                // Nếu cùng máy bay và cách nhau dưới 4 tiếng -> trùng
+                long thoiGianTrung = Math.abs(cb.getGioKhoiHanh().getTime() - chuyenBayMoi.getGioKhoiHanh().getTime());
                 if (thoiGianTrung < 4 * 60 * 60 * 1000) {
                     return true;
                 }
@@ -404,85 +369,114 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
     public List<ChuyenBay> getChuyenBayConCho() {
         return danhSach.stream()
                 .filter(ChuyenBay::conGheTrong)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     public boolean datGheChuyenBay(String maChuyen) {
         ChuyenBay cb = timKiemTheoMa(maChuyen);
-        if (cb != null && cb.conGheTrong()) {
-            return cb.datGhe();
-        }
-        return false;
+        return cb != null && cb.datGhe();
     }
 
     public boolean huyGheChuyenBay(String maChuyen) {
         ChuyenBay cb = timKiemTheoMa(maChuyen);
-        if (cb != null) {
-            return cb.huyGhe();
-        }
-        return false;
+        return cb != null && cb.huyGhe();
     }
 
-    // SỬA: Cập nhật trạng thái chuyến bay tự động
     public void capNhatTrangThaiChuyenBay() {
         Date now = new Date();
         for (ChuyenBay cb : danhSach) {
-            cb.capNhatTrangThaiBay(); // Sử dụng phương thức từ class ChuyenBay
+            cb.capNhatTrangThaiBay();
         }
     }
 
+    // ========== THỐNG KÊ CHO GUI ==========
     public Map<String, Integer> thongKeChuyenBayTheoTuyen() {
-        Map<String, Integer> thongKe = new HashMap<>();
-        for (ChuyenBay cb : danhSach) {
-            String tuyen = cb.getDiemDi() + " - " + cb.getDiemDen();
-            thongKe.put(tuyen, thongKe.getOrDefault(tuyen, 0) + 1);
-        }
-        return thongKe;
+        return danhSach.stream()
+                .collect(Collectors.groupingBy(
+                    cb -> cb.getDiemDi() + " - " + cb.getDiemDen(),
+                    Collectors.summingInt(cb -> 1)
+                ));
     }
 
-    // SỬA: Thêm phương thức thống kê doanh thu ước tính
     public Map<String, Double> thongKeDoanhThuUocTinh() {
-        Map<String, Double> thongKe = new HashMap<>();
-        for (ChuyenBay cb : danhSach) {
-            String tuyen = cb.getDiemDi() + " - " + cb.getDiemDen();
-            double doanhThuUocTinh = cb.getGiaCoBan() * (cb.getSoGhe() - cb.getSoGheTrong());
-            thongKe.put(tuyen, thongKe.getOrDefault(tuyen, 0.0) + doanhThuUocTinh);
-        }
+        return danhSach.stream()
+                .collect(Collectors.groupingBy(
+                    cb -> cb.getDiemDi() + " - " + cb.getDiemDen(),
+                    Collectors.summingDouble(cb -> 
+                        cb.getGiaCoBan() * (cb.getSoGhe() - cb.getSoGheTrong())
+                    )
+                ));
+    }
+
+    public Map<String, Integer> thongKeTheoTrangThai() {
+        return danhSach.stream()
+                .collect(Collectors.groupingBy(
+                    ChuyenBay::getTrangThai,
+                    Collectors.summingInt(cb -> 1)
+                ));
+    }
+
+    public Map<String, Object> thongKeTongQuan() {
+        Map<String, Object> thongKe = new HashMap<>();
+        thongKe.put("tongChuyenBay", danhSach.size());
+        thongKe.put("chuyenBayConCho", getChuyenBayConCho().size());
+        thongKe.put("tongGheTrong", danhSach.stream().mapToInt(ChuyenBay::getSoGheTrong).sum());
+        thongKe.put("tongGhe", danhSach.stream().mapToInt(ChuyenBay::getSoGhe).sum());
+        thongKe.put("tyLeGheTrong", String.format("%.1f%%", 
+            (double) thongKe.get("tongGheTrong") / (int) thongKe.get("tongGhe") * 100));
+        
         return thongKe;
     }
 
-    public List<ChuyenBay> getDanhSach() {
-        return new ArrayList<>(danhSach);
+    // ========== PHƯƠNG THỨC TIỆN ÍCH CHO GUI ==========
+    public List<String> getDanhSachDiemDi() {
+        return danhSach.stream()
+                .map(ChuyenBay::getDiemDi)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
-    // SỬA: Sửa các phương thức không áp dụng
+    public List<String> getDanhSachDiemDen() {
+        return danhSach.stream()
+                .map(ChuyenBay::getDiemDen)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getDanhSachMaMayBay() {
+        return danhSach.stream()
+                .map(ChuyenBay::getMaMayBay)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getDanhSachTrangThai() {
+        return danhSach.stream()
+                .map(ChuyenBay::getTrangThai)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    // ========== PHƯƠNG THỨC KHÔNG ÁP DỤNG ==========
     @Override
     public ChuyenBay timKiemTheoCMND(String cmnd) {
-        // Không áp dụng cho chuyến bay
-        System.out.println("Phương thức không áp dụng cho chuyến bay");
-        return danhSach.get(0);
+        throw new UnsupportedOperationException("Phương thức không áp dụng cho chuyến bay");
     }
 
     @Override
     public List<ChuyenBay> timKiemTheoChuyenBay(String maChuyen) {
-        // Trả về chuyến bay với mã cụ thể
         ChuyenBay cb = timKiemTheoMa(maChuyen);
-        List<ChuyenBay> ketQua = new ArrayList<>();
-        if (cb != null) {
-            ketQua.add(cb);
-        }
-        return ketQua;
+        return cb != null ? Arrays.asList(cb) : new ArrayList<>();
     }
 
-    @Override
-    public List<ChuyenBay> timKiemTheoKhoangGia(double min, double max) {
-        return danhSach.stream()
-                .filter(cb -> cb.getGiaCoBan() >= min && cb.getGiaCoBan() <= max)
-                .toList();
+    // ========== MAIN METHOD FOR TESTING ==========
+    public static void main(String[] args) {
+        DanhSachChuyenBay ds = new DanhSachChuyenBay();
+        ds.docFile("src/resources/data/1_ChuyenBays.xml");
+        ds.hienThiTatCa();
     }
-public static void main(String[] args) {
-    DanhSachChuyenBay ds = new DanhSachChuyenBay();
-    ds.docFileXML1("src/resources/data/1_ChuyenBays.xml");
-    ds.hienThiTatCa();
-}
 }
