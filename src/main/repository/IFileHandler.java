@@ -7,7 +7,6 @@ public interface IFileHandler {
     boolean docFile(String tenFile);
     boolean ghiFile(String tenFile);
     
-    // Thêm phương thức mới để xử lý XML
     default List<Map<String, String>> docFileXML(String tenFile) {
         return XMLUtils.docFileXML(tenFile);
     }

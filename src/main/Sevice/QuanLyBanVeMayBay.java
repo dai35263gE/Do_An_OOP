@@ -37,9 +37,9 @@ public class QuanLyBanVeMayBay {
         thongKe.put("tongChuyenBay", dsChuyenBay.demSoLuong());
         thongKe.put("tongKhachHang", dsKhachHang.demSoLuong());
         thongKe.put("tongDoanhThu", dsHoaDon.tinhTongDoanhThu());
-        thongKe.put("veThuongGia", dsVe.demSoLuongTheoLoai("THƯƠNG GIA"));
-        thongKe.put("vePhoThong", dsVe.demSoLuongTheoLoai("PHỔ THÔNG"));
-        thongKe.put("veTietKiem", dsVe.demSoLuongTheoLoai("TIẾT KIỆM"));
+        thongKe.put("veThuongGia", dsVe.demSoLuongTheoLoai("VeThuongGia"));
+        thongKe.put("vePhoThong", dsVe.demSoLuongTheoLoai("VePhoThong"));
+        thongKe.put("veTietKiem", dsVe.demSoLuongTheoLoai("VeTietKiem"));
         
         // Tính tỷ lệ lấp đầy
         int tongGhe = 0;

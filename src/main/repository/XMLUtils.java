@@ -105,7 +105,6 @@ public class XMLUtils {
                 danhSach.add(data);
             }
         }
-        System.out.println("Đọc " + danhSach.size() + " khách hàng từ XML");
         return danhSach;
     }
 
@@ -226,7 +225,6 @@ public class XMLUtils {
             danhSach.add(data);
         }
     }
-    System.out.println("Đọc " + danhSach.size() + " hóa đơn từ XML");
     return danhSach;
 }
 

@@ -141,23 +141,6 @@ public class ChuyenBay {
     
     // Cập nhật trạng thái tự động - tối ưu hóa
     public void capNhatTrangThai() {
-        Date now = new Date();
-        
-        if (TRANG_THAI_HUY.equals(trangThai)) {
-            return;
-        }
-        
-        if (now.before(gioKhoiHanh)) {
-            if (soGheTrong == 0) {
-                trangThai = TRANG_THAI_DA_DAT_HET;
-            } else {
-                trangThai = TRANG_THAI_CHUA_BAY;
-            }
-        } else if (now.after(gioKhoiHanh) && now.before(gioDen)) {
-            trangThai = TRANG_THAI_DANG_BAY;
-        } else if (now.after(gioDen)) {
-            trangThai = TRANG_THAI_DA_BAY;
-        }
     }
     
     public void capNhatTrangThaiBay() {

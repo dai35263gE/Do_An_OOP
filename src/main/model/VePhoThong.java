@@ -15,8 +15,8 @@ import java.util.Date;
 public class VePhoThong extends VeMayBay {
     private boolean hanhLyXachTay;
     private int soKgHanhLyKyGui;
-    private double phiHanhLy;
-    private String loaiGhe; // Cửa sổ, lối đi
+    private double phiHanhLy; 
+    private String loaiGhe; // Cửa sổ/ lối đi
     private boolean doAn;
     
     public VePhoThong(String maKH, String maVe, Date ngayBay, double giaVe, String maChuyen, String soGhe,boolean hanhLyXachTay, int soKgHanhLyKyGui, double phiHanhLy, String loaiGhe, boolean doAn) {

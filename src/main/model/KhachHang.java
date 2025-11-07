@@ -21,20 +21,17 @@ public class KhachHang extends NguoiDung {
     private List<VeMayBay> veDaDat;
     
     // Constants
-    public static final String HANG_BRONZE = "BRONZE";
-    public static final String HANG_SILVER = "SILVER";
-    public static final String HANG_GOLD = "GOLD";
-    public static final String HANG_PLATINUM = "PLATINUM";
+    public static final String HANG_BRONZE = "BRONZE";  // 
+    public static final String HANG_SILVER = "SILVER";  // hoa don tren 1,000,000
+    public static final String HANG_GOLD = "GOLD"; // hoa don tren 5,000,000
+    public static final String HANG_PLATINUM = "PLATINUM"; // hoa don tren 10,000,000
     
-    // Ngưỡng điểm cho các hạng
+    // Ngưỡng điểm cho các hạng, 1000vnd = 1d
     private static final int DIEM_SILVER = 1000;
     private static final int DIEM_GOLD = 5000;
     private static final int DIEM_PLATINUM = 10000;
     
-    // Thời gian tối thiểu để hủy vé (4 tiếng)
-    private static final long THOI_GIAN_HUY_TOI_THIEU = 4 * 60 * 60 * 1000;
 
-    // CONSTRUCTOR
     public KhachHang(String ma, String hoTen, String soDT, String email, 
                     String cmnd, Date ngaySinh, String gioiTinh, String diaChi,
                     String tenDangNhap, String matKhau) {
@@ -48,7 +45,7 @@ public class KhachHang extends NguoiDung {
         this.veDaDat = new ArrayList<>();
     }
     
-    // OVERLOAD CONSTRUCTOR - từ database
+    // OVERLOAD CONSTRUCTOR - từ file
     public KhachHang(String ma, String hoTen, String soDT, String email, 
                     String cmnd, Date ngaySinh, String gioiTinh, String diaChi,
                     String tenDangNhap, String matKhau, String hangKhachHang, 
@@ -64,7 +61,6 @@ public class KhachHang extends NguoiDung {
     }
     
 
-    // ABSTRACT METHODS IMPLEMENTATION
     @Override
     public String getVaiTro() {
         return "KHACH_HANG";
@@ -91,7 +87,6 @@ public class KhachHang extends NguoiDung {
         }
     }
     
-    // BUSINESS METHODS - Chức năng khách hàng
     public boolean datVe(VeMayBay ve) {
         if (!coTheThucHienChucNang("DAT_VE")) {
             return false;

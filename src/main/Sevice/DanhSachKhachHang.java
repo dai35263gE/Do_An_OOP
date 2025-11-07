@@ -359,7 +359,7 @@ public class DanhSachKhachHang implements IQuanLy<KhachHang>, IFileHandler {
                 }
             }
 
-            System.out.println("Đã tải " + count + " khách hàng từ file XML");
+            System.out.println("Da tai " + count + " khach hang tu file XML");
             return count > 0;
 
         } catch (Exception e) {

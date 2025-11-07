@@ -2,12 +2,15 @@ package Main.dialogs;
 
 import Main.MainGUI;
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
+
 import Main.utils.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 import model.*;
 import Sevice.QuanLyBanVeMayBay;
@@ -26,12 +29,42 @@ public class ChuyenBayDialogs {
     // ========== DIALOG THÊM CHUYẾN BAY ==========
     public void moDialogThemChuyenBay() {
         JDialog dialog = new JDialog(mainGUI, "Thêm Chuyến Bay Mới", true);
-        dialog.setSize(600, 650);
+        dialog.setSize(650, 750);
         dialog.setLocationRelativeTo(mainGUI);
-        dialog.setLayout(new BorderLayout());
+        dialog.setLayout(new BorderLayout(10, 10));
+        dialog.getContentPane().setBackground(new Color(245, 245, 245));
 
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        // Header
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(new Color(70, 130, 180));
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        
+        JLabel lblTitle = new JLabel("✈️ THÊM CHUYẾN BAY MỚI");
+        lblTitle.setFont(new Font("Arial", Font.BOLD, 18));
+        lblTitle.setForeground(Color.WHITE);
+        headerPanel.add(lblTitle, BorderLayout.WEST);
+        
+        JLabel lblSubTitle = new JLabel("Điền đầy đủ thông tin bên dưới");
+        lblSubTitle.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblSubTitle.setForeground(new Color(200, 220, 240));
+        headerPanel.add(lblSubTitle, BorderLayout.EAST);
+
+        // Main content panel
+        JPanel mainContent = new JPanel(new BorderLayout(10, 10));
+        mainContent.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        mainContent.setBackground(Color.WHITE);
+
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setBackground(Color.WHITE);
+        formPanel.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(new Color(200, 220, 240), 1),
+            "THÔNG TIN CHUYẾN BAY",
+            TitledBorder.LEFT,
+            TitledBorder.TOP,
+            new Font("Arial", Font.BOLD, 12),
+            new Color(70, 130, 180)
+        ));
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(8, 8, 8, 8);
@@ -41,214 +74,285 @@ public class ChuyenBayDialogs {
         // Tự động tạo mã chuyến bay
         int soChuyenBayHienTai = quanLy.getDsChuyenBay().demSoLuong();
         String maChuyenTuDong = "CB" + String.format("%03d", soChuyenBayHienTai + 1);
-        JTextField txtMaChuyen = new JTextField(maChuyenTuDong, 20);
-        txtMaChuyen.setEditable(false);
-        txtMaChuyen.setBackground(new Color(240, 240, 240));
+        JTextField txtMaChuyen = createStyledTextField(maChuyenTuDong, true);
         
         // ComboBox cho điểm đi và điểm đến
         String[] diaDiem = {"Hà Nội (HAN)", "TP.HCM (SGN)", "Đà Nẵng (DAD)", "Nha Trang (CXR)", "Phú Quốc (PQC)", "Huế (HUI)"};
-        JComboBox<String> cbDiemDi = new JComboBox<>(diaDiem);
-        JComboBox<String> cbDiemDen = new JComboBox<>(diaDiem);
+        JComboBox<String> cbDiemDi = createStyledComboBox(diaDiem);
+        JComboBox<String> cbDiemDen = createStyledComboBox(diaDiem);
+        cbDiemDen.setSelectedIndex(1); // Mặc định chọn điểm đến khác điểm đi
         
         // Spinner cho giờ khởi hành và giờ đến
-        JSpinner spinnerGioKhoiHanh = GUIUtils.createDateSpinner();
-        JSpinner spinnerGioDen = GUIUtils.createDateSpinner();
+        JSpinner spinnerGioKhoiHanh = createTimeSpinner();
+        JSpinner spinnerGioDen = createTimeSpinner();
         
-        // Đặt giờ khởi hành mặc định là ngày mai 6:00 sáng
-        Calendar calKhoiHanh = Calendar.getInstance();
-        calKhoiHanh.add(Calendar.DAY_OF_MONTH, 1);
-        calKhoiHanh.set(Calendar.HOUR_OF_DAY, 6);
-        calKhoiHanh.set(Calendar.MINUTE, 0);
-        spinnerGioKhoiHanh.setValue(calKhoiHanh.getTime());
-        
-        // Đặt giờ đến mặc định là ngày mai 8:00 sáng (sau 2 giờ)
-        Calendar calDen = Calendar.getInstance();
-        calDen.add(Calendar.DAY_OF_MONTH, 1);
-        calDen.set(Calendar.HOUR_OF_DAY, 8);
-        calDen.set(Calendar.MINUTE, 0);
-        spinnerGioDen.setValue(calDen.getTime());
+        // Đặt giờ mặc định
+        setDefaultTimes(spinnerGioKhoiHanh, spinnerGioDen);
         
         JSpinner spinnerSoGhe = GUIUtils.createNumberSpinner(150, 50, 500, 10);
+        styleSpinner(spinnerSoGhe);
         
         // ComboBox cho mã máy bay
-        String[] mayBay = {"VN-A321", "VN-B787", "VN-A350"};
-        JComboBox<String> cbMaMayBay = new JComboBox<>(mayBay);
+        String[] mayBay = {"VN-A321", "VN-B787", "VN-A350", "VN-A320", "VN-B777"};
+        JComboBox<String> cbMaMayBay = createStyledComboBox(mayBay);
         
         JSpinner spinnerGiaCoBan = GUIUtils.createNumberSpinner(1500000.0, 500000.0, 50000000.0, 100000.0);
-        
-        // Định dạng spinner giá
-        JSpinner.NumberEditor editorGia = new JSpinner.NumberEditor(spinnerGiaCoBan, "#,##0 VND");
-        spinnerGiaCoBan.setEditor(editorGia);
+        stylePriceSpinner(spinnerGiaCoBan);
 
-        // Thêm components vào panel
-        GUIUtils.addFormRow(panel, gbc, "Mã chuyến bay:", txtMaChuyen);
-        GUIUtils.addFormRow(panel, gbc, "Điểm đi:*", cbDiemDi);
-        GUIUtils.addFormRow(panel, gbc, "Điểm đến:*", cbDiemDen);
-        GUIUtils.addFormRow(panel, gbc, "Giờ khởi hành:*", spinnerGioKhoiHanh);
-        GUIUtils.addFormRow(panel, gbc, "Giờ đến:*", spinnerGioDen);
-        GUIUtils.addFormRow(panel, gbc, "Số ghế:*", spinnerSoGhe);
-        GUIUtils.addFormRow(panel, gbc, "Mã máy bay:*", cbMaMayBay);
-        GUIUtils.addFormRow(panel, gbc, "Giá cơ bản:*", spinnerGiaCoBan);
+        // Thêm components vào panel với label có icon
+        addFormRowWithIcon(formPanel, gbc, "🔷 Mã chuyến bay:", txtMaChuyen);
+        addFormRowWithIcon(formPanel, gbc, "🛫 Điểm đi:*", cbDiemDi);
+        addFormRowWithIcon(formPanel, gbc, "🛬 Điểm đến:*", cbDiemDen);
+        addFormRowWithIcon(formPanel, gbc, "⏰ Giờ khởi hành:*", spinnerGioKhoiHanh);
+        addFormRowWithIcon(formPanel, gbc, "⏱️ Giờ đến:*", spinnerGioDen);
+        addFormRowWithIcon(formPanel, gbc, "💺 Số ghế:*", spinnerSoGhe);
+        addFormRowWithIcon(formPanel, gbc, "✈️ Mã máy bay:*", cbMaMayBay);
+        addFormRowWithIcon(formPanel, gbc, "💰 Giá cơ bản:*", spinnerGiaCoBan);
 
         // Panel hiển thị thông tin
         JPanel panelThongTin = new JPanel(new BorderLayout());
-        panelThongTin.setBorder(BorderFactory.createTitledBorder("THÔNG TIN CHUYẾN BAY"));
-        JTextArea txtThongTin = new JTextArea(6, 40);
+        panelThongTin.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(new Color(60, 179, 113), 1),
+            "📋 THÔNG TIN CHUYẾN BAY",
+            TitledBorder.LEFT,
+            TitledBorder.TOP,
+            new Font("Arial", Font.BOLD, 12),
+            new Color(60, 179, 113)
+        ));
+        panelThongTin.setBackground(Color.WHITE);
+        
+        JTextArea txtThongTin = new JTextArea(8, 40);
         txtThongTin.setEditable(false);
-        txtThongTin.setBackground(new Color(240, 240, 240));
-        txtThongTin.setMargin(new Insets(10, 10, 10, 10));
+        txtThongTin.setBackground(new Color(240, 248, 255));
+        txtThongTin.setForeground(new Color(70, 130, 180));
+        txtThongTin.setFont(new Font("Consolas", Font.PLAIN, 12));
+        txtThongTin.setMargin(new Insets(15, 15, 15, 15));
+        txtThongTin.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panelThongTin.add(new JScrollPane(txtThongTin), BorderLayout.CENTER);
 
         // Cập nhật thông tin khi thay đổi dữ liệu
         Runnable updateChuyenBayInfo = () -> {
-            try {
-                String maChuyen = txtMaChuyen.getText().trim();
-                String diemDi = (String) cbDiemDi.getSelectedItem();
-                String diemDen = (String) cbDiemDen.getSelectedItem();
-                Date gioKhoiHanh = (Date) spinnerGioKhoiHanh.getValue();
-                Date gioDen = (Date) spinnerGioDen.getValue();
-                int soGhe = (Integer) spinnerSoGhe.getValue();
-                String maMayBay = (String) cbMaMayBay.getSelectedItem();
-                double giaCoBan = (Double) spinnerGiaCoBan.getValue();
-                
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                long thoiGianBay = (gioDen.getTime() - gioKhoiHanh.getTime()) / (1000 * 60); // phút
-                
-                String info = String.format(
-                    "Mã chuyến: %s\n" +
-                    "Lộ trình: %s → %s\n" +
-                    "Khởi hành: %s\n" +
-                    "Đến: %s\n" +
-                    "Thời gian bay: %d phút\n" +
-                    "Số ghế: %d\n" +
-                    "Máy bay: %s\n" +
-                    "Giá cơ bản: %s VND\n" +
-                    "Khoảng cách: %.0f km",
-                    maChuyen,
-                    diemDi,
-                    diemDen,
-                    sdf.format(gioKhoiHanh),
-                    sdf.format(gioDen),
-                    thoiGianBay,
-                    soGhe,
-                    maMayBay,
-                    String.format("%,.0f", giaCoBan),
-                    10000000
-                );
-                
-                txtThongTin.setText(info);
-            } catch (Exception ex) {
-                txtThongTin.setText("Đang cập nhật thông tin...");
-            }
+            updateChuyenBayInfo(txtMaChuyen, cbDiemDi, cbDiemDen, spinnerGioKhoiHanh, 
+                              spinnerGioDen, spinnerSoGhe, cbMaMayBay, spinnerGiaCoBan, txtThongTin);
         };
 
         // Thêm listeners
-        cbDiemDi.addActionListener(e -> updateChuyenBayInfo.run());
-        cbDiemDen.addActionListener(e -> updateChuyenBayInfo.run());
-        cbMaMayBay.addActionListener(e -> updateChuyenBayInfo.run());
-        spinnerGioKhoiHanh.addChangeListener(e -> updateChuyenBayInfo.run());
-        spinnerGioDen.addChangeListener(e -> updateChuyenBayInfo.run());
-        spinnerSoGhe.addChangeListener(e -> updateChuyenBayInfo.run());
-        spinnerGiaCoBan.addChangeListener(e -> updateChuyenBayInfo.run());
+        addChuyenBayListeners(cbDiemDi, cbDiemDen, spinnerGioKhoiHanh, spinnerGioDen,
+                            spinnerSoGhe, cbMaMayBay, spinnerGiaCoBan, updateChuyenBayInfo);
 
         // Gọi lần đầu
         updateChuyenBayInfo.run();
 
         // Panel button
-        JPanel panelButton = new JPanel(new FlowLayout());
-        JButton btnThem = new JButton("Thêm Chuyến Bay");
-        JButton btnHuy = new JButton("Hủy");
-        JButton btnLamMoi = new JButton("Làm Mới");
+        JPanel panelButton = createButtonPanel(dialog, txtMaChuyen, cbDiemDi, cbDiemDen,
+                                             spinnerGioKhoiHanh, spinnerGioDen, spinnerSoGhe,
+                                             cbMaMayBay, spinnerGiaCoBan, updateChuyenBayInfo);
 
-        btnThem.setBackground(new Color(70, 130, 180));
-        btnThem.setForeground(Color.WHITE);
-        btnLamMoi.setBackground(new Color(255, 165, 0));
-        btnLamMoi.setForeground(Color.WHITE);
+        // Sắp xếp layout
+        mainContent.add(formPanel, BorderLayout.NORTH);
+        mainContent.add(panelThongTin, BorderLayout.CENTER);
+
+        dialog.add(headerPanel, BorderLayout.NORTH);
+        dialog.add(mainContent, BorderLayout.CENTER);
+        dialog.add(panelButton, BorderLayout.SOUTH);
+        
+        dialog.setVisible(true);
+    }
+
+    // ========== PHƯƠNG THỨC HỖ TRỢ ==========
+    
+    private JTextField createStyledTextField(String text, boolean editable) {
+        JTextField textField = new JTextField(text, 20);
+        textField.setEditable(editable);
+        textField.setBackground(editable ? Color.WHITE : new Color(240, 240, 240));
+        textField.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(200, 200, 200)),
+            BorderFactory.createEmptyBorder(5, 8, 5, 8)
+        ));
+        textField.setFont(new Font("Arial", Font.PLAIN, 12));
+        return textField;
+    }
+    
+    private JComboBox<String> createStyledComboBox(String[] items) {
+        JComboBox<String> comboBox = new JComboBox<>(items);
+        comboBox.setBackground(Color.WHITE);
+        comboBox.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(200, 200, 200)),
+            BorderFactory.createEmptyBorder(5, 8, 5, 8)
+        ));
+        comboBox.setFont(new Font("Arial", Font.PLAIN, 12));
+        return comboBox;
+    }
+    
+    private JSpinner createTimeSpinner() {
+        JSpinner spinner = new JSpinner(new SpinnerDateModel());
+        JSpinner.DateEditor editor = new JSpinner.DateEditor(spinner, "dd/MM/yyyy HH:mm");
+        spinner.setEditor(editor);
+        spinner.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(200, 200, 200)),
+            BorderFactory.createEmptyBorder(5, 8, 5, 8)
+        ));
+        return spinner;
+    }
+    
+    private void setDefaultTimes(JSpinner spinnerKhoiHanh, JSpinner spinnerDen) {
+        Calendar calKhoiHanh = Calendar.getInstance();
+        calKhoiHanh.add(Calendar.DAY_OF_MONTH, 1);
+        calKhoiHanh.set(Calendar.HOUR_OF_DAY, 6);
+        calKhoiHanh.set(Calendar.MINUTE, 0);
+        spinnerKhoiHanh.setValue(calKhoiHanh.getTime());
+        
+        Calendar calDen = (Calendar) calKhoiHanh.clone();
+        calDen.add(Calendar.HOUR_OF_DAY, 2);
+        spinnerDen.setValue(calDen.getTime());
+    }
+    
+    private void styleSpinner(JSpinner spinner) {
+        spinner.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(200, 200, 200)),
+            BorderFactory.createEmptyBorder(5, 8, 5, 8)
+        ));
+    }
+    
+    private void stylePriceSpinner(JSpinner spinner) {
+        JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner, "#,##0 VND");
+        spinner.setEditor(editor);
+        spinner.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(200, 200, 200)),
+            BorderFactory.createEmptyBorder(5, 8, 5, 8)
+        ));
+    }
+    
+    private void addFormRowWithIcon(JPanel panel, GridBagConstraints gbc, String label, JComponent component) {
+        JLabel lbl = new JLabel(label);
+        lbl.setFont(new Font("Arial", Font.BOLD, 12));
+        lbl.setForeground(new Color(60, 60, 60));
+        
+        gbc.gridx = 0;
+        gbc.weightx = 0.3;
+        panel.add(lbl, gbc);
+        
+        gbc.gridx = 1;
+        gbc.weightx = 0.7;
+        panel.add(component, gbc);
+        
+        gbc.gridy++;
+    }
+    
+    private void updateChuyenBayInfo(JTextField txtMaChuyen, JComboBox<String> cbDiemDi, 
+                                   JComboBox<String> cbDiemDen, JSpinner spinnerGioKhoiHanh,
+                                   JSpinner spinnerGioDen, JSpinner spinnerSoGhe,
+                                   JComboBox<String> cbMaMayBay, JSpinner spinnerGiaCoBan,
+                                   JTextArea txtThongTin) {
+        try {
+            String maChuyen = txtMaChuyen.getText().trim();
+            String diemDi = (String) cbDiemDi.getSelectedItem();
+            String diemDen = (String) cbDiemDen.getSelectedItem();
+            Date gioKhoiHanh = (Date) spinnerGioKhoiHanh.getValue();
+            Date gioDen = (Date) spinnerGioDen.getValue();
+            int soGhe = (Integer) spinnerSoGhe.getValue();
+            String maMayBay = (String) cbMaMayBay.getSelectedItem();
+            double giaCoBan = (Double) spinnerGiaCoBan.getValue();
+            
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            long thoiGianBay = (gioDen.getTime() - gioKhoiHanh.getTime()) / (1000 * 60);
+            
+            // Tính khoảng cách giả lập dựa trên điểm đi và điểm đến
+            double khoangCach = tinhKhoangCach(diemDi, diemDen);
+            
+            String info = String.format(
+                "🔹 Mã chuyến: %s\n" +
+                "🛫 Lộ trình: %s → %s\n" +
+                "⏰ Khởi hành: %s\n" +
+                "⏱️ Đến nơi: %s\n" +
+                "⏳ Thời gian bay: %d phút\n" +
+                "💺 Số ghế: %d\n" +
+                "✈️ Máy bay: %s\n" +
+                "💰 Giá cơ bản: %s VND\n" +
+                "📏 Khoảng cách: %.0f km\n" +
+                "🎯 Trạng thái: %s",
+                maChuyen,
+                diemDi, diemDen,
+                sdf.format(gioKhoiHanh),
+                sdf.format(gioDen),
+                thoiGianBay,
+                soGhe,
+                maMayBay,
+                String.format("%,.0f", giaCoBan),
+                khoangCach,
+                "CHƯA BAY"
+            );
+            
+            txtThongTin.setText(info);
+        } catch (Exception ex) {
+            txtThongTin.setText("🔄 Đang cập nhật thông tin...");
+        }
+    }
+    
+    private double tinhKhoangCach(String diemDi, String diemDen) {
+        // Giả lập khoảng cách giữa các sân bay
+        Map<String, Map<String, Double>> distances = new HashMap<>();
+        
+        // Khoảng cách từ Hà Nội
+        Map<String, Double> hanDistances = new HashMap<>();
+        hanDistances.put("TP.HCM (SGN)", 1160.0);
+        hanDistances.put("Đà Nẵng (DAD)", 600.0);
+        hanDistances.put("Nha Trang (CXR)", 1080.0);
+        hanDistances.put("Phú Quốc (PQC)", 1200.0);
+        hanDistances.put("Huế (HUI)", 500.0);
+        distances.put("Hà Nội (HAN)", hanDistances);
+        
+        // Khoảng cách từ TP.HCM
+        Map<String, Double> sgnDistances = new HashMap<>();
+        sgnDistances.put("Hà Nội (HAN)", 1160.0);
+        sgnDistances.put("Đà Nẵng (DAD)", 600.0);
+        sgnDistances.put("Nha Trang (CXR)", 350.0);
+        sgnDistances.put("Phú Quốc (PQC)", 300.0);
+        sgnDistances.put("Huế (HUI)", 700.0);
+        distances.put("TP.HCM (SGN)", sgnDistances);
+        
+        Double distance = distances.getOrDefault(diemDi, new HashMap<>()).get(diemDen);
+        return distance != null ? distance : 500.0; // Mặc định 500km
+    }
+    
+    private void addChuyenBayListeners(JComboBox<String> cbDiemDi, JComboBox<String> cbDiemDen,
+                                     JSpinner spinnerGioKhoiHanh, JSpinner spinnerGioDen,
+                                     JSpinner spinnerSoGhe, JComboBox<String> cbMaMayBay,
+                                     JSpinner spinnerGiaCoBan, Runnable updateAction) {
+        cbDiemDi.addActionListener(e -> updateAction.run());
+        cbDiemDen.addActionListener(e -> updateAction.run());
+        cbMaMayBay.addActionListener(e -> updateAction.run());
+        spinnerGioKhoiHanh.addChangeListener(e -> updateAction.run());
+        spinnerGioDen.addChangeListener(e -> updateAction.run());
+        spinnerSoGhe.addChangeListener(e -> updateAction.run());
+        spinnerGiaCoBan.addChangeListener(e -> updateAction.run());
+    }
+    
+    private JPanel createButtonPanel(JDialog dialog, JTextField txtMaChuyen, 
+                                   JComboBox<String> cbDiemDi, JComboBox<String> cbDiemDen,
+                                   JSpinner spinnerGioKhoiHanh, JSpinner spinnerGioDen,
+                                   JSpinner spinnerSoGhe, JComboBox<String> cbMaMayBay,
+                                   JSpinner spinnerGiaCoBan, Runnable updateAction) {
+        JPanel panelButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 15));
+        panelButton.setBackground(Color.WHITE);
+        panelButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        JButton btnThem = createStyledButton("✅ Thêm Chuyến Bay", new Color(60, 179, 113));
+        JButton btnHuy = createStyledButton("❌ Hủy", new Color(220, 53, 69));
+        JButton btnLamMoi = createStyledButton("🔄 Làm Mới", new Color(255, 165, 0));
 
         btnThem.addActionListener(e -> {
             if (!validateThemChuyenBay(dialog, cbDiemDi, cbDiemDen, spinnerGioKhoiHanh, spinnerGioDen)) {
                 return;
             }
-
-            try {
-                // Lấy thông tin từ form
-                String maChuyen = txtMaChuyen.getText().trim();
-                String diemDi = (String) cbDiemDi.getSelectedItem();
-                String diemDen = (String) cbDiemDen.getSelectedItem();
-                Date gioKhoiHanh = (Date) spinnerGioKhoiHanh.getValue();
-                Date gioDen = (Date) spinnerGioDen.getValue();
-                int soGhe = (Integer) spinnerSoGhe.getValue();
-                String maMayBay = (String) cbMaMayBay.getSelectedItem();
-                double giaCoBan = (Double) spinnerGiaCoBan.getValue();
-
-                // Kiểm tra mã chuyến bay đã tồn tại chưa
-                if (quanLy.getDsChuyenBay().timKiemTheoMa(maChuyen) != null) {
-                    ValidatorUtils.showErrorDialog(dialog, "Mã chuyến bay đã tồn tại!");
-                    return;
-                }
-
-                // Tạo chuyến bay mới
-                ChuyenBay chuyenBayMoi = new ChuyenBay(
-                    maChuyen, diemDi, diemDen, gioKhoiHanh, gioDen,
-                    soGhe, soGhe, maMayBay, giaCoBan
-                );
-
-                // Thêm vào danh sách
-                quanLy.themChuyenBay(chuyenBayMoi);
-
-                // Hiển thị thông báo thành công
-                String message = String.format(
-                    "Thêm chuyến bay thành công!\n\n" +
-                    "Mã chuyến: %s\n" +
-                    "Lộ trình: %s → %s\n" +
-                    "Khởi hành: %s\n" +
-                    "Số ghế: %d\n" +
-                    "Máy bay: %s\n" +
-                    "Giá cơ bản: %s VND",
-                    maChuyen, diemDi, diemDen,
-                    new SimpleDateFormat("dd/MM/yyyy HH:mm").format(gioKhoiHanh),
-                    soGhe,
-                    maMayBay,
-                    String.format("%,.0f", giaCoBan)
-                );
-
-                ValidatorUtils.showSuccessDialog(dialog, message);
-
-                // Đóng dialog và cập nhật giao diện
-                dialog.dispose();
-                mainGUI.capNhatDuLieuGUI();
-
-            } catch (Exception ex) {
-                ValidatorUtils.showErrorDialog(dialog, "Lỗi: " + ex.getMessage());
-            }
+            handleThemChuyenBay(dialog, txtMaChuyen, cbDiemDi, cbDiemDen, spinnerGioKhoiHanh,
+                              spinnerGioDen, spinnerSoGhe, cbMaMayBay, spinnerGiaCoBan);
         });
 
         btnLamMoi.addActionListener(e -> {
-            // Tạo mã chuyến bay mới
-            int soChuyenBayMoi = quanLy.getDsChuyenBay().demSoLuong();
-            String maChuyenMoi = "CB" + String.format("%03d", soChuyenBayMoi + 1);
-            txtMaChuyen.setText(maChuyenMoi);
-            
-            // Reset các combobox
-            cbDiemDi.setSelectedIndex(0);
-            cbDiemDen.setSelectedIndex(1); // Chọn điểm đến khác mặc định
-            
-            // Reset thời gian
-            Calendar calNow = Calendar.getInstance();
-            calNow.add(Calendar.DAY_OF_MONTH, 1);
-            calNow.set(Calendar.HOUR_OF_DAY, 6);
-            calNow.set(Calendar.MINUTE, 0);
-            spinnerGioKhoiHanh.setValue(calNow.getTime());
-            
-            calNow.add(Calendar.HOUR, 2);
-            spinnerGioDen.setValue(calNow.getTime());
-            
-            // Reset các giá trị khác
-            spinnerSoGhe.setValue(150);
-            cbMaMayBay.setSelectedIndex(0);
-            spinnerGiaCoBan.setValue(1500000.0);
-            
-            ValidatorUtils.showSuccessDialog(dialog, "Đã làm mới form với mã chuyến bay mới!");
+            resetFormThemChuyenBay(txtMaChuyen, cbDiemDi, cbDiemDen, spinnerGioKhoiHanh,
+                                 spinnerGioDen, spinnerSoGhe, cbMaMayBay, spinnerGiaCoBan);
+            ValidatorUtils.showSuccessDialog(dialog, "✅ Đã làm mới form với mã chuyến bay mới!");
         });
 
         btnHuy.addActionListener(e -> dialog.dispose());
@@ -257,14 +361,108 @@ public class ChuyenBayDialogs {
         panelButton.add(btnLamMoi);
         panelButton.add(btnHuy);
 
-        // Thêm các panel vào dialog
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.add(panel, BorderLayout.NORTH);
-        mainPanel.add(panelThongTin, BorderLayout.CENTER);
+        return panelButton;
+    }
+    
+    private JButton createStyledButton(String text, Color backgroundColor) {
+        JButton button = new JButton(text);
+        button.setBackground(backgroundColor);
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Arial", Font.BOLD, 12));
+        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        button.setFocusPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        // Hiệu ứng hover
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(backgroundColor.darker());
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(backgroundColor);
+            }
+        });
+        
+        return button;
+    }
+    
+    private void handleThemChuyenBay(JDialog dialog, JTextField txtMaChuyen, 
+                                   JComboBox<String> cbDiemDi, JComboBox<String> cbDiemDen,
+                                   JSpinner spinnerGioKhoiHanh, JSpinner spinnerGioDen,
+                                   JSpinner spinnerSoGhe, JComboBox<String> cbMaMayBay,
+                                   JSpinner spinnerGiaCoBan) {
+        try {
+            String maChuyen = txtMaChuyen.getText().trim();
+            String diemDi = (String) cbDiemDi.getSelectedItem();
+            String diemDen = (String) cbDiemDen.getSelectedItem();
+            Date gioKhoiHanh = (Date) spinnerGioKhoiHanh.getValue();
+            Date gioDen = (Date) spinnerGioDen.getValue();
+            int soGhe = (Integer) spinnerSoGhe.getValue();
+            String maMayBay = (String) cbMaMayBay.getSelectedItem();
+            double giaCoBan = (Double) spinnerGiaCoBan.getValue();
 
-        dialog.add(mainPanel, BorderLayout.CENTER);
-        dialog.add(panelButton, BorderLayout.SOUTH);
-        dialog.setVisible(true);
+            // Kiểm tra mã chuyến bay đã tồn tại chưa
+            if (quanLy.getDsChuyenBay().timKiemTheoMa(maChuyen) != null) {
+                ValidatorUtils.showErrorDialog(dialog, "❌ Mã chuyến bay đã tồn tại!");
+                return;
+            }
+
+            // Tạo chuyến bay mới
+            ChuyenBay chuyenBayMoi = new ChuyenBay(
+                maChuyen, diemDi, diemDen, gioKhoiHanh, gioDen,
+                soGhe, soGhe, maMayBay, giaCoBan
+            );
+
+            // Thêm vào danh sách
+            quanLy.themChuyenBay(chuyenBayMoi);
+
+            // Hiển thị thông báo thành công
+            String message = String.format(
+                "✅ Thêm chuyến bay thành công!\n\n" +
+                "🔹 Mã chuyến: %s\n" +
+                "🛫 Lộ trình: %s → %s\n" +
+                "⏰ Khởi hành: %s\n" +
+                "💺 Số ghế: %d\n" +
+                "✈️ Máy bay: %s\n" +
+                "💰 Giá cơ bản: %s VND",
+                maChuyen, diemDi, diemDen,
+                new SimpleDateFormat("dd/MM/yyyy HH:mm").format(gioKhoiHanh),
+                soGhe,
+                maMayBay,
+                String.format("%,.0f", giaCoBan)
+            );
+
+            ValidatorUtils.showSuccessDialog(dialog, message);
+
+            // Đóng dialog và cập nhật giao diện
+            dialog.dispose();
+            mainGUI.capNhatDuLieuGUI();
+
+        } catch (Exception ex) {
+            ValidatorUtils.showErrorDialog(dialog, "❌ Lỗi: " + ex.getMessage());
+        }
+    }
+    
+    private void resetFormThemChuyenBay(JTextField txtMaChuyen, JComboBox<String> cbDiemDi,
+                                      JComboBox<String> cbDiemDen, JSpinner spinnerGioKhoiHanh,
+                                      JSpinner spinnerGioDen, JSpinner spinnerSoGhe,
+                                      JComboBox<String> cbMaMayBay, JSpinner spinnerGiaCoBan) {
+        // Tạo mã chuyến bay mới
+        int soChuyenBayMoi = quanLy.getDsChuyenBay().demSoLuong();
+        String maChuyenMoi = "CB" + String.format("%03d", soChuyenBayMoi + 1);
+        txtMaChuyen.setText(maChuyenMoi);
+        
+        // Reset các combobox
+        cbDiemDi.setSelectedIndex(0);
+        cbDiemDen.setSelectedIndex(1);
+        
+        // Reset thời gian
+        setDefaultTimes(spinnerGioKhoiHanh, spinnerGioDen);
+        
+        // Reset các giá trị khác
+        spinnerSoGhe.setValue(150);
+        cbMaMayBay.setSelectedIndex(0);
+        spinnerGiaCoBan.setValue(1500000.0);
     }
 
     private boolean validateThemChuyenBay(JDialog dialog, JComboBox<String> cbDiemDi, 
@@ -274,7 +472,7 @@ public class ChuyenBayDialogs {
         String diemDen = (String) cbDiemDen.getSelectedItem();
         
         if (diemDi.equals(diemDen)) {
-            ValidatorUtils.showErrorDialog(dialog, "Điểm đi và điểm đến không được trùng nhau!");
+            ValidatorUtils.showErrorDialog(dialog, "❌ Điểm đi và điểm đến không được trùng nhau!");
             return false;
         }
 
@@ -282,12 +480,12 @@ public class ChuyenBayDialogs {
         Date gioDen = (Date) spinnerGioDen.getValue();
 
         if (!ValidatorUtils.isValidTimeRange(gioKhoiHanh, gioDen)) {
-            ValidatorUtils.showErrorDialog(dialog, "Giờ khởi hành phải trước giờ đến!");
+            ValidatorUtils.showErrorDialog(dialog, "❌ Giờ khởi hành phải trước giờ đến!");
             return false;
         }
 
         if (!ValidatorUtils.isFutureTime(gioKhoiHanh)) {
-            ValidatorUtils.showErrorDialog(dialog, "Giờ khởi hành phải trong tương lai!");
+            ValidatorUtils.showErrorDialog(dialog, "❌ Giờ khởi hành phải trong tương lai!");
             return false;
         }
 
@@ -298,7 +496,7 @@ public class ChuyenBayDialogs {
     public void moDialogSuaChuyenBay() {
         int selectedRow = tableChuyenBay.getSelectedRow();
         if (selectedRow == -1) {
-            ValidatorUtils.showWarningDialog(mainGUI, "Vui lòng chọn một chuyến bay để sửa!");
+            ValidatorUtils.showWarningDialog(mainGUI, "⚠️ Vui lòng chọn một chuyến bay để sửa!");
             return;
         }
 
@@ -306,317 +504,72 @@ public class ChuyenBayDialogs {
         ChuyenBay cbCanSua = quanLy.getDsChuyenBay().timKiemTheoMa(maChuyen);
 
         if (cbCanSua == null) {
-            ValidatorUtils.showErrorDialog(mainGUI, "Không tìm thấy thông tin chuyến bay!");
+            ValidatorUtils.showErrorDialog(mainGUI, "❌ Không tìm thấy thông tin chuyến bay!");
             return;
         }
 
         JDialog dialog = new JDialog(mainGUI, "Sửa Thông Tin Chuyến Bay - " + maChuyen, true);
-        dialog.setSize(600, 700);
+        dialog.setSize(700, 800);
         dialog.setLocationRelativeTo(mainGUI);
-        dialog.setLayout(new BorderLayout());
+        dialog.setLayout(new BorderLayout(10, 10));
+        dialog.getContentPane().setBackground(new Color(245, 245, 245));
 
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(8, 8, 8, 8);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-
-        // Panel hiển thị thông tin hiện tại
-        JPanel panelThongTinHienTai = new JPanel(new BorderLayout());
-        panelThongTinHienTai.setBorder(BorderFactory.createTitledBorder("THÔNG TIN HIỆN TẠI"));
-        JTextArea txtThongTinHienTai = new JTextArea(6, 40);
-        txtThongTinHienTai.setEditable(false);
-        txtThongTinHienTai.setBackground(new Color(245, 245, 245));
-        txtThongTinHienTai.setForeground(new Color(70, 130, 180));
-        txtThongTinHienTai.setFont(new Font("Arial", Font.BOLD, 12));
-        txtThongTinHienTai.setMargin(new Insets(10, 10, 10, 10));
-
-        // Hiển thị thông tin chuyến bay hiện tại
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        String thongTinHienTai = String.format(
-            "Mã chuyến: %s\n" +
-            "Lộ trình: %s → %s\n" +
-            "Khởi hành: %s\n" +
-            "Đến: %s\n" +
-            "Số ghế: %d/%d\n" +
-            "Giá cơ bản: %,d VND\n" +
-            "Trạng thái: %s",
-            cbCanSua.getMaChuyen(),
-            cbCanSua.getDiemDi(),
-            cbCanSua.getDiemDen(),
-            sdf.format(cbCanSua.getGioKhoiHanh()),
-            sdf.format(cbCanSua.getGioDen()),
-            cbCanSua.getSoGheTrong(),
-            cbCanSua.getSoGhe(),
-            (int) cbCanSua.getGiaCoBan(),
-            cbCanSua.getTrangThai()
-        );
-        txtThongTinHienTai.setText(thongTinHienTai);
-        panelThongTinHienTai.add(new JScrollPane(txtThongTinHienTai), BorderLayout.CENTER);
-
-        // Các component nhập liệu để sửa
-        JTextField txtMaChuyen = new JTextField(cbCanSua.getMaChuyen());
-        txtMaChuyen.setEditable(false);
-        txtMaChuyen.setBackground(new Color(240, 240, 240));
+        // Header
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(new Color(70, 130, 180));
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
         
-        JTextField txtDiemDi = new JTextField(cbCanSua.getDiemDi());
-        JTextField txtDiemDen = new JTextField(cbCanSua.getDiemDen());
+        JLabel lblTitle = new JLabel("✏️ SỬA THÔNG TIN CHUYẾN BAY");
+        lblTitle.setFont(new Font("Arial", Font.BOLD, 18));
+        lblTitle.setForeground(Color.WHITE);
+        headerPanel.add(lblTitle, BorderLayout.WEST);
         
-        // Spinner cho giờ khởi hành và giờ đến
-        JSpinner spinnerGioKhoiHanh = new JSpinner(new SpinnerDateModel(cbCanSua.getGioKhoiHanh(), null, null, Calendar.HOUR_OF_DAY));
-        JSpinner.DateEditor editorKhoiHanh = new JSpinner.DateEditor(spinnerGioKhoiHanh, "dd/MM/yyyy HH:mm");
-        spinnerGioKhoiHanh.setEditor(editorKhoiHanh);
+        JLabel lblSubTitle = new JLabel("Mã: " + maChuyen);
+        lblSubTitle.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblSubTitle.setForeground(new Color(200, 220, 240));
+        headerPanel.add(lblSubTitle, BorderLayout.EAST);
+
+        // Main content
+        JPanel mainContent = new JPanel(new BorderLayout(10, 10));
+        mainContent.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        mainContent.setBackground(Color.WHITE);
+
+        // Panel thông tin hiện tại
+        JPanel panelThongTinHienTai = createInfoPanel("📊 THÔNG TIN HIỆN TẠI", 
+            buildCurrentChuyenBayInfo(cbCanSua), new Color(70, 130, 180));
+
+        // Panel form sửa
+        JPanel formPanel = createSuaChuyenBayForm(cbCanSua);
         
-        JSpinner spinnerGioDen = new JSpinner(new SpinnerDateModel(cbCanSua.getGioDen(), null, null, Calendar.HOUR_OF_DAY));
-        JSpinner.DateEditor editorDen = new JSpinner.DateEditor(spinnerGioDen, "dd/MM/yyyy HH:mm");
-        spinnerGioDen.setEditor(editorDen);
-        
-        JSpinner spinnerSoGhe = GUIUtils.createNumberSpinner(cbCanSua.getSoGhe(), 50, 500, 10);
-        JSpinner spinnerSoGheTrong = GUIUtils.createNumberSpinner(cbCanSua.getSoGheTrong(), 0, cbCanSua.getSoGhe(), 1);
-        JTextField txtMaMayBay = new JTextField(cbCanSua.getMaMayBay());
-        JSpinner spinnerGiaCoBan = GUIUtils.createNumberSpinner(cbCanSua.getGiaCoBan(), 500000.0, 50000000.0, 100000.0);
-        
-        // Định dạng spinner giá
-        JSpinner.NumberEditor editorGia = new JSpinner.NumberEditor(spinnerGiaCoBan, "#,##0 VND");
-        spinnerGiaCoBan.setEditor(editorGia);
-
-        // ComboBox trạng thái
-        JComboBox<String> cbTrangThai = new JComboBox<>(new String[] {
-            ChuyenBay.TRANG_THAI_CHUA_BAY,
-            ChuyenBay.TRANG_THAI_DANG_BAY,
-            ChuyenBay.TRANG_THAI_DA_BAY,
-            ChuyenBay.TRANG_THAI_HUY
-        });
-        cbTrangThai.setSelectedItem(cbCanSua.getTrangThai());
-
-        // Thêm components vào panel
-        GUIUtils.addFormRow(panel, gbc, "Mã chuyến bay:", txtMaChuyen);
-        GUIUtils.addFormRow(panel, gbc, "Điểm đi:*", txtDiemDi);
-        GUIUtils.addFormRow(panel, gbc, "Điểm đến:*", txtDiemDen);
-        GUIUtils.addFormRow(panel, gbc, "Giờ khởi hành:*", spinnerGioKhoiHanh);
-        GUIUtils.addFormRow(panel, gbc, "Giờ đến:*", spinnerGioDen);
-        GUIUtils.addFormRow(panel, gbc, "Tổng số ghế:*", spinnerSoGhe);
-        GUIUtils.addFormRow(panel, gbc, "Số ghế trống:*", spinnerSoGheTrong);
-        GUIUtils.addFormRow(panel, gbc, "Mã máy bay:*", txtMaMayBay);
-        GUIUtils.addFormRow(panel, gbc, "Giá cơ bản:*", spinnerGiaCoBan);
-        GUIUtils.addFormRow(panel, gbc, "Trạng thái:*", cbTrangThai);
-
-        // Panel hiển thị thông tin cập nhật
-        JPanel panelThongTinCapNhat = new JPanel(new BorderLayout());
-        panelThongTinCapNhat.setBorder(BorderFactory.createTitledBorder("THÔNG TIN CẬP NHẬT"));
-        JTextArea txtThongTinCapNhat = new JTextArea(6, 40);
-        txtThongTinCapNhat.setEditable(false);
-        txtThongTinCapNhat.setBackground(new Color(240, 248, 255));
-        txtThongTinCapNhat.setMargin(new Insets(10, 10, 10, 10));
-        panelThongTinCapNhat.add(new JScrollPane(txtThongTinCapNhat), BorderLayout.CENTER);
-
-        // Cập nhật thông tin khi thay đổi dữ liệu
-        Runnable updateThongTinCapNhat = () -> {
-            try {
-                String diemDi = txtDiemDi.getText().trim();
-                String diemDen = txtDiemDen.getText().trim();
-                Date gioKhoiHanh = (Date) spinnerGioKhoiHanh.getValue();
-                Date gioDen = (Date) spinnerGioDen.getValue();
-                int soGhe = (Integer) spinnerSoGhe.getValue();
-                int soGheTrong = (Integer) spinnerSoGheTrong.getValue();
-                double giaCoBan = (Double) spinnerGiaCoBan.getValue();
-                String trangThai = (String) cbTrangThai.getSelectedItem();
-                
-                long thoiGianBay = (gioDen.getTime() - gioKhoiHanh.getTime()) / (1000 * 60); // phút
-                
-                String info = String.format(
-                    "THÔNG TIN CẬP NHẬT:\n\n" +
-                    "Lộ trình: %s → %s\n" +
-                    "Khởi hành: %s\n" +
-                    "Đến: %s\n" +
-                    "Thời gian bay: %d phút\n" +
-                    "Ghế: %d/%d (%.1f%% lấp đầy)\n" +
-                    "Giá cơ bản: %s VND\n" +
-                    "Trạng thái: %s",
-                    diemDi.isEmpty() ? "?" : diemDi,
-                    diemDen.isEmpty() ? "?" : diemDen,
-                    sdf.format(gioKhoiHanh),
-                    sdf.format(gioDen),
-                    thoiGianBay,
-                    soGhe - soGheTrong, soGhe,
-                    ((double)(soGhe - soGheTrong) / soGhe) * 100,
-                    String.format("%,.0f", giaCoBan),
-                    trangThai
-                );
-                
-                txtThongTinCapNhat.setText(info);
-            } catch (Exception ex) {
-                txtThongTinCapNhat.setText("Đang cập nhật thông tin...");
-            }
-        };
-
-        // Thêm listener cho các component
-        DocumentListener docListener = new DocumentListener() {
-            public void anyUpdate() { updateThongTinCapNhat.run(); }
-            public void insertUpdate(DocumentEvent e) { anyUpdate(); }
-            public void removeUpdate(DocumentEvent e) { anyUpdate(); }
-            public void changedUpdate(DocumentEvent e) { anyUpdate(); }
-        };
-        
-        txtDiemDi.getDocument().addDocumentListener(docListener);
-        txtDiemDen.getDocument().addDocumentListener(docListener);
-        txtMaMayBay.getDocument().addDocumentListener(docListener);
-        
-        spinnerGioKhoiHanh.addChangeListener(e -> updateThongTinCapNhat.run());
-        spinnerGioDen.addChangeListener(e -> updateThongTinCapNhat.run());
-        spinnerSoGhe.addChangeListener(e -> {
-            int soGheMoi = (Integer) spinnerSoGhe.getValue();
-            int soGheTrongHienTai = (Integer) spinnerSoGheTrong.getValue();
-            
-            if (soGheTrongHienTai > soGheMoi) {
-                spinnerSoGheTrong.setValue(soGheMoi);
-            }
-            spinnerSoGheTrong.setModel(new SpinnerNumberModel(
-                Math.min(soGheTrongHienTai, soGheMoi), 0, soGheMoi, 1
-            ));
-            updateThongTinCapNhat.run();
-        });
-        spinnerSoGheTrong.addChangeListener(e -> updateThongTinCapNhat.run());
-        spinnerGiaCoBan.addChangeListener(e -> updateThongTinCapNhat.run());
-        cbTrangThai.addActionListener(e -> updateThongTinCapNhat.run());
-
-        // Gọi lần đầu
-        updateThongTinCapNhat.run();
+        // Panel thông tin cập nhật
+        JPanel panelThongTinCapNhat = createInfoPanel("🔄 THÔNG TIN CẬP NHẬT", 
+            "", new Color(60, 179, 113));
 
         // Panel button
-        JPanel panelButton = new JPanel(new FlowLayout());
-        JButton btnLuu = new JButton("Lưu Thay Đổi");
-        JButton btnHuy = new JButton("Hủy");
-        JButton btnKhoiPhuc = new JButton("Khôi Phục Mặc Định");
+        JPanel panelButton = createSuaChuyenBayButtonPanel(dialog, cbCanSua, formPanel, panelThongTinCapNhat);
 
-        btnLuu.setBackground(new Color(70, 130, 180));
-        btnLuu.setForeground(Color.WHITE);
-        btnKhoiPhuc.setBackground(new Color(255, 165, 0));
-        btnKhoiPhuc.setForeground(Color.WHITE);
+        // Sắp xếp layout
+        JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
+        centerPanel.add(formPanel, BorderLayout.CENTER);
+        centerPanel.add(panelThongTinCapNhat, BorderLayout.SOUTH);
 
-        btnLuu.addActionListener(e -> {
-            if (!validateSuaChuyenBay(dialog, txtDiemDi, txtDiemDen, txtMaMayBay, 
-                                    spinnerGioKhoiHanh, spinnerGioDen, spinnerSoGhe, spinnerSoGheTrong)) {
-                return;
-            }
+        mainContent.add(panelThongTinHienTai, BorderLayout.NORTH);
+        mainContent.add(centerPanel, BorderLayout.CENTER);
 
-            try {
-                // Lấy thông tin từ form
-                String diemDi = txtDiemDi.getText().trim();
-                String diemDen = txtDiemDen.getText().trim();
-                Date gioKhoiHanh = (Date) spinnerGioKhoiHanh.getValue();
-                Date gioDen = (Date) spinnerGioDen.getValue();
-                int soGhe = (Integer) spinnerSoGhe.getValue();
-                int soGheTrong = (Integer) spinnerSoGheTrong.getValue();
-                String maMayBay = txtMaMayBay.getText().trim();
-                double giaCoBan = (Double) spinnerGiaCoBan.getValue();
-                String trangThai = (String) cbTrangThai.getSelectedItem();
-
-                // Cập nhật thông tin chuyến bay
-                cbCanSua.setDiemDi(diemDi);
-                cbCanSua.setDiemDen(diemDen);
-                cbCanSua.setGioKhoiHanh(gioKhoiHanh);
-                cbCanSua.setGioDen(gioDen);
-                cbCanSua.setSoGhe(soGhe);
-                cbCanSua.setSoGheTrong(soGheTrong);
-                cbCanSua.setMaMayBay(maMayBay);
-                cbCanSua.setGiaCoBan(giaCoBan);
-                cbCanSua.setTrangThai(trangThai);
-
-                // Hiển thị thông báo thành công
-                String message = String.format(
-                    "Cập nhật chuyến bay thành công!\n\n" +
-                    "Mã chuyến: %s\n" +
-                    "Lộ trình: %s → %s\n" +
-                    "Khởi hành: %s\n" +
-                    "Số ghế: %d/%d\n" +
-                    "Giá cơ bản: %s VND\n" +
-                    "Trạng thái: %s",
-                    cbCanSua.getMaChuyen(),
-                    diemDi, diemDen,
-                    sdf.format(gioKhoiHanh),
-                    soGhe - soGheTrong, soGhe,
-                    String.format("%,.0f", giaCoBan),
-                    trangThai
-                );
-
-                ValidatorUtils.showSuccessDialog(dialog, message);
-
-                // Đóng dialog và cập nhật giao diện
-                dialog.dispose();
-                mainGUI.capNhatDuLieuGUI();
-
-            } catch (Exception ex) {
-                ValidatorUtils.showErrorDialog(dialog, "Lỗi: " + ex.getMessage());
-            }
-        });
-
-        btnKhoiPhuc.addActionListener(e -> {
-            // Khôi phục về giá trị ban đầu
-            txtDiemDi.setText(cbCanSua.getDiemDi());
-            txtDiemDen.setText(cbCanSua.getDiemDen());
-            spinnerGioKhoiHanh.setValue(cbCanSua.getGioKhoiHanh());
-            spinnerGioDen.setValue(cbCanSua.getGioDen());
-            spinnerSoGhe.setValue(cbCanSua.getSoGhe());
-            spinnerSoGheTrong.setValue(cbCanSua.getSoGheTrong());
-            txtMaMayBay.setText(cbCanSua.getMaMayBay());
-            spinnerGiaCoBan.setValue(cbCanSua.getGiaCoBan());
-            cbTrangThai.setSelectedItem(cbCanSua.getTrangThai());
-
-            ValidatorUtils.showSuccessDialog(dialog, "Đã khôi phục thông tin ban đầu!");
-        });
-
-        btnHuy.addActionListener(e -> dialog.dispose());
-
-        panelButton.add(btnLuu);
-        panelButton.add(btnKhoiPhuc);
-        panelButton.add(btnHuy);
-
-        // Thêm các panel vào dialog
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.add(panelThongTinHienTai, BorderLayout.NORTH);
-        mainPanel.add(panel, BorderLayout.CENTER);
-        mainPanel.add(panelThongTinCapNhat, BorderLayout.SOUTH);
-
-        dialog.add(mainPanel, BorderLayout.CENTER);
+        dialog.add(headerPanel, BorderLayout.NORTH);
+        dialog.add(mainContent, BorderLayout.CENTER);
         dialog.add(panelButton, BorderLayout.SOUTH);
+        
         dialog.setVisible(true);
     }
 
-    private boolean validateSuaChuyenBay(JDialog dialog, JTextField txtDiemDi, JTextField txtDiemDen,
-                                       JTextField txtMaMayBay, JSpinner spinnerGioKhoiHanh,
-                                       JSpinner spinnerGioDen, JSpinner spinnerSoGhe, JSpinner spinnerSoGheTrong) {
-        // Validate required fields
-        if (!ValidatorUtils.validateRequiredFields(dialog, txtDiemDi, txtDiemDen, txtMaMayBay)) {
-            return false;
-        }
+    // ... (Các phương thức hỗ trợ cho dialog sửa chuyến bay)
 
-        Date gioKhoiHanh = (Date) spinnerGioKhoiHanh.getValue();
-        Date gioDen = (Date) spinnerGioDen.getValue();
-
-        if (!ValidatorUtils.isValidTimeRange(gioKhoiHanh, gioDen)) {
-            ValidatorUtils.showErrorDialog(dialog, "Giờ khởi hành phải trước giờ đến!");
-            return false;
-        }
-
-        int soGhe = (Integer) spinnerSoGhe.getValue();
-        int soGheTrong = (Integer) spinnerSoGheTrong.getValue();
-
-        if (soGheTrong > soGhe) {
-            ValidatorUtils.showErrorDialog(dialog, "Số ghế trống không được lớn hơn tổng số ghế!");
-            return false;
-        }
-
-        return true;
-    }
-
-    // ========== DIALOG XÓA CHUYẾN BAY ==========
+    // ========== XÓA CHUYẾN BAY ==========
     public void xoaChuyenBay() {
         int selectedRow = tableChuyenBay.getSelectedRow();
         if (selectedRow == -1) {
-            ValidatorUtils.showWarningDialog(mainGUI, "Vui lòng chọn một chuyến bay để xóa!");
+            ValidatorUtils.showWarningDialog(mainGUI, "⚠️ Vui lòng chọn một chuyến bay để xóa!");
             return;
         }
 
@@ -628,28 +581,47 @@ public class ChuyenBayDialogs {
         ChuyenBay cbCanXoa = quanLy.getDsChuyenBay().timKiemTheoMa(maChuyen);
 
         if (cbCanXoa == null) {
-            ValidatorUtils.showErrorDialog(mainGUI, "Không tìm thấy thông tin chuyến bay!");
+            ValidatorUtils.showErrorDialog(mainGUI, "❌ Không tìm thấy thông tin chuyến bay!");
             return;
         }
 
-        // Kiểm tra trạng thái chuyến bay - CHỈ cho phép xóa nếu trạng thái là HỦY
+        // Kiểm tra trạng thái chuyến bay
         if (!trangThai.equals(ChuyenBay.TRANG_THAI_HUY)) {
             ValidatorUtils.showErrorDialog(mainGUI,
-                "Chỉ có thể xóa chuyến bay có trạng thái HỦY!\n" +
-                "Trạng thái hiện tại: " + trangThai + "\n\n" +
-                "Vui lòng chuyển trạng thái chuyến bay sang HỦY trước khi xóa.");
+                "❌ Chỉ có thể xóa chuyến bay có trạng thái HỦY!\n" +
+                "📊 Trạng thái hiện tại: " + trangThai + "\n\n" +
+                "💡 Vui lòng chuyển trạng thái chuyến bay sang HỦY trước khi xóa.");
             return;
         }
 
-        // Hiển thị dialog xác nhận
-        int confirm = JOptionPane.showConfirmDialog(mainGUI,
+        // Hiển thị dialog xác nhận với icon và styling
+        JPanel messagePanel = new JPanel(new BorderLayout(10, 10));
+        messagePanel.setBackground(Color.WHITE);
+        
+        JLabel iconLabel = new JLabel("⚠️", JLabel.CENTER);
+        iconLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        iconLabel.setForeground(new Color(255, 193, 7));
+        
+        JTextArea messageArea = new JTextArea(
             "Bạn có chắc chắn muốn xóa chuyến bay này?\n\n" +
-            "Mã chuyến: " + maChuyen + "\n" +
-            "Lộ trình: " + diemDi + " → " + diemDen + "\n" +
-            "Trạng thái: " + trangThai + "\n\n" +
-            "Thao tác này không thể hoàn tác!",
+            "🔹 Mã chuyến: " + maChuyen + "\n" +
+            "🛫 Lộ trình: " + diemDi + " → " + diemDen + "\n" +
+            "📊 Trạng thái: " + trangThai + "\n\n" +
+            "❌ Thao tác này không thể hoàn tác!"
+        );
+        messageArea.setEditable(false);
+        messageArea.setBackground(Color.WHITE);
+        messageArea.setFont(new Font("Arial", Font.PLAIN, 12));
+        messageArea.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        messagePanel.add(iconLabel, BorderLayout.WEST);
+        messagePanel.add(messageArea, BorderLayout.CENTER);
+
+        int confirm = JOptionPane.showConfirmDialog(mainGUI,
+            messagePanel,
             "Xác nhận xóa chuyến bay",
-            JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE);
 
         if (confirm == JOptionPane.YES_OPTION) {
             try {
@@ -657,18 +629,446 @@ public class ChuyenBayDialogs {
                 
                 if (xoaThanhCong) {
                     ValidatorUtils.showSuccessDialog(mainGUI, 
-                        "Xóa chuyến bay thành công!\n\n" +
-                        "Mã chuyến: " + maChuyen + "\n" +
-                        "Lộ trình: " + diemDi + " → " + diemDen);
+                        "✅ Xóa chuyến bay thành công!\n\n" +
+                        "🔹 Mã chuyến: " + maChuyen + "\n" +
+                        "🛫 Lộ trình: " + diemDi + " → " + diemDen);
                     
                     mainGUI.capNhatDuLieuGUI();
                 } else {
-                    ValidatorUtils.showErrorDialog(mainGUI, "Không thể xóa chuyến bay!");
+                    ValidatorUtils.showErrorDialog(mainGUI, "❌ Không thể xóa chuyến bay!");
                 }
                 
             } catch (Exception ex) {
-                ValidatorUtils.showErrorDialog(mainGUI, "Lỗi khi xóa chuyến bay: " + ex.getMessage());
+                ValidatorUtils.showErrorDialog(mainGUI, "❌ Lỗi khi xóa chuyến bay: " + ex.getMessage());
             }
         }
     }
+
+    // ... (Các phương thức hỗ trợ khác)
+
+    private JPanel createInfoPanel(String title, String content, Color color) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(color, 1),
+            title,
+            TitledBorder.LEFT,
+            TitledBorder.TOP,
+            new Font("Arial", Font.BOLD, 12),
+            color
+        ));
+        panel.setBackground(Color.WHITE);
+        
+        JTextArea textArea = new JTextArea(content);
+        textArea.setEditable(false);
+        textArea.setBackground(new Color(240, 248, 255));
+        textArea.setForeground(color);
+        textArea.setFont(new Font("Consolas", Font.PLAIN, 11));
+        textArea.setMargin(new Insets(10, 10, 10, 10));
+        textArea.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        
+        panel.add(new JScrollPane(textArea), BorderLayout.CENTER);
+        return panel;
+    }
+
+    private String buildCurrentChuyenBayInfo(ChuyenBay cb) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return String.format(
+            "🔹 Mã chuyến: %s\n" +
+            "🛫 Lộ trình: %s → %s\n" +
+            "⏰ Khởi hành: %s\n" +
+            "⏱️ Đến nơi: %s\n" +
+            "💺 Số ghế: %d/%d\n" +
+            "💰 Giá cơ bản: %,d VND\n" +
+            "📊 Trạng thái: %s",
+            cb.getMaChuyen(),
+            cb.getDiemDi(),
+            cb.getDiemDen(),
+            sdf.format(cb.getGioKhoiHanh()),
+            sdf.format(cb.getGioDen()),
+            cb.getSoGheTrong(),
+            cb.getSoGhe(),
+            (int) cb.getGiaCoBan(),
+            cb.getTrangThai()
+        );
+    }
+    // ========== PHƯƠNG THỨC CHO DIALOG SỬA CHUYẾN BAY ==========
+
+private JPanel createSuaChuyenBayForm(ChuyenBay cbCanSua) {
+    JPanel formPanel = new JPanel(new GridBagLayout());
+    formPanel.setBackground(Color.WHITE);
+    formPanel.setBorder(BorderFactory.createTitledBorder(
+        BorderFactory.createLineBorder(new Color(255, 165, 0), 1),
+        "✏️ THÔNG TIN CHỈNH SỬA",
+        TitledBorder.LEFT,
+        TitledBorder.TOP,
+        new Font("Arial", Font.BOLD, 12),
+        new Color(255, 165, 0)
+    ));
+
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.fill = GridBagConstraints.HORIZONTAL;
+    gbc.insets = new Insets(8, 8, 8, 8);
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+
+    // Mã chuyến bay (không thể sửa)
+    JTextField txtMaChuyen = createStyledTextField(cbCanSua.getMaChuyen(), false);
+    
+    // Điểm đi và điểm đến
+    String[] diaDiem = {"Hà Nội (HAN)", "TP.HCM (SGN)", "Đà Nẵng (DAD)", "Nha Trang (CXR)", "Phú Quốc (PQC)", "Huế (HUI)"};
+    JComboBox<String> cbDiemDi = createStyledComboBox(diaDiem);
+    JComboBox<String> cbDiemDen = createStyledComboBox(diaDiem);
+    
+    // Chọn điểm đi và điểm đến hiện tại
+    setComboBoxToValue(cbDiemDi, cbCanSua.getDiemDi());
+    setComboBoxToValue(cbDiemDen, cbCanSua.getDiemDen());
+    
+    // Thời gian
+    JSpinner spinnerGioKhoiHanh = createTimeSpinner();
+    JSpinner spinnerGioDen = createTimeSpinner();
+    spinnerGioKhoiHanh.setValue(cbCanSua.getGioKhoiHanh());
+    spinnerGioDen.setValue(cbCanSua.getGioDen());
+    
+    // Số ghế
+    JSpinner spinnerSoGhe = GUIUtils.createNumberSpinner(cbCanSua.getSoGhe(), 50, 500, 10);
+    JSpinner spinnerSoGheTrong = GUIUtils.createNumberSpinner(cbCanSua.getSoGheTrong(), 0, cbCanSua.getSoGhe(), 1);
+    styleSpinner(spinnerSoGhe);
+    styleSpinner(spinnerSoGheTrong);
+    
+    // Máy bay
+    String[] mayBay = {"VN-A321", "VN-B787", "VN-A350", "VN-A320", "VN-B777"};
+    JComboBox<String> cbMaMayBay = createStyledComboBox(mayBay);
+    setComboBoxToValue(cbMaMayBay, cbCanSua.getMaMayBay());
+    
+    // Giá
+    JSpinner spinnerGiaCoBan = GUIUtils.createNumberSpinner(cbCanSua.getGiaCoBan(), 500000.0, 50000000.0, 100000.0);
+    stylePriceSpinner(spinnerGiaCoBan);
+    
+    // Trạng thái
+    JComboBox<String> cbTrangThai = createStyledComboBox(new String[] {
+        ChuyenBay.TRANG_THAI_CHUA_BAY,
+        ChuyenBay.TRANG_THAI_DANG_BAY,
+        ChuyenBay.TRANG_THAI_DA_BAY,
+        ChuyenBay.TRANG_THAI_HUY
+    });
+    cbTrangThai.setSelectedItem(cbCanSua.getTrangThai());
+
+    // Thêm components vào form
+    addFormRowWithIcon(formPanel, gbc, "🔷 Mã chuyến bay:", txtMaChuyen);
+    addFormRowWithIcon(formPanel, gbc, "🛫 Điểm đi:*", cbDiemDi);
+    addFormRowWithIcon(formPanel, gbc, "🛬 Điểm đến:*", cbDiemDen);
+    addFormRowWithIcon(formPanel, gbc, "⏰ Giờ khởi hành:*", spinnerGioKhoiHanh);
+    addFormRowWithIcon(formPanel, gbc, "⏱️ Giờ đến:*", spinnerGioDen);
+    addFormRowWithIcon(formPanel, gbc, "💺 Tổng số ghế:*", spinnerSoGhe);
+    addFormRowWithIcon(formPanel, gbc, "🪑 Số ghế trống:*", spinnerSoGheTrong);
+    addFormRowWithIcon(formPanel, gbc, "✈️ Mã máy bay:*", cbMaMayBay);
+    addFormRowWithIcon(formPanel, gbc, "💰 Giá cơ bản:*", spinnerGiaCoBan);
+    addFormRowWithIcon(formPanel, gbc, "📊 Trạng thái:*", cbTrangThai);
+
+    // Lưu references để sử dụng sau
+    formPanel.putClientProperty("components", new HashMap<String, Object>() {{
+        put("txtMaChuyen", txtMaChuyen);
+        put("cbDiemDi", cbDiemDi);
+        put("cbDiemDen", cbDiemDen);
+        put("spinnerGioKhoiHanh", spinnerGioKhoiHanh);
+        put("spinnerGioDen", spinnerGioDen);
+        put("spinnerSoGhe", spinnerSoGhe);
+        put("spinnerSoGheTrong", spinnerSoGheTrong);
+        put("cbMaMayBay", cbMaMayBay);
+        put("spinnerGiaCoBan", spinnerGiaCoBan);
+        put("cbTrangThai", cbTrangThai);
+    }});
+
+    return formPanel;
+}
+
+private JPanel createSuaChuyenBayButtonPanel(JDialog dialog, ChuyenBay cbCanSua, 
+                                           JPanel formPanel, JPanel panelThongTinCapNhat) {
+    JPanel panelButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 15));
+    panelButton.setBackground(Color.WHITE);
+    panelButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    
+    JButton btnLuu = createStyledButton("💾 Lưu Thay Đổi", new Color(60, 179, 113));
+    JButton btnHuy = createStyledButton("❌ Hủy", new Color(220, 53, 69));
+    JButton btnKhoiPhuc = createStyledButton("🔄 Khôi Phục Mặc Định", new Color(255, 165, 0));
+
+    btnLuu.addActionListener(e -> {
+        handleSuaChuyenBay(dialog, cbCanSua, formPanel, panelThongTinCapNhat);
+    });
+
+    btnKhoiPhuc.addActionListener(e -> {
+        khoiPhucGiaTriBanDau(formPanel, cbCanSua);
+        ValidatorUtils.showSuccessDialog(dialog, "✅ Đã khôi phục thông tin ban đầu!");
+    });
+
+    btnHuy.addActionListener(e -> dialog.dispose());
+
+    panelButton.add(btnLuu);
+    panelButton.add(btnKhoiPhuc);
+    panelButton.add(btnHuy);
+
+    return panelButton;
+}
+
+private void handleSuaChuyenBay(JDialog dialog, ChuyenBay cbCanSua, 
+                              JPanel formPanel, JPanel panelThongTinCapNhat) {
+    try {
+        Map<String, Object> components = (Map<String, Object>) formPanel.getClientProperty("components");
+        
+        JComboBox<String> cbDiemDi = (JComboBox<String>) components.get("cbDiemDi");
+        JComboBox<String> cbDiemDen = (JComboBox<String>) components.get("cbDiemDen");
+        JSpinner spinnerGioKhoiHanh = (JSpinner) components.get("spinnerGioKhoiHanh");
+        JSpinner spinnerGioDen = (JSpinner) components.get("spinnerGioDen");
+        JSpinner spinnerSoGhe = (JSpinner) components.get("spinnerSoGhe");
+        JSpinner spinnerSoGheTrong = (JSpinner) components.get("spinnerSoGheTrong");
+        JComboBox<String> cbMaMayBay = (JComboBox<String>) components.get("cbMaMayBay");
+        JSpinner spinnerGiaCoBan = (JSpinner) components.get("spinnerGiaCoBan");
+        JComboBox<String> cbTrangThai = (JComboBox<String>) components.get("cbTrangThai");
+
+        // Validate dữ liệu
+        if (!validateSuaChuyenBay(dialog, cbDiemDi, cbDiemDen, spinnerGioKhoiHanh, 
+                                spinnerGioDen, spinnerSoGhe, spinnerSoGheTrong)) {
+            return;
+        }
+
+        // Lấy thông tin từ form
+        String diemDi = (String) cbDiemDi.getSelectedItem();
+        String diemDen = (String) cbDiemDen.getSelectedItem();
+        Date gioKhoiHanh = (Date) spinnerGioKhoiHanh.getValue();
+        Date gioDen = (Date) spinnerGioDen.getValue();
+        int soGhe = (Integer) spinnerSoGhe.getValue();
+        int soGheTrong = (Integer) spinnerSoGheTrong.getValue();
+        String maMayBay = (String) cbMaMayBay.getSelectedItem();
+        double giaCoBan = (Double) spinnerGiaCoBan.getValue();
+        String trangThai = (String) cbTrangThai.getSelectedItem();
+
+        // Cập nhật thông tin chuyến bay
+        cbCanSua.setDiemDi(diemDi);
+        cbCanSua.setDiemDen(diemDen);
+        cbCanSua.setGioKhoiHanh(gioKhoiHanh);
+        cbCanSua.setGioDen(gioDen);
+        cbCanSua.setSoGhe(soGhe);
+        cbCanSua.setSoGheTrong(soGheTrong);
+        cbCanSua.setMaMayBay(maMayBay);
+        cbCanSua.setGiaCoBan(giaCoBan);
+        cbCanSua.setTrangThai(trangThai);
+
+        // Hiển thị thông báo thành công
+        String message = String.format(
+            "✅ Cập nhật chuyến bay thành công!\n\n" +
+            "🔹 Mã chuyến: %s\n" +
+            "🛫 Lộ trình: %s → %s\n" +
+            "⏰ Khởi hành: %s\n" +
+            "💺 Số ghế: %d/%d\n" +
+            "💰 Giá cơ bản: %s VND\n" +
+            "📊 Trạng thái: %s",
+            cbCanSua.getMaChuyen(),
+            diemDi, diemDen,
+            new SimpleDateFormat("dd/MM/yyyy HH:mm").format(gioKhoiHanh),
+            soGhe - soGheTrong, soGhe,
+            String.format("%,.0f", giaCoBan),
+            trangThai
+        );
+
+        ValidatorUtils.showSuccessDialog(dialog, message);
+
+        // Đóng dialog và cập nhật giao diện
+        dialog.dispose();
+        mainGUI.capNhatDuLieuGUI();
+
+    } catch (Exception ex) {
+        ValidatorUtils.showErrorDialog(dialog, "❌ Lỗi: " + ex.getMessage());
+        ex.printStackTrace();
+    }
+}
+
+private boolean validateSuaChuyenBay(JDialog dialog, JComboBox<String> cbDiemDi,
+                                   JComboBox<String> cbDiemDen, JSpinner spinnerGioKhoiHanh,
+                                   JSpinner spinnerGioDen, JSpinner spinnerSoGhe, 
+                                   JSpinner spinnerSoGheTrong) {
+    String diemDi = (String) cbDiemDi.getSelectedItem();
+    String diemDen = (String) cbDiemDen.getSelectedItem();
+    
+    if (diemDi.equals(diemDen)) {
+        ValidatorUtils.showErrorDialog(dialog, "❌ Điểm đi và điểm đến không được trùng nhau!");
+        return false;
+    }
+
+    Date gioKhoiHanh = (Date) spinnerGioKhoiHanh.getValue();
+    Date gioDen = (Date) spinnerGioDen.getValue();
+
+    if (!ValidatorUtils.isValidTimeRange(gioKhoiHanh, gioDen)) {
+        ValidatorUtils.showErrorDialog(dialog, "❌ Giờ khởi hành phải trước giờ đến!");
+        return false;
+    }
+
+    int soGhe = (Integer) spinnerSoGhe.getValue();
+    int soGheTrong = (Integer) spinnerSoGheTrong.getValue();
+
+    if (soGheTrong > soGhe) {
+        ValidatorUtils.showErrorDialog(dialog, "❌ Số ghế trống không được lớn hơn tổng số ghế!");
+        return false;
+    }
+
+    if (soGheTrong < 0) {
+        ValidatorUtils.showErrorDialog(dialog, "❌ Số ghế trống không được âm!");
+        return false;
+    }
+
+    return true;
+}
+
+private void khoiPhucGiaTriBanDau(JPanel formPanel, ChuyenBay cbCanSua) {
+    Map<String, Object> components = (Map<String, Object>) formPanel.getClientProperty("components");
+    
+    JComboBox<String> cbDiemDi = (JComboBox<String>) components.get("cbDiemDi");
+    JComboBox<String> cbDiemDen = (JComboBox<String>) components.get("cbDiemDen");
+    JSpinner spinnerGioKhoiHanh = (JSpinner) components.get("spinnerGioKhoiHanh");
+    JSpinner spinnerGioDen = (JSpinner) components.get("spinnerGioDen");
+    JSpinner spinnerSoGhe = (JSpinner) components.get("spinnerSoGhe");
+    JSpinner spinnerSoGheTrong = (JSpinner) components.get("spinnerSoGheTrong");
+    JComboBox<String> cbMaMayBay = (JComboBox<String>) components.get("cbMaMayBay");
+    JSpinner spinnerGiaCoBan = (JSpinner) components.get("spinnerGiaCoBan");
+    JComboBox<String> cbTrangThai = (JComboBox<String>) components.get("cbTrangThai");
+
+    // Khôi phục về giá trị ban đầu
+    setComboBoxToValue(cbDiemDi, cbCanSua.getDiemDi());
+    setComboBoxToValue(cbDiemDen, cbCanSua.getDiemDen());
+    spinnerGioKhoiHanh.setValue(cbCanSua.getGioKhoiHanh());
+    spinnerGioDen.setValue(cbCanSua.getGioDen());
+    spinnerSoGhe.setValue(cbCanSua.getSoGhe());
+    spinnerSoGheTrong.setValue(cbCanSua.getSoGheTrong());
+    setComboBoxToValue(cbMaMayBay, cbCanSua.getMaMayBay());
+    spinnerGiaCoBan.setValue(cbCanSua.getGiaCoBan());
+    cbTrangThai.setSelectedItem(cbCanSua.getTrangThai());
+}
+
+// ========== PHƯƠNG THỨC HỖ TRỢ BỔ SUNG ==========
+
+private void setComboBoxToValue(JComboBox<String> comboBox, String value) {
+    for (int i = 0; i < comboBox.getItemCount(); i++) {
+        if (comboBox.getItemAt(i).equals(value)) {
+            comboBox.setSelectedIndex(i);
+            return;
+        }
+    }
+    // Nếu không tìm thấy, chọn item đầu tiên
+    if (comboBox.getItemCount() > 0) {
+        comboBox.setSelectedIndex(0);
+    }
+}
+
+// Thêm phương thức cập nhật thông tin real-time cho dialog sửa
+private void setupRealTimeUpdate(JPanel formPanel, JPanel panelThongTinCapNhat, ChuyenBay cbCanSua) {
+    Map<String, Object> components = (Map<String, Object>) formPanel.getClientProperty("components");
+    
+    JComboBox<String> cbDiemDi = (JComboBox<String>) components.get("cbDiemDi");
+    JComboBox<String> cbDiemDen = (JComboBox<String>) components.get("cbDiemDen");
+    JSpinner spinnerGioKhoiHanh = (JSpinner) components.get("spinnerGioKhoiHanh");
+    JSpinner spinnerGioDen = (JSpinner) components.get("spinnerGioDen");
+    JSpinner spinnerSoGhe = (JSpinner) components.get("spinnerSoGhe");
+    JSpinner spinnerSoGheTrong = (JSpinner) components.get("spinnerSoGheTrong");
+    JComboBox<String> cbMaMayBay = (JComboBox<String>) components.get("cbMaMayBay");
+    JSpinner spinnerGiaCoBan = (JSpinner) components.get("spinnerGiaCoBan");
+    JComboBox<String> cbTrangThai = (JComboBox<String>) components.get("cbTrangThai");
+
+    Runnable updateThongTinCapNhat = () -> {
+        updateSuaChuyenBayInfo(cbCanSua, cbDiemDi, cbDiemDen, spinnerGioKhoiHanh, spinnerGioDen,
+                              spinnerSoGhe, spinnerSoGheTrong, cbMaMayBay, spinnerGiaCoBan,
+                              cbTrangThai, panelThongTinCapNhat);
+    };
+
+    // Thêm listeners cho tất cả components
+    cbDiemDi.addActionListener(e -> updateThongTinCapNhat.run());
+    cbDiemDen.addActionListener(e -> updateThongTinCapNhat.run());
+    cbMaMayBay.addActionListener(e -> updateThongTinCapNhat.run());
+    cbTrangThai.addActionListener(e -> updateThongTinCapNhat.run());
+    spinnerGioKhoiHanh.addChangeListener(e -> updateThongTinCapNhat.run());
+    spinnerGioDen.addChangeListener(e -> updateThongTinCapNhat.run());
+    spinnerSoGhe.addChangeListener(e -> {
+        int soGheMoi = (Integer) spinnerSoGhe.getValue();
+        int soGheTrongHienTai = (Integer) spinnerSoGheTrong.getValue();
+        
+        if (soGheTrongHienTai > soGheMoi) {
+            spinnerSoGheTrong.setValue(soGheMoi);
+        }
+        spinnerSoGheTrong.setModel(new SpinnerNumberModel(
+            Math.min(soGheTrongHienTai, soGheMoi), 0, soGheMoi, 1
+        ));
+        updateThongTinCapNhat.run();
+    });
+    spinnerSoGheTrong.addChangeListener(e -> updateThongTinCapNhat.run());
+    spinnerGiaCoBan.addChangeListener(e -> updateThongTinCapNhat.run());
+
+    // Gọi lần đầu
+    updateThongTinCapNhat.run();
+}
+
+private void updateSuaChuyenBayInfo(ChuyenBay cbCanSua, JComboBox<String> cbDiemDi,
+                                  JComboBox<String> cbDiemDen, JSpinner spinnerGioKhoiHanh,
+                                  JSpinner spinnerGioDen, JSpinner spinnerSoGhe,
+                                  JSpinner spinnerSoGheTrong, JComboBox<String> cbMaMayBay,
+                                  JSpinner spinnerGiaCoBan, JComboBox<String> cbTrangThai,
+                                  JPanel panelThongTinCapNhat) {
+    try {
+        String diemDi = (String) cbDiemDi.getSelectedItem();
+        String diemDen = (String) cbDiemDen.getSelectedItem();
+        Date gioKhoiHanh = (Date) spinnerGioKhoiHanh.getValue();
+        Date gioDen = (Date) spinnerGioDen.getValue();
+        int soGhe = (Integer) spinnerSoGhe.getValue();
+        int soGheTrong = (Integer) spinnerSoGheTrong.getValue();
+        double giaCoBan = (Double) spinnerGiaCoBan.getValue();
+        String trangThai = (String) cbTrangThai.getSelectedItem();
+        
+        long thoiGianBay = (gioDen.getTime() - gioKhoiHanh.getTime()) / (1000 * 60);
+        double tyLeLapDay = ((double)(soGhe - soGheTrong) / soGhe) * 100;
+        
+        String info = String.format(
+            "🔄 THÔNG TIN CẬP NHẬT:\n\n" +
+            "🛫 Lộ trình: %s → %s\n" +
+            "⏰ Khởi hành: %s\n" +
+            "⏱️ Đến nơi: %s\n" +
+            "⏳ Thời gian bay: %d phút\n" +
+            "💺 Ghế: %d/%d (%.1f%% lấp đầy)\n" +
+            "💰 Giá cơ bản: %s VND\n" +
+            "📊 Trạng thái: %s\n" +
+            "🎯 Thay đổi: %s",
+            diemDi.isEmpty() ? "?" : diemDi,
+            diemDen.isEmpty() ? "?" : diemDen,
+            new SimpleDateFormat("dd/MM/yyyy HH:mm").format(gioKhoiHanh),
+            new SimpleDateFormat("dd/MM/yyyy HH:mm").format(gioDen),
+            thoiGianBay,
+            soGhe - soGheTrong, soGhe,
+            tyLeLapDay,
+            String.format("%,.0f", giaCoBan),
+            trangThai,
+            kiemTraThayDoi(cbCanSua, diemDi, diemDen, gioKhoiHanh, gioDen, soGhe, soGheTrong, giaCoBan, trangThai)
+        );
+        
+        // Cập nhật JTextArea trong panel
+        JTextArea txtThongTin = (JTextArea) ((JScrollPane) panelThongTinCapNhat.getComponent(0)).getViewport().getView();
+        txtThongTin.setText(info);
+        
+    } catch (Exception ex) {
+        JTextArea txtThongTin = (JTextArea) ((JScrollPane) panelThongTinCapNhat.getComponent(0)).getViewport().getView();
+        txtThongTin.setText("🔄 Đang cập nhật thông tin...");
+    }
+}
+
+private String kiemTraThayDoi(ChuyenBay cbCanSua, String diemDi, String diemDen,
+                             Date gioKhoiHanh, Date gioDen, int soGhe, int soGheTrong,
+                             double giaCoBan, String trangThai) {
+    List<String> thayDoi = new ArrayList<>();
+    
+    if (!cbCanSua.getDiemDi().equals(diemDi)) thayDoi.add("Điểm đi");
+    if (!cbCanSua.getDiemDen().equals(diemDen)) thayDoi.add("Điểm đến");
+    if (!cbCanSua.getGioKhoiHanh().equals(gioKhoiHanh)) thayDoi.add("Giờ khởi hành");
+    if (!cbCanSua.getGioDen().equals(gioDen)) thayDoi.add("Giờ đến");
+    if (cbCanSua.getSoGhe() != soGhe) thayDoi.add("Số ghế");
+    if (cbCanSua.getSoGheTrong() != soGheTrong) thayDoi.add("Ghế trống");
+    if (cbCanSua.getGiaCoBan() != giaCoBan) thayDoi.add("Giá vé");
+    if (!cbCanSua.getTrangThai().equals(trangThai)) thayDoi.add("Trạng thái");
+    
+    return thayDoi.isEmpty() ? "Không có thay đổi" : String.join(", ", thayDoi);
+}
 }

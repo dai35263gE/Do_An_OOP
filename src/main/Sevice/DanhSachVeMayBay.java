@@ -272,7 +272,7 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
             List<Map<String, String>> dataList = XMLUtils.docFileXML(tenFile);
             
             if (dataList == null || dataList.isEmpty()) {
-                System.out.println("❌ Không có dữ liệu trong file XML hoặc file không tồn tại");
+                System.out.println("Khong co du lieu hoac file khong ton tai");
                 return false;
             }
             
@@ -294,15 +294,15 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
                     countSuccess++;
                     
                 } catch (Exception e) {
-                    System.out.println("❌ Lỗi xử lý vé: " + data.get("MaVe") + " - " + e.getMessage());
+                    System.out.println("Loi xu ly ve: " + data.get("MaVe") + " - " + e.getMessage());
                 }
             }
             
-            System.out.println("✅ Đã tải " + countSuccess + " vé từ file XML");
+            System.out.println("Da tai " + countSuccess + " ve tu file XML");
             return countSuccess > 0;
             
         } catch (Exception e) {
-            System.out.println("💥 LỖI NGHIÊM TRỌNG khi đọc file: " + e.getMessage());
+            System.out.println("Loi nghiem trong khi doc file file: " + e.getMessage());
             return false;
         }
     }
@@ -351,11 +351,11 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
                     );
                     
                 default:
-                    System.out.println("❌ Loại vé không hợp lệ: " + loaiVe);
+                    System.out.println("Loai ve khong hop le: " + loaiVe);
                     return null;
             }
         } catch (Exception e) {
-            System.out.println("❌ Loi tao ve tu XML data: " + e.getMessage());
+            System.out.println("Loi tao ve tu XML data: " + e.getMessage());
             return null;
         }
     }
@@ -408,12 +408,12 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
             
             boolean result = XMLUtils.ghiFileXML(tenFile, dataList, "VeMayBays");
             if (result) {
-                System.out.println("✅ Ghi file XML thành công: " + danhSach.size() + " vé");
+                System.out.println("Ghi file thanh cong: " + danhSach.size() + " ve");
             }
             return result;
             
         } catch (Exception e) {
-            System.out.println("❌ Lỗi ghi file XML: " + e.getMessage());
+            System.out.println("Loi ghi fileL: " + e.getMessage());
             return false;
         }
     }
@@ -685,7 +685,6 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
     
     public List<String> getDanhSachTrangThai() {
         return Arrays.asList(
-            VeMayBay.TRANG_THAI_CO_THE_DAT,
             VeMayBay.TRANG_THAI_DA_DAT,
             VeMayBay.TRANG_THAI_DA_THANH_TOAN,
             VeMayBay.TRANG_THAI_DA_HUY,
@@ -715,10 +714,10 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
     }
     
     // ========== MAIN METHOD FOR TESTING ==========
-    public static void main(String[] args) {
-        DanhSachVeMayBay ds = new DanhSachVeMayBay();
-        ds.docFile("src/resources/data/3_VeMayBays.xml");
-        ds.hienThiTatCa();
-        System.out.println("Tổng doanh thu: " + (long)ds.tinhTongDoanhThu());
-    }
+    // public static void main(String[] args) {
+    //     DanhSachVeMayBay ds = new DanhSachVeMayBay();
+    //     ds.docFile("src/resources/data/3_VeMayBays.xml");
+    //     ds.hienThiTatCa();
+    //     System.out.println("Tổng doanh thu: " + (long)ds.tinhTongDoanhThu());
+    // }
 }

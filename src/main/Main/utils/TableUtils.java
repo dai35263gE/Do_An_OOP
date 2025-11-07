@@ -91,8 +91,8 @@ public class TableUtils {
             Object[] row = {
                 ve.getMaVe(),
                 ve.getmaKH(),
-                        dsKH.timKiemTheoMa(ve.getmaKH()).getHoTen(),
-                        dsKH.timKiemTheoMa(ve.getmaKH()).getCmnd(),
+                dsKH.timKiemTheoMa(ve.getmaKH()).getHoTen(),
+                dsKH.timKiemTheoMa(ve.getmaKH()).getCmnd(),
                 ve.getMaChuyen(),
                 ve.loaiVe(),
                 ve.getNgayBay() != null ? sdf.format(ve.getNgayBay()) : "N/A",

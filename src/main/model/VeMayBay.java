@@ -17,16 +17,16 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
     protected String trangThai;
     protected Date ngayDat;
     
-    // Constants
     public static final String TRANG_THAI_DA_DAT = "ĐÃ_ĐẶT";
     public static final String TRANG_THAI_DA_THANH_TOAN = "ĐÃ_THANH_TOÁN";
     public static final String TRANG_THAI_DA_HUY = "ĐÃ_HỦY";
     public static final String TRANG_THAI_DA_BAY = "ĐÃ_BAY";
     
-    // Thời gian tối thiểu để hủy vé (4 tiếng trước giờ bay)
     private static final long THOI_GIAN_HUY_TOI_THIEU = 4 * 60 * 60 * 1000; // 4 tiếng tính bằng milliseconds
+    //thoi gian doi se gap doi thoi gian huy ( toi thieu)
+
     
-    // Regex patterns for validation
+    // tao format mave va so ghe
     private static final Pattern MA_VE_PATTERN = Pattern.compile("^(VG|VP|VT)[0-9]{3}$");
     private static final Pattern SO_GHE_PATTERN = Pattern.compile("^[0-9]{1,2}[A-Z]$");
     
@@ -43,10 +43,9 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
     }
 
     public VeMayBay() {
-        //TODO Auto-generated constructor stub
     }
 
-    // Abstract methods
+    // Phuong thuc Abstract 
     public abstract double tinhThue();
     public abstract String loaiVe();
     public abstract String chiTietLoaiVe();
@@ -55,7 +54,7 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
     // BUSINESS METHODS - Tối ưu cho GUI
     public boolean coTheHuy() {
         if (ngayBay == null) return true;
-        if (!trangThai.equals(TRANG_THAI_DA_DAT) && !trangThai.equals(TRANG_THAI_DA_THANH_TOAN)) {
+        if (!trangThai.equals(TRANG_THAI_DA_BAY) && !trangThai.equals(TRANG_THAI_DA_THANH_TOAN)) {
             return false; // Chỉ có thể hủy vé đã đặt hoặc đã thanh toán
         }
         
@@ -86,7 +85,7 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
         }
         
         long thoiGianConLai = ngayBay.getTime() - System.currentTimeMillis();
-        return thoiGianConLai > THOI_GIAN_HUY_TOI_THIEU * 2; // Đổi vé cần nhiều thời gian hơn
+        return thoiGianConLai > THOI_GIAN_HUY_TOI_THIEU * 2;
     }
     
     public void datVe() throws IllegalStateException {
@@ -127,7 +126,8 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
     public boolean coTheSuDung() {
         return !TRANG_THAI_DA_HUY.equals(trangThai) && !TRANG_THAI_DA_BAY.equals(trangThai);
     }
-    // VALIDATION METHODS
+    
+    
     public static boolean validateMaVe(String maVe) {
         return maVe != null && MA_VE_PATTERN.matcher(maVe).matches();
     }
@@ -175,6 +175,7 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
         // Phù hợp để hiển thị trong JTable
         return new Object[] {
             maVe,
+            maKH,
             loaiVe(),
             maChuyen,
             ngayBay,
@@ -196,19 +197,7 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
         return this.ngayBay.compareTo(other.ngayBay);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        VeMayBay that = (VeMayBay) obj;
-        return maVe != null && maVe.equals(that.maVe);
-    }
-    
-    @Override
-    public int hashCode() {
-        return maVe != null ? maVe.hashCode() : 0;
-    }
-    
+
     @Override
     public String toString() {
         return String.format("%s - %s - %s - %s", maVe, loaiVe(), maChuyen, trangThai);

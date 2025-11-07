@@ -252,31 +252,13 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
 
         return ketQua;
     }
-
-    // ========== PHÂN TRANG CHO GUI ==========
-    public List<ChuyenBay> phanTrang(int trang, int kichThuocTrang) {
-        int batDau = (trang - 1) * kichThuocTrang;
-        int ketThuc = Math.min(batDau + kichThuocTrang, danhSach.size());
-        
-        if (batDau >= danhSach.size() || batDau < 0) {
-            return new ArrayList<>();
-        }
-        
-        return new ArrayList<>(danhSach.subList(batDau, ketThuc));
-    }
-
-    public int getTongSoTrang(int kichThuocTrang) {
-        return (int) Math.ceil((double) danhSach.size() / kichThuocTrang);
-    }
-
-    // ========== IMPLEMENT IFILEHANDLER ==========
     @Override
     public boolean docFile(String tenFile) {
         try {
             List<Map<String, String>> dataList = XMLUtils.docFileXML(tenFile);
 
             if (dataList.isEmpty()) {
-                System.out.println("Không có dữ liệu trong file XML");
+                System.out.println("Khong co du lieu trong file");
                 return false;
             }
 
@@ -303,15 +285,15 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
                     }
 
                 } catch (Exception e) {
-                    System.err.println("Lỗi tạo ChuyenBay từ XML: " + e.getMessage());
+                    System.err.println("Loi tao chuyen bay: " + e.getMessage());
                 }
             }
             
-            System.out.println("Đã tải " + count + " chuyến bay từ file XML");
+            System.out.println("Da tai " + count + " chuyen bay tu file XML");
             return true;
 
         } catch (Exception e) {
-            System.err.println("Lỗi đọc file XML: " + e.getMessage());
+            System.err.println("Loi doc file: " + e.getMessage());
             return false;
         }
     }
@@ -340,7 +322,7 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
             return XMLUtils.ghiFileXML(tenFile, dataList, "ChuyenBays");
 
         } catch (Exception e) {
-            System.err.println("Lỗi ghi file XML: " + e.getMessage());
+            System.err.println("Loi ghi file XML: " + e.getMessage());
             return false;
         }
     }
@@ -473,10 +455,10 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
         return cb != null ? Arrays.asList(cb) : new ArrayList<>();
     }
 
-    // ========== MAIN METHOD FOR TESTING ==========
-    public static void main(String[] args) {
-        DanhSachChuyenBay ds = new DanhSachChuyenBay();
-        ds.docFile("src/resources/data/1_ChuyenBays.xml");
-        ds.hienThiTatCa();
-    }
+    // // ========== MAIN METHOD FOR TESTING ==========
+    // public static void main(String[] args) {
+    //     DanhSachChuyenBay ds = new DanhSachChuyenBay();
+    //     ds.docFile("src/resources/data/1_ChuyenBays.xml");
+    //     ds.hienThiTatCa();
+    // }
 }

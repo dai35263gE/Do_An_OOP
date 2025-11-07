@@ -25,11 +25,11 @@ public class StatCardManager {
     private void taoStatCards() {
         // Tạo 8 thẻ thống kê
         String[] titles = {
-            "Tổng số vé", "Tổng chuyến bay", "Tổng khách hàng", "Tổng doanh thu",
-            "Vé thương gia", "Vé phổ thông", "Vé tiết kiệm", "Tỷ lệ lấp đầy"
+            "Tổng số vé", "Tổng chuyến bay", "Tổng khách hàng", "Tổng doanh thu", "Tỷ lệ lấp đầy",
+            "Vé thương gia", "Vé phổ thông", "Vé tiết kiệm",
         };
 
-        String[] values = {"0", "0", "0", "0 VND", "0", "0", "0", "0%"};
+        String[] values = {"0", "0", "0", "0 VND", "0%", "0", "0", "0"};
 
         String[] types = {
             "primary", "success", "info", "warning",
@@ -110,14 +110,15 @@ public class StatCardManager {
     public void capNhatThongKeTrangChu() {
         Map<String, Object> thongKe = quanLy.thongKeTongQuan();
 
-        updateStatCard(0, String.valueOf(thongKe.get("TongVe")));
-        updateStatCard(1, String.valueOf(thongKe.get("TongChuyenBay")));
-        updateStatCard(2, String.valueOf(thongKe.get("TongKhachHang")));
-        updateStatCard(3, String.format("%,.0f VND", thongKe.get("TongDoanhThu")));
-        updateStatCard(4, String.valueOf(thongKe.get("VeThuongGia")));
-        updateStatCard(5, String.valueOf(thongKe.get("VePhoThong")));
-        updateStatCard(6, String.valueOf(thongKe.get("VeTietKiem")));
-        updateStatCard(7, String.format("%.1f%%", thongKe.get("tiLeLapDay")));
+        updateStatCard(0, String.valueOf(thongKe.get("tongVe")));
+        updateStatCard(1, String.valueOf(thongKe.get("tongChuyenBay")));
+        updateStatCard(2, String.valueOf(thongKe.get("tongKhachHang")));
+        updateStatCard(3, String.format("%,.0f VND", thongKe.get("tongDoanhThu")));
+        updateStatCard(4, String.format("%.1f%%", thongKe.get("tiLeLapDay")));
+        updateStatCard(5, String.valueOf(thongKe.get("VeThuongGia")));
+        updateStatCard(6, String.valueOf(thongKe.get("VePhoThong")));
+        updateStatCard(7, String.valueOf(thongKe.get("VeTietKiem")));
+        
     }
 
     public void capNhatThongKeTheoLoai(String loai) {
@@ -125,7 +126,7 @@ public class StatCardManager {
         
         switch (loai) {
             case "ve":
-                updateStatCard(0, String.valueOf(thongKe.get("TongVe")));
+                updateStatCard(0, String.valueOf(thongKe.get("tongVe")));
                 updateStatCard(4, String.valueOf(thongKe.get("VeThuongGia")));
                 updateStatCard(5, String.valueOf(thongKe.get("VePhoThong")));
                 updateStatCard(6, String.valueOf(thongKe.get("VeTietKiem")));

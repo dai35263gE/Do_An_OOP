@@ -18,7 +18,7 @@ public class MainGUI extends JFrame {
     private MenuManager menuManager;
     private VeDialogs veDialogs;
     private ChuyenBayDialogs chuyenBayDialogs;
-    private ThongKeDialogs thongKeDialogs;
+
     private KhachHangDialogs khachHangDialogs;
 
     public MainGUI() {
@@ -314,7 +314,7 @@ public class MainGUI extends JFrame {
                 veDialogs.moDialogDatVe();
                 break;
             case "Sửa vé":
-                // veDialogs.moDialogSuaVe();
+                veDialogs.moDialogSuaVe();
                 break;
             case "Xóa vé":
                 veDialogs.xoaVe();
@@ -329,7 +329,7 @@ public class MainGUI extends JFrame {
                 capNhatTableVe();
                 break;
             case "Xem chi tiết":
-                // Gọi dialog xem chi tiết vé
+                veDialogs.xemChiTietVe();
                 break;
         }
     }

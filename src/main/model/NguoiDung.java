@@ -11,9 +11,7 @@ import java.util.regex.Pattern;
  *
  * @author HP
  */
-// File: NguoiDung.java - CLASS CHA
 public abstract class NguoiDung {
-    // CÁC THUỘC TÍNH CHUNG
     protected String ma;
     protected String hoTen;
     protected String soDT;
@@ -26,13 +24,10 @@ public abstract class NguoiDung {
     protected String tenDangNhap;
     protected String matKhau;
     protected boolean trangThaiDangNhap;
-    protected Date lastLogin;
     
-    // Constants
     public static final String GT_NAM = "Nam";
     public static final String GT_NU = "Nữ";
     
-    // Regex patterns for validation
     protected static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
     protected static final Pattern PHONE_PATTERN = Pattern.compile("^(03|05|07|08|09)[0-9]{8}$");
     protected static final Pattern CMND_PATTERN = Pattern.compile("^[0-9]{9}$|^[0-9]{12}$");
@@ -55,7 +50,6 @@ public abstract class NguoiDung {
         setMatKhau(matKhau);
         this.ngayTao = new Date();
         this.trangThaiDangNhap = false;
-        this.lastLogin = null;
     }
     
     // ABSTRACT METHODS - để các lớp con triển khai
@@ -63,11 +57,9 @@ public abstract class NguoiDung {
     public abstract String getPhanQuyen();
     public abstract boolean coTheThucHienChucNang(String chucNang);
     
-    // AUTHENTICATION METHODS
     public boolean dangNhap(String tenDangNhap, String matKhau) {
         if (this.tenDangNhap.equals(tenDangNhap) && this.matKhau.equals(matKhau)) {
             this.trangThaiDangNhap = true;
-            this.lastLogin = new Date();
             return true;
         }
         return false;
@@ -85,15 +77,6 @@ public abstract class NguoiDung {
         return false;
     }
     
-    public void resetMatKhau(String matKhauMoi) {
-        if (validatePassword(matKhauMoi)) {
-            setMatKhau(matKhauMoi);
-        } else {
-            throw new IllegalArgumentException("Mật khẩu mới không hợp lệ");
-        }
-    }
-    
-    // VALIDATION METHODS
     public static boolean validateEmail(String email) {
         return email != null && EMAIL_PATTERN.matcher(email).matches();
     }
@@ -114,7 +97,6 @@ public abstract class NguoiDung {
         return password != null && PASSWORD_PATTERN.matcher(password).matches();
     }
     
-    // UTILITY METHODS cho GUI
     public int tinhTuoi() {
         if (ngaySinh == null) return 0;
         Date now = new Date();
@@ -146,8 +128,7 @@ public abstract class NguoiDung {
             gioiTinh,
             diaChi,
             getVaiTro(),
-            trangThaiDangNhap ? "Đang hoạt động" : "Không hoạt động",
-            lastLogin
+            trangThaiDangNhap ? "Đang hoạt động" : "Không hoạt động"
         };
     }
     
@@ -254,7 +235,6 @@ public abstract class NguoiDung {
     
     public boolean isTrangThaiDangNhap() { return trangThaiDangNhap; }
     
-    public Date getLastLogin() { return lastLogin; }
     
     // Additional utility methods for GUI
     public boolean isNam() {
@@ -276,18 +256,5 @@ public abstract class NguoiDung {
     @Override
     public String toString() {
         return getThongTinCoBan();
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        NguoiDung that = (NguoiDung) obj;
-        return ma != null && ma.equals(that.ma);
-    }
-    
-    @Override
-    public int hashCode() {
-        return ma != null ? ma.hashCode() : 0;
     }
 }

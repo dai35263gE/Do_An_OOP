@@ -322,8 +322,6 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
                     System.out.println("❌ Lỗi xử lý hóa đơn: " + data.get("MaHoaDon") + " - " + e.getMessage());
                 }
             }
-
-            System.out.println("✅ Đã tải " + countSuccess + " hóa đơn từ file XML");
             return countSuccess > 0;
 
         } catch (Exception e) {
@@ -413,14 +411,11 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
                 VeMayBay ve = danhSachVeMayBay.timKiemTheoMa(maVeTrim);
                 if (ve != null) {
                     danhSachVe.add(ve);
-                    System.out.println("✅ Đã tìm thấy vé: " + maVeTrim + " cho hóa đơn: " + data.get("MaHoaDon"));
                 } else {
-                    System.out.println("❌ Không tìm thấy vé: " + maVeTrim + " trong danh sách vé");
+                    System.out.println("Khong tim thay ve: " + maVeTrim + " trong danh sach ve");
                 }
             }
         }
-        
-        System.out.println("✅ Đã tìm thấy " + danhSachVe.size() + " vé cho hóa đơn: " + data.get("MaHoaDon"));
         return danhSachVe;
         
     } catch (Exception e) {
@@ -820,12 +815,12 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
 
         return thongKe;
     }
-    public static void main(String[] args) {
-        DanhSachHoaDon ds = new DanhSachHoaDon();
-        ds.docFile("src/resources/data/4_HoaDons.xml");
-        ds.hienThiTatCa();
-        for(HoaDon hd : ds.danhSach){
-            System.out.println(hd.getDanhSachVe());
-        }
-    }
+    // public static void main(String[] args) {
+    //     DanhSachHoaDon ds = new DanhSachHoaDon();
+    //     ds.docFile("src/resources/data/4_HoaDons.xml");
+    //     ds.hienThiTatCa();
+    //     for(HoaDon hd : ds.danhSach){
+    //         System.out.println(hd.getDanhSachVe());
+    //     }
+    // }
 }

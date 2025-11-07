@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,7 @@ public class UsersGUI extends JFrame {
     private DanhSachChuyenBay dsChuyenBay;
     private DanhSachVeMayBay dsVe;
     private DanhSachHoaDon dsHoaDon;
+    private DanhSachKhachHang dsKhachHang;
 
     // Components
     private JTabbedPane tabbedPane;
@@ -37,37 +39,45 @@ public class UsersGUI extends JFrame {
     // Tab Vé của tôi
     private JTable tableVeCuaToi;
     private DefaultTableModel modelVeCuaToi;
-    private JButton btnXemHoaDon, btnHuyVe;
+    private JButton btnXemHoaDon, btnHuyVe, btnXemChiTietVe;
     
     // Tab Lịch sử
     private JTable tableLichSu;
     private DefaultTableModel modelLichSu;
     
     // Tab Thông tin
-    private JTextField txtHoTen, txtEmail, txtSoDT, txtDiaChi, txtGioiTinh, txtCmnd, txtNgaySinh;
+    private JTextField txtHoTen, txtEmail, txtSoDT, txtDiaChi, txtCmnd, txtNgaySinh;
+    private JComboBox<String> cbGioiTinh;
     private JButton btnCapNhatThongTin;
+    private JLabel lblDiemTichLuy, lblHangKhachHang;
 
     public UsersGUI(QuanLyBanVeMayBay quanLy) {
         this.quanLy = quanLy;
         this.dsChuyenBay = quanLy.getDsChuyenBay();
         this.dsVe = quanLy.getDsVe();
         this.dsHoaDon = quanLy.getDsHoaDon();
+        this.dsKhachHang = quanLy.getDsKhachHang();
         
         initComponents();
         setupLayout();
         setupEvents();
     }
 
-    public boolean dangNhap(String maKH) {
-        khachHangDangNhap = quanLy.getDsKhachHang().timKiemTheoMa(maKH);
-        if (khachHangDangNhap != null) {
-            lblWelcome.setText("Xin chào, " + khachHangDangNhap.getHoTen() + "! - Hạng: " + khachHangDangNhap.getHangKhachHang());
+    public boolean dangNhap(String maKH, String matKhau) {
+        khachHangDangNhap = dsKhachHang.timKiemTheoMa(maKH);
+        if (khachHangDangNhap != null && kiemTraMatKhau(matKhau)) {
+            lblWelcome.setText("Xin chào, " + khachHangDangNhap.getHoTen() + "! - Hạng: " + khachHangDangNhap.getHangKhachHangText());
             capNhatThongTinCaNhan();
             taiVeCuaToi();
             taiLichSu();
             return true;
         }
         return false;
+    }
+
+    private boolean kiemTraMatKhau(String matKhau) {
+        // Trong thực tế, nên mã hóa và so sánh mật khẩu
+        return khachHangDangNhap != null && khachHangDangNhap.getMatKhau().equals(matKhau);
     }
 
     private void initComponents() {
@@ -109,12 +119,13 @@ public class UsersGUI extends JFrame {
         JPanel panelTimKiem = new JPanel(new GridLayout(2, 4, 10, 10));
         panelTimKiem.setBorder(BorderFactory.createTitledBorder("Tìm kiếm chuyến bay"));
 
-        // Lấy danh sách điểm đi, điểm duy nhất
+        // Lấy danh sách điểm đi, điểm đến từ danh sách chuyến bay
         java.util.Set<String> diemDiSet = new java.util.HashSet<>();
         java.util.Set<String> diemDenSet = new java.util.HashSet<>();
         
-        if (dsChuyenBay != null && dsChuyenBay.getDanhSachChuyenBay() != null) {
-            for (ChuyenBay cb : dsChuyenBay.getDanhSachChuyenBay()) {
+        List<ChuyenBay> danhSachCB = dsChuyenBay.getDanhSach();
+        if (danhSachCB != null) {
+            for (ChuyenBay cb : danhSachCB) {
                 if ("CHƯA BAY".equals(cb.getTrangThai())) {
                     diemDiSet.add(cb.getDiemDi());
                     diemDenSet.add(cb.getDiemDen());
@@ -138,7 +149,12 @@ public class UsersGUI extends JFrame {
 
         // Table chuyến bay
         String[] columns = {"Mã CB", "Điểm đi", "Điểm đến", "Ngày giờ", "Giá", "Ghế trống", "Trạng thái"};
-        modelChuyenBay = new DefaultTableModel(columns, 0);
+        modelChuyenBay = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         tableChuyenBay = new JTable(modelChuyenBay);
         tableChuyenBay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollChuyenBay = new JScrollPane(tableChuyenBay);
@@ -164,15 +180,22 @@ public class UsersGUI extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         String[] columns = {"Mã Vé", "Chuyến Bay", "Loại Vé", "Số Ghế", "Giá Vé", "Ngày Đặt", "Trạng Thái"};
-        modelVeCuaToi = new DefaultTableModel(columns, 0);
+        modelVeCuaToi = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         tableVeCuaToi = new JTable(modelVeCuaToi);
         JScrollPane scrollVeCuaToi = new JScrollPane(tableVeCuaToi);
 
         // Panel button
         JPanel panelButton = new JPanel(new FlowLayout());
+        btnXemChiTietVe = new JButton("Xem Chi Tiết");
         btnXemHoaDon = new JButton("Xem Hóa Đơn");
         btnHuyVe = new JButton("Hủy Vé");
 
+        panelButton.add(btnXemChiTietVe);
         panelButton.add(btnXemHoaDon);
         panelButton.add(btnHuyVe);
 
@@ -188,7 +211,12 @@ public class UsersGUI extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         String[] columns = {"Mã Vé", "Chuyến Bay", "Loại Vé", "Giá Vé", "Ngày Đặt", "Trạng Thái"};
-        modelLichSu = new DefaultTableModel(columns, 0);
+        modelLichSu = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         tableLichSu = new JTable(modelLichSu);
         JScrollPane scrollLichSu = new JScrollPane(tableLichSu);
 
@@ -199,34 +227,55 @@ public class UsersGUI extends JFrame {
     }
 
     private JPanel createTabThongTin() {
-        JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
+        // Panel thông tin cơ bản
+        JPanel panelThongTin = new JPanel(new GridLayout(0, 2, 10, 10));
+        
         txtHoTen = new JTextField();
         txtEmail = new JTextField();
         txtSoDT = new JTextField();
         txtDiaChi = new JTextField();
-        txtGioiTinh = new JTextField();
         txtCmnd = new JTextField();
         txtNgaySinh = new JTextField();
+        
+        String[] gioiTinhOptions = {"Nam", "Nữ", "Khác"};
+        cbGioiTinh = new JComboBox<>(gioiTinhOptions);
+        
         btnCapNhatThongTin = new JButton("Cập Nhật Thông Tin");
 
-        panel.add(new JLabel("Họ tên:"));
-        panel.add(txtHoTen);
-        panel.add(new JLabel("Email:"));
-        panel.add(txtEmail);
-        panel.add(new JLabel("Số điện thoại:"));
-        panel.add(txtSoDT);
-        panel.add(new JLabel("Địa chỉ:"));
-        panel.add(txtDiaChi);
-        panel.add(new JLabel("Giới tính:"));
-        panel.add(txtGioiTinh);
-        panel.add(new JLabel("CCCD:"));
-        panel.add(txtCmnd);
-        panel.add(new JLabel("Ngày Sinh:"));
-        panel.add(txtNgaySinh);
-        panel.add(new JLabel(""));
-        panel.add(btnCapNhatThongTin);
+        panelThongTin.add(new JLabel("Họ tên:"));
+        panelThongTin.add(txtHoTen);
+        panelThongTin.add(new JLabel("Email:"));
+        panelThongTin.add(txtEmail);
+        panelThongTin.add(new JLabel("Số điện thoại:"));
+        panelThongTin.add(txtSoDT);
+        panelThongTin.add(new JLabel("Địa chỉ:"));
+        panelThongTin.add(txtDiaChi);
+        panelThongTin.add(new JLabel("Giới tính:"));
+        panelThongTin.add(cbGioiTinh);
+        panelThongTin.add(new JLabel("CCCD:"));
+        panelThongTin.add(txtCmnd);
+        panelThongTin.add(new JLabel("Ngày Sinh (dd/MM/yyyy):"));
+        panelThongTin.add(txtNgaySinh);
+        panelThongTin.add(new JLabel(""));
+        panelThongTin.add(btnCapNhatThongTin);
+
+        // Panel thông tin thành viên
+        JPanel panelThanhVien = new JPanel(new GridLayout(2, 2, 10, 10));
+        panelThanhVien.setBorder(BorderFactory.createTitledBorder("Thông tin thành viên"));
+        
+        lblHangKhachHang = new JLabel("Hạng: Chưa đăng nhập");
+        lblDiemTichLuy = new JLabel("Điểm tích lũy: 0");
+        
+        panelThanhVien.add(new JLabel("Hạng khách hàng:"));
+        panelThanhVien.add(lblHangKhachHang);
+        panelThanhVien.add(new JLabel("Điểm tích lũy:"));
+        panelThanhVien.add(lblDiemTichLuy);
+
+        panel.add(panelThongTin, BorderLayout.CENTER);
+        panel.add(panelThanhVien, BorderLayout.SOUTH);
 
         return panel;
     }
@@ -243,6 +292,7 @@ public class UsersGUI extends JFrame {
         btnDatVe.addActionListener(e -> datVe());
 
         // Tab Vé của tôi
+        btnXemChiTietVe.addActionListener(e -> xemChiTietVe());
         btnXemHoaDon.addActionListener(e -> xemHoaDon());
         btnHuyVe.addActionListener(e -> huyVe());
 
@@ -276,6 +326,7 @@ public class UsersGUI extends JFrame {
             return;
         }
 
+        // Sử dụng phương thức có sẵn từ DanhSachChuyenBay
         List<ChuyenBay> ketQua = dsChuyenBay.timKiemTheoTuyen(diemDi, diemDen);
 
         if (ngayDiStr != null && !ngayDiStr.isEmpty()) {
@@ -339,7 +390,7 @@ public class UsersGUI extends JFrame {
 
         if (loaiVe == null) return;
 
-        // Tính giá vé
+        // Tính giá vé với giảm giá theo hạng khách hàng
         double giaCoBan = chuyenBay.getGiaCoBan();
         double heSoGia = 1.0;
         switch (loaiVe) {
@@ -348,19 +399,24 @@ public class UsersGUI extends JFrame {
             case "TIẾT KIỆM": heSoGia = 0.9; break;
         }
         double giaVe = giaCoBan * heSoGia;
+        
+        // Áp dụng giảm giá theo hạng khách hàng
+        double giamGia = khachHangDangNhap.tinhMucGiamGia(giaVe);
+        giaVe -= giamGia;
 
         // Tạo vé mới
         String maVe = "VE" + System.currentTimeMillis();
         VeMayBay ve;
         
         if ("THƯƠNG GIA".equals(loaiVe)) {
-            ve = new VeThuongGia(maVe, khachHangDangNhap.getMaKH(), khachHangDangNhap.getHoTen(),
-                    khachHangDangNhap.getCmnd(), new Date(), giaVe, maChuyen, 
-                    "A" + chuyenBay.getSoGheTrong(), "DAT", "Massage", 500000.0, 20, true, "Rượu vang");
+            ve = new VeThuongGia( khachHangDangNhap.getMa(),maVe,new Date(),  giaVe,maChuyen,
+                    "A" + chuyenBay.getSoGheTrong()+1,"Massage", 500000.0, 20, true, "Rượu vang");
+        } else if("PHỔ THÔNG".equals(loaiVe)){
+            ve = new VePhoThong( khachHangDangNhap.getMa(),maVe,new Date(),  giaVe,maChuyen,
+                    "B" + chuyenBay.getSoGheTrong()+1, true, 5, 200000, "Cửa sổ", true);
         } else {
-            ve = new VePhoThong(maVe, khachHangDangNhap.getMaKH(), khachHangDangNhap.getHoTen(),
-                    khachHangDangNhap.getCmnd(), new Date(), giaVe, maChuyen,
-                    "A" + chuyenBay.getSoGheTrong(), "DAT", true, 5, 200000, "Cửa sổ", true);
+            ve = new VeTietKiem( khachHangDangNhap.getMa(),maVe,new Date(),  giaVe,maChuyen,
+                    "B" + chuyenBay.getSoGheTrong()+1, 10, 0.1, true, 100000.0, "Khong");
         }
 
         // Thêm vé và cập nhật chuyến bay
@@ -369,8 +425,9 @@ public class UsersGUI extends JFrame {
             
             // Tạo hóa đơn
             String maHoaDon = "HD" + System.currentTimeMillis();
-            HoaDon hoaDon = new HoaDon(maHoaDon, khachHangDangNhap.getMaKH(), "KHACH_HANG",
-                    giaVe, giaVe * 0.1, 200000, "DA_THANH_TOAN");
+            List<VeMayBay> dsVe = new ArrayList<>();
+            dsVe.add(ve);
+            HoaDon hoaDon = new HoaDon( khachHangDangNhap, dsVe, 0,"DA_THANH_TOAN");
             dsHoaDon.them(hoaDon);
 
             // Cập nhật điểm tích lũy
@@ -383,11 +440,13 @@ public class UsersGUI extends JFrame {
                     "Chuyến bay: " + chuyenBay.getDiemDi() + " → " + chuyenBay.getDiemDen() + "\n" +
                     "Loại vé: " + loaiVe + "\n" +
                     "Giá vé: " + String.format("%,d VND", (int)giaVe) + "\n" +
+                    "Giảm giá: " + String.format("%,d VND", (int)giamGia) + "\n" +
                     "Điểm tích lũy nhận được: " + diemThuong,
                     "Thành công", JOptionPane.INFORMATION_MESSAGE);
 
             taiVeCuaToi();
             taiLichSu();
+            capNhatThongTinCaNhan();
         } else {
             JOptionPane.showMessageDialog(this, "Đặt vé thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
@@ -397,7 +456,7 @@ public class UsersGUI extends JFrame {
         if (khachHangDangNhap == null) return;
         
         modelVeCuaToi.setRowCount(0);
-        List<VeMayBay> veCuaToi = dsVe.timKiemTheoMaKH(khachHangDangNhap.getMaKH());
+        List<VeMayBay> veCuaToi = khachHangDangNhap.getVeDaDat();
         
         for (VeMayBay ve : veCuaToi) {
             if ("DAT".equals(ve.getTrangThai()) || "CONFIRMED".equals(ve.getTrangThai())) {
@@ -422,7 +481,7 @@ public class UsersGUI extends JFrame {
         if (khachHangDangNhap == null) return;
         
         modelLichSu.setRowCount(0);
-        List<VeMayBay> lichSu = dsVe.timKiemTheoMaKH(khachHangDangNhap.getMaKH());
+        List<VeMayBay> lichSu = khachHangDangNhap.getVeDaDat();
         
         for (VeMayBay ve : lichSu) {
             ChuyenBay cb = dsChuyenBay.timKiemTheoMa(ve.getMaChuyen());
@@ -440,7 +499,7 @@ public class UsersGUI extends JFrame {
         }
     }
 
-    private void xemHoaDon() {
+    private void xemChiTietVe() {
         int row = tableVeCuaToi.getSelectedRow();
         if (row < 0) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một vé!", "Thông báo", JOptionPane.WARNING_MESSAGE);
@@ -451,24 +510,53 @@ public class UsersGUI extends JFrame {
         VeMayBay ve = dsVe.timKiemTheoMa(maVe);
         
         if (ve != null) {
-            // Tìm hóa đơn tương ứng
-            List<HoaDon> hoaDonList = dsHoaDon.timKiemTheoMaKH(khachHangDangNhap.getMaKH());
-            for (HoaDon hd : hoaDonList) {
-                // Giả sử có phương thức lấy vé từ hóa đơn
-                // Hiển thị thông tin hóa đơn
-                StringBuilder sb = new StringBuilder();
-                sb.append("=== HÓA ĐƠN ===\n\n");
-                sb.append("Mã hóa đơn: ").append(hd.getMaHoaDon()).append("\n");
-                sb.append("Ngày lập: ").append(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(hd.getNgayLap())).append("\n");
-                sb.append("Khách hàng: ").append(khachHangDangNhap.getHoTen()).append("\n");
-                sb.append("Tổng tiền: ").append(String.format("%,d VND", (int)hd.getTongTien())).append("\n");
-                sb.append("Trạng thái: ").append(hd.getTrangThai()).append("\n");
+            ChuyenBay cb = dsChuyenBay.timKiemTheoMa(ve.getMaChuyen());
+            
+            StringBuilder sb = new StringBuilder();
+            sb.append("=== CHI TIẾT VÉ ===\n\n");
+            sb.append("Mã vé: ").append(ve.getMaVe()).append("\n");
+            sb.append("Ma khach hang: ").append(ve.getmaKH()).append("\n");
+            sb.append("Chuyến bay: ").append(cb != null ? cb.getDiemDi() + " → " + cb.getDiemDen() : "N/A").append("\n");
+            sb.append("Số ghế: ").append(ve.getSoGhe()).append("\n");
+            sb.append("Loại vé: ").append(ve instanceof VeThuongGia ? "Thương gia" : "Phổ thông").append("\n");
+            sb.append("Giá vé: ").append(String.format("%,d VND", (int)ve.getGiaVe())).append("\n");
+            sb.append("Ngày đặt: ").append(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(ve.getNgayDat())).append("\n");
+            sb.append("Trạng thái: ").append(ve.getTrangThai()).append("\n");
 
-                JTextArea textArea = new JTextArea(sb.toString());
-                textArea.setEditable(false);
-                JOptionPane.showMessageDialog(this, new JScrollPane(textArea), "Hóa Đơn", JOptionPane.INFORMATION_MESSAGE);
-                break;
-            }
+            JTextArea textArea = new JTextArea(sb.toString());
+            textArea.setEditable(false);
+            JOptionPane.showMessageDialog(this, new JScrollPane(textArea), "Chi Tiết Vé", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private void xemHoaDon() {
+        int row = tableVeCuaToi.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một vé!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String maVe = (String) modelVeCuaToi.getValueAt(row, 0);
+        
+        // Tìm hóa đơn tương ứng
+        List<HoaDon> hoaDonList = khachHangDangNhap.getLichSuHoaDon();
+        for (HoaDon hd : hoaDonList) {
+            // Hiển thị thông tin hóa đơn
+            StringBuilder sb = new StringBuilder();
+            sb.append("=== HÓA ĐƠN ===\n\n");
+            sb.append("Mã hóa đơn: ").append(hd.getMaHoaDon()).append("\n");
+            sb.append("Ngày lập: ").append(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(hd.getNgayLap())).append("\n");
+            sb.append("Khách hàng: ").append(khachHangDangNhap.getHoTen()).append("\n");
+            sb.append("Tổng tiền: ").append(String.format("%,d VND", (int)hd.getTongTien())).append("\n");
+            sb.append("Giảm giá: ").append(String.format("%,d VND", (int)hd.getKhuyenMai())).append("\n");
+            sb.append("Phí dịch vụ: ").append(String.format("%,d VND", (int)hd.getThue())).append("\n");
+            sb.append("Thành tiền: ").append(String.format("%,d VND", (int)hd.getThanhTien())).append("\n");
+            sb.append("Trạng thái: ").append(hd.getTrangThai()).append("\n");
+
+            JTextArea textArea = new JTextArea(sb.toString());
+            textArea.setEditable(false);
+            JOptionPane.showMessageDialog(this, new JScrollPane(textArea), "Hóa Đơn", JOptionPane.INFORMATION_MESSAGE);
+            break;
         }
     }
 
@@ -480,16 +568,29 @@ public class UsersGUI extends JFrame {
         }
 
         String maVe = (String) modelVeCuaToi.getValueAt(row, 0);
+        VeMayBay ve = dsVe.timKiemTheoMa(maVe);
+        
+        if (ve == null) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy vé!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Kiểm tra khả năng hủy vé
+        String khaNangHuy = khachHangDangNhap.kiemTraKhaNangHuyVe(ve);
+        if (!khaNangHuy.equals("Có thể hủy")) {
+            JOptionPane.showMessageDialog(this, 
+                "Không thể hủy vé:\n" + khaNangHuy, 
+                "Không thể hủy", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         int confirm = JOptionPane.showConfirmDialog(this,
                 "Bạn có chắc chắn muốn hủy vé " + maVe + "?",
                 "Xác nhận hủy vé",
                 JOptionPane.YES_NO_OPTION);
 
         if (confirm == JOptionPane.YES_OPTION) {
-            VeMayBay ve = dsVe.timKiemTheoMa(maVe);
-            if (ve != null) {
-                ve.setTrangThai("DA_HUY");
-                
+            if (khachHangDangNhap.huyVe(ve)) {
                 // Cập nhật số ghế trống của chuyến bay
                 ChuyenBay cb = dsChuyenBay.timKiemTheoMa(ve.getMaChuyen());
                 if (cb != null) {
@@ -499,344 +600,148 @@ public class UsersGUI extends JFrame {
                 JOptionPane.showMessageDialog(this, "Đã hủy vé thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
                 taiVeCuaToi();
                 taiLichSu();
+            } else {
+                JOptionPane.showMessageDialog(this, "Hủy vé thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
     private void capNhatThongTinCaNhan() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         if (khachHangDangNhap != null) {
             txtHoTen.setText(khachHangDangNhap.getHoTen());
             txtEmail.setText(khachHangDangNhap.getEmail());
             txtSoDT.setText(khachHangDangNhap.getSoDT());
             txtDiaChi.setText(khachHangDangNhap.getDiaChi());
-            txtGioiTinh.setText(khachHangDangNhap.getGioiTinh());
             txtCmnd.setText(khachHangDangNhap.getCmnd());
             txtNgaySinh.setText(sdf.format(khachHangDangNhap.getNgaySinh()));
+            
+            // Set giới tính
+            String gioiTinh = khachHangDangNhap.getGioiTinh();
+            if (gioiTinh != null) {
+                cbGioiTinh.setSelectedItem(gioiTinh);
+            }
+            
+            // Cập nhật thông tin thành viên
+            lblHangKhachHang.setText("Hạng: " + khachHangDangNhap.getHangKhachHangText());
+            lblDiemTichLuy.setText("Điểm tích lũy: " + khachHangDangNhap.getDiemTichLuy());
         }
     }
 
     private void capNhatThongTin() {
-    // Kiểm tra xem khách hàng có đang đăng nhập không
-    if (khachHangDangNhap == null) {
-        JOptionPane.showMessageDialog(this, 
-            "Không tìm thấy thông tin khách hàng! Vui lòng đăng nhập lại.", 
-            "Lỗi", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    try {
-        // Lấy dữ liệu từ các trường nhập liệu
-        String hoTen = txtHoTen.getText().trim();
-        String email = txtEmail.getText().trim();
-        String soDT = txtSoDT.getText().trim();
-        String diaChi = txtDiaChi.getText().trim();
-        String gioiTinh = txtGioiTinh.getText().toString();
-        String cccd = txtCmnd.getText().trim();
-        String ngaySinhStr = txtNgaySinh.getText().trim();
-
-        // Validate dữ liệu đầu vào
-        StringBuilder loi = new StringBuilder();
-        
-        // Validate họ tên
-        if (hoTen.isEmpty()) {
-            loi.append("• Họ tên không được để trống\n");
-        } else if (hoTen.length() < 2) {
-            loi.append("• Họ tên phải có ít nhất 2 ký tự\n");
-        } else if (!isValidName(hoTen)) {
-            loi.append("• Họ tên chỉ được chứa chữ cái và khoảng trắng\n");
-        }
-        
-        // Validate email
-        if (email.isEmpty()) {
-            loi.append("• Email không được để trống\n");
-        } else if (!isValidEmail(email)) {
-            loi.append("• Email không đúng định dạng\n");
-        }
-        
-        // Validate số điện thoại
-        if (soDT.isEmpty()) {
-            loi.append("• Số điện thoại không được để trống\n");
-        } else if (!isValidPhoneNumber(soDT)) {
-            loi.append("• Số điện thoại không hợp lệ (10-11 số)\n");
-        }
-        
-        // Validate địa chỉ
-        if (diaChi.isEmpty()) {
-            loi.append("• Địa chỉ không được để trống\n");
-        }
-        
-        // Validate CCCD
-        if (cccd.isEmpty()) {
-            loi.append("• Số CCCD không được để trống\n");
-        } else if (!isValidCCCD(cccd)) {
-            loi.append("• Số CCCD phải có 12 chữ số\n");
-        } else {
-            // Kiểm tra CCCD có trùng với khách hàng khác không
-            KhachHang khachHangTrung = quanLy.getDsKhachHang().timKiemTheoCMND(cccd);
-            if (khachHangTrung != null && !khachHangTrung.getMaKH().equals(khachHangDangNhap.getMaKH())) {
-                loi.append("• Số CCCD đã được sử dụng bởi khách hàng khác\n");
-            }
-        }
-        
-        // Validate ngày sinh
-        if (ngaySinhStr.isEmpty()) {
-            loi.append("• Ngày sinh không được để trống\n");
-        } else if (!isValidDate(ngaySinhStr)) {
-            loi.append("• Ngày sinh không hợp lệ (định dạng dd/MM/yyyy)\n");
-        } else {
-            // Kiểm tra tuổi (ít nhất 1 tuổi, nhiều nhất 120 tuổi)
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                sdf.setLenient(false);
-                Date ngaySinh = sdf.parse(ngaySinhStr);
-                if (!isValidAge(ngaySinh)) {
-                    loi.append("• Tuổi phải từ 1 đến 120\n");
-                }
-            } catch (Exception ex) {
-                loi.append("• Ngày sinh không hợp lệ\n");
-            }
-        }
-
-        // Validate giới tính
-        if (gioiTinh == null || gioiTinh.isEmpty() || gioiTinh.equals("-- Chọn --")) {
-            loi.append("• Vui lòng chọn giới tính\n");
-        }
-
-        // Hiển thị lỗi nếu có
-        if (loi.length() > 0) {
+        if (khachHangDangNhap == null) {
             JOptionPane.showMessageDialog(this, 
-                "Vui lòng sửa các lỗi sau:\n" + loi.toString(), 
-                "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+                "Không tìm thấy thông tin khách hàng! Vui lòng đăng nhập lại.", 
+                "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Parse ngày sinh
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        sdf.setLenient(false);
-        Date ngaySinh = sdf.parse(ngaySinhStr);
+        try {
+            // Lấy dữ liệu từ các trường nhập liệu
+            String hoTen = txtHoTen.getText().trim();
+            String email = txtEmail.getText().trim();
+            String soDT = txtSoDT.getText().trim();
+            String diaChi = txtDiaChi.getText().trim();
+            String gioiTinh = (String) cbGioiTinh.getSelectedItem();
+            String cccd = txtCmnd.getText().trim();
+            String ngaySinhStr = txtNgaySinh.getText().trim();
 
-        // Hiển thị xác nhận trước khi cập nhật
-        int xacNhan = JOptionPane.showConfirmDialog(this,
-            "Bạn có chắc chắn muốn cập nhật thông tin cá nhân?\n\n" +
-            "Họ tên: " + hoTen + "\n" +
-            "Email: " + email + "\n" +
-            "Số ĐT: " + soDT + "\n" +
-            "Địa chỉ: " + diaChi + "\n" +
-            "Giới tính: " + gioiTinh + "\n" +
-            "CCCD: " + cccd + "\n" +
-            "Ngày sinh: " + ngaySinhStr,
-            "Xác nhận cập nhật",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE);
-
-        if (xacNhan != JOptionPane.YES_OPTION) {
-            return;
-        }
-
-        // Lưu thông tin cũ để so sánh
-        String hoTenCu = khachHangDangNhap.getHoTen();
-        String emailCu = khachHangDangNhap.getEmail();
-        String soDTCu = khachHangDangNhap.getSoDT();
-        String diaChiCu = khachHangDangNhap.getDiaChi();
-        String gioiTinhCu = khachHangDangNhap.getGioiTinh();
-        String cccdCu = khachHangDangNhap.getCmnd();
-        Date ngaySinhCu = khachHangDangNhap.getNgaySinh();
-
-        // Cập nhật thông tin mới
-        khachHangDangNhap.setHoTen(hoTen);
-        khachHangDangNhap.setEmail(email);
-        khachHangDangNhap.setSoDT(soDT);
-        khachHangDangNhap.setDiaChi(diaChi);
-        khachHangDangNhap.setGioiTinh(gioiTinh);
-        khachHangDangNhap.setCmnd(cccd);
-        khachHangDangNhap.setNgaySinh(ngaySinh);
-
-        // Kiểm tra xem có thay đổi gì không
-        boolean coThayDoi = !hoTen.equals(hoTenCu) || !email.equals(emailCu) || 
-                           !soDT.equals(soDTCu) || !diaChi.equals(diaChiCu) ||
-                           !gioiTinh.equals(gioiTinhCu) || !cccd.equals(cccdCu) ||
-                           !ngaySinh.equals(ngaySinhCu);
-
-        if (coThayDoi) {
-            // Ghi log thay đổi
-            System.out.println("Khách hàng " + khachHangDangNhap.getMaKH() + " đã cập nhật thông tin:");
-            if (!hoTen.equals(hoTenCu)) {
-                System.out.println("  - Họ tên: " + hoTenCu + " → " + hoTen);
-            }
-            if (!email.equals(emailCu)) {
-                System.out.println("  - Email: " + emailCu + " → " + email);
-            }
-            if (!soDT.equals(soDTCu)) {
-                System.out.println("  - Số ĐT: " + soDTCu + " → " + soDT);
-            }
-            if (!diaChi.equals(diaChiCu)) {
-                System.out.println("  - Địa chỉ: " + diaChiCu + " → " + diaChi);
-            }
-            if (!gioiTinh.equals(gioiTinhCu)) {
-                System.out.println("  - Giới tính: " + gioiTinhCu + " → " + gioiTinh);
-            }
-            if (!cccd.equals(cccdCu)) {
-                System.out.println("  - CCCD: " + cccdCu + " → " + cccd);
-            }
-            if (!ngaySinh.equals(ngaySinhCu)) {
-                System.out.println("  - Ngày sinh: " + sdf.format(ngaySinhCu) + " → " + sdf.format(ngaySinh));
-            }
-
-            // Hiển thị thông báo thành công
-            JOptionPane.showMessageDialog(this,
-                "✅ Cập nhật thông tin thành công!\n\n" +
-                "Thông tin đã được thay đổi:\n" +
-                (hoTen.equals(hoTenCu) ? "" : "• Họ tên\n") +
-                (email.equals(emailCu) ? "" : "• Email\n") +
-                (soDT.equals(soDTCu) ? "" : "• Số điện thoại\n") +
-                (diaChi.equals(diaChiCu) ? "" : "• Địa chỉ\n") +
-                (gioiTinh.equals(gioiTinhCu) ? "" : "• Giới tính\n") +
-                (cccd.equals(cccdCu) ? "" : "• CCCD\n") +
-                (ngaySinh.equals(ngaySinhCu) ? "" : "• Ngày sinh"),
-                "Thành công",
-                JOptionPane.INFORMATION_MESSAGE);
-
-            // Cập nhật lại thông tin hiển thị
-            capNhatHienThiThongTin();
+            // Validate dữ liệu đầu vào
+            StringBuilder loi = new StringBuilder();
             
-        } else {
+            if (hoTen.isEmpty()) loi.append("• Họ tên không được để trống\n");
+            if (email.isEmpty()) loi.append("• Email không được để trống\n");
+            if (soDT.isEmpty()) loi.append("• Số điện thoại không được để trống\n");
+            if (diaChi.isEmpty()) loi.append("• Địa chỉ không được để trống\n");
+            if (cccd.isEmpty()) loi.append("• CCCD không được để trống\n");
+            if (ngaySinhStr.isEmpty()) loi.append("• Ngày sinh không được để trống\n");
+
+            if (loi.length() > 0) {
+                JOptionPane.showMessageDialog(this, 
+                    "Vui lòng sửa các lỗi sau:\n" + loi.toString(), 
+                    "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Parse ngày sinh
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            sdf.setLenient(false);
+            Date ngaySinh = sdf.parse(ngaySinhStr);
+
+            // Cập nhật thông tin
+            if (khachHangDangNhap.capNhatThongTinCaNhan(hoTen, soDT, email, diaChi, gioiTinh)) {
+                khachHangDangNhap.setCmnd(cccd);
+                khachHangDangNhap.setNgaySinh(ngaySinh);
+                
+                JOptionPane.showMessageDialog(this,
+                    "Cập nhật thông tin thành công!",
+                    "Thành công",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+                // Cập nhật lại hiển thị
+                capNhatThongTinCaNhan();
+                lblWelcome.setText("Xin chào, " + khachHangDangNhap.getHoTen() + "! - Hạng: " + khachHangDangNhap.getHangKhachHangText());
+                
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "Cập nhật thông tin thất bại!",
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
-                "Không có thông tin nào được thay đổi.",
-                "Thông báo",
-                JOptionPane.INFORMATION_MESSAGE);
+                "Có lỗi xảy ra khi cập nhật thông tin:\n" + ex.getMessage(),
+                "Lỗi hệ thống",
+                JOptionPane.ERROR_MESSAGE);
         }
-
-    } catch (Exception ex) {
-        // Xử lý lỗi
-        JOptionPane.showMessageDialog(this,
-            "❌ Có lỗi xảy ra khi cập nhật thông tin:\n" + ex.getMessage(),
-            "Lỗi hệ thống",
-            JOptionPane.ERROR_MESSAGE);
-        ex.printStackTrace();
     }
-}
 
-// Method hỗ trợ kiểm tra định dạng email
-private boolean isValidEmail(String email) {
-    String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
-    return email.matches(emailRegex);
-}
-
-// Method hỗ trợ kiểm tra định dạng số điện thoại
-private boolean isValidPhoneNumber(String phone) {
-    // Chấp nhận số điện thoại 10-11 số, có thể bắt đầu bằng 0, 84, +84
-    String phoneRegex = "^(0|84|\\+84)([3|5|7|8|9])[0-9]{8}$";
-    return phone.replace("+", "").matches(phoneRegex);
-}
-
-// Method kiểm tra định dạng CCCD (12 chữ số)
-private boolean isValidCCCD(String cccd) {
-    return cccd.matches("^[0-9]{12}$");
-}
-
-// Method kiểm tra định dạng ngày
-private boolean isValidDate(String dateStr) {
-    try {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        sdf.setLenient(false);
-        sdf.parse(dateStr);
-        return true;
-    } catch (Exception e) {
+    public static boolean showDangNhap(QuanLyBanVeMayBay quanLy) {
+        JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        JTextField txtMaKH = new JTextField(15);
+        JPasswordField txtMatKhau = new JPasswordField(15);
+        
+        panel.add(new JLabel("Mã khách hàng:"));
+        panel.add(txtMaKH);
+        panel.add(new JLabel("Mật khẩu:"));
+        panel.add(txtMatKhau);
+        panel.add(new JLabel(""));
+        panel.add(new JLabel(""));
+        
+        int result = JOptionPane.showConfirmDialog(null, panel, "Đăng nhập hệ thống", 
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        
+        if (result == JOptionPane.OK_OPTION) {
+            String maKH = txtMaKH.getText().trim();
+            String matKhau = new String(txtMatKhau.getPassword());
+            
+            if (maKH.isEmpty() || matKhau.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+            
+            UsersGUI usersGUI = new UsersGUI(quanLy);
+            if (usersGUI.dangNhap(maKH, matKhau)) {
+                usersGUI.setVisible(true);
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(null, 
+                    "Mã khách hàng hoặc mật khẩu không đúng!\nVui lòng kiểm tra lại.", 
+                    "Đăng nhập thất bại", JOptionPane.ERROR_MESSAGE);
+            }
+        }
         return false;
     }
-}
 
-// Method kiểm tra tuổi hợp lệ
-private boolean isValidAge(Date ngaySinh) {
-    Calendar calNgaySinh = Calendar.getInstance();
-    calNgaySinh.setTime(ngaySinh);
-    
-    Calendar calHienTai = Calendar.getInstance();
-    
-    int tuoi = calHienTai.get(Calendar.YEAR) - calNgaySinh.get(Calendar.YEAR);
-    
-    // Kiểm tra nếu chưa đến sinh nhật trong năm nay thì trừ đi 1 tuổi
-    if (calHienTai.get(Calendar.DAY_OF_YEAR) < calNgaySinh.get(Calendar.DAY_OF_YEAR)) {
-        tuoi--;
-    }
-    
-    return tuoi >= 1 && tuoi <= 120;
-}
-
-// Method kiểm tra tên hợp lệ (chỉ chứa chữ cái và khoảng trắng)
-private boolean isValidName(String name) {
-    return name.matches("^[a-zA-ZÀ-ỹ\\s]+$");
-}
-
-// Method cập nhật hiển thị thông tin
-private void capNhatHienThiThongTin() {
-    if (khachHangDangNhap != null) {
-        lblWelcome.setText("Xin chào, " + khachHangDangNhap.getHoTen() + "! - Hạng: " + khachHangDangNhap.getHangKhachHang());
-    }
-}
-
-// Method để hiển thị dialog đăng nhập (phiên bản cải tiến)
-public static boolean showDangNhap(QuanLyBanVeMayBay quanLy) {
-    JPanel panel = new JPanel(new GridLayout(2, 2, 10, 10));
-    panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-    
-    JTextField txtMaKH = new JTextField(15);
-    JPasswordField txtMatKhau = new JPasswordField(15);
-    
-    panel.add(new JLabel("Mã khách hàng:"));
-    panel.add(txtMaKH);
-    
-    int result = JOptionPane.showConfirmDialog(null, panel, "Đăng nhập hệ thống", 
-            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-    
-    if (result == JOptionPane.OK_OPTION) {
-        String maKH = txtMaKH.getText().trim();
-        String matKhau = new String(txtMatKhau.getPassword());
-        
-        if (maKH.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Vui lòng nhập mã khách hàng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        
-
-        
-        // Kiểm tra thông tin đăng nhập
-        UsersGUI usersGUI = new UsersGUI(quanLy);
-        if (usersGUI.dangNhap(maKH, matKhau)) {
-            usersGUI.setVisible(true);
-            return true;
-        } else {
-            JOptionPane.showMessageDialog(null, 
-                "Mã khách hàng hoặc mật khẩu không đúng!\nVui lòng kiểm tra lại.", 
-                "Đăng nhập thất bại", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    return false;
-}
-
-// Cập nhật method đăng nhập để hỗ trợ mật khẩu
-public boolean dangNhap(String maKH, String matKhau) {
-    khachHangDangNhap = quanLy.getDsKhachHang().timKiemTheoMa(maKH);
-    
-    if (khachHangDangNhap != null) {
-        // Giả sử có phương thức kiểm tra mật khẩu
-        // if (khachHangDangNhap.kiemTraMatKhau(matKhau)) {
-        if (true) { // Tạm thời bỏ qua kiểm tra mật khẩu
-            lblWelcome.setText("Xin chào, " + khachHangDangNhap.getHoTen() + "! - Hạng: " + khachHangDangNhap.getHangKhachHang());
-            capNhatThongTinCaNhan();
-            taiVeCuaToi();
-            taiLichSu();
-            return true;
-        }
-    }
-    return false;
-}
-
-
-   public static void main(String[] args) {
+    public static void main(String[] args) {
         QuanLyBanVeMayBay quanLy = new QuanLyBanVeMayBay();
         quanLy.docDuLieuTuFile();
-        UsersGUI.showDangNhap(quanLy);
+        
+        SwingUtilities.invokeLater(() -> {
+            UsersGUI.showDangNhap(quanLy);
+        });
     }
 }
