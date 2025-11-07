@@ -34,7 +34,6 @@ public class ChuyenBay {
         setGiaCoBan(giaCoBan);
         this.trangThai = TRANG_THAI_CHUA_BAY;
         this.danhSachVe = new ArrayList<>();
-        capNhatTrangThai();
     }
     
     // BUSINESS METHODS - Tối ưu cho GUI
@@ -43,7 +42,6 @@ public class ChuyenBay {
             return false;
         }
         soGheTrong--;
-        capNhatTrangThai();
         return true;
     }
     
@@ -52,7 +50,6 @@ public class ChuyenBay {
             return false;
         }
         soGheTrong++;
-        capNhatTrangThai();
         return true;
     }
     
@@ -79,8 +76,7 @@ public class ChuyenBay {
     }
     
     public boolean kiemTraGheDaDat(String soGhe) {
-        return danhSachVe.stream()
-                .anyMatch(ve -> ve.getSoGhe().equals(soGhe) && !ve.isDaHuy());
+        return danhSachVe.stream().anyMatch(ve -> ve.getSoGhe().equals(soGhe) && !ve.isDaHuy());
     }
     
     public List<String> getDanhSachGheTrong() {
@@ -89,7 +85,7 @@ public class ChuyenBay {
         for (int i = 1; i <= soHang; i++) {
             for (char c = 'A'; c <= 'D'; c++) {
                 if (gheTrong.size() >= soGheTrong) break;
-                String soGhe = i + String.valueOf(c);
+                String soGhe = String.valueOf(c) + i;
                 if (!kiemTraGheDaDat(soGhe)) {
                     gheTrong.add(soGhe);
                 }
@@ -111,7 +107,6 @@ public class ChuyenBay {
     public int getSoGheTrong() {
         return soGheTrong;
     }
-    
     public void setSoGheTrong(int soGheTrong) {
         if (soGheTrong < 0 || soGheTrong > soGhe) {
             throw new IllegalArgumentException("Số ghế trống không hợp lệ");
@@ -122,7 +117,6 @@ public class ChuyenBay {
     public int getSoGheDaDat() {
         return soGhe - soGheTrong;
     }
-    
     public boolean conGheTrong() {
         return soGheTrong > 0;
     }
@@ -132,27 +126,9 @@ public class ChuyenBay {
                (trangThai.equals(TRANG_THAI_CHUA_BAY) || trangThai.equals(TRANG_THAI_DA_DAT_HET));
     }
     
-    public boolean coTheHuyVe() {
-        if (gioKhoiHanh == null) return true;
-        
-        long thoiGianConLai = gioKhoiHanh.getTime() - System.currentTimeMillis();
-        return thoiGianConLai > (4 * 60 * 60 * 1000); // 4 tiếng
-    }
-    
-    // Cập nhật trạng thái tự động - tối ưu hóa
-    public void capNhatTrangThai() {
-    }
-    
-    public void capNhatTrangThaiBay() {
-        capNhatTrangThai();
-    }
-    
     // Tìm kiếm và lọc vé - tối ưu với Stream API
     public VeMayBay timVeTheoMa(String maVe) {
-        return danhSachVe.stream()
-                .filter(ve -> ve.getMaVe().equals(maVe))
-                .findFirst()
-                .orElse(null);
+        return danhSachVe.stream().filter(ve -> ve.getMaVe().equals(maVe)).findFirst().orElse(null);
     }
     
     public List<VeMayBay> timVeTheoTrangThai(String trangThai) {
@@ -230,17 +206,6 @@ public class ChuyenBay {
         };
     }
     
-    public String getThongTinChiTiet() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        return String.format(
-            "Mã chuyến: %s\nĐiểm đi: %s\nĐiểm đến: %s\nGiờ khởi hành: %s\nGiờ đến: %s\n" +
-            "Số ghế: %d/%d (%.1f%%)\nMáy bay: %s\nGiá cơ bản: %s\nTrạng thái: %s\nThời gian bay: %s\nDoanh thu: %s",
-            maChuyen, diemDi, diemDen, dateFormat.format(gioKhoiHanh), dateFormat.format(gioDen), 
-            getSoGheDaDat(), soGhe, getTyLeDat(), maMayBay, 
-            String.format("%,d VND", (int)giaCoBan), getTrangThaiHienThi(), 
-            getThoiGianBayFormatted(), String.format("%,d VND", (int)tinhDoanhThu())
-        );
-    }
     
     public String getThongTinTimKiem() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -328,7 +293,6 @@ public class ChuyenBay {
     }
     
     public String getTrangThai() { 
-        capNhatTrangThai();
         return trangThai; 
     }
     

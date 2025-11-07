@@ -32,12 +32,8 @@ public class KhachHang extends NguoiDung {
     private static final int DIEM_PLATINUM = 10000;
     
 
-    public KhachHang(String ma, String hoTen, String soDT, String email, 
-                    String cmnd, Date ngaySinh, String gioiTinh, String diaChi,
-                    String tenDangNhap, String matKhau) {
-        
+    public KhachHang(String ma, String hoTen, String soDT, String email, String cmnd, Date ngaySinh, String gioiTinh, String diaChi,  String tenDangNhap, String matKhau) {
         super(ma, hoTen, soDT, email, cmnd, ngaySinh, gioiTinh, diaChi, tenDangNhap, matKhau);
-        
         this.hangKhachHang = HANG_BRONZE;
         this.diemTichLuy = 0;
         this.ngayDangKy = new Date();
@@ -46,29 +42,13 @@ public class KhachHang extends NguoiDung {
     }
     
     // OVERLOAD CONSTRUCTOR - từ file
-    public KhachHang(String ma, String hoTen, String soDT, String email, 
-                    String cmnd, Date ngaySinh, String gioiTinh, String diaChi,
-                    String tenDangNhap, String matKhau, String hangKhachHang, 
-                    int diemTichLuy, Date ngayDangKy) {
-        
+    public KhachHang(String ma, String hoTen, String soDT, String email, String cmnd, Date ngaySinh, String gioiTinh, String diaChi,String tenDangNhap, String matKhau, String hangKhachHang, int diemTichLuy, Date ngayDangKy) {
         super(ma, hoTen, soDT, email, cmnd, ngaySinh, gioiTinh, diaChi, tenDangNhap, matKhau);
-        
         setHangKhachHang(hangKhachHang);
         setDiemTichLuy(diemTichLuy);
         setNgayDangKy(ngayDangKy);
         this.lichSuHoaDon = new ArrayList<>();
         this.veDaDat = new ArrayList<>();
-    }
-    
-
-    @Override
-    public String getVaiTro() {
-        return "KHACH_HANG";
-    }
-    
-    @Override
-    public String getPhanQuyen() {
-        return "KHACH_HANG_BASIC";
     }
     
     @Override
@@ -93,7 +73,13 @@ public class KhachHang extends NguoiDung {
         }
         
         try {
-            ve.datVe();
+            if (!ve.trangThai.equals(VeMayBay.TRANG_THAI_DA_DAT)) {
+            throw new IllegalStateException("Vé không thể đặt. Trạng thái hiện tại: " + ve.getTrangThai());
+        }
+        else {
+            ve.setTrangThai(VeMayBay.TRANG_THAI_DA_DAT);
+            ve.ngayDat = new Date();
+        }
             veDaDat.add(ve);
             return true;
         } catch (IllegalStateException e) {
@@ -111,7 +97,11 @@ public class KhachHang extends NguoiDung {
         }
         
         try {
-            ve.huyVe();
+            if (!ve.coTheHuy()) {
+            String thongBao = ve.getThongBaoKhongTheHuy();
+            throw new IllegalStateException(thongBao != null ? thongBao : "Không thể hủy vé");
+        }
+        else {ve.setTrangThai(VeMayBay.TRANG_THAI_DA_HUY);}
             veDaDat.remove(ve);
             return true;
         } catch (IllegalStateException e) {
@@ -189,36 +179,6 @@ public class KhachHang extends NguoiDung {
     
     public List<VeMayBay> getVeDaDat() {
         return new ArrayList<>(veDaDat);
-    }
-    
-    public List<VeMayBay> getVeChuaBay() {
-        List<VeMayBay> result = new ArrayList<>();
-        for (VeMayBay ve : veDaDat) {
-            if (!ve.daBay() && ve.coTheSuDung()) {
-                result.add(ve);
-            }
-        }
-        return result;
-    }
-    
-    public List<VeMayBay> getVeDaBay() {
-        List<VeMayBay> result = new ArrayList<>();
-        for (VeMayBay ve : veDaDat) {
-            if (ve.daBay()) {
-                result.add(ve);
-            }
-        }
-        return result;
-    }
-    
-    public List<VeMayBay> getVeCoTheHuy() {
-        List<VeMayBay> result = new ArrayList<>();
-        for (VeMayBay ve : veDaDat) {
-            if (ve.coTheHuy()) {
-                result.add(ve);
-            }
-        }
-        return result;
     }
     
     public HoaDon timHoaDonTheoMa(String maHoaDon) {
@@ -326,13 +286,7 @@ public class KhachHang extends NguoiDung {
             getTongSoChuyenBay(), getSoChuyenBayDaBay(), getSoChuyenBaySapBay(), getTongChiTieu()
         );
     }
-    
-    @Override
-    public String toString() {
-        return String.format("KhachHang[%s: %s, %s, %d điểm, %s]", 
-                           getMa(), getHoTen(), getSoDT(), diemTichLuy, hangKhachHang);
-    }
-    
+
     // GETTERS AND SETTERS
     public String getHangKhachHang() { return hangKhachHang; }
     public void setHangKhachHang(String hangKhachHang) { 

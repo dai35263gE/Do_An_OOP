@@ -12,14 +12,8 @@ import java.util.regex.Pattern;
  * @author HP
  */
 public abstract class NguoiDung {
-    protected String ma;
-    protected String hoTen;
-    protected String soDT;
-    protected String email;
-    protected String cmnd;
+    protected String ma,hoTen,soDT,email,cmnd,gioiTinh,diaChi;
     protected Date ngaySinh;
-    protected String gioiTinh;
-    protected String diaChi;
     protected Date ngayTao;
     protected String tenDangNhap;
     protected String matKhau;
@@ -31,8 +25,6 @@ public abstract class NguoiDung {
     protected static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
     protected static final Pattern PHONE_PATTERN = Pattern.compile("^(03|05|07|08|09)[0-9]{8}$");
     protected static final Pattern CMND_PATTERN = Pattern.compile("^[0-9]{9}$|^[0-9]{12}$");
-    protected static final Pattern USERNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9_]{4,20}$");
-    protected static final Pattern PASSWORD_PATTERN = Pattern.compile("^.{6,}$");
     
     // CONSTRUCTOR
     public NguoiDung(String ma, String hoTen, String soDT, String email, 
@@ -53,8 +45,6 @@ public abstract class NguoiDung {
     }
     
     // ABSTRACT METHODS - để các lớp con triển khai
-    public abstract String getVaiTro();
-    public abstract String getPhanQuyen();
     public abstract boolean coTheThucHienChucNang(String chucNang);
     
     public boolean dangNhap(String tenDangNhap, String matKhau) {
@@ -69,14 +59,6 @@ public abstract class NguoiDung {
         this.trangThaiDangNhap = false;
     }
     
-    public boolean doiMatKhau(String matKhauCu, String matKhauMoi) {
-        if (this.matKhau.equals(matKhauCu) && validatePassword(matKhauMoi)) {
-            setMatKhau(matKhauMoi);
-            return true;
-        }
-        return false;
-    }
-    
     public static boolean validateEmail(String email) {
         return email != null && EMAIL_PATTERN.matcher(email).matches();
     }
@@ -89,14 +71,6 @@ public abstract class NguoiDung {
         return cmnd != null && CMND_PATTERN.matcher(cmnd).matches();
     }
     
-    public static boolean validateUsername(String username) {
-        return username != null && USERNAME_PATTERN.matcher(username).matches();
-    }
-    
-    public static boolean validatePassword(String password) {
-        return password != null && PASSWORD_PATTERN.matcher(password).matches();
-    }
-    
     public int tinhTuoi() {
         if (ngaySinh == null) return 0;
         Date now = new Date();
@@ -104,14 +78,10 @@ public abstract class NguoiDung {
         return (int) (diff / (1000L * 60 * 60 * 24 * 365));
     }
     
-    public String getThongTinCoBan() {
-        return String.format("%s - %s - %s", ma, hoTen, getVaiTro());
-    }
-    
     public String getThongTinDayDu() {
         return String.format(
-            "Mã: %s\nHọ tên: %s\nSĐT: %s\nEmail: %s\nCMND: %s\nNgày sinh: %s\nGiới tính: %s\nĐịa chỉ: %s\nVai trò: %s\nTrạng thái: %s",
-            ma, hoTen, soDT, email, cmnd, ngaySinh, gioiTinh, diaChi, getVaiTro(),
+            "Mã: %s\nHọ tên: %s\nSĐT: %s\nEmail: %s\nCMND: %s\nNgày sinh: %s\nGiới tính: %s\nĐịa chỉ: %s\nTrạng thái: %s",
+            ma, hoTen, soDT, email, cmnd, ngaySinh, gioiTinh, diaChi,
             trangThaiDangNhap ? "Đang đăng nhập" : "Chưa đăng nhập"
         );
     }
@@ -127,23 +97,10 @@ public abstract class NguoiDung {
             ngaySinh,
             gioiTinh,
             diaChi,
-            getVaiTro(),
             trangThaiDangNhap ? "Đang hoạt động" : "Không hoạt động"
         };
     }
     
-    public boolean isDuThongTin() {
-        return ma != null && !ma.trim().isEmpty() &&
-               hoTen != null && !hoTen.trim().isEmpty() &&
-               soDT != null && !soDT.trim().isEmpty() &&
-               email != null && !email.trim().isEmpty() &&
-               cmnd != null && !cmnd.trim().isEmpty() &&
-               ngaySinh != null &&
-               gioiTinh != null && !gioiTinh.trim().isEmpty() &&
-               diaChi != null && !diaChi.trim().isEmpty() &&
-               tenDangNhap != null && !tenDangNhap.trim().isEmpty() &&
-               matKhau != null && !matKhau.trim().isEmpty();
-    }
     
     // GETTERS AND SETTERS
     public String getMa() { return ma; }
@@ -219,8 +176,6 @@ public abstract class NguoiDung {
     public void setTenDangNhap(String tenDangNhap) { 
         if (tenDangNhap == null || tenDangNhap.trim().isEmpty()) 
             throw new IllegalArgumentException("Tên đăng nhập không được để trống");
-        if (!validateUsername(tenDangNhap.trim())) 
-            throw new IllegalArgumentException("Tên đăng nhập phải từ 4-20 ký tự và chỉ chứa chữ, số, dấu gạch dưới");
         this.tenDangNhap = tenDangNhap.trim();
     }
     
@@ -228,14 +183,10 @@ public abstract class NguoiDung {
     public void setMatKhau(String matKhau) { 
         if (matKhau == null || matKhau.trim().isEmpty()) 
             throw new IllegalArgumentException("Mật khẩu không được để trống");
-        if (!validatePassword(matKhau.trim())) 
-            throw new IllegalArgumentException("Mật khẩu phải có ít nhất 6 ký tự");
         this.matKhau = matKhau.trim();
     }
     
     public boolean isTrangThaiDangNhap() { return trangThaiDangNhap; }
-    
-    
     // Additional utility methods for GUI
     public boolean isNam() {
         return GT_NAM.equals(gioiTinh);
@@ -247,14 +198,5 @@ public abstract class NguoiDung {
     
     public boolean isDangHoatDong() {
         return trangThaiDangNhap;
-    }
-    
-    public String getTrangThaiText() {
-        return trangThaiDangNhap ? "Đang hoạt động" : "Không hoạt động";
-    }
-    
-    @Override
-    public String toString() {
-        return getThongTinCoBan();
     }
 }

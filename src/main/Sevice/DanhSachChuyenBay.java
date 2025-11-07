@@ -364,13 +364,6 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
         return cb != null && cb.huyGhe();
     }
 
-    public void capNhatTrangThaiChuyenBay() {
-        Date now = new Date();
-        for (ChuyenBay cb : danhSach) {
-            cb.capNhatTrangThaiBay();
-        }
-    }
-
     // ========== THỐNG KÊ CHO GUI ==========
     public Map<String, Integer> thongKeChuyenBayTheoTuyen() {
         return danhSach.stream()

@@ -51,7 +51,6 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
     public abstract String chiTietLoaiVe();
     public abstract double tinhTongTien();
     
-    // BUSINESS METHODS - Tối ưu cho GUI
     public boolean coTheHuy() {
         if (ngayBay == null) return true;
         if (!trangThai.equals(TRANG_THAI_DA_BAY) && !trangThai.equals(TRANG_THAI_DA_THANH_TOAN)) {
@@ -61,7 +60,15 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
         long thoiGianConLai = ngayBay.getTime() - System.currentTimeMillis();
         return thoiGianConLai > THOI_GIAN_HUY_TOI_THIEU;
     }
-    
+    public boolean coTheDoi() {
+        if (ngayBay == null) return true;
+        if (!trangThai.equals(TRANG_THAI_DA_DAT) && !trangThai.equals(TRANG_THAI_DA_THANH_TOAN)) {
+            return false;
+        }
+        
+        long thoiGianConLai = ngayBay.getTime() - System.currentTimeMillis();
+        return thoiGianConLai > THOI_GIAN_HUY_TOI_THIEU * 2;
+    }
     public String getThongBaoKhongTheHuy() {
         if (trangThai.equals(TRANG_THAI_DA_HUY)) {
             return "Vé đã bị hủy";
@@ -77,65 +84,31 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
         }
         return null;
     }
-    
-    public boolean coTheDoi() {
-        if (ngayBay == null) return true;
-        if (!trangThai.equals(TRANG_THAI_DA_DAT) && !trangThai.equals(TRANG_THAI_DA_THANH_TOAN)) {
-            return false;
-        }
-        
-        long thoiGianConLai = ngayBay.getTime() - System.currentTimeMillis();
-        return thoiGianConLai > THOI_GIAN_HUY_TOI_THIEU * 2;
-    }
-    
-    public void datVe() throws IllegalStateException {
-        if (!trangThai.equals(TRANG_THAI_DA_DAT)) {
-            throw new IllegalStateException("Vé không thể đặt. Trạng thái hiện tại: " + trangThai);
-        }
-        this.trangThai = TRANG_THAI_DA_DAT;
-        this.ngayDat = new Date();
-    }
-    
-    public void huyVe() throws IllegalStateException {
-        if (!coTheHuy()) {
-            String thongBao = getThongBaoKhongTheHuy();
-            throw new IllegalStateException(thongBao != null ? thongBao : "Không thể hủy vé");
-        }
-        this.trangThai = TRANG_THAI_DA_HUY;
-    }
-    
-    public void thanhToanVe() {
-        if (!trangThai.equals(TRANG_THAI_DA_DAT)) {
-            throw new IllegalStateException("Chỉ có thể thanh toán vé đã đặt");
-        }
-        this.trangThai = TRANG_THAI_DA_THANH_TOAN;
-    }
-    
     public void capNhatTrangThaiBay() {
         Date now = new Date();
         if (ngayBay != null && now.after(ngayBay) && 
-            (trangThai.equals(TRANG_THAI_DA_THANH_TOAN) || trangThai.equals(TRANG_THAI_DA_DAT))) {
+            (trangThai.equals(TRANG_THAI_DA_THANH_TOAN))) {
             this.trangThai = TRANG_THAI_DA_BAY;
         }
     }
-    
     public boolean daBay() {
         return TRANG_THAI_DA_BAY.equals(trangThai);
-    }
-    
+    } 
     public boolean coTheSuDung() {
         return !TRANG_THAI_DA_HUY.equals(trangThai) && !TRANG_THAI_DA_BAY.equals(trangThai);
     }
-    
-    
-    public static boolean validateMaVe(String maVe) {
-        return maVe != null && MA_VE_PATTERN.matcher(maVe).matches();
+    public boolean isConTrong() {
+        return TRANG_THAI_DA_HUY.equals(trangThai);
     }
-    
-    public static boolean validateSoGhe(String soGhe) {
-        return soGhe != null && SO_GHE_PATTERN.matcher(soGhe).matches();
+    public boolean isDaDat() {
+        return TRANG_THAI_DA_DAT.equals(trangThai);
     }
-    
+    public boolean isDaThanhToan() {
+        return TRANG_THAI_DA_THANH_TOAN.equals(trangThai);
+    }
+    public boolean isDaHuy() {
+        return TRANG_THAI_DA_HUY.equals(trangThai);
+    }
     private boolean isTrangThaiHopLe(String trangThai) {
         return trangThai != null && 
                (
@@ -144,7 +117,6 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
                 trangThai.equals(TRANG_THAI_DA_HUY) ||
                 trangThai.equals(TRANG_THAI_DA_BAY));
     }
-    
     public boolean kiemTraVeHopLe() {
         return validateMaVe(maVe) &&
                ngayBay != null && 
@@ -153,6 +125,13 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
                maChuyen != null && !maChuyen.trim().isEmpty() && 
                validateSoGhe(soGhe) && 
                isTrangThaiHopLe(trangThai);
+    } 
+    
+    public static boolean validateMaVe(String maVe) {
+        return maVe != null && MA_VE_PATTERN.matcher(maVe).matches();
+    }
+    public static boolean validateSoGhe(String soGhe) {
+        return soGhe != null && SO_GHE_PATTERN.matcher(soGhe).matches();
     }
     
     public String getThongTinChiTiet() {
@@ -196,14 +175,7 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
         if (other.ngayBay == null) return 1;
         return this.ngayBay.compareTo(other.ngayBay);
     }
-
-
-    @Override
-    public String toString() {
-        return String.format("%s - %s - %s - %s", maVe, loaiVe(), maChuyen, trangThai);
-    }
     
-    // Getters and Setters với VALIDATION
     public String getMaVe() { return maVe; }
     public void setMaVe(String maVe) { 
         if (!validateMaVe(maVe)) {
@@ -251,7 +223,9 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
         }
         this.trangThai = trangThai;
     }
+    
     public String getmaKH() { return maKH; }
+    
     public Date getNgayDat() { return ngayDat; }
     public void setNgayDat(Date ngayDat) { 
         if (ngayDat != null && ngayDat.after(new Date())) {
@@ -260,22 +234,7 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
         this.ngayDat = ngayDat;
     }
     
-    // Additional utility methods for GUI
-    public boolean isConTrong() {
-        return TRANG_THAI_DA_HUY.equals(trangThai);
-    }
     
-    public boolean isDaDat() {
-        return TRANG_THAI_DA_DAT.equals(trangThai);
-    }
-    
-    public boolean isDaThanhToan() {
-        return TRANG_THAI_DA_THANH_TOAN.equals(trangThai);
-    }
-    
-    public boolean isDaHuy() {
-        return TRANG_THAI_DA_HUY.equals(trangThai);
-    }
     
     public long getThoiGianConLai() {
         if (ngayBay == null) return Long.MAX_VALUE;

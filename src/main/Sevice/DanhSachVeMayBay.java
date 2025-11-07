@@ -565,19 +565,6 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
     }
     
     // ========== PHƯƠNG THỨC BỔ SUNG CHO GUI ==========
-    public boolean datVe(String maVe) {
-        VeMayBay ve = timKiemTheoMa(maVe);
-        if (ve == null) {
-            throw new IllegalArgumentException("Không tìm thấy vé với mã: " + maVe);
-        }
-        
-        try {
-            ve.datVe();
-            return true;
-        } catch (IllegalStateException e) {
-            throw new IllegalStateException("Không thể đặt vé: " + e.getMessage());
-        }
-    }
     
     public boolean huyVe(String maVe) {
         VeMayBay ve = timKiemTheoMa(maVe);
@@ -586,24 +573,14 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
         }
         
         try {
-            ve.huyVe();
+            if (!ve.coTheHuy()) {
+            String thongBao = ve.getThongBaoKhongTheHuy();
+            throw new IllegalStateException(thongBao != null ? thongBao : "Không thể hủy vé");
+        }
+        else {ve.setTrangThai(VeMayBay.TRANG_THAI_DA_HUY);}
             return true;
         } catch (IllegalStateException e) {
             throw new IllegalStateException("Không thể hủy vé: " + e.getMessage());
-        }
-    }
-    
-    public boolean thanhToanVe(String maVe) {
-        VeMayBay ve = timKiemTheoMa(maVe);
-        if (ve == null) {
-            throw new IllegalArgumentException("Không tìm thấy vé với mã: " + maVe);
-        }
-        
-        try {
-            ve.thanhToanVe();
-            return true;
-        } catch (IllegalStateException e) {
-            throw new IllegalStateException("Không thể thanh toán vé: " + e.getMessage());
         }
     }
     
