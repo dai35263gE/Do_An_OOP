@@ -20,7 +20,6 @@ public class ChuyenBay {
     public static final String TRANG_THAI_DANG_BAY = "DANG_BAY";
     public static final String TRANG_THAI_DA_BAY = "DA_BAY";
     public static final String TRANG_THAI_HUY = "HUY";
-    public static final String TRANG_THAI_DA_DAT_HET = "DA_DAT_HET";
     
     public ChuyenBay(String maChuyen, String diemDi, String diemDen, Date gioKhoiHanh, Date gioDen, int soGhe, int soGheTrong, String maMayBay, double giaCoBan) {
         setMaChuyen(maChuyen);
@@ -35,8 +34,7 @@ public class ChuyenBay {
         this.trangThai = TRANG_THAI_CHUA_BAY;
         this.danhSachVe = new ArrayList<>();
     }
-    
-    // BUSINESS METHODS - Tối ưu cho GUI
+
     public boolean datGhe() {
         if (!conGheTrong()) {
             return false;
@@ -123,7 +121,7 @@ public class ChuyenBay {
     
     public boolean coTheDatVe() {
         return conGheTrong() && 
-               (trangThai.equals(TRANG_THAI_CHUA_BAY) || trangThai.equals(TRANG_THAI_DA_DAT_HET));
+               (trangThai.equals(TRANG_THAI_CHUA_BAY) || soGheTrong != 0);
     }
     
     // Tìm kiếm và lọc vé - tối ưu với Stream API
@@ -132,15 +130,11 @@ public class ChuyenBay {
     }
     
     public List<VeMayBay> timVeTheoTrangThai(String trangThai) {
-        return danhSachVe.stream()
-                .filter(ve -> ve.getTrangThai().equals(trangThai))
-                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+        return danhSachVe.stream().filter(ve -> ve.getTrangThai().equals(trangThai)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
     }
     
     public List<VeMayBay> getVeConHieuLuc() {
-        return danhSachVe.stream()
-                .filter(VeMayBay::coTheSuDung)
-                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+        return danhSachVe.stream().filter(VeMayBay::coTheSuDung).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
     }
     
     // Tính toán thông tin
@@ -149,7 +143,7 @@ public class ChuyenBay {
             return 0;
         }
         long diff = gioDen.getTime() - gioKhoiHanh.getTime();
-        return diff / (1000.0 * 60); // Trả về phút
+        return diff / (1000.0 * 60);
     }
     
     public String getThoiGianBayFormatted() {
@@ -160,10 +154,7 @@ public class ChuyenBay {
     }
     
     public double tinhDoanhThu() {
-        return danhSachVe.stream()
-                .filter(VeMayBay::isDaThanhToan)
-                .mapToDouble(VeMayBay::tinhTongTien)
-                .sum();
+        return danhSachVe.stream().filter(VeMayBay::isDaThanhToan).mapToDouble(VeMayBay::tinhTongTien).sum();
     }
     
     public boolean kiemTraChuyenBayHopLe() {
@@ -185,12 +176,9 @@ public class ChuyenBay {
             diemDen,
             dateFormat.format(gioKhoiHanh),
             dateFormat.format(gioDen),
-            getSoGheDaDat() + "/" + soGhe,
+            soGheTrong,
             String.format("%,d VND", (int)giaCoBan),
-            getTrangThaiHienThi(),
-            getThoiGianBayFormatted(),
-            String.format("%,d VND", (int)tinhDoanhThu()),
-            getTyLeDatFormatted()
+            getTrangThai()
         };
     }
     
@@ -205,7 +193,6 @@ public class ChuyenBay {
             getTrangThaiHienThi()
         };
     }
-    
     
     public String getThongTinTimKiem() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -302,7 +289,6 @@ public class ChuyenBay {
             case TRANG_THAI_DANG_BAY: return "Đang bay";
             case TRANG_THAI_DA_BAY: return "Đã bay";
             case TRANG_THAI_HUY: return "Đã hủy";
-            case TRANG_THAI_DA_DAT_HET: return "Hết chỗ";
             default: return "Không xác định";
         }
     }
@@ -320,7 +306,7 @@ public class ChuyenBay {
     public boolean isDangBay() { return TRANG_THAI_DANG_BAY.equals(getTrangThai()); }
     public boolean isDaBay() { return TRANG_THAI_DA_BAY.equals(getTrangThai()); }
     public boolean isHuy() { return TRANG_THAI_HUY.equals(getTrangThai()); }
-    public boolean isDaDatHet() { return TRANG_THAI_DA_DAT_HET.equals(getTrangThai()); }
+    public boolean isDaDatHet() { return this.soGheTrong==0; }
     
     public double getTyLeDat() {
         return soGhe > 0 ? (double) getSoGheDaDat() / soGhe * 100 : 0;

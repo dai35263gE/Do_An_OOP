@@ -63,10 +63,8 @@ public class MainGUI extends JFrame {
      */
     public void capNhatDuLieuGUI() {
         try {
-            // Hiển thị trạng thái loading
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             
-            // Cập nhật tất cả các bảng dữ liệu
             capNhatTatCaTables();
             
             // Cập nhật thống kê trang chủ
@@ -130,8 +128,8 @@ public class MainGUI extends JFrame {
      */
     private void updateWindowTitle() {
         Map<String, Object> thongKe = quanLy.thongKeTongQuan();
-        int tongVe = (int) thongKe.get("TongVe");
-        int tongChuyenBay = (int) thongKe.get("TongChuyenBay");
+        int tongVe = (int) thongKe.get("tongVe");
+        int tongChuyenBay = (int) thongKe.get("tongChuyenBay");
         
         String newTitle = String.format(
             "HỆ THỐNG QUẢN LÝ VÉ MÁY BAY - Phiên bản %s - Vé: %d - Chuyến bay: %d",
@@ -320,7 +318,7 @@ public class MainGUI extends JFrame {
                 veDialogs.xoaVe();
                 break;
             case "Tìm kiếm":
-                // Gọi dialog tìm kiếm vé
+                veDialogs.moDialogTimKiemVe();
                 break;
             case "Lọc":
                 // Gọi dialog lọc vé

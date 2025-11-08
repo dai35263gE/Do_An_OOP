@@ -174,11 +174,45 @@ public class KhachHang extends NguoiDung {
     
     // TRA CỨU VÀ XEM THÔNG TIN
     public List<HoaDon> getLichSuHoaDon() {
-        return new ArrayList<>(lichSuHoaDon);
+        return lichSuHoaDon;
     }
     
     public List<VeMayBay> getVeDaDat() {
-        return new ArrayList<>(veDaDat);
+        List<VeMayBay> veCuaToi = new ArrayList<>();
+        for(HoaDon hd : this.lichSuHoaDon){
+            veCuaToi.addAll(hd.getDanhSachVe());
+        }
+        return veCuaToi;
+    }
+    
+    public List<VeMayBay> getVeChuaBay() {
+        List<VeMayBay> result = new ArrayList<>();
+        for (VeMayBay ve : veDaDat) {
+            if (!ve.daBay() && ve.coTheSuDung()) {
+                result.add(ve);
+            }
+        }
+        return result;
+    }
+    
+    public List<VeMayBay> getVeDaBay() {
+        List<VeMayBay> result = new ArrayList<>();
+        for (VeMayBay ve : veDaDat) {
+            if (ve.daBay()) {
+                result.add(ve);
+            }
+        }
+        return result;
+    }
+    
+    public List<VeMayBay> getVeCoTheHuy() {
+        List<VeMayBay> result = new ArrayList<>();
+        for (VeMayBay ve : veDaDat) {
+            if (ve.coTheHuy()) {
+                result.add(ve);
+            }
+        }
+        return result;
     }
     
     public HoaDon timHoaDonTheoMa(String maHoaDon) {
@@ -286,7 +320,6 @@ public class KhachHang extends NguoiDung {
             getTongSoChuyenBay(), getSoChuyenBayDaBay(), getSoChuyenBaySapBay(), getTongChiTieu()
         );
     }
-
     // GETTERS AND SETTERS
     public String getHangKhachHang() { return hangKhachHang; }
     public void setHangKhachHang(String hangKhachHang) { 

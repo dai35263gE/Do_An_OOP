@@ -84,7 +84,7 @@ public class HoaDon {
         return "HD" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
-    private double tinhTongTien() {
+    public double tinhTongTien() {
         double tong = 0;
         for (VeMayBay ve : danhSachVe) {
             tong += ve.tinhTongTien();
@@ -92,11 +92,11 @@ public class HoaDon {
         return tong;
     }
 
-    private double tinhThue() {
+    public double tinhThue() {
         return tongTien * 0.05; // Thuế 8%
     }
 
-    private double tinhThanhTien() {
+    public double tinhThanhTien() {
         return tongTien + thue - khuyenMai;
     }
 

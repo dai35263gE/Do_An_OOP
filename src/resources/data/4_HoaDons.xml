@@ -18,8 +18,8 @@
         <GioiTinh>Nam</GioiTinh>
         <DiaChi>Hà Nội</DiaChi>
         <TenDangNhap>nguyenvanan</TenDangNhap>
-        <MatKhau>password123</MatKhau>
-        <DanhSachMaVe>VG001,VG002</DanhSachMaVe>
+        <MatKhau>0000</MatKhau>
+        <DanhSachMaVe>VG001,VT004</DanhSachMaVe>
     </HoaDon>
     <HoaDon>
         <MaHoaDon>HD002</MaHoaDon>

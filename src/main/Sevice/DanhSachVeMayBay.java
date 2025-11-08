@@ -4,7 +4,6 @@ import java.util.*;
 import java.text.SimpleDateFormat;
 import java.util.stream.Collectors;
 
-import model.HoaDon;
 import model.VeMayBay;
 import model.VeThuongGia;
 import model.VePhoThong;
@@ -26,7 +25,6 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
     public List<VeMayBay> getDanhSach() {
         return new ArrayList<>(danhSach);
     }
-    
     public List<VeMayBay> getDanhSachVeMayBay() {
         return new ArrayList<>(danhSach);
     }
@@ -83,10 +81,7 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
     
     @Override
     public VeMayBay timKiemTheoMa(String maVe) {
-        return danhSach.stream()
-                      .filter(ve -> ve.getMaVe().equalsIgnoreCase(maVe))
-                      .findFirst()
-                      .orElse(null);
+        return danhSach.stream().filter(ve -> ve.getMaVe().equalsIgnoreCase(maVe)).findFirst().orElse(null);
     }
     
     @Override
@@ -249,22 +244,6 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
         danhSach.sort(Comparator.comparing(VeMayBay::getNgayBay));
     }
     
-    // ========== PHÂN TRANG CHO GUI ==========
-    public List<VeMayBay> phanTrang(int trang, int kichThuocTrang) {
-        int batDau = (trang - 1) * kichThuocTrang;
-        int ketThuc = Math.min(batDau + kichThuocTrang, danhSach.size());
-        
-        if (batDau >= danhSach.size() || batDau < 0) {
-            return new ArrayList<>();
-        }
-        
-        return new ArrayList<>(danhSach.subList(batDau, ketThuc));
-    }
-    
-    public int getTongSoTrang(int kichThuocTrang) {
-        return (int) Math.ceil((double) danhSach.size() / kichThuocTrang);
-    }
-    
     // ========== IMPLEMENT IFILEHANDLER ==========
     @Override
     public boolean docFile(String tenFile) {
@@ -297,8 +276,6 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
                     System.out.println("Loi xu ly ve: " + data.get("MaVe") + " - " + e.getMessage());
                 }
             }
-            
-            System.out.println("Da tai " + countSuccess + " ve tu file XML");
             return countSuccess > 0;
             
         } catch (Exception e) {

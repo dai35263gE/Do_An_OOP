@@ -14,7 +14,6 @@ public class TableUtils {
     public static void capNhatTableVe(JTable tableVe, QuanLyBanVeMayBay quanLy) {
         DefaultTableModel model = (DefaultTableModel) tableVe.getModel();
         model.setRowCount(0);
-
         DanhSachVeMayBay dsVe = quanLy.getDsVe();
         DanhSachKhachHang dsKH = quanLy.getDsKhachHang();
         if (dsVe != null && dsVe.getDanhSach() != null) {

@@ -18,16 +18,13 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
         danhSach = new ArrayList<>();
     }
 
-    // ========== GETTERS ==========
     public ArrayList<ChuyenBay> getDanhSachChuyenBay() {
         return new ArrayList<>(danhSach);
     }
-
     public List<ChuyenBay> getDanhSach() {
         return new ArrayList<>(danhSach);
     }
 
-    // ========== IMPLEMENT IQUANLY ==========
     @Override
     public boolean them(ChuyenBay chuyenBay) {
         if (danhSach.size() >= MAX_SIZE) {
@@ -44,7 +41,6 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
 
         return danhSach.add(chuyenBay);
     }
-
     @Override
     public boolean xoa(String maChuyen) {
         ChuyenBay chuyenBay = timKiemTheoMa(maChuyen);
@@ -58,7 +54,6 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
 
         return danhSach.remove(chuyenBay);
     }
-
     @Override
     public boolean sua(String maChuyen, ChuyenBay chuyenBayMoi) {
         ChuyenBay chuyenBayCu = timKiemTheoMa(maChuyen);
@@ -299,6 +294,7 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
     }
 
     @Override
+
     public boolean ghiFile(String tenFile) {
         try {
             List<Map<String, String>> dataList = new ArrayList<>();
@@ -331,7 +327,6 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
     private boolean kiemTraTrungLich(ChuyenBay chuyenBayMoi) {
         return kiemTraTrungLich(chuyenBayMoi, null);
     }
-
     private boolean kiemTraTrungLich(ChuyenBay chuyenBayMoi, String maLoaiTru) {
         for (ChuyenBay cb : danhSach) {
             if (maLoaiTru != null && cb.getMaChuyen().equals(maLoaiTru)) {
@@ -349,9 +344,7 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
     }
 
     public List<ChuyenBay> getChuyenBayConCho() {
-        return danhSach.stream()
-                .filter(ChuyenBay::conGheTrong)
-                .collect(Collectors.toList());
+        return danhSach.stream().filter(ChuyenBay::conGheTrong).collect(Collectors.toList());
     }
 
     public boolean datGheChuyenBay(String maChuyen) {
@@ -405,35 +398,20 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
 
     // ========== PHƯƠNG THỨC TIỆN ÍCH CHO GUI ==========
     public List<String> getDanhSachDiemDi() {
-        return danhSach.stream()
-                .map(ChuyenBay::getDiemDi)
-                .distinct()
-                .sorted()
-                .collect(Collectors.toList());
+        return danhSach.stream().map(ChuyenBay::getDiemDi).distinct().sorted()
+.collect(Collectors.toList());
     }
 
     public List<String> getDanhSachDiemDen() {
-        return danhSach.stream()
-                .map(ChuyenBay::getDiemDen)
-                .distinct()
-                .sorted()
-                .collect(Collectors.toList());
+        return danhSach.stream().map(ChuyenBay::getDiemDen).distinct().sorted().collect(Collectors.toList());
     }
 
     public List<String> getDanhSachMaMayBay() {
-        return danhSach.stream()
-                .map(ChuyenBay::getMaMayBay)
-                .distinct()
-                .sorted()
-                .collect(Collectors.toList());
+        return danhSach.stream().map(ChuyenBay::getMaMayBay).distinct().sorted().collect(Collectors.toList());
     }
 
     public List<String> getDanhSachTrangThai() {
-        return danhSach.stream()
-                .map(ChuyenBay::getTrangThai)
-                .distinct()
-                .sorted()
-                .collect(Collectors.toList());
+        return danhSach.stream().map(ChuyenBay::getTrangThai).distinct().sorted().collect(Collectors.toList());
     }
 
     // ========== PHƯƠNG THỨC KHÔNG ÁP DỤNG ==========
@@ -448,10 +426,10 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
         return cb != null ? Arrays.asList(cb) : new ArrayList<>();
     }
 
-    // // ========== MAIN METHOD FOR TESTING ==========
-    // public static void main(String[] args) {
-    //     DanhSachChuyenBay ds = new DanhSachChuyenBay();
-    //     ds.docFile("src/resources/data/1_ChuyenBays.xml");
-    //     ds.hienThiTatCa();
-    // }
+     // ========== MAIN METHOD FOR TESTING ==========
+     public static void main(String[] args) {
+        DanhSachChuyenBay ds = new DanhSachChuyenBay();
+         ds.docFile("src/resources/data/1_ChuyenBays.xml");
+        ds.hienThiTatCa();
+     }
 }

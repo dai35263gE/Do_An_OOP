@@ -67,7 +67,7 @@ public class XMLUtils {
 
                 String[] tags = {
                     "MaChuyen", "DiemDi", "DiemDen", "GioKhoiHanh", 
-                    "GioDen", "SoGhe", "MaMayBay", "GiaCoBan", "TrangThai"
+                    "GioDen", "SoGhe","SoGheTrong", "MaMayBay", "GiaCoBan", "TrangThai"
                 };
                 
                 for (String tag : tags) {
@@ -129,8 +129,6 @@ public class XMLUtils {
         for (int i = 0; i < veTietKiemList.getLength(); i++) {
             danhSach.add(docVeMayBay(veTietKiemList.item(i), "VeTietKiem"));
         }
-        
-        System.out.println("Đọc " + danhSach.size() + " vé máy bay từ XML");
         return danhSach;
     }
 

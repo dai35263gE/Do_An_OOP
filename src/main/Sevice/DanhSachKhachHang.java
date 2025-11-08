@@ -1,7 +1,6 @@
 package Sevice;
 
 import java.util.*;
-import java.text.SimpleDateFormat;
 import java.util.stream.Collectors;
 
 import model.KhachHang;
@@ -86,26 +85,18 @@ public class DanhSachKhachHang implements IQuanLy<KhachHang>, IFileHandler {
 
     @Override
     public KhachHang timKiemTheoMa(String maKH) {
-        return danhSach.stream()
-                .filter(kh -> kh.getMa().equals(maKH))
-                .findFirst()
-                .orElse(null);
+        return danhSach.stream().filter(kh -> kh.getMa().equals(maKH)).findFirst().orElse(null);
     }
 
     @Override
     public List<KhachHang> timKiemTheoTen(String ten) {
         String keyword = ten.toLowerCase();
-        return danhSach.stream()
-                .filter(kh -> kh.getHoTen().toLowerCase().contains(keyword))
-                .collect(Collectors.toList());
+        return danhSach.stream().filter(kh -> kh.getHoTen().toLowerCase().contains(keyword)).collect(Collectors.toList());
     }
 
     @Override
     public KhachHang timKiemTheoCMND(String cmnd) {
-        return danhSach.stream()
-                .filter(kh -> kh.getCmnd().equals(cmnd))
-                .findFirst()
-                .orElse(null);
+        return danhSach.stream().filter(kh -> kh.getCmnd().equals(cmnd)).findFirst().orElse(null);
     }
 
     @Override
@@ -268,22 +259,6 @@ public class DanhSachKhachHang implements IQuanLy<KhachHang>, IFileHandler {
         return ketQua;
     }
 
-    // ========== PHÂN TRANG ==========
-    public List<KhachHang> phanTrang(int trang, int kichThuocTrang) {
-        int batDau = (trang - 1) * kichThuocTrang;
-        int ketThuc = Math.min(batDau + kichThuocTrang, danhSach.size());
-        
-        if (batDau >= danhSach.size() || batDau < 0) {
-            return new ArrayList<>();
-        }
-        
-        return new ArrayList<>(danhSach.subList(batDau, ketThuc));
-    }
-
-    public int getTongSoTrang(int kichThuocTrang) {
-        return (int) Math.ceil((double) danhSach.size() / kichThuocTrang);
-    }
-
     // ========== SẮP XẾP NÂNG CAO ==========
     public void sapXepTheoHoTen() {
         danhSach.sort(Comparator.comparing(KhachHang::getHoTen));
@@ -301,7 +276,6 @@ public class DanhSachKhachHang implements IQuanLy<KhachHang>, IFileHandler {
         danhSach.sort(Comparator.comparing(KhachHang::getNgaySinh));
     }
 
-    // ========== IMPLEMENT IFILEHANDLER ==========
     @Override
     public boolean docFile(String tenFile) {
         try {

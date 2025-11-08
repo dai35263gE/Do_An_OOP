@@ -4,7 +4,6 @@ import java.util.*;
 import java.text.SimpleDateFormat;
 import java.util.stream.Collectors;
 
-import model.ChuyenBay;
 import model.HoaDon;
 import model.KhachHang;
 import model.VeMayBay;
@@ -257,22 +256,6 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
         danhSach.sort(Comparator.comparing(HoaDon::getNgayLap));
     }
 
-    // ========== PHÂN TRANG CHO GUI ==========
-    public List<HoaDon> phanTrang(int trang, int kichThuocTrang) {
-        int batDau = (trang - 1) * kichThuocTrang;
-        int ketThuc = Math.min(batDau + kichThuocTrang, danhSach.size());
-
-        if (batDau >= danhSach.size() || batDau < 0) {
-            return new ArrayList<>();
-        }
-
-        return new ArrayList<>(danhSach.subList(batDau, ketThuc));
-    }
-
-    public int getTongSoTrang(int kichThuocTrang) {
-        return (int) Math.ceil((double) danhSach.size() / kichThuocTrang);
-    }
-
     // ========== SẮP XẾP NÂNG CAO CHO GUI ==========
     public void sapXepTheoNgayLap() {
         danhSach.sort(Comparator.comparing(HoaDon::getNgayLap));
@@ -367,7 +350,6 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
     }
 }
 
-
     private KhachHang taoKhachHangTuData(Map<String, String> data) {
         // Trong thực tế, cần lấy khách hàng từ DanhSachKhachHang
         // Ở đây tạo tạm một khách hàng từ dữ liệu XML
@@ -389,7 +371,7 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
             return null;
         }
     }
-   private List<VeMayBay> taoDSVeTuData(Map<String, String> data, DanhSachVeMayBay danhSachVeMayBay) {
+    private List<VeMayBay> taoDSVeTuData(Map<String, String> data, DanhSachVeMayBay danhSachVeMayBay) {
     try {
         List<VeMayBay> danhSachVe = new ArrayList<>();
         
