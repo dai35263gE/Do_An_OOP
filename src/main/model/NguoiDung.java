@@ -48,7 +48,7 @@ public abstract class NguoiDung {
     public abstract boolean coTheThucHienChucNang(String chucNang);
     
     public boolean dangNhap(String tenDangNhap, String matKhau) {
-        if (this.tenDangNhap.equals(tenDangNhap) && this.matKhau.equals(matKhau)) {
+        if (this.ma.equals(tenDangNhap) && this.matKhau.equals(matKhau)) {
             this.trangThaiDangNhap = true;
             return true;
         }

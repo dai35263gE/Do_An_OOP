@@ -503,7 +503,7 @@ private Map<String, Object> taoFiltersTimKiemDaTieuChi(JTextField txtMaVe, JText
     
     // Lọc theo mã khách hàng
     if (!txtMaKhachHang.getText().trim().isEmpty()) {
-        filters.put("maKhachHang", txtMaKhachHang.getText().trim());
+        filters.put("maKH", txtMaKhachHang.getText().trim());
     }
     
     // Lọc theo tên khách hàng
@@ -531,11 +531,6 @@ private Map<String, Object> taoFiltersTimKiemDaTieuChi(JTextField txtMaVe, JText
     String diemDen = (String) cbDiemDen.getSelectedItem();
     if (!"Tất cả".equals(diemDen)) {
         filters.put("diemDen", diemDen);
-    }
-    
-    // Lọc theo số ghế
-    if (!txtSoGhe.getText().trim().isEmpty()) {
-        filters.put("soGhe", txtSoGhe.getText().trim());
     }
     
     // Lọc theo loại vé
@@ -579,8 +574,8 @@ private Map<String, Object> taoFiltersTimKiemDaTieuChi(JTextField txtMaVe, JText
             cal.set(Calendar.SECOND, 59);
             Date denNgayDatCuoi = (Date) cal.getTime();
             
-            filters.put("tuNgayDat", tuNgayDat);
-            filters.put("denNgayDat", denNgayDatCuoi);
+            filters.put("tuNgay", tuNgayDat);
+            filters.put("denNgay", denNgayDatCuoi);
         }
     } catch (Exception ex) {
         System.err.println("Lỗi xử lý ngày đặt: " + ex.getMessage());
@@ -600,8 +595,8 @@ private Map<String, Object> taoFiltersTimKiemDaTieuChi(JTextField txtMaVe, JText
             cal.set(Calendar.SECOND, 59);
             Date denNgayBayCuoi = (Date) cal.getTime();
             
-            filters.put("tuNgayBay", tuNgayBay);
-            filters.put("denNgayBay", denNgayBayCuoi);
+            filters.put("tuNgay", tuNgayBay);
+            filters.put("denNgay", denNgayBayCuoi);
         }
     } catch (Exception ex) {
         System.err.println("Lỗi xử lý ngày bay: " + ex.getMessage());
@@ -643,10 +638,10 @@ private void lamMoiFormTimKiem(JTextField txtMaVe, JTextField txtMaKhachHang, JT
 
 private String chuyenTrangThaiSangCode(String trangThai) {
     switch (trangThai) {
-        case "Đã đặt": return "DaDat";
-        case "Đã thanh toán": return "DaThanhToan";
-        case "Đã hủy": return "DaHuy";
-        case "Đã bay": return "DaBay";
+        case "Đã đặt": return "ĐÃ_ĐẶT";
+        case "Đã thanh toán": return "ĐÃ_THANH_TOÁN";
+        case "Đã hủy": return "ĐÃ_HỦY";
+        case "Đã bay": return "ĐÃ_BAY";
         default: return trangThai;
     }
 }

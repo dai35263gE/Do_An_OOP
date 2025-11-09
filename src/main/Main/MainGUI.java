@@ -91,9 +91,7 @@ public class MainGUI extends JFrame {
         tabManager.capNhatTableKhachHang();
     }
 
-    /**
-     * Cập nhật thống kê trang chủ
-     */
+    //Cập nhật thống kê trang chủ
     public void capNhatThongKeTrangChu() {
         statCardManager.capNhatThongKeTrangChu();
     }
@@ -354,6 +352,18 @@ public class MainGUI extends JFrame {
                 khachHangDialogs.moDialogThemKhachHang();
                 break;
             case "Làm mới":
+                capNhatTableKhachHang();
+                break;
+            case "Sửa KH":
+                khachHangDialogs.suaKhachHang();
+                break;
+            case "Xóa KH":
+                capNhatTableKhachHang();
+                break;
+            case "Tìm kiếm":
+                khachHangDialogs.moDialogTimKiemLoc();
+                break;
+            case "Lọc":
                 capNhatTableKhachHang();
                 break;
             case "Xem hóa đơn":

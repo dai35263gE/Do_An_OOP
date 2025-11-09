@@ -136,6 +136,12 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
                 case "loaiVe":
                     ketQua.removeIf(ve -> !ve.loaiVe().equals(value));
                     break;
+                case "maKH":
+                    ketQua.removeIf(ve -> !ve.getmaKH().equals(value));
+                    break;
+                case "maVe":
+                    ketQua.removeIf(ve -> !ve.getMaVe().equals(value));
+                    break;
                 case "trangThai":
                     ketQua.removeIf(ve -> !ve.getTrangThai().equals(value));
                     break;
@@ -173,12 +179,11 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
         }
         
         String keywordLower = keyword.toLowerCase().trim();
-        return danhSach.stream()
-                      .filter(ve -> ve.getMaVe().toLowerCase().contains(keywordLower) ||
-                                   ve.getMaChuyen().toLowerCase().contains(keywordLower) ||
-                                   ve.getSoGhe().toLowerCase().contains(keywordLower) ||
-                                   ve.loaiVe().toLowerCase().contains(keywordLower) ||
-                                   ve.getTrangThai().toLowerCase().contains(keywordLower))
+        return danhSach.stream().filter(ve -> ve.getMaVe().toLowerCase().contains(keywordLower) ||
+        ve.getMaChuyen().toLowerCase().contains(keywordLower) ||
+        ve.getSoGhe().toLowerCase().contains(keywordLower) ||
+     ve.loaiVe().toLowerCase().contains(keywordLower) ||
+        ve.getTrangThai().toLowerCase().contains(keywordLower))
                       .collect(Collectors.toList());
     }
     
