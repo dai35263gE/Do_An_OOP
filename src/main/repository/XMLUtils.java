@@ -77,7 +77,6 @@ public class XMLUtils {
                 danhSach.add(data);
             }
         }
-        System.out.println("Đọc " + danhSach.size() + " chuyến bay từ XML");
         return danhSach;
     }
 

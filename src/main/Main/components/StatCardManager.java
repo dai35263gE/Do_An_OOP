@@ -16,6 +16,7 @@ public class StatCardManager {
         this.statCards = new JPanel[8];
         this.statsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 15));
         taoStatCards();
+        capNhatThongKeTrangChu();
     }
 
     public JPanel getStatsPanel() {
@@ -25,18 +26,17 @@ public class StatCardManager {
     private void taoStatCards() {
         // Tạo 8 thẻ thống kê
         String[] titles = {
-            "Tổng số vé", "Tổng chuyến bay", "Tổng khách hàng", "Tổng doanh thu", "Tỷ lệ lấp đầy",
-            "Vé thương gia", "Vé phổ thông", "Vé tiết kiệm",
+            "Tổng số vé", "Tổng chuyến bay", "Tổng khách hàng", "Tổng doanh thu", "Tỷ lệ lấp đầy"
         };
 
-        String[] values = {"0", "0", "0", "0 VND", "0%", "0", "0", "0"};
+        String[] values = {"0", "0", "0", "0 VND", "0%"};
 
         String[] types = {
             "primary", "success", "info", "warning",
-            "primary", "success", "info", "warning"
+            "primary"
         };
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 5; i++) {
             statCards[i] = taoStatCard(titles[i], values[i], types[i]);
             statsPanel.add(statCards[i]);
         }
@@ -54,7 +54,7 @@ public class StatCardManager {
         lblValue.setName("value"); // Đặt tên để dễ tìm
 
         JLabel lblTitle = new JLabel("<html><center>" + title + "</center></html>", JLabel.CENTER);
-        lblTitle.setFont(new Font("Arial", Font.PLAIN, 14));
+        lblTitle.setFont(new Font("Arial", Font.PLAIN, 12));
         lblTitle.setForeground(Color.WHITE);
 
         JPanel contentPanel = new JPanel(new BorderLayout(0, 10));
@@ -108,17 +108,13 @@ public class StatCardManager {
     }
 
     public void capNhatThongKeTrangChu() {
+        quanLy.docDuLieuTuFile();
         Map<String, Object> thongKe = quanLy.thongKeTongQuan();
-
         updateStatCard(0, String.valueOf(thongKe.get("tongVe")));
         updateStatCard(1, String.valueOf(thongKe.get("tongChuyenBay")));
         updateStatCard(2, String.valueOf(thongKe.get("tongKhachHang")));
-        updateStatCard(3, String.format("%,.0f VND", thongKe.get("tongDoanhThu")));
+        updateStatCard(3, String.format("%,.0f", thongKe.get("tongDoanhThu")));
         updateStatCard(4, String.format("%.1f%%", thongKe.get("tiLeLapDay")));
-        updateStatCard(5, String.valueOf(thongKe.get("VeThuongGia")));
-        updateStatCard(6, String.valueOf(thongKe.get("VePhoThong")));
-        updateStatCard(7, String.valueOf(thongKe.get("VeTietKiem")));
-        
     }
 
     public void capNhatThongKeTheoLoai(String loai) {

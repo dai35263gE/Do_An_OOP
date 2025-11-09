@@ -52,11 +52,9 @@ public class UsersGUI extends JFrame {
         this.quanLy = quanLy;
         quanLy.docDuLieuTuFile();
         this.dsChuyenBay = quanLy.getDsChuyenBay();
-
         this.dsVe = quanLy.getDsVe();
         this.dsHoaDon = quanLy.getDsHoaDon();
         this.dsKhachHang = quanLy.getDsKhachHang();
-
         initComponents();
         setupLayout();
         setupEvents();
@@ -243,7 +241,7 @@ public class UsersGUI extends JFrame {
     JPanel panelThongTin = new JPanel(new GridBagLayout());
     panelThongTin.setBorder(BorderFactory.createTitledBorder(
         BorderFactory.createLineBorder(new Color(70, 130, 180), 2),
-        "THÔNG TIN CÁ NHÂN",
+        "👤 THÔNG TIN CÁ NHÂN",
         javax.swing.border.TitledBorder.CENTER,
         javax.swing.border.TitledBorder.TOP,
         new Font("Segoe UI", Font.BOLD, 14),
@@ -577,42 +575,347 @@ private JLabel createInfoLabel(String text) {
             return;
         }
 
-        // Hiển thị dialog chọn loại vé
-        String[] loaiVeOptions = { "THƯƠNG GIA", "PHỔ THÔNG", "TIẾT KIỆM" };
-        String loaiVe = (String) JOptionPane.showInputDialog(this,
-                "Chọn loại vé:",
-                "Chọn loại vé",
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                loaiVeOptions,
-                loaiVeOptions[1]);
+        private void datVe() {
+    if (khachHangDangNhap == null) {
+        JOptionPane.showMessageDialog(this, "Vui lòng đăng nhập!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        if (loaiVe == null)
-            return;
+    if (cbChuyenBay.getSelectedItem() == null) {
+        JOptionPane.showMessageDialog(this, "Vui lòng chọn chuyến bay!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        // Tính giá vé với giảm giá theo hạng khách hàng
-        double giaCoBan = chuyenBay.getGiaCoBan();
-        double heSoGia = 1.0;
-        switch (loaiVe) {
-            case "THƯƠNG GIA":
-                heSoGia = 2.0;
-                break;
-            case "PHỔ THÔNG":
-                heSoGia = 1.2;
-                break;
-            case "TIẾT KIỆM":
-                heSoGia = 0.9;
-                break;
-        }
-        double giaVe = giaCoBan * heSoGia;
+    String maChuyen = (String) cbChuyenBay.getSelectedItem();
+    ChuyenBay chuyenBay = dsChuyenBay.timKiemTheoMa(maChuyen);
 
-        // Áp dụng giảm giá theo hạng khách hàng
-        double giamGia = khachHangDangNhap.tinhMucGiamGia(giaVe);
-        giaVe -= giamGia;
+    if (chuyenBay == null || chuyenBay.getSoGheTrong() <= 0) {
+        JOptionPane.showMessageDialog(this, "Chuyến bay không khả dụng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        // Tạo vé mới
-        String maVe = "VE" + System.currentTimeMillis();
-        VeMayBay ve;
+    // Hiển thị dialog chọn loại vé
+    String[] loaiVeOptions = { "THƯƠNG GIA", "PHỔ THÔNG", "TIẾT KIỆM" };
+    String loaiVe = (String) JOptionPane.showInputDialog(this,
+            "Chọn loại vé:",
+            "Chọn loại vé",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            loaiVeOptions,
+            loaiVeOptions[1]);
+
+    if (loaiVe == null) return;
+
+    // Chọn loại ghế và dịch vụ dựa trên loại vé
+    VeMayBay ve = null;
+    String soGhe = "";
+    double giaVe = 0;
+    double giaCoBan = chuyenBay.getGiaCoBan();
+
+    switch (loaiVe) {
+        case "THƯƠNG GIA":
+            ve = chonVeThuongGia(chuyenBay, giaCoBan);
+            break;
+        case "PHỔ THÔNG":
+            ve = chonVePhoThong(chuyenBay, giaCoBan);
+            break;
+        case "TIẾT KIỆM":
+            ve = chonVeTietKiem(chuyenBay, giaCoBan);
+            break;
+    }
+
+    if (ve == null) {
+        return; // Người dùng đã hủy quá trình chọn
+    }
+
+    // Áp dụng giảm giá theo hạng khách hàng
+    double giamGia = khachHangDangNhap.tinhMucGiamGia(ve.getGiaVe());
+    double giaVeSauGiam = ve.getGiaVe() - giamGia;
+    ve.setGiaVe(giaVeSauGiam);
+
+    // Hiển thị thông tin vé trước khi xác nhận
+    if (!hienThiThongTinVeXacNhan(ve, chuyenBay, giamGia)) {
+        return; // Người dùng không xác nhận
+    }
+
+    // Thêm vé và cập nhật chuyến bay
+    if (dsVe.them(ve)) {
+        chuyenBay.setSoGheTrong(chuyenBay.getSoGheTrong() - 1);
+
+        // Tạo hóa đơn
+        String maHoaDon = "HD" + System.currentTimeMillis();
+        List<VeMayBay> dsVeHoaDon = new ArrayList<>();
+        dsVeHoaDon.add(ve);
+        HoaDon hoaDon = new HoaDon(khachHangDangNhap, dsVeHoaDon, 0, "DA_THANH_TOAN");
+        dsHoaDon.them(hoaDon);
+
+        // Cập nhật điểm tích lũy
+        int diemThuong = (int) (giaVeSauGiam / 100000); // 1 điểm cho mỗi 100,000 VND
+        khachHangDangNhap.tangDiemTichLuy(diemThuong);
+
+        JOptionPane.showMessageDialog(this,
+                "Đặt vé thành công!\n" +
+                        "Mã vé: " + ve.getMaVe() + "\n" +
+                        "Chuyến bay: " + chuyenBay.getDiemDi() + " → " + chuyenBay.getDiemDen() + "\n" +
+                        "Loại vé: " + loaiVe + "\n" +
+                        "Số ghế: " + ve.getSoGhe() + "\n" +
+                        "Giá vé: " + String.format("%,d VND", (int) giaVeSauGiam) + "\n" +
+                        "Giảm giá: " + String.format("%,d VND", (int) giamGia) + "\n" +
+                        "Điểm tích lũy nhận được: " + diemThuong,
+                "Thành công", JOptionPane.INFORMATION_MESSAGE);
+
+        taiVeCuaToi();
+        taiLichSu();
+        capNhatThongTinCaNhan();
+    } else {
+        JOptionPane.showMessageDialog(this, "Đặt vé thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+private VeThuongGia chonVeThuongGia(ChuyenBay chuyenBay, double giaCoBan) {
+    // Chọn loại ghế
+    String[] loaiGheOptions = { "Ghế ngồi", "Giường nằm", "Suite" };
+    String loaiGhe = (String) JOptionPane.showInputDialog(this,
+            "Chọn loại ghế:",
+            "Chọn loại ghế - Thương Gia",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            loaiGheOptions,
+            loaiGheOptions[0]);
+
+    if (loaiGhe == null) return null;
+
+    // Chọn dịch vụ ăn uống
+    String[] dichVuAnUongOptions = { "Rượu vang cao cấp", "Champagne", "Cocktail đặc biệt", "Set menu 5 món" };
+    String dichVuAnUong = (String) JOptionPane.showInputDialog(this,
+            "Chọn dịch vụ ăn uống:",
+            "Dịch vụ ăn uống - Thương Gia",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            dichVuAnUongOptions,
+            dichVuAnUongOptions[0]);
+
+    if (dichVuAnUong == null) return null;
+
+    // Chọn dịch vụ giải trí
+    String[] dichVuGiaiTriOptions = { "Màn hình cá nhân 15inch", "VR giải trí", "Console game", "Massage chair" };
+    String dichVuGiaiTri = (String) JOptionPane.showInputDialog(this,
+            "Chọn dịch vụ giải trí:",
+            "Dịch vụ giải trí - Thương Gia",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            dichVuGiaiTriOptions,
+            dichVuGiaiTriOptions[0]);
+
+    if (dichVuGiaiTri == null) return null;
+
+    // Tính giá vé
+    double heSoGia = 2.0; // Hệ số cơ bản
+    double phiDichVu = 500000.0; // Phí dịch vụ cơ bản
+    double phiHanhLy = 20; // kg hành lý miễn phí
+
+    // Tăng giá theo loại ghế
+    switch (loaiGhe) {
+        case "Giường nằm": heSoGia += 0.5; break;
+        case "Suite": heSoGia += 1.0; break;
+    }
+
+    double giaVe = giaCoBan * heSoGia + phiDichVu;
+
+    String maVe = "VETG" + System.currentTimeMillis();
+    String soGhe = "TG" + (chuyenBay.getSoGheTrong() + 1);
+
+    return new VeThuongGia(
+            khachHangDangNhap.getMa(), 
+            maVe, 
+            new Date(), 
+            giaVe, 
+            chuyenBay.getMaChuyenBay(),
+            soGhe, 
+            dichVuGiaiTri, 
+            phiDichVu, 
+            phiHanhLy, 
+            true, 
+            dichVuAnUong
+    );
+}
+
+private VePhoThong chonVePhoThong(ChuyenBay chuyenBay, double giaCoBan) {
+    // Chọn vị trí ghế
+    String[] viTriGheOptions = { "Cửa sổ", "Lối đi", "Giữa" };
+    String viTriGhe = (String) JOptionPane.showInputDialog(this,
+            "Chọn vị trí ghế:",
+            "Chọn vị trí ghế - Phổ Thông",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            viTriGheOptions,
+            viTriGheOptions[0]);
+
+    if (viTriGhe == null) return null;
+
+    // Chọn loại hành lý
+    String[] hanhLyOptions = { "7kg xách tay", "15kg ký gửi", "20kg ký gửi", "25kg ký gửi" };
+    String hanhLy = (String) JOptionPane.showInputDialog(this,
+            "Chọn gói hành lý:",
+            "Chọn hành lý - Phổ Thông",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            hanhLyOptions,
+            hanhLyOptions[1]);
+
+    if (hanhLy == null) return null;
+
+    // Chọn dịch vụ ăn uống
+    int coAnUong = JOptionPane.showConfirmDialog(this,
+            "Có sử dụng dịch vụ ăn uống? (+150,000 VND)",
+            "Dịch vụ ăn uống",
+            JOptionPane.YES_NO_OPTION);
+
+    // Tính giá vé
+    double heSoGia = 1.2; // Hệ số cơ bản
+    double phiHanhLy = 0;
+    double phiAnUong = (coAnUong == JOptionPane.YES_OPTION) ? 150000 : 0;
+
+    // Tính phí hành lý
+    switch (hanhLy) {
+        case "15kg ký gửi": phiHanhLy = 200000; break;
+        case "20kg ký gửi": phiHanhLy = 300000; break;
+        case "25kg ký gửi": phiHanhLy = 400000; break;
+    }
+
+    double giaVe = giaCoBan * heSoGia + phiHanhLy + phiAnUong;
+
+    String maVe = "VEPT" + System.currentTimeMillis();
+    String soGhe = "PT" + (chuyenBay.getSoGheTrong() + 1);
+
+    return new VePhoThong(
+            khachHangDangNhap.getMa(),
+            maVe,
+            new Date(),
+            giaVe,
+            chuyenBay.getMaChuyenBay(),
+            soGhe,
+            coAnUong == JOptionPane.YES_OPTION,
+            5, // kg hành lý cơ bản
+            phiHanhLy,
+            viTriGhe,
+            true
+    );
+}
+
+private VeTietKiem chonVeTietKiem(ChuyenBay chuyenBay, double giaCoBan) {
+    // Chọn loại vé
+    String[] loaiVeTietKiemOptions = { "Tiết kiệm cơ bản", "Tiết kiệm linh hoạt", "Tiết kiệm siêu rẻ" };
+    String loaiVeTietKiem = (String) JOptionPane.showInputDialog(this,
+            "Chọn loại vé tiết kiệm:",
+            "Chọn loại vé - Tiết Kiệm",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            loaiVeTietKiemOptions,
+            loaiVeTietKiemOptions[0]);
+
+    if (loaiVeTietKiem == null) return null;
+
+    // Chọn hành lý
+    String[] hanhLyOptions = { "Không hành lý", "7kg xách tay", "10kg ký gửi" };
+    String hanhLy = (String) JOptionPane.showInputDialog(this,
+            "Chọn gói hành lý:",
+            "Chọn hành lý - Tiết Kiệm",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            hanhLyOptions,
+            hanhLyOptions[0]);
+
+    if (hanhLy == null) return null;
+
+    // Tính giá vé
+    double heSoGia = 0.9; // Hệ số cơ bản
+    double phiHanhLy = 0;
+    double phiDichVu = 100000.0; // Phí dịch vụ cơ bản
+
+    // Điều chỉnh hệ số giá theo loại vé
+    switch (loaiVeTietKiem) {
+        case "Tiết kiệm linh hoạt": 
+            heSoGia = 0.85;
+            phiDichVu = 150000;
+            break;
+        case "Tiết kiệm siêu rẻ":
+            heSoGia = 0.8;
+            phiDichVu = 200000;
+            break;
+    }
+
+    // Tính phí hành lý
+    switch (hanhLy) {
+        case "7kg xách tay": phiHanhLy = 50000; break;
+        case "10kg ký gửi": phiHanhLy = 100000; break;
+    }
+
+    double giaVe = giaCoBan * heSoGia + phiHanhLy + phiDichVu;
+
+    String maVe = "VETK" + System.currentTimeMillis();
+    String soGhe = "TK" + (chuyenBay.getSoGheTrong() + 1);
+
+    return new VeTietKiem(
+            khachHangDangNhap.getMa(),
+            maVe,
+            new Date(),
+            giaVe,
+            chuyenBay.getMaChuyenBay(),
+            soGhe,
+            10, // % giảm giá
+            phiDichVu,
+            true,
+            phiHanhLy,
+            hanhLy
+    );
+}
+
+private boolean hienThiThongTinVeXacNhan(VeMayBay ve, ChuyenBay chuyenBay, double giamGia) {
+    StringBuilder thongTin = new StringBuilder();
+    thongTin.append("=== THÔNG TIN VÉ ===\n\n");
+    thongTin.append("Mã vé: ").append(ve.getMaVe()).append("\n");
+    thongTin.append("Chuyến bay: ").append(chuyenBay.getDiemDi()).append(" → ").append(chuyenBay.getDiemDen()).append("\n");
+    thongTin.append("Loại vé: ").append(ve.loaiVe()).append("\n");
+    thongTin.append("Số ghế: ").append(ve.getSoGhe()).append("\n");
+    thongTin.append("Giờ bay: ").append(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(chuyenBay.getGioKhoiHanh())).append("\n");
+    thongTin.append("Giá vé gốc: ").append(String.format("%,d VND", (int) (ve.getGiaVe() + giamGia))).append("\n");
+    thongTin.append("Giảm giá: ").append(String.format("%,d VND", (int) giamGia)).append("\n");
+    thongTin.append("Thành tiền: ").append(String.format("%,d VND", (int) ve.getGiaVe())).append("\n\n");
+
+    // Thêm thông tin đặc thù cho từng loại vé
+    if (ve instanceof VeThuongGia) {
+        VeThuongGia vtg = (VeThuongGia) ve;
+        thongTin.append("=== DỊCH VỤ THƯƠNG GIA ===\n");
+        thongTin.append("• Dịch vụ giải trí: ").append(vtg.getDichVuGiaiTri()).append("\n");
+        thongTin.append("• Dịch vụ ăn uống: ").append(vtg.getDichVuAnUong()).append("\n");
+        thongTin.append("• Hành lý miễn phí: ").append(vtg.getHanhLyMienPhi()).append("kg\n");
+        thongTin.append("• Phí dịch vụ: ").append(String.format("%,d VND", (int) vtg.getPhiDichVu())).append("\n");
+    } else if (ve instanceof VePhoThong) {
+        VePhoThong vpt = (VePhoThong) ve;
+        thongTin.append("=== DỊCH VỤ PHỔ THÔNG ===\n");
+        thongTin.append("• Vị trí ghế: ").append(vpt.getLoaiGhe()).append("\n");
+        thongTin.append("• Hành lý cơ bản: ").append(vpt.getHanhLyMienPhi()).append("kg\n");
+        thongTin.append("• Phí hành lý: ").append(String.format("%,d VND", (int) vpt.getPhiHanhLy())).append("\n");
+        thongTin.append("• Dịch vụ ăn uống: ").append(vpt.isCoAnUong() ? "Có" : "Không").append("\n");
+    } else if (ve instanceof VeTietKiem) {
+        VeTietKiem vtk = (VeTietKiem) ve;
+        thongTin.append("=== DỊCH VỤ TIẾT KIỆM ===\n");
+        thongTin.append("• Hành lý: ").append(vtk.getHanhLy()).append("\n");
+        thongTin.append("• Phí hành lý: ").append(String.format("%,d VND", (int) vtk.getPhiHanhLy())).append("\n");
+        thongTin.append("• Phí dịch vụ: ").append(String.format("%,d VND", (int) vtk.getPhiDichVu())).append("\n");
+    }
+
+    thongTin.append("\nBạn có chắc chắn đặt vé này?");
+
+    int confirm = JOptionPane.showConfirmDialog(this,
+            thongTin.toString(),
+            "XÁC NHẬN ĐẶT VÉ",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+
+    return confirm == JOptionPane.YES_OPTION;
+}
 
         if ("THƯƠNG GIA".equals(loaiVe)) {
             ve = new VeThuongGia(khachHangDangNhap.getMa(), maVe, new Date(), giaVe, maChuyen,

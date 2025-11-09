@@ -332,8 +332,6 @@ public class DanhSachKhachHang implements IQuanLy<KhachHang>, IFileHandler {
                     System.err.println("Lỗi tạo KhachHang từ XML: " + e.getMessage());
                 }
             }
-
-            System.out.println("Da tai " + count + " khach hang tu file XML");
             return count > 0;
 
         } catch (Exception e) {

@@ -18,7 +18,6 @@ public class MainGUI extends JFrame {
     private MenuManager menuManager;
     private VeDialogs veDialogs;
     private ChuyenBayDialogs chuyenBayDialogs;
-
     private KhachHangDialogs khachHangDialogs;
 
     public MainGUI() {
@@ -34,7 +33,7 @@ public class MainGUI extends JFrame {
         this.menuManager = new MenuManager(this, quanLy);
         this.veDialogs = new VeDialogs(this, quanLy, tabManager.getTableVe());
         this.chuyenBayDialogs = new ChuyenBayDialogs(this, quanLy, tabManager.getTableChuyenBay());
-        // ... khởi tạo các manager khác
+        this.khachHangDialogs = new KhachHangDialogs(quanLy, this);
     }
 
     private void initComponents() {
@@ -74,7 +73,7 @@ public class MainGUI extends JFrame {
             capNhatTrangThaiGUI();
             
             // Hiển thị thông báo thành công (tùy chọn)
-            showStatusMessage("Dữ liệu đã được cập nhật thành công!");
+            showStatusMessage("Du lieu da duoc cap nhat thanh cong!");
             
         } catch (Exception ex) {
             ValidatorUtils.showExceptionDialog(this, "Lỗi khi cập nhật dữ liệu GUI", ex);
@@ -259,9 +258,6 @@ public class MainGUI extends JFrame {
                 // Cập nhật text area thống kê nếu cần
                 break;
         }
-        
-        // Ghi log hoặc xử lý thêm
-        System.out.println("Đã chuyển sang tab: " + tabName);
     }
 
     /**
@@ -275,7 +271,7 @@ public class MainGUI extends JFrame {
                 break;
             case "Tìm chuyến bay":
                 tabManager.chuyenTab(2); // Tab chuyến bay
-                // Có thể mở dialog tìm kiếm ở đây
+                
                 break;
             case "Thống kê":
                 tabManager.chuyenTab(4); // Tab thống kê
@@ -311,12 +307,6 @@ public class MainGUI extends JFrame {
             case "Thêm vé":
                 veDialogs.moDialogDatVe();
                 break;
-            case "Sửa vé":
-                veDialogs.moDialogSuaVe();
-                break;
-            case "Xóa vé":
-                veDialogs.xoaVe();
-                break;
             case "Tìm kiếm":
                 veDialogs.moDialogTimKiemVe();
                 break;
@@ -327,7 +317,7 @@ public class MainGUI extends JFrame {
                 capNhatTableVe();
                 break;
             case "Xem chi tiết":
-                veDialogs.xemChiTietVe();
+                // veDialogs.xemChiTietVe();
                 break;
         }
     }

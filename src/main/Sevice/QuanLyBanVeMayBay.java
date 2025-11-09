@@ -39,8 +39,6 @@ public class QuanLyBanVeMayBay {
         thongKe.put("veThuongGia", dsVe.demSoLuongTheoLoai("VeThuongGia"));
         thongKe.put("vePhoThong", dsVe.demSoLuongTheoLoai("VePhoThong"));
         thongKe.put("veTietKiem", dsVe.demSoLuongTheoLoai("VeTietKiem"));
-        
-        // Tính tỷ lệ lấp đầy
         int tongGhe = 0;
         int gheTrong = 0;
         for (ChuyenBay cb : dsChuyenBay.getDanhSach()) {
@@ -56,9 +54,9 @@ public class QuanLyBanVeMayBay {
     public Map<String, Double> thongKeDoanhThu() {
         Map<String, Double> doanhThu = new HashMap<>();
         
-        doanhThu.put("thuongGia", dsVe.tinhDoanhThuTheoLoai("THƯƠNG GIA"));
-        doanhThu.put("phoThong", dsVe.tinhDoanhThuTheoLoai("PHỔ THÔNG"));
-        doanhThu.put("tietKiem", dsVe.tinhDoanhThuTheoLoai("TIẾT KIỆM"));
+        doanhThu.put("thuongGia", dsVe.tinhDoanhThuTheoLoai("VeThuongGia"));
+        doanhThu.put("phoThong", dsVe.tinhDoanhThuTheoLoai("VePhoThong"));
+        doanhThu.put("tietKiem", dsVe.tinhDoanhThuTheoLoai("VeTietKiem"));
         doanhThu.put("tongCong", dsHoaDon.tinhTongDoanhThu());
         
         return doanhThu;
@@ -138,4 +136,14 @@ public class QuanLyBanVeMayBay {
     public DanhSachChuyenBay getDsChuyenBay() { return dsChuyenBay; }
     public DanhSachKhachHang getDsKhachHang() { return dsKhachHang; }
     public DanhSachHoaDon getDsHoaDon() { return dsHoaDon; }
+    
+    public static void main(String[] args) {
+        QuanLyBanVeMayBay quanly = new QuanLyBanVeMayBay();
+        quanly.docDuLieuTuFile();
+        
+        for (String key : quanly.thongKeTongQuan().keySet()) {
+            String value = quanly.thongKeTongQuan().get(key).toString();
+            System.out.println(key + " : " + value);
+        }
+    }
 }

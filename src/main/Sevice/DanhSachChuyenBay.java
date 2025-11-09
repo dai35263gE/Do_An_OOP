@@ -283,8 +283,6 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
                     System.err.println("Loi tao chuyen bay: " + e.getMessage());
                 }
             }
-            
-            System.out.println("Da tai " + count + " chuyen bay tu file XML");
             return true;
 
         } catch (Exception e) {

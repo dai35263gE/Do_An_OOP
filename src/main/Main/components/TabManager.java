@@ -128,7 +128,7 @@ public class TabManager {
     JPanel statsPanel = new StatCardManager(quanLy).getStatsPanel();
     statsPanel.setBorder(BorderFactory.createTitledBorder(
         BorderFactory.createLineBorder(new Color(70, 130, 180), 2),
-        "📊 THỐNG KÊ NHANH",
+        "THỐNG KÊ NHANH",
         TitledBorder.CENTER,
         TitledBorder.TOP,
         new Font("Arial", Font.BOLD, 14),
@@ -148,10 +148,10 @@ public class TabManager {
     infoPanel.setBackground(Color.WHITE);
     
     String[] systemInfo = {
-        "🚀 Phiên bản: " + QuanLyBanVeMayBay.getPhienBan(),
-        "📈 Số lượt truy cập: " + QuanLyBanVeMayBay.getSoLanTruyCap(),
-        "🕐 Thời gian hệ thống: " + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
-        "💾 Trạng thái: Đang hoạt động"
+        "Phiên bản: " + QuanLyBanVeMayBay.getPhienBan(),
+        "Số lượt truy cập: " + QuanLyBanVeMayBay.getSoLanTruyCap(),
+        "Thời gian hệ thống: " + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
+        "Trạng thái: Đang hoạt động"
     };
     
     for (String info : systemInfo) {
@@ -163,13 +163,8 @@ public class TabManager {
 
     // Phần mô tả chức năng
     JTextArea welcomeText = new JTextArea();
-    welcomeText.setText("Chào mừng đến với Hệ thống Quản lý Bán Vé Máy Bay!\n\n" +
-                       "Hệ thống cung cấp các chức năng chính:\n" +
-                       "• 🎫 Quản lý vé máy bay: Đặt, sửa, xóa, tìm kiếm vé\n" +
-                       "• ✈️ Quản lý chuyến bay: Thêm, cập nhật thông tin chuyến bay\n" +
-                       "• 👥 Quản lý khách hàng: Thông tin và lịch sử đặt vé\n" +
-                       "• 📊 Thống kê và báo cáo: Doanh thu, hiệu suất kinh doanh\n\n" +
-                       "💡 Mẹo: Sử dụng menu và các nút chức năng để khám phá hệ thống!");
+    welcomeText.setText(
+                       "Mẹo: Sử dụng menu và các nút chức năng để khám phá hệ thống!");
     welcomeText.setEditable(false);
     welcomeText.setFont(new Font("Arial", Font.PLAIN, 14));
     welcomeText.setBackground(Color.WHITE);
@@ -266,7 +261,7 @@ public class TabManager {
     private JPanel taoToolbarVe() {
         JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
         
-        String[] buttonNames = { "Thêm vé", "Sửa vé", "Xóa vé", "Tìm kiếm", "Lọc", "Làm mới", "Xem chi tiết" };
+        String[] buttonNames = { "Thêm vé", "Tìm kiếm", "Lọc", "Xem chi tiết", "Làm mới" };
         for (String name : buttonNames) {
             JButton btn = new JButton(name);
             btn.addActionListener(e -> mainGUI.xuLyQuanLyVe(name));
