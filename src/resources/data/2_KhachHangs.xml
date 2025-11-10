@@ -6,7 +6,7 @@
         <Email>nguyen.van.an@email.com</Email>
         <SoDT>0912345678</SoDT>
         <GioiTinh>Nam</GioiTinh>
-        <DiemTichLuy>15200</DiemTichLuy>
+        <DiemTichLuy>15360</DiemTichLuy>
         <NgayDangKy>2022-01-10 00:00:00</NgayDangKy>
         <MaKH>KH001</MaKH>
         <NgaySinh>1985-05-15 00:00:00</NgaySinh>
@@ -21,7 +21,7 @@
         <Email>tran.thi.binh@email.com</Email>
         <SoDT>0923456789</SoDT>
         <GioiTinh>Nữ</GioiTinh>
-        <DiemTichLuy>13450</DiemTichLuy>
+        <DiemTichLuy>13460</DiemTichLuy>
         <NgayDangKy>2022-03-15 00:00:00</NgayDangKy>
         <MaKH>KH002</MaKH>
         <NgaySinh>1988-08-20 00:00:00</NgaySinh>
@@ -51,7 +51,7 @@
         <Email>pham.thi.dung@email.com</Email>
         <SoDT>0945678901</SoDT>
         <GioiTinh>Nữ</GioiTinh>
-        <DiemTichLuy>7500</DiemTichLuy>
+        <DiemTichLuy>7506</DiemTichLuy>
         <NgayDangKy>2023-02-14 00:00:00</NgayDangKy>
         <MaKH>KH004</MaKH>
         <NgaySinh>1992-03-25 00:00:00</NgaySinh>

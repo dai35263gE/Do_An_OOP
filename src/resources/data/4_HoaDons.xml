@@ -231,25 +231,4 @@
         <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
         <CMND>123456789123</CMND>
     </HoaDon>
-    <HoaDon>
-        <MaHoaDon>HD011</MaHoaDon>
-        <TenDangNhap>nguyenvanan</TenDangNhap>
-        <Thue>53840.700000000004</Thue>
-        <Email>nguyen.van.an@email.com</Email>
-        <ThanhTien>954704.7</ThanhTien>
-        <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
-        <SoDT>0912345678</SoDT>
-        <TongTien>1076814.0</TongTien>
-        <GioiTinh>Nam</GioiTinh>
-        <NgayLap>2025-11-10 20:24:29</NgayLap>
-        <DanhSachMaVe>VP023</DanhSachMaVe>
-        <MaKH>KH001</MaKH>
-        <NgaySinh>1985-05-15 00:00:00</NgaySinh>
-        <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
-        <KhuyenMai>175950.0</KhuyenMai>
-        <HoTen>Nguyễn Văn An</HoTen>
-        <MatKhau>0000</MatKhau>
-        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
-        <CMND>123456789123</CMND>
-    </HoaDon>
 </HoaDons>

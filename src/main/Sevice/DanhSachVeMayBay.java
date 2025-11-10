@@ -1,12 +1,19 @@
 package Sevice;
 
-import java.util.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import model.VeMayBay;
-import model.VeThuongGia;
 import model.VePhoThong;
+import model.VeThuongGia;
 import model.VeTietKiem;
 import repository.IFileHandler;
 import repository.IQuanLy;
@@ -14,166 +21,167 @@ import repository.IThongKe;
 import repository.XMLUtils;
 
 public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThongKe {
-    private List<VeMayBay> danhSach;
-    private static final int MAX_SIZE = 10000;
-    
-    public DanhSachVeMayBay() {
-        this.danhSach = new ArrayList<>();
+  private List<VeMayBay> danhSach;
+  private static final int MAX_SIZE = 10000;
+
+  public DanhSachVeMayBay() {
+    this.danhSach = new ArrayList<>();
+  }
+
+  // ========== GETTERS ==========
+  public List<VeMayBay> getDanhSach() {
+    return new ArrayList<>(danhSach);
+  }
+
+  // ========== IMPLEMENT IQUANLY ==========
+  @Override
+  public boolean them(VeMayBay ve) {
+    if (danhSach.size() >= MAX_SIZE) {
+      throw new IllegalStateException("Danh sách vé đã đầy!");
     }
-    
-    // ========== GETTERS ==========
-    public List<VeMayBay> getDanhSach() {
-        return new ArrayList<>(danhSach);
+
+    if (tonTai(ve.getMaVe())) {
+      throw new IllegalArgumentException("Mã vé '" + ve.getMaVe() + "' đã tồn tại!");
     }
-    // ========== IMPLEMENT IQUANLY ==========
-    @Override
-    public boolean them(VeMayBay ve) {
-        if (danhSach.size() >= MAX_SIZE) {
-            throw new IllegalStateException("Danh sách vé đã đầy!");
-        }
-        
-        if (tonTai(ve.getMaVe())) {
-            throw new IllegalArgumentException("Mã vé '" + ve.getMaVe() + "' đã tồn tại!");
-        }  
-        return danhSach.add(ve);
+    return danhSach.add(ve);
+  }
+
+  @Override
+  public boolean xoa(String maVe) {
+    VeMayBay ve = timKiemTheoMa(maVe);
+    if (ve == null) {
+      throw new IllegalArgumentException("Không tìm thấy vé với mã: " + maVe);
     }
-    
-    @Override
-    public boolean xoa(String maVe) {
-        VeMayBay ve = timKiemTheoMa(maVe);
-        if (ve == null) {
-            throw new IllegalArgumentException("Không tìm thấy vé với mã: " + maVe);
-        }
-        
-        // Kiểm tra nếu vé đã thanh toán thì không thể xóa
-        if (ve.isDaThanhToan()) {
-            throw new IllegalStateException("Không thể xóa vé đã thanh toán!");
-        }
-        
-        return danhSach.remove(ve);
+
+    // Kiểm tra nếu vé đã thanh toán thì không thể xóa
+    if (ve.isDaThanhToan()) {
+      throw new IllegalStateException("Không thể xóa vé đã thanh toán!");
     }
-    
-    @Override
-    public boolean sua(String maVe, VeMayBay veMoi) {
-        VeMayBay veCu = timKiemTheoMa(maVe);
-        if (veCu == null) {
-            throw new IllegalArgumentException("Không tìm thấy vé với mã: " + maVe);
-        }
-        
-        // Kiểm tra nếu vé đã thanh toán thì chỉ cho sửa một số thông tin
-        if (veCu.isDaThanhToan()) {
-            throw new IllegalStateException("Không thể sửa vé đã thanh toán!");
-        }
-        
-        int index = danhSach.indexOf(veCu);
-        danhSach.set(index, veMoi);
-        return true;
+
+    return danhSach.remove(ve);
+  }
+
+  @Override
+  public boolean sua(String maVe, VeMayBay veMoi) {
+    VeMayBay veCu = timKiemTheoMa(maVe);
+    if (veCu == null) {
+      throw new IllegalArgumentException("Không tìm thấy vé với mã: " + maVe);
     }
-    
-    @Override
-    public VeMayBay timKiemTheoMa(String maVe) {
-        return danhSach.stream().filter(ve -> ve.getMaVe().equalsIgnoreCase(maVe)).findFirst().orElse(null);
+
+    // Kiểm tra nếu vé đã thanh toán thì chỉ cho sửa một số thông tin
+    if (veCu.isDaThanhToan()) {
+      throw new IllegalStateException("Không thể sửa vé đã thanh toán!");
     }
-    
-    @Override
-    public List<VeMayBay> timKiemTheoTen(String ten) {
-        // Class VeMayBay của bạn không có thuộc tính tên, nên trả về danh sách rỗng
-        return new ArrayList<>();
+
+    int index = danhSach.indexOf(veCu);
+    danhSach.set(index, veMoi);
+    return true;
+  }
+
+  @Override
+  public VeMayBay timKiemTheoMa(String maVe) {
+    return danhSach.stream().filter(ve -> ve.getMaVe().equalsIgnoreCase(maVe)).findFirst().orElse(null);
+  }
+
+  @Override
+  public List<VeMayBay> timKiemTheoTen(String ten) {
+    // Class VeMayBay của bạn không có thuộc tính tên, nên trả về danh sách rỗng
+    return new ArrayList<>();
+  }
+
+  @Override
+  public VeMayBay timKiemTheoCMND(String cmnd) {
+    // Class VeMayBay của bạn không có thuộc tính CMND
+    return null;
+  }
+
+  @Override
+  public List<VeMayBay> timKiemTheoChuyenBay(String maChuyen) {
+    return danhSach.stream()
+        .filter(ve -> ve.getMaChuyen().equalsIgnoreCase(maChuyen))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<VeMayBay> timKiemTheoKhoangGia(double min, double max) {
+    return danhSach.stream()
+        .filter(ve -> ve.tinhTongTien() >= min && ve.tinhTongTien() <= max)
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<VeMayBay> timKiemTheoNgayBay(Date ngay) {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    String ngayCanTim = sdf.format(ngay);
+
+    return danhSach.stream()
+        .filter(ve -> sdf.format(ve.getNgayBay()).equals(ngayCanTim))
+        .collect(Collectors.toList());
+  }
+
+  // ========== TÌM KIẾM NÂNG CAO CHO GUI ==========
+  public List<VeMayBay> timKiemDaTieuChi(Map<String, Object> filters) {
+    List<VeMayBay> ketQua = new ArrayList<>(danhSach);
+
+    for (Map.Entry<String, Object> entry : filters.entrySet()) {
+      String key = entry.getKey();
+      Object value = entry.getValue();
+
+      if (value == null || value.toString().isEmpty()) {
+        continue;
+      }
+
+      switch (key) {
+        case "loaiVe":
+          ketQua.removeIf(ve -> !ve.loaiVe().equals(value));
+          break;
+        case "maKH":
+          ketQua.removeIf(ve -> !ve.getmaKH().equals(value));
+          break;
+        case "maVe":
+          ketQua.removeIf(ve -> !ve.getMaVe().equals(value));
+          break;
+        case "trangThai":
+          ketQua.removeIf(ve -> !ve.getTrangThai().equals(value));
+          break;
+        case "maChuyen":
+          ketQua.removeIf(ve -> !ve.getMaChuyen().equals(value));
+          break;
+        case "tuNgay":
+          Date tuNgay = (Date) value;
+          ketQua.removeIf(ve -> ve.getNgayBay().before(tuNgay));
+          break;
+        case "denNgay":
+          Date denNgay = (Date) value;
+          ketQua.removeIf(ve -> ve.getNgayBay().after(denNgay));
+          break;
+        case "giaMin":
+          double giaMin = (double) value;
+          ketQua.removeIf(ve -> ve.tinhTongTien() < giaMin);
+          break;
+        case "giaMax":
+          double giaMax = (double) value;
+          ketQua.removeIf(ve -> ve.tinhTongTien() > giaMax);
+          break;
+        case "soGhe":
+          ketQua.removeIf(ve -> !ve.getSoGhe().contains(value.toString()));
+          break;
+      }
     }
-    
-    @Override
-    public VeMayBay timKiemTheoCMND(String cmnd) {
-        // Class VeMayBay của bạn không có thuộc tính CMND
-        return null;
+
+    return ketQua;
+  }
+
+  public List<VeMayBay> timKiemGanDung(String keyword) {
+    if (keyword == null || keyword.trim().isEmpty()) {
+      return new ArrayList<>(danhSach);
     }
-    
-    @Override
-    public List<VeMayBay> timKiemTheoChuyenBay(String maChuyen) {
-        return danhSach.stream()
-                      .filter(ve -> ve.getMaChuyen().equalsIgnoreCase(maChuyen))
-                      .collect(Collectors.toList());
-    }
-    
-    @Override
-    public List<VeMayBay> timKiemTheoKhoangGia(double min, double max) {
-        return danhSach.stream()
-                      .filter(ve -> ve.tinhTongTien() >= min && ve.tinhTongTien() <= max)
-                      .collect(Collectors.toList());
-    }
-    
-    @Override
-    public List<VeMayBay> timKiemTheoNgayBay(Date ngay) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String ngayCanTim = sdf.format(ngay);
-        
-        return danhSach.stream()
-                      .filter(ve -> sdf.format(ve.getNgayBay()).equals(ngayCanTim))
-                      .collect(Collectors.toList());
-    }
-    
-    // ========== TÌM KIẾM NÂNG CAO CHO GUI ==========
-    public List<VeMayBay> timKiemDaTieuChi(Map<String, Object> filters) {
-        List<VeMayBay> ketQua = new ArrayList<>(danhSach);
-        
-        for (Map.Entry<String, Object> entry : filters.entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            
-            if (value == null || value.toString().isEmpty()) {
-                continue;
-            }
-            
-            switch (key) {
-                case "loaiVe":
-                    ketQua.removeIf(ve -> !ve.loaiVe().equals(value));
-                    break;
-                case "maKH":
-                    ketQua.removeIf(ve -> !ve.getmaKH().equals(value));
-                    break;
-                case "maVe":
-                    ketQua.removeIf(ve -> !ve.getMaVe().equals(value));
-                    break;
-                case "trangThai":
-                    ketQua.removeIf(ve -> !ve.getTrangThai().equals(value));
-                    break;
-                case "maChuyen":
-                    ketQua.removeIf(ve -> !ve.getMaChuyen().equals(value));
-                    break;
-                case "tuNgay":
-                    Date tuNgay = (Date) value;
-                    ketQua.removeIf(ve -> ve.getNgayBay().before(tuNgay));
-                    break;
-                case "denNgay":
-                    Date denNgay = (Date) value;
-                    ketQua.removeIf(ve -> ve.getNgayBay().after(denNgay));
-                    break;
-                case "giaMin":
-                    double giaMin = (double) value;
-                    ketQua.removeIf(ve -> ve.tinhTongTien() < giaMin);
-                    break;
-                case "giaMax":
-                    double giaMax = (double) value;
-                    ketQua.removeIf(ve -> ve.tinhTongTien() > giaMax);
-                    break;
-                case "soGhe":
-                    ketQua.removeIf(ve -> !ve.getSoGhe().contains(value.toString()));
-                    break;
-            }
-        }
-        
-        return ketQua;
-    }
-    
-    public List<VeMayBay> timKiemGanDung(String keyword) {
-        if (keyword == null || keyword.trim().isEmpty()) {
-            return new ArrayList<>(danhSach);
-        }
-        
-        String keywordLower = keyword.toLowerCase().trim();
-        return danhSach.stream().filter(ve -> ve.getMaVe().toLowerCase().contains(keywordLower) ||
+
+    String keywordLower = keyword.toLowerCase().trim();
+    return danhSach.stream().filter(ve -> ve.getMaVe().toLowerCase().contains(keywordLower) ||
         ve.getMaChuyen().toLowerCase().contains(keywordLower) ||
         ve.getSoGhe().toLowerCase().contains(keywordLower) ||
-     ve.loaiVe().toLowerCase().contains(keywordLower) ||
+        ve.loaiVe().toLowerCase().contains(keywordLower) ||
         ve.getTrangThai().toLowerCase().contains(keywordLower))
                       .collect(Collectors.toList());
     }
@@ -299,8 +307,7 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
                         data.get("DichVuDacBiet"),
                         XMLUtils.stringToDouble(data.get("PhuThu")),
                         XMLUtils.stringToBoolean(data.get("PhongChoVIP")),XMLUtils.stringToInt(data.get("SoKgHanhLyKyGui")),
-                        data.get("LoaiDoUong"),
-                        trangThai
+                        data.get("LoaiDoUong")
                     );
                     
                 case "VePhoThong":
@@ -309,15 +316,13 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
                         XMLUtils.stringToBoolean(data.get("HanhLyXachTay")),
                         XMLUtils.stringToInt(data.get("SoKgHanhLyKyGui")),
                         data.get("LoaiGhe"),
-                        XMLUtils.stringToBoolean(data.get("DoAn")),
-                        trangThai
+                        XMLUtils.stringToBoolean(data.get("DoAn"))
                     );
                     
                 case "VeTietKiem":
                     return new VeTietKiem(
                         maKH,maVe, ngayBay, giaVe, maChuyen, soGhe,
-                        XMLUtils.stringToBoolean(data.get("HanhLyXachTay")),
-                        trangThai
+                        XMLUtils.stringToBoolean(data.get("HanhLyXachTay"))
                     );
                     
                 default:

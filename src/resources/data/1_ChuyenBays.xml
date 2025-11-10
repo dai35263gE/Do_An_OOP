@@ -28,7 +28,7 @@
         <DiemDi>Đà Nẵng (DAD)</DiemDi>
         <MaMayBay>VN-A045</MaMayBay>
         <GioDen>2025-11-11 10:30:00</GioDen>
-        <SoGheTrong>15</SoGheTrong>
+        <SoGheTrong>14</SoGheTrong>
         <DiemDen>TP.HCM (SGN)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
         <MaChuyen>CB003</MaChuyen>
@@ -52,7 +52,7 @@
         <DiemDi>TP.HCM (SGN)</DiemDi>
         <MaMayBay>VN-NH90</MaMayBay>
         <GioDen>2025-11-12 11:45:00</GioDen>
-        <SoGheTrong>8</SoGheTrong>
+        <SoGheTrong>7</SoGheTrong>
         <DiemDen>Phú Quốc (PQC)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
         <MaChuyen>CB005</MaChuyen>
@@ -64,7 +64,7 @@
         <DiemDi>Hà Nội (HAN)</DiemDi>
         <MaMayBay>VN-A003</MaMayBay>
         <GioDen>2025-11-12 16:20:00</GioDen>
-        <SoGheTrong>22</SoGheTrong>
+        <SoGheTrong>21</SoGheTrong>
         <DiemDen>Nha Trang (CXR)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
         <MaChuyen>CB006</MaChuyen>
@@ -76,7 +76,7 @@
         <DiemDi>Đà Nẵng (DAD)</DiemDi>
         <MaMayBay>VN-F045</MaMayBay>
         <GioDen>2025-11-13 13:30:00</GioDen>
-        <SoGheTrong>5</SoGheTrong>
+        <SoGheTrong>2</SoGheTrong>
         <DiemDen>Nha Trang (CXR)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
         <MaChuyen>CB007</MaChuyen>
@@ -112,7 +112,7 @@
         <DiemDi>Cần Thơ (VCA)</DiemDi>
         <MaMayBay>VN-NH90</MaMayBay>
         <GioDen>2025-11-14 23:30:00</GioDen>
-        <SoGheTrong>42</SoGheTrong>
+        <SoGheTrong>41</SoGheTrong>
         <DiemDen>Hà Nội (HAN)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
         <MaChuyen>CB010</MaChuyen>
@@ -220,7 +220,7 @@
         <DiemDi>Hà Nội (HAN)</DiemDi>
         <MaMayBay>VN-G09R</MaMayBay>
         <GioDen>2025-11-15 11:45:00</GioDen>
-        <SoGheTrong>72</SoGheTrong>
+        <SoGheTrong>71</SoGheTrong>
         <DiemDen>Phú Quốc (PQC)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
         <MaChuyen>CB019</MaChuyen>
@@ -244,7 +244,7 @@
         <DiemDi>Hà Nội (HAN)</DiemDi>
         <MaMayBay>VN-A003</MaMayBay>
         <GioDen>2025-11-13 10:15:00</GioDen>
-        <SoGheTrong>38</SoGheTrong>
+        <SoGheTrong>37</SoGheTrong>
         <DiemDen>TP.HCM (SGN)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
         <MaChuyen>CB021</MaChuyen>
@@ -292,7 +292,7 @@
         <DiemDi>TP.HCM (SGN)</DiemDi>
         <MaMayBay>VN-NH90</MaMayBay>
         <GioDen>2025-11-15 13:15:00</GioDen>
-        <SoGheTrong>10</SoGheTrong>
+        <SoGheTrong>9</SoGheTrong>
         <DiemDen>Phú Quốc (PQC)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
         <MaChuyen>CB025</MaChuyen>

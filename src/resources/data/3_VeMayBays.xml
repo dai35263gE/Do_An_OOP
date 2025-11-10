@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <VeMayBays>
-    <!-- Vé Thương Gia -->
     <VeThuongGia>
         <MaVe>VG001</MaVe>
         <MaKhachHang>KH001</MaKhachHang>
@@ -32,8 +31,6 @@
         <PhongChoVIP>true</PhongChoVIP>
         <LoaiDoUong>Champagne</LoaiDoUong>
     </VeThuongGia>
-
-    <!-- Vé Phổ Thông -->
     <VePhoThong>
         <MaVe>VP001</MaVe>
         <MaKhachHang>KH003</MaKhachHang>
