@@ -16,6 +16,9 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
     protected String soGhe;
     protected String trangThai;
     protected Date ngayDat;
+
+    public static double thue = 0.05;
+    public static int feeHL  = 15000;
     
     public static final String TRANG_THAI_DA_DAT = "ĐÃ_ĐẶT";
     public static final String TRANG_THAI_DA_THANH_TOAN = "ĐÃ_THANH_TOÁN";
@@ -54,13 +57,9 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
         this.trangThai = trangThai;
     }
 
-    public VeMayBay() {
-    }
-
     // Phuong thuc Abstract 
     public abstract double tinhThue();
     public abstract String loaiVe();
-    public abstract String chiTietLoaiVe();
     public abstract double tinhTongTien();
     
     public boolean coTheHuy() {
@@ -146,22 +145,7 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
         return soGhe != null && SO_GHE_PATTERN.matcher(soGhe).matches();
     }
     
-    public String getThongTinChiTiet() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Mã vé: ").append(maVe).append("\n");
-        sb.append("Loại vé: ").append(loaiVe()).append("\n");
-        sb.append("Chuyến bay: ").append(maChuyen).append("\n");
-        sb.append("Ngày bay: ").append(ngayBay).append("\n");
-        sb.append("Ghế: ").append(soGhe).append("\n");
-        sb.append("Giá vé: ").append(String.format("%,.0f VND", giaVe)).append("\n");
-        sb.append("Thuế: ").append(String.format("%,.0f VND", tinhThue())).append("\n");
-        sb.append("Tổng tiền: ").append(String.format("%,.0f VND", tinhTongTien())).append("\n");
-        sb.append("Chi tiết: ").append(chiTietLoaiVe()).append("\n");
-        sb.append("Trạng thái: ").append(trangThai).append("\n");
-        sb.append("Ngày đặt: ").append(ngayDat).append("\n");
-        return sb.toString();
-    }
-    
+
     public Object[] toRowData() {
         // Phù hợp để hiển thị trong JTable
         return new Object[] {

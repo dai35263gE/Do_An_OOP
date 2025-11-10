@@ -61,9 +61,7 @@ public class VeDialogs {
         JTextField txtCMND = new JTextField(15);
         JTextField txtMaChuyen = new JTextField(15);
         
-        // ComboBox cho điểm đi và điểm đến
-        JComboBox<String> cbDiemDi = new JComboBox<>(loadDiemDiItems());
-        JComboBox<String> cbDiemDen = new JComboBox<>(loadDiemDenItems());
+
         
         JTextField txtSoGhe = new JTextField(10);
         JComboBox<String> cbLoaiVe = new JComboBox<>(new String[]{"Tất cả", "VeThuongGia", "VePhoThong", "VeTietKiem"});
@@ -138,8 +136,6 @@ public class VeDialogs {
         gbc3.gridx = 0;
         gbc3.gridy = 0;
 
-        GUIUtils.addFormRow(col3, gbc3, "Điểm đi:", cbDiemDi);
-        GUIUtils.addFormRow(col3, gbc3, "Điểm đến:", cbDiemDen);
 
         // Panel khoảng giá
         JPanel panelGia = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
@@ -210,7 +206,7 @@ public class VeDialogs {
         btnTimKiem.addActionListener(e -> {
             Map<String, Object> filters = taoFiltersTimKiemDaTieuChi(
                 txtMaVe, txtMaKhachHang, txtTenKhachHang, txtCMND,
-                txtMaChuyen, cbDiemDi, cbDiemDen, txtSoGhe, 
+                txtMaChuyen, txtSoGhe, 
                 cbLoaiVe, cbTrangThai, txtGiaMin, txtGiaMax
             );
             
@@ -227,7 +223,7 @@ public class VeDialogs {
         // Xử lý làm mới
         btnLamMoi.addActionListener(e -> {
             lamMoiFormTimKiem(txtMaVe, txtMaKhachHang, txtTenKhachHang, txtCMND, 
-                             txtMaChuyen, cbDiemDi, cbDiemDen, txtSoGhe, 
+                             txtMaChuyen, txtSoGhe, 
                              cbLoaiVe, cbTrangThai, txtGiaMin, txtGiaMax);
             ValidatorUtils.showSuccessDialog(dialog, "Đã làm mới form tìm kiếm!");
         });
@@ -249,42 +245,13 @@ public class VeDialogs {
         dialog.setVisible(true);
     }
 
-    // ========== CÁC PHƯƠNG THỨC HỖ TRỢ TÌM KIẾM ĐA TIÊU CHÍ ==========
 
-    private Vector<String> loadDiemDiItems() {
-        Vector<String> items = new Vector<>();
-        items.add("Tất cả");
-        
-        DanhSachChuyenBay dsChuyenBay = quanLy.getDsChuyenBay();
-        if (dsChuyenBay != null && dsChuyenBay.getDanhSachChuyenBay() != null) {
-            for (ChuyenBay cb : dsChuyenBay.getDanhSachChuyenBay()) {
-                if (!items.contains(cb.getDiemDi())) {
-                    items.add(cb.getDiemDi());
-                }
-            }
-        }
-        return items;
-    }
 
-    private Vector<String> loadDiemDenItems() {
-        Vector<String> items = new Vector<>();
-        items.add("Tất cả");
-        
-        DanhSachChuyenBay dsChuyenBay = quanLy.getDsChuyenBay();
-        if (dsChuyenBay != null && dsChuyenBay.getDanhSachChuyenBay() != null) {
-            for (ChuyenBay cb : dsChuyenBay.getDanhSachChuyenBay()) {
-                if (!items.contains(cb.getDiemDen())) {
-                    items.add(cb.getDiemDen());
-                }
-            }
-        }
-        return items;
-    }
 
     private Map<String, Object> taoFiltersTimKiemDaTieuChi(JTextField txtMaVe, JTextField txtMaKhachHang,
                                                           JTextField txtTenKhachHang, JTextField txtCMND,
-                                                          JTextField txtMaChuyen, JComboBox<String> cbDiemDi,
-                                                          JComboBox<String> cbDiemDen, JTextField txtSoGhe,
+                                                          JTextField txtMaChuyen, 
+                                                          JTextField txtSoGhe,
                                                           JComboBox<String> cbLoaiVe, JComboBox<String> cbTrangThai,
                                                           JTextField txtGiaMin, JTextField txtGiaMax) {
         
@@ -315,17 +282,6 @@ public class VeDialogs {
             filters.put("maChuyen", txtMaChuyen.getText().trim());
         }
         
-        // Lọc theo điểm đi
-        String diemDi = (String) cbDiemDi.getSelectedItem();
-        if (!"Tất cả".equals(diemDi)) {
-            filters.put("diemDi", diemDi);
-        }
-        
-        // Lọc theo điểm đến
-        String diemDen = (String) cbDiemDen.getSelectedItem();
-        if (!"Tất cả".equals(diemDen)) {
-            filters.put("diemDen", diemDen);
-        }
         
         // Lọc theo loại vé
         String loaiVe = (String) cbLoaiVe.getSelectedItem();
@@ -361,8 +317,7 @@ public class VeDialogs {
     }
 
     private void lamMoiFormTimKiem(JTextField txtMaVe, JTextField txtMaKhachHang, JTextField txtTenKhachHang,
-                                  JTextField txtCMND, JTextField txtMaChuyen, JComboBox<String> cbDiemDi,
-                                  JComboBox<String> cbDiemDen, JTextField txtSoGhe, JComboBox<String> cbLoaiVe,
+                                  JTextField txtCMND, JTextField txtMaChuyen, JTextField txtSoGhe, JComboBox<String> cbLoaiVe,
                                   JComboBox<String> cbTrangThai, JTextField txtGiaMin, JTextField txtGiaMax) {
         
         // Reset text fields
@@ -375,9 +330,7 @@ public class VeDialogs {
         txtGiaMin.setText("");
         txtGiaMax.setText("");
         
-        // Reset combo boxes
-        cbDiemDi.setSelectedIndex(0);
-        cbDiemDen.setSelectedIndex(0);
+
         cbLoaiVe.setSelectedIndex(0);
         cbTrangThai.setSelectedIndex(0);
     }

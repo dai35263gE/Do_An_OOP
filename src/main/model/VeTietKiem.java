@@ -13,11 +13,14 @@ import java.util.Date;
 
 public class VeTietKiem extends VeMayBay {
     private boolean hanhLyXachTay; // tối đa 7kg
+
+    public static double hsg = 1.0;
     
     public VeTietKiem(String maKH,String maVe,Date ngayBay, double giaVe, String maChuyenBay, String soGhe,boolean hanhLyXachTay) {
         super(maKH,maVe, ngayBay, giaVe, maChuyenBay, soGhe);
         this.hanhLyXachTay = hanhLyXachTay; 
     }
+
     public VeTietKiem(String maKH,String maVe,Date ngayBay, double giaVe, String maChuyenBay, String soGhe,boolean hanhLyXachTay, String trangThai) {
         super(maKH,maVe, ngayBay, giaVe, maChuyenBay, soGhe);
         this.trangThai = trangThai;
@@ -25,8 +28,7 @@ public class VeTietKiem extends VeMayBay {
     
     @Override
     public double tinhThue() {
-        double giaSauGiam = giaVe * (1 - 0.1);
-        return giaSauGiam * 0.05; // Thuế 5% trên giá sau giảm
+        return tinhTongTien() * VeMayBay.thue; 
     }
     
     @Override
@@ -35,15 +37,8 @@ public class VeTietKiem extends VeMayBay {
     }
     
     @Override
-    public String chiTietLoaiVe() {
-        return String.format("Hành lý xách tay: %s",
-                           hanhLyXachTay);
-    }
-    
-    @Override
     public double tinhTongTien() {
-        double giaSauGiam = giaVe * (1 - 0.1);
-        return giaSauGiam + tinhThue();
+        return giaVe*hsg;
     }
     
     // Getters and Setters

@@ -164,7 +164,7 @@ public class KhachHang extends NguoiDung {
             case HANG_PLATINUM: return 0.15;
             case HANG_GOLD: return 0.10;
             case HANG_SILVER: return 0.05;
-            default: return 0.02;
+            default: return 0;
         }
     }
     
@@ -321,7 +321,9 @@ public class KhachHang extends NguoiDung {
         );
     }
     // GETTERS AND SETTERS
-    public String getHangKhachHang() { return hangKhachHang; }
+    public String getHangKhachHang() {
+         return hangKhachHang; 
+    }
     public void setHangKhachHang(String hangKhachHang) { 
         if (!hangKhachHang.equals(HANG_BRONZE) && 
             !hangKhachHang.equals(HANG_SILVER) && 

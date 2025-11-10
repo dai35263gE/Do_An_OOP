@@ -11,7 +11,7 @@
         <TongTien>2500000.0</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2024-01-15 09:30:00</NgayLap>
-        <DanhSachMaVe/>
+        <DanhSachMaVe>VG001,VT004</DanhSachMaVe>
         <MaKH>KH001</MaKH>
         <NgaySinh>1990-05-15 00:00:00</NgaySinh>
         <DiaChi>Hà Nội</DiaChi>
@@ -32,7 +32,7 @@
         <TongTien>1800000.0</TongTien>
         <GioiTinh>Nữ</GioiTinh>
         <NgayLap>2024-01-16 14:20:00</NgayLap>
-        <DanhSachMaVe/>
+        <DanhSachMaVe>VG003,VT007</DanhSachMaVe>
         <MaKH>KH002</MaKH>
         <NgaySinh>1985-08-20 00:00:00</NgaySinh>
         <DiaChi>TP.HCM</DiaChi>
@@ -53,7 +53,7 @@
         <TongTien>3200000.0</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2024-01-17 10:15:00</NgayLap>
-        <DanhSachMaVe/>
+        <DanhSachMaVe>VG004,VP005</DanhSachMaVe>
         <MaKH>KH003</MaKH>
         <NgaySinh>1992-12-10 00:00:00</NgaySinh>
         <DiaChi>Đà Nẵng</DiaChi>
@@ -74,14 +74,14 @@
         <TongTien>1500000.0</TongTien>
         <GioiTinh>Nữ</GioiTinh>
         <NgayLap>2024-01-18 16:45:00</NgayLap>
-        <DanhSachMaVe/>
+        <DanhSachMaVe>VP006</DanhSachMaVe>
         <MaKH>KH004</MaKH>
         <NgaySinh>1988-03-25 00:00:00</NgaySinh>
         <DiaChi>Cần Thơ</DiaChi>
         <KhuyenMai>0.0</KhuyenMai>
         <HoTen>Phạm Thị Dung</HoTen>
         <MatKhau>password012</MatKhau>
-        <PhuongThucTT>CHƯA</PhuongThucTT>
+        <PhuongThucTT>NONE</PhuongThucTT>
         <CMND>001456789012</CMND>
     </HoaDon>
     <HoaDon>
@@ -95,7 +95,7 @@
         <TongTien>2800000.0</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2024-01-19 11:30:00</NgayLap>
-        <DanhSachMaVe/>
+        <DanhSachMaVe>VT007,VG003</DanhSachMaVe>
         <MaKH>KH005</MaKH>
         <NgaySinh>1995-07-18 00:00:00</NgaySinh>
         <DiaChi>Hải Phòng</DiaChi>
@@ -116,14 +116,14 @@
         <TongTien>1900000.0</TongTien>
         <GioiTinh>Nữ</GioiTinh>
         <NgayLap>2024-01-20 13:20:00</NgayLap>
-        <DanhSachMaVe/>
+        <DanhSachMaVe>VG006</DanhSachMaVe>
         <MaKH>KH006</MaKH>
         <NgaySinh>1993-09-05 00:00:00</NgaySinh>
         <DiaChi>Nha Trang</DiaChi>
         <KhuyenMai>0.0</KhuyenMai>
         <HoTen>Vũ Thị Phương</HoTen>
         <MatKhau>password678</MatKhau>
-        <PhuongThucTT>CHƯA</PhuongThucTT>
+        <PhuongThucTT>NONE</PhuongThucTT>
         <CMND>001678901234</CMND>
     </HoaDon>
     <HoaDon>
@@ -137,7 +137,7 @@
         <TongTien>4200000.0</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2024-01-21 15:10:00</NgayLap>
-        <DanhSachMaVe/>
+        <DanhSachMaVe>VP003,VG002,VP001</DanhSachMaVe>
         <MaKH>KH007</MaKH>
         <NgaySinh>1987-11-30 00:00:00</NgaySinh>
         <DiaChi>Vũng Tàu</DiaChi>
@@ -153,19 +153,19 @@
         <Thue>96000.0</Thue>
         <Email>maithihoa@email.com</Email>
         <ThanhTien>1246000.0</ThanhTien>
-        <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
+        <TrangThai>HỦY</TrangThai>
         <SoDT>0989012345</SoDT>
         <TongTien>1200000.0</TongTien>
         <GioiTinh>Nữ</GioiTinh>
         <NgayLap>2024-01-22 08:45:00</NgayLap>
-        <DanhSachMaVe/>
+        <DanhSachMaVe>VG005</DanhSachMaVe>
         <MaKH>KH008</MaKH>
         <NgaySinh>1991-04-12 00:00:00</NgaySinh>
         <DiaChi>Huế</DiaChi>
         <KhuyenMai>50000.0</KhuyenMai>
         <HoTen>Mai Thị Hoa</HoTen>
         <MatKhau>password234</MatKhau>
-        <PhuongThucTT>CHƯA</PhuongThucTT>
+        <PhuongThucTT>NONE</PhuongThucTT>
         <CMND>001890123456</CMND>
     </HoaDon>
     <HoaDon>
@@ -179,7 +179,7 @@
         <TongTien>3500000.0</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2024-01-23 17:30:00</NgayLap>
-        <DanhSachMaVe/>
+        <DanhSachMaVe>VG006,VP007</DanhSachMaVe>
         <MaKH>KH009</MaKH>
         <NgaySinh>1989-06-22 00:00:00</NgaySinh>
         <DiaChi>Quảng Ninh</DiaChi>
@@ -200,7 +200,7 @@
         <TongTien>2000000.0</TongTien>
         <GioiTinh>Nữ</GioiTinh>
         <NgayLap>2024-01-24 12:00:00</NgayLap>
-        <DanhSachMaVe/>
+        <DanhSachMaVe>VT003</DanhSachMaVe>
         <MaKH>KH010</MaKH>
         <NgaySinh>1994-02-14 00:00:00</NgaySinh>
         <DiaChi>Bình Dương</DiaChi>
@@ -211,21 +211,42 @@
         <CMND>001012345678</CMND>
     </HoaDon>
     <HoaDon>
-        <MaHoaDon>HD020</MaHoaDon>
+        <MaHoaDon>HD011</MaHoaDon>
         <TenDangNhap>nguyenvanan</TenDangNhap>
-        <Thue>120692.1875</Thue>
+        <Thue>33900.0</Thue>
         <Email>nguyen.van.an@email.com</Email>
-        <ThanhTien>2263598.4375</ThanhTien>
+        <ThanhTien>3168900.0</ThanhTien>
         <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
         <SoDT>0912345678</SoDT>
-        <TongTien>2413843.75</TongTien>
+        <TongTien>3390000.0</TongTien>
         <GioiTinh>Nam</GioiTinh>
-        <NgayLap>2025-11-11 01:03:30</NgayLap>
-        <DanhSachMaVe/>
+        <NgayLap>2025-11-11 05:42:30</NgayLap>
+        <DanhSachMaVe>VG021</DanhSachMaVe>
         <MaKH>KH001</MaKH>
         <NgaySinh>1985-05-15 00:00:00</NgaySinh>
         <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
-        <KhuyenMai>270937.5</KhuyenMai>
+        <KhuyenMai>255000.0</KhuyenMai>
+        <HoTen>Nguyễn Văn An</HoTen>
+        <MatKhau>0000</MatKhau>
+        <PhuongThucTT>TIỀN_MẶT</PhuongThucTT>
+        <CMND>123456789123</CMND>
+    </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD012</MaHoaDon>
+        <TenDangNhap>nguyenvanan</TenDangNhap>
+        <Thue>13413.6</Thue>
+        <Email>nguyen.van.an@email.com</Email>
+        <ThanhTien>1230573.6</ThanhTien>
+        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+        <SoDT>0912345678</SoDT>
+        <TongTien>1341360.0</TongTien>
+        <GioiTinh>Nam</GioiTinh>
+        <NgayLap>2025-11-11 05:52:47</NgayLap>
+        <DanhSachMaVe>VP022</DanhSachMaVe>
+        <MaKH>KH001</MaKH>
+        <NgaySinh>1985-05-15 00:00:00</NgaySinh>
+        <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
+        <KhuyenMai>124200.0</KhuyenMai>
         <HoTen>Nguyễn Văn An</HoTen>
         <MatKhau>0000</MatKhau>
         <PhuongThucTT>THẺ_TÍN_DỤNG</PhuongThucTT>

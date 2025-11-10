@@ -344,7 +344,7 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
       HoaDon hoaDon = new HoaDon(maHoaDon, ngayLap, khachHang, tongTien, thue, khuyenMai, phuongThucTT, trangThai,
           DSVe);
 
-      // Đảm bảo thành tiền tính đúng
+
       hoaDon.setThanhTien(thanhTien);
 
       return hoaDon;

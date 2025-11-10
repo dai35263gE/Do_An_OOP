@@ -41,6 +41,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerDateModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
@@ -79,7 +80,7 @@ public class UsersGUI extends JFrame {
   // Tab Vé của tôi
   private JTable tableVeCuaToi;
   private DefaultTableModel modelVeCuaToi;
-  private JButton btnXemHoaDon, btnHuyVe, btnXemChiTietVe;
+  private JButton btnHuyVe, btnXemChiTietVe;
 
   // Tab Lịch sử
   private JTable tableLichSu;
@@ -237,11 +238,9 @@ public class UsersGUI extends JFrame {
     // Panel button
     JPanel panelButton = new JPanel(new FlowLayout());
     btnXemChiTietVe = new JButton("Xem Chi Tiết Vé");
-    btnXemHoaDon = new JButton("Xem Hóa Đơn");
     btnHuyVe = new JButton("Hủy Vé");
 
     panelButton.add(btnXemChiTietVe);
-    panelButton.add(btnXemHoaDon);
     panelButton.add(btnHuyVe);
 
     panel.add(new JLabel("Vé đang có:"), BorderLayout.NORTH);
@@ -321,7 +320,7 @@ private void xemChiTietHoaDon() {
         
         sb.append("\n=== THÔNG TIN THANH TOÁN ===\n");
         sb.append("Tổng tiền: ").append(String.format("%,d VND", (int) hoaDon.getTongTien())).append("\n");
-        sb.append("Giảm giá: ").append(String.format("%,d VND", (int) hoaDon.getKhuyenMai())).append("\n");
+
         sb.append("Thuế/VAT: ").append(String.format("%,d VND", (int) hoaDon.getThue())).append("\n");
         sb.append("Thành tiền: ").append(String.format("%,d VND", (int) hoaDon.getThanhTien())).append("\n");
         sb.append("Phương thức TT: ").append(chuyenPhuongThucTTSangText(hoaDon.getPhuongThucTT())).append("\n");
@@ -338,6 +337,8 @@ private void xemChiTietHoaDon() {
     }
 }
 
+
+// ========== PHƯƠNG THỨC THANH TOÁN HÓA ĐƠN
 // ========== PHƯƠNG THỨC THANH TOÁN HÓA ĐƠN ==========
 private void thanhToanHoaDon() {
     int row = tableLichSu.getSelectedRow();
@@ -365,27 +366,69 @@ private void thanhToanHoaDon() {
         return;
     }
 
-    // Hiển thị dialog chọn phương thức thanh toán
-    String[] ptOptions = { "Tiền mặt", "Chuyển khoản", "Thẻ tín dụng", "Ví điện tử" };
-    String phuongThucTT = (String) JOptionPane.showInputDialog(
-            this,
-            "Chọn phương thức thanh toán cho hóa đơn " + maHoaDon,
-            "Phương Thức Thanh Toán",
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            ptOptions,
-            ptOptions[0]);
+    // Hiển thị dialog chọn phương thức thanh toán và sử dụng điểm
+    JPanel panelThanhToan = new JPanel(new GridLayout(4, 2, 10, 10));
+    panelThanhToan.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-    if (phuongThucTT == null) {
+    String[] ptOptions = { "Tiền mặt", "Chuyển khoản", "Thẻ tín dụng", "Ví điện tử" };
+    JComboBox<String> cbPhuongThuc = new JComboBox<>(ptOptions);
+
+    // Thông tin thanh toán
+    double thanhTien = hoaDon.getThanhTien();
+    int diemTichLuyHienCo = khachHangDangNhap.getDiemTichLuy();
+    int diemToiDaDuocDung = (int) Math.min(diemTichLuyHienCo, thanhTien);
+    
+    // Sử dụng mảng để lưu giá trị diemSuDung (fix lỗi lambda)
+    final int[] diemSuDungArr = {0};
+
+    JLabel lblThanhTien = new JLabel(String.format("%,d VND", (int) thanhTien));
+    JLabel lblDiemHienCo = new JLabel(String.valueOf(diemTichLuyHienCo));
+    JSpinner spinnerDiemSuDung = new JSpinner(new SpinnerNumberModel(0, 0, diemToiDaDuocDung, 1));
+
+    // Cập nhật khi điểm sử dụng thay đổi
+    spinnerDiemSuDung.addChangeListener(e -> {
+        int diemSuDung = (int) spinnerDiemSuDung.getValue();
+        diemSuDungArr[0] = diemSuDung; // Lưu giá trị vào mảng
+    });
+
+    panelThanhToan.add(new JLabel("Tổng tiền:"));
+    panelThanhToan.add(lblThanhTien);
+    panelThanhToan.add(new JLabel("Điểm tích lũy hiện có:"));
+    panelThanhToan.add(lblDiemHienCo);
+    panelThanhToan.add(new JLabel("Sử dụng điểm (tối đa " + diemToiDaDuocDung + " điểm):"));
+    panelThanhToan.add(spinnerDiemSuDung);
+    panelThanhToan.add(new JLabel("Phương thức thanh toán:"));
+    panelThanhToan.add(cbPhuongThuc);
+
+    int result = JOptionPane.showConfirmDialog(
+            this,
+            panelThanhToan,
+            "Thanh Toán Hóa Đơn " + maHoaDon,
+            JOptionPane.OK_CANCEL_OPTION,
+            JOptionPane.PLAIN_MESSAGE);
+
+    if (result != JOptionPane.OK_OPTION) {
         return; // Hủy
     }
+
+    String phuongThucTT = (String) cbPhuongThuc.getSelectedItem();
+    int diemSuDung = diemSuDungArr[0]; // Lấy giá trị cuối cùng từ mảng
+
+    // Tính toán số tiền thực tế
+    double tienGiamTuDiem = diemSuDung;
+    double thanhTienThucTe = thanhTien - tienGiamTuDiem;
 
     // Xác nhận thanh toán
     int confirm = JOptionPane.showConfirmDialog(
             this,
-            "Bạn có chắc chắn muốn thanh toán hóa đơn " + maHoaDon + "?\n" +
-                    "Phương thức thanh toán: " + phuongThucTT + "\n" +
-                    "Số tiền: " + String.format("%,d VND", (int) hoaDon.getThanhTien()),
+            "XÁC NHẬN THANH TOÁN\n\n" +
+                    "Mã hóa đơn: " + maHoaDon + "\n" +
+                    "Tổng tiền: " + String.format("%,d VND", (int) thanhTien) + "\n" +
+                    "Sử dụng điểm: " + diemSuDung + " điểm\n" +
+                    "Giảm giá từ điểm: " + String.format("%,d VND", (int) tienGiamTuDiem) + "\n" +
+                    "Thành tiền: " + String.format("%,d VND", (int) thanhTienThucTe) + "\n" +
+                    "Phương thức: " + phuongThucTT + "\n\n" +
+                    "Bạn có chắc chắn muốn thanh toán?",
             "Xác Nhận Thanh Toán",
             JOptionPane.YES_NO_OPTION);
 
@@ -399,9 +442,24 @@ private void thanhToanHoaDon() {
         hoaDon.setPhuongThucTT(chuyenPhuongThucTextSangMa(phuongThucTT));
         hoaDon.setNgayLap(new Date());
 
+        // Trừ điểm tích lũy nếu có sử dụng
+        if (diemSuDung > 0) {
+            khachHangDangNhap.setDiemTichLuy(khachHangDangNhap.getDiemTichLuy() - diemSuDung);
+        }
+
+        // Cộng điểm tích lũy mới từ hóa đơn này (trừ phần đã dùng điểm)
+        if (thanhTienThucTe > 0) {
+            int diemThuongMoi = (int) (thanhTienThucTe / 1000); // 1 điểm cho mỗi 100,000 VND
+            khachHangDangNhap.tangDiemTichLuy(diemThuongMoi);
+        }
+
         // Cập nhật trạng thái các vé trong hóa đơn
-        for (VeMayBay ve : hoaDon.getDanhSachVe()) {
-            ve.setTrangThai(VeMayBay.TRANG_THAI_DA_THANH_TOAN);
+        for (VeMayBay ve1 : hoaDon.getDanhSachVe()) {
+            for(VeMayBay ve2 : quanLy.getDsVe().getDanhSach()){
+                if(ve1.getMaVe().equals(ve2.getMaVe())){
+                    ve2.setTrangThai(VeMayBay.TRANG_THAI_DA_THANH_TOAN);
+                }
+            }
         }
 
         // Lưu dữ liệu
@@ -410,9 +468,30 @@ private void thanhToanHoaDon() {
         // Cập nhật giao diện
         taiLichSu();
         taiVeCuaToi();
+        capNhatThongTinCaNhan();
+
+        // Hiển thị thông báo thành công
+        StringBuilder message = new StringBuilder();
+        message.append("Thanh toán hóa đơn thành công!\n\n");
+        message.append("Mã hóa đơn: ").append(maHoaDon).append("\n");
+        message.append("Tổng tiền: ").append(String.format("%,d VND", (int) thanhTien)).append("\n");
+        
+        if (diemSuDung > 0) {
+            message.append("Đã sử dụng: ").append(diemSuDung).append(" điểm\n");
+            message.append("Giảm giá từ điểm: ").append(String.format("%,d VND", (int) tienGiamTuDiem)).append("\n");
+            message.append("Điểm còn lại: ").append(khachHangDangNhap.getDiemTichLuy()).append(" điểm\n");
+        }
+        
+        if (thanhTienThucTe > 0) {
+            int diemThuongMoi = (int) (thanhTienThucTe / 1000);
+            message.append("Điểm tích lũy nhận được: ").append(diemThuongMoi).append(" điểm\n");
+        }
+        
+        message.append("Thành tiền: ").append(String.format("%,d VND", (int) thanhTienThucTe)).append("\n");
+        message.append("Phương thức: ").append(phuongThucTT);
 
         JOptionPane.showMessageDialog(this, 
-            "Thanh toán hóa đơn thành công!\nMã hóa đơn: " + maHoaDon, 
+            message.toString(), 
             "Thành Công", 
             JOptionPane.INFORMATION_MESSAGE);
 
@@ -424,7 +503,6 @@ private void thanhToanHoaDon() {
         e.printStackTrace();
     }
 }
-
 // ========== PHƯƠNG THỨC HỦY HÓA ĐƠN ==========
 private void huyHoaDon() {
     int row = tableLichSu.getSelectedRow();
@@ -524,7 +602,7 @@ private String chuyenPhuongThucTextSangMa(String phuongThucText) {
         case "Ví điện tử":
             return HoaDon.PT_VI_DIEN_TU;
         default:
-            return HoaDon.PT_CHUYEN_KHOAN;
+            return HoaDon.PT_NONE;
     }
 }
 
@@ -778,7 +856,6 @@ private String chuyenPhuongThucTextSangMa(String phuongThucText) {
 
     // Tab Vé của tôi
     btnXemChiTietVe.addActionListener(e -> xemChiTietVe());
-    btnXemHoaDon.addActionListener(e -> xemHoaDon());
     btnHuyVe.addActionListener(e -> huyVe());
 
     // Tab Thông tin
@@ -955,8 +1032,8 @@ private String chuyenPhuongThucTextSangMa(String phuongThucText) {
     try {
       List<VeMayBay> dsVeHoaDon = new ArrayList<>();
       dsVeHoaDon.add(ve);
-      String maHoaDon = "HD" + String.format("%03d", quanLy.getDsHoaDon().getDanhSach().size());
-      HoaDon hoaDon = new HoaDon(maHoaDon, khachHangDangNhap, dsVeHoaDon, giamGia, HoaDon.PT_CHUYEN_KHOAN);
+      String maHoaDon = "HD" + String.format("%03d", quanLy.getDsHoaDon().demSoLuong()+1);
+      HoaDon hoaDon = new HoaDon(maHoaDon, khachHangDangNhap, dsVeHoaDon, giamGia, HoaDon.PT_NONE);
       dsHoaDon.them(hoaDon);
       return true;
     } catch (Exception e) {
@@ -976,7 +1053,7 @@ private String chuyenPhuongThucTextSangMa(String phuongThucText) {
 
   private void hienThiThongBaoThanhCong(VeMayBay ve, ChuyenBay chuyenBay) {
     double giamGia = khachHangDangNhap.tinhMucGiamGia(ve.getGiaVe());
-    int diemThuong = (int) ((ve.getGiaVe() - giamGia) / 100000);
+    int diemThuong = (int) ((ve.getGiaVe() - giamGia) / 1000);
 
     String message = String.format(
         "Đặt vé thành công!\n\n" +
@@ -1159,6 +1236,8 @@ private String chuyenPhuongThucTextSangMa(String phuongThucText) {
           cbDichVu2.addItem("Champagne");
           cbDichVu2.addItem("Cocktail đặc biệt");
           cbHanhLy.addItem("20kg miễn phí");
+          cbHanhLy.addItem("30kg");
+          cbHanhLy.addItem("40kg");
           break;
 
         case "PHỔ THÔNG":
@@ -1171,6 +1250,7 @@ private String chuyenPhuongThucTextSangMa(String phuongThucText) {
           cbDichVu2.addItem("Không ăn uống");
           cbDichVu2.addItem("Set ăn phổ thông");
           cbHanhLy.addItem("7kg xách tay");
+          cbHanhLy.addItem("10kg miễn phí");
           cbHanhLy.addItem("15kg ký gửi");
           cbHanhLy.addItem("20kg ký gửi");
           cbHanhLy.addItem("25kg ký gửi");
@@ -1202,31 +1282,26 @@ private String chuyenPhuongThucTextSangMa(String phuongThucText) {
       // Tính hệ số giá theo loại vé
       switch (loaiVe) {
         case "THƯƠNG GIA":
-          heSoGia = 2.0;
+          heSoGia = VeThuongGia.hsg;
           phuThu = 500000;
-          String loaiGheTG = (String) cbLoaiGhe.getSelectedItem();
-          if ("Giường nằm".equals(loaiGheTG))
-            heSoGia += 0.5;
-          if ("Suite".equals(loaiGheTG))
-            heSoGia += 1.0;
           // Thêm phí hành lý
           String hanhLyTG = (String) cbHanhLy.getSelectedItem();
-          if ("30kg (thêm 200,000 VND)".equals(hanhLyTG))
-            phiHanhLy = 200000;
-          if ("40kg (thêm 400,000 VND)".equals(hanhLyTG))
-            phiHanhLy = 400000;
+          if ("30kg".equals(hanhLyTG))
+            phiHanhLy = VeMayBay.feeHL*(30-20);
+          if ("40kg ".equals(hanhLyTG))
+            phiHanhLy = VeMayBay.feeHL*(40-20);
           break;
 
         case "PHỔ THÔNG":
-          heSoGia = 1.2;
+          heSoGia = VePhoThong.hsg;
           // Thêm phí hành lý
           String hanhLyPT = (String) cbHanhLy.getSelectedItem();
           if ("15kg ký gửi".equals(hanhLyPT))
-            phiHanhLy = 200000;
+            phiHanhLy = VeMayBay.feeHL*(15-10);
           if ("20kg ký gửi".equals(hanhLyPT))
-            phiHanhLy = 300000;
+            phiHanhLy = VeMayBay.feeHL*(20-10);
           if ("25kg ký gửi".equals(hanhLyPT))
-            phiHanhLy = 400000;
+            phiHanhLy = VeMayBay.feeHL*(25-10);
           // Thêm phí ăn uống
           String anUongPT = (String) cbDichVu2.getSelectedItem();
           if ("Có".equals(anUongPT))
@@ -1236,17 +1311,8 @@ private String chuyenPhuongThucTextSangMa(String phuongThucText) {
           break;
 
         case "TIẾT KIỆM":
-          heSoGia = 0.9;
+          heSoGia = VeTietKiem.hsg;
           phuThu = 100000;
-          // Điều chỉnh theo loại vé TK
-          String loaiVeTK = (String) cbLoaiGhe.getSelectedItem();
-          if ("Tiết kiệm linh hoạt".equals(loaiVeTK)) {
-            heSoGia = 0.85;
-            phuThu = 150000;
-          } else if ("Tiết kiệm siêu rẻ".equals(loaiVeTK)) {
-            heSoGia = 0.8;
-            phuThu = 200000;
-          }
           // Thêm phí hành lý
           String hanhLyTK = (String) cbHanhLy.getSelectedItem();
           if ("7kg xách tay".equals(hanhLyTK))
@@ -1308,7 +1374,7 @@ private String chuyenPhuongThucTextSangMa(String phuongThucText) {
           veResult[0] = new VePhoThong(
               khachHangDangNhap.getMa(), maVe1, new Date(), tongGia,
               chuyenBay.getMaChuyen(), soGhe, coAnUong,
-              7, viTriGhe, true);
+              7, viTriGhe, true,VeMayBay.TRANG_THAI_DA_DAT);
           break;
 
         case "TIẾT KIỆM":
@@ -1346,23 +1412,6 @@ private String chuyenPhuongThucTextSangMa(String phuongThucText) {
     dialog.setVisible(true);
     return veResult[0];
   }
-
-  private String generateSoGhe(String loaiVe, int soGheTrong) {
-    String prefix = "";
-    switch (loaiVe) {
-      case "THƯƠNG GIA":
-        prefix = "VG0";
-        break;
-      case "PHỔ THÔNG":
-        prefix = "VP0";
-        break;
-      case "TIẾT KIỆM":
-        prefix = "VT0";
-        break;
-    }
-    return prefix + "67";
-  }
-
   private String getTenLoaiVe(VeMayBay ve) {
     if (ve instanceof VeThuongGia)
       return "Thương gia";
@@ -1622,37 +1671,6 @@ private String chuyenPhuongThucTextSangMa(String phuongThucText) {
     }
   }
 
-  private void xemHoaDon() {
-    int row = tableVeCuaToi.getSelectedRow();
-    if (row < 0) {
-      JOptionPane.showMessageDialog(this, "Vui lòng chọn một vé!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-      return;
-    }
-
-    String maVe = (String) modelVeCuaToi.getValueAt(row, 0);
-
-    // Tìm hóa đơn tương ứng
-    List<HoaDon> hoaDonList = khachHangDangNhap.getLichSuHoaDon();
-    for (HoaDon hd : hoaDonList) {
-      // Hiển thị thông tin hóa đơn
-      StringBuilder sb = new StringBuilder();
-      sb.append("=== HÓA ĐƠN ===\n\n");
-      sb.append("Mã hóa đơn: ").append(hd.getMaHoaDon()).append("\n");
-      sb.append("Ngày lập: ").append(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(hd.getNgayLap()))
-          .append("\n");
-      sb.append("Khách hàng: ").append(khachHangDangNhap.getHoTen()).append("\n");
-      sb.append("Tổng tiền: ").append(String.format("%,d VND", (int) hd.getTongTien())).append("\n");
-      sb.append("Giảm giá: ").append(String.format("%,d VND", (int) hd.getKhuyenMai())).append("\n");
-      sb.append("Phí dịch vụ: ").append(String.format("%,d VND", (int) hd.getThue())).append("\n");
-      sb.append("Thành tiền: ").append(String.format("%,d VND", (int) hd.getThanhTien())).append("\n");
-      sb.append("Trạng thái: ").append(hd.getTrangThai()).append("\n");
-
-      JTextArea textArea = new JTextArea(sb.toString());
-      textArea.setEditable(false);
-      JOptionPane.showMessageDialog(this, new JScrollPane(textArea), "Hóa Đơn", JOptionPane.INFORMATION_MESSAGE);
-      break;
-    }
-  }
 
   private void huyVe() {
     int row = tableVeCuaToi.getSelectedRow();

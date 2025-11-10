@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <KhachHangs>
     <KhachHang>
-        <HangKhachHang>PLATINUM</HangKhachHang>
+        <HangKhachHang>GOLD</HangKhachHang>
         <TenDangNhap>nguyenvanan</TenDangNhap>
         <Email>nguyen.van.an@email.com</Email>
         <SoDT>0912345678</SoDT>
         <GioiTinh>Nam</GioiTinh>
-        <DiemTichLuy>15360</DiemTichLuy>
+        <DiemTichLuy>6890</DiemTichLuy>
         <NgayDangKy>2022-01-10 00:00:00</NgayDangKy>
         <MaKH>KH001</MaKH>
         <NgaySinh>1985-05-15 00:00:00</NgaySinh>
@@ -17,26 +17,11 @@
     </KhachHang>
     <KhachHang>
         <HangKhachHang>PLATINUM</HangKhachHang>
-        <TenDangNhap>tranthibinh</TenDangNhap>
-        <Email>tran.thi.binh@email.com</Email>
-        <SoDT>0923456789</SoDT>
-        <GioiTinh>Nữ</GioiTinh>
-        <DiemTichLuy>13460</DiemTichLuy>
-        <NgayDangKy>2022-03-15 00:00:00</NgayDangKy>
-        <MaKH>KH002</MaKH>
-        <NgaySinh>1988-08-20 00:00:00</NgaySinh>
-        <DiaChi>456 Lê Lợi, Quận Hoàn Kiếm, Hà Nội</DiaChi>
-        <HoTen>Trần Thị Bình</HoTen>
-        <MatKhau>0000</MatKhau>
-        <CMND>001234567890</CMND>
-    </KhachHang>
-    <KhachHang>
-        <HangKhachHang>GOLD</HangKhachHang>
         <TenDangNhap>levancuong</TenDangNhap>
         <Email>le.van.cuong@email.com</Email>
         <SoDT>0934567890</SoDT>
         <GioiTinh>Nam</GioiTinh>
-        <DiemTichLuy>8200</DiemTichLuy>
+        <DiemTichLuy>82000</DiemTichLuy>
         <NgayDangKy>2023-01-20 00:00:00</NgayDangKy>
         <MaKH>KH003</MaKH>
         <NgaySinh>1990-12-10 00:00:00</NgaySinh>
@@ -46,12 +31,12 @@
         <CMND>001345678901</CMND>
     </KhachHang>
     <KhachHang>
-        <HangKhachHang>GOLD</HangKhachHang>
+        <HangKhachHang>PLATINUM</HangKhachHang>
         <TenDangNhap>phamthidung</TenDangNhap>
         <Email>pham.thi.dung@email.com</Email>
         <SoDT>0945678901</SoDT>
         <GioiTinh>Nữ</GioiTinh>
-        <DiemTichLuy>7506</DiemTichLuy>
+        <DiemTichLuy>75060</DiemTichLuy>
         <NgayDangKy>2023-02-14 00:00:00</NgayDangKy>
         <MaKH>KH004</MaKH>
         <NgaySinh>1992-03-25 00:00:00</NgaySinh>
@@ -61,12 +46,12 @@
         <CMND>001456789012</CMND>
     </KhachHang>
     <KhachHang>
-        <HangKhachHang>GOLD</HangKhachHang>
+        <HangKhachHang>PLATINUM</HangKhachHang>
         <TenDangNhap>hoangvanem</TenDangNhap>
         <Email>hoang.van.em@email.com</Email>
         <SoDT>0956789012</SoDT>
         <GioiTinh>Nam</GioiTinh>
-        <DiemTichLuy>6800</DiemTichLuy>
+        <DiemTichLuy>68000</DiemTichLuy>
         <NgayDangKy>2023-03-10 00:00:00</NgayDangKy>
         <MaKH>KH005</MaKH>
         <NgaySinh>1987-11-08 00:00:00</NgaySinh>
@@ -76,12 +61,12 @@
         <CMND>001567890123</CMND>
     </KhachHang>
     <KhachHang>
-        <HangKhachHang>SILVER</HangKhachHang>
+        <HangKhachHang>PLATINUM</HangKhachHang>
         <TenDangNhap>vuthiphuong</TenDangNhap>
         <Email>vu.thi.phuong@email.com</Email>
         <SoDT>0967890123</SoDT>
         <GioiTinh>Nữ</GioiTinh>
-        <DiemTichLuy>4200</DiemTichLuy>
+        <DiemTichLuy>42000</DiemTichLuy>
         <NgayDangKy>2023-04-05 00:00:00</NgayDangKy>
         <MaKH>KH006</MaKH>
         <NgaySinh>1993-07-12 00:00:00</NgaySinh>
@@ -91,12 +76,12 @@
         <CMND>001678901234</CMND>
     </KhachHang>
     <KhachHang>
-        <HangKhachHang>SILVER</HangKhachHang>
+        <HangKhachHang>PLATINUM</HangKhachHang>
         <TenDangNhap>dangvanquan</TenDangNhap>
         <Email>dang.van.quan@email.com</Email>
         <SoDT>0978901234</SoDT>
         <GioiTinh>Nam</GioiTinh>
-        <DiemTichLuy>3800</DiemTichLuy>
+        <DiemTichLuy>38000</DiemTichLuy>
         <NgayDangKy>2023-05-20 00:00:00</NgayDangKy>
         <MaKH>KH007</MaKH>
         <NgaySinh>1991-04-18 00:00:00</NgaySinh>
@@ -106,12 +91,12 @@
         <CMND>001789012345</CMND>
     </KhachHang>
     <KhachHang>
-        <HangKhachHang>SILVER</HangKhachHang>
+        <HangKhachHang>PLATINUM</HangKhachHang>
         <TenDangNhap>buithihuong</TenDangNhap>
         <Email>bui.thi.huong@email.com</Email>
         <SoDT>0989012345</SoDT>
         <GioiTinh>Nữ</GioiTinh>
-        <DiemTichLuy>2900</DiemTichLuy>
+        <DiemTichLuy>29000</DiemTichLuy>
         <NgayDangKy>2023-06-15 00:00:00</NgayDangKy>
         <MaKH>KH008</MaKH>
         <NgaySinh>1994-09-30 00:00:00</NgaySinh>
@@ -121,12 +106,12 @@
         <CMND>001890123456</CMND>
     </KhachHang>
     <KhachHang>
-        <HangKhachHang>SILVER</HangKhachHang>
+        <HangKhachHang>PLATINUM</HangKhachHang>
         <TenDangNhap>ngovanhai</TenDangNhap>
         <Email>ngo.van.hai@email.com</Email>
         <SoDT>0990123456</SoDT>
         <GioiTinh>Nam</GioiTinh>
-        <DiemTichLuy>1800</DiemTichLuy>
+        <DiemTichLuy>18000</DiemTichLuy>
         <NgayDangKy>2023-07-22 00:00:00</NgayDangKy>
         <MaKH>KH009</MaKH>
         <NgaySinh>1995-02-14 00:00:00</NgaySinh>
@@ -136,12 +121,12 @@
         <CMND>001901234567</CMND>
     </KhachHang>
     <KhachHang>
-        <HangKhachHang>SILVER</HangKhachHang>
+        <HangKhachHang>PLATINUM</HangKhachHang>
         <TenDangNhap>dothilan</TenDangNhap>
         <Email>do.thi.lan@email.com</Email>
         <SoDT>0911123456</SoDT>
         <GioiTinh>Nữ</GioiTinh>
-        <DiemTichLuy>1500</DiemTichLuy>
+        <DiemTichLuy>15000</DiemTichLuy>
         <NgayDangKy>2023-08-30 00:00:00</NgayDangKy>
         <MaKH>KH010</MaKH>
         <NgaySinh>1996-06-08 00:00:00</NgaySinh>
@@ -151,12 +136,12 @@
         <CMND>002012345678</CMND>
     </KhachHang>
     <KhachHang>
-        <HangKhachHang>GOLD</HangKhachHang>
+        <HangKhachHang>PLATINUM</HangKhachHang>
         <TenDangNhap>maivantu</TenDangNhap>
         <Email>mai.van.tu@email.com</Email>
         <SoDT>0912234567</SoDT>
         <GioiTinh>Nam</GioiTinh>
-        <DiemTichLuy>6100</DiemTichLuy>
+        <DiemTichLuy>61000</DiemTichLuy>
         <NgayDangKy>2023-09-12 00:00:00</NgayDangKy>
         <MaKH>KH011</MaKH>
         <NgaySinh>1989-11-25 00:00:00</NgaySinh>
@@ -166,12 +151,12 @@
         <CMND>002123456789</CMND>
     </KhachHang>
     <KhachHang>
-        <HangKhachHang>SILVER</HangKhachHang>
+        <HangKhachHang>PLATINUM</HangKhachHang>
         <TenDangNhap>lythimai</TenDangNhap>
         <Email>ly.thi.mai@email.com</Email>
         <SoDT>0913345678</SoDT>
         <GioiTinh>Nữ</GioiTinh>
-        <DiemTichLuy>3300</DiemTichLuy>
+        <DiemTichLuy>33000</DiemTichLuy>
         <NgayDangKy>2023-10-05 00:00:00</NgayDangKy>
         <MaKH>KH012</MaKH>
         <NgaySinh>1990-03-17 00:00:00</NgaySinh>
@@ -186,7 +171,7 @@
         <Email>vo.van.nam@email.com</Email>
         <SoDT>0914456789</SoDT>
         <GioiTinh>Nam</GioiTinh>
-        <DiemTichLuy>11200</DiemTichLuy>
+        <DiemTichLuy>112000</DiemTichLuy>
         <NgayDangKy>2022-11-18 00:00:00</NgayDangKy>
         <MaKH>KH013</MaKH>
         <NgaySinh>1986-08-22 00:00:00</NgaySinh>
@@ -196,12 +181,12 @@
         <CMND>002345678901</CMND>
     </KhachHang>
     <KhachHang>
-        <HangKhachHang>SILVER</HangKhachHang>
+        <HangKhachHang>BRONZE</HangKhachHang>
         <TenDangNhap>truongthinga</TenDangNhap>
         <Email>truong.thi.nga@email.com</Email>
         <SoDT>0915567890</SoDT>
         <GioiTinh>Nữ</GioiTinh>
-        <DiemTichLuy>2700</DiemTichLuy>
+        <DiemTichLuy>0</DiemTichLuy>
         <NgayDangKy>2023-11-25 00:00:00</NgayDangKy>
         <MaKH>KH014</MaKH>
         <NgaySinh>1993-12-03 00:00:00</NgaySinh>
@@ -209,5 +194,20 @@
         <HoTen>Trương Thị Nga</HoTen>
         <MatKhau>0000s</MatKhau>
         <CMND>002456789012</CMND>
+    </KhachHang>
+    <KhachHang>
+        <HangKhachHang>PLATINUM</HangKhachHang>
+        <TenDangNhap>tranthibinh</TenDangNhap>
+        <Email>tran.thi.binh@email.com</Email>
+        <SoDT>0923456789</SoDT>
+        <GioiTinh>Nữ</GioiTinh>
+        <DiemTichLuy>130460</DiemTichLuy>
+        <NgayDangKy>2022-03-15 00:00:00</NgayDangKy>
+        <MaKH>KH002</MaKH>
+        <NgaySinh>1988-08-20 00:00:00</NgaySinh>
+        <DiaChi>456 Lê Lợi, Quận Hoàn Kiếm, Hà Nội</DiaChi>
+        <HoTen>Trần Thị Bình</HoTen>
+        <MatKhau>0000</MatKhau>
+        <CMND>001234567890</CMND>
     </KhachHang>
 </KhachHangs>

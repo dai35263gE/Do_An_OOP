@@ -19,6 +19,8 @@ public class VeThuongGia extends VeMayBay {
     private String loaiDoUong;
 
     public static final int SO_KG_MIEN_PHI= 20;
+
+    public static double hsg = 2.0;
     
     public VeThuongGia(String maKH,String maVe, Date ngayBay, double giaVe, String maChuyen, String soGhe,String dichVuDacBiet, double phuThu,boolean phongChoVIP,double SoKgHanhLyKyGui, String loaiDoUong) {
         super( maKH,maVe, ngayBay, giaVe, maChuyen, soGhe);
@@ -40,7 +42,7 @@ public class VeThuongGia extends VeMayBay {
     
     @Override
     public double tinhThue() {
-        return (giaVe * 0.1) + (phuThu * 0.05) + 200000; // VAT 10% + thuế dịch vụ
+        return tinhTongTien()*VeMayBay.thue; // VAT 10% + thuế dịch vụ
     }
     
     @Override
@@ -49,14 +51,8 @@ public class VeThuongGia extends VeMayBay {
     }
     
     @Override
-    public String chiTietLoaiVe() {
-        return String.format("Dịch vụ: %s, Phụ thu: %.2f, Hành lý: %dkg, VIP: %b",
-                           dichVuDacBiet, phuThu, SoKgHanhLyKyGui, phongChoVIP);
-    }
-    
-    @Override
     public double tinhTongTien() {
-        return giaVe + phuThu + tinhThue();
+        return (giaVe*hsg + phuThu+getPhiHanhLy());
     }
     
     // Getters and Setters

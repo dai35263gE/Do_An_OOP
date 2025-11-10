@@ -15,10 +15,12 @@ import java.util.Date;
 public class VePhoThong extends VeMayBay {
     private boolean hanhLyXachTay;  // Tối đa 7kg
     private int soKgHanhLyKyGui;
-    private String loaiGhe; // Cửa sổ/ lối đi 
+    private String loaiGhe; // Cửa sổ/ lối đi /giữa
     private boolean doAn; 
 
     public static final int SO_KG_MIEN_PHI = 10;//kg
+
+    public static double hsg = 1.2;
     
     public VePhoThong(String maKH, String maVe, Date ngayBay, double giaVe, String maChuyen, String soGhe,boolean hanhLyXachTay, int soKgHanhLyKyGui, String loaiGhe, boolean doAn) {
         super(maKH, maVe, ngayBay, giaVe, maChuyen, soGhe);
@@ -38,11 +40,7 @@ public class VePhoThong extends VeMayBay {
     
     @Override
     public double tinhThue() {
-        double thue = giaVe * 0.08; // VAT 8%
-        if (soKgHanhLyKyGui > 0) {
-            thue += getPhiHanhLy() * 0.1; // Thuế hành lý 10%
-        }
-        return thue;
+        return tinhTongTien()*VeMayBay.thue;
     }
     
     @Override
@@ -50,15 +48,10 @@ public class VePhoThong extends VeMayBay {
         return "VePhoThong";
     }
     
-    @Override
-    public String chiTietLoaiVe() {
-        return String.format("Hành lý xách tay: %b, Ký gửi: %dkg, Loại ghế: %s, Đồ ăn: %b",
-                           hanhLyXachTay, soKgHanhLyKyGui, loaiGhe, doAn);
-    }
     
     @Override
     public double tinhTongTien() {
-        return giaVe + getPhiHanhLy() + tinhThue();
+        return (giaVe*hsg + getPhiHanhLy());
     }
     
     // Getters and Setters

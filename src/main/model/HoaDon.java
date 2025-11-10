@@ -7,7 +7,6 @@ package model;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
  *
@@ -46,10 +45,10 @@ public class HoaDon {
         setTongTien(tinhTongTien());
         setThue(tinhThue());
         setKhuyenMai(khuyenMai);
-        setPhuongThucTT(phuongThucTT);
-
-        this.thanhTien = tinhThanhTien();
         this.trangThai = TT_CHUA_TT;
+        setPhuongThucTT(phuongThucTT);
+        this.thanhTien = tinhThanhTien();
+        
     }
 
     // OVERLOAD CONSTRUCTOR - không có khuyến mãi
@@ -91,7 +90,7 @@ public class HoaDon {
     }
 
     public double tinhThue() {
-        return tongTien * 0.05; // Thuế 8%
+        return tongTien * 0.01;
     }
 
     public double tinhThanhTien() {
@@ -235,9 +234,11 @@ public class HoaDon {
         if (!phuongThucTT.equals(PT_TIEN_MAT) &&
                 !phuongThucTT.equals(PT_CHUYEN_KHOAN) &&
                 !phuongThucTT.equals(PT_THE) &&
-                !phuongThucTT.equals(PT_VI_DIEN_TU)) {
+                !phuongThucTT.equals(PT_VI_DIEN_TU) &&
+                !phuongThucTT.equals(PT_NONE)) {
             throw new IllegalArgumentException("Phương thức thanh toán không hợp lệ");
         }
+        if(this.getTrangThai().equals(TT_CHUA_TT) || this.getTrangThai().equals(TT_HUY)) this.phuongThucTT = PT_NONE;
         this.phuongThucTT = phuongThucTT;
     }
 
@@ -250,6 +251,7 @@ public class HoaDon {
                 !trangThai.equals(TT_HUY)) {
             throw new IllegalArgumentException("Trạng thái hóa đơn không hợp lệ");
         }
+
         this.trangThai = trangThai;
     }
 
