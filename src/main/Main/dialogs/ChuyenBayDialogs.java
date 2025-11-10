@@ -49,140 +49,141 @@ public class ChuyenBayDialogs {
 
   // ========== DIALOG THÊM CHUYẾN BAY ==========
   public void moDialogThemChuyenBay() {
-    JDialog dialog = new JDialog(mainGUI, "Thêm Chuyến Bay Mới", true);
-    dialog.setSize(650, 750);
-    dialog.setLocationRelativeTo(mainGUI);
-    dialog.setLayout(new BorderLayout(10, 10));
-    dialog.getContentPane().setBackground(new Color(245, 245, 245));
+    try {
+      System.out.println("Đang mở dialog thêm chuyến bay...");
+      JDialog dialog = new JDialog(mainGUI, "Thêm Chuyến Bay Mới", true);
+      dialog.setSize(600, 700);
+      dialog.setLocationRelativeTo(mainGUI);
+      dialog.setLayout(new BorderLayout(10, 10));
+      dialog.getContentPane().setBackground(new Color(245, 245, 245));
 
-    // Header
-    JPanel headerPanel = new JPanel(new BorderLayout());
-    headerPanel.setBackground(new Color(70, 130, 180));
-    headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+      // Header
+      JPanel headerPanel = new JPanel(new BorderLayout());
+      headerPanel.setBackground(new Color(70, 130, 180));
+      headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
 
-    JLabel lblTitle = new JLabel("THÊM CHUYẾN BAY MỚI");
-    lblTitle.setFont(new Font("Arial", Font.BOLD, 18));
-    lblTitle.setForeground(Color.WHITE);
-    headerPanel.add(lblTitle, BorderLayout.WEST);
+      JLabel lblTitle = new JLabel("THÊM CHUYẾN BAY MỚI");
+      lblTitle.setFont(new Font("Arial", Font.BOLD, 18));
+      lblTitle.setForeground(Color.WHITE);
+      headerPanel.add(lblTitle, BorderLayout.WEST);
 
-    JLabel lblSubTitle = new JLabel("Điền đầy đủ thông tin bên dưới");
-    lblSubTitle.setFont(new Font("Arial", Font.PLAIN, 12));
-    lblSubTitle.setForeground(new Color(200, 220, 240));
-    headerPanel.add(lblSubTitle, BorderLayout.EAST);
+      JLabel lblSubTitle = new JLabel("Điền đầy đủ thông tin bên dưới");
+      lblSubTitle.setFont(new Font("Arial", Font.PLAIN, 12));
+      lblSubTitle.setForeground(new Color(200, 220, 240));
+      headerPanel.add(lblSubTitle, BorderLayout.EAST);
 
-    // Main content panel
-    JPanel mainContent = new JPanel(new BorderLayout(10, 10));
-    mainContent.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-    mainContent.setBackground(Color.WHITE);
+      // Main content panel
+      JPanel mainContent = new JPanel(new BorderLayout(10, 10));
+      mainContent.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+      mainContent.setBackground(Color.WHITE);
 
-    JPanel formPanel = new JPanel(new GridBagLayout());
-    formPanel.setBackground(Color.WHITE);
-    formPanel.setBorder(BorderFactory.createTitledBorder(
-        BorderFactory.createLineBorder(new Color(200, 220, 240), 1),
-        "THÔNG TIN CHUYẾN BAY",
-        TitledBorder.LEFT,
-        TitledBorder.TOP,
-        new Font("Arial", Font.BOLD, 12),
-        new Color(70, 130, 180)));
+      JPanel formPanel = new JPanel(new GridBagLayout());
+      formPanel.setBackground(Color.WHITE);
+      formPanel.setBorder(BorderFactory.createTitledBorder(
+          BorderFactory.createLineBorder(new Color(200, 220, 240), 1),
+          "THÔNG TIN CHUYẾN BAY",
+          TitledBorder.LEFT,
+          TitledBorder.TOP,
+          new Font("Arial", Font.BOLD, 12),
+          new Color(70, 130, 180)));
 
-    GridBagConstraints gbc = new GridBagConstraints();
-    gbc.fill = GridBagConstraints.HORIZONTAL;
-    gbc.insets = new Insets(8, 8, 8, 8);
-    gbc.gridx = 0;
-    gbc.gridy = 0;
+      GridBagConstraints gbc = new GridBagConstraints();
+      gbc.fill = GridBagConstraints.HORIZONTAL;
+      gbc.insets = new Insets(8, 8, 8, 8);
+      gbc.gridx = 0;
+      gbc.gridy = 0;
 
-    // Tự động tạo mã chuyến bay
-    int soChuyenBayHienTai = quanLy.getDsChuyenBay().demSoLuong();
-    String maChuyenTuDong = "CB" + String.format("%03d", soChuyenBayHienTai + 1);
-    JTextField txtMaChuyen = createStyledTextField(maChuyenTuDong, true);
+      // ComboBox cho điểm đi và điểm đến
+      String[] diaDiem = { "Hà Nội (HAN)", "TP.HCM (SGN)", "Đà Nẵng (DAD)", "Nha Trang (CXR)", "Phú Quốc (PQC)",
+          "Huế (HUI)" };
+      JComboBox<String> cbDiemDi = createStyledComboBox(diaDiem);
+      JComboBox<String> cbDiemDen = createStyledComboBox(diaDiem);
+      cbDiemDen.setSelectedIndex(1); // Mặc định chọn điểm đến khác điểm đi
 
-    // ComboBox cho điểm đi và điểm đến
-    String[] diaDiem = { "Hà Nội (HAN)", "TP.HCM (SGN)", "Đà Nẵng (DAD)", "Nha Trang (CXR)", "Phú Quốc (PQC)",
-        "Huế (HUI)" };
-    JComboBox<String> cbDiemDi = createStyledComboBox(diaDiem);
-    JComboBox<String> cbDiemDen = createStyledComboBox(diaDiem);
-    cbDiemDen.setSelectedIndex(1); // Mặc định chọn điểm đến khác điểm đi
+      // Spinner cho giờ khởi hành và giờ đến
+      JSpinner spinnerGioKhoiHanh = createTimeSpinner();
+      JSpinner spinnerGioDen = createTimeSpinner();
 
-    // Spinner cho giờ khởi hành và giờ đến
-    JSpinner spinnerGioKhoiHanh = createTimeSpinner();
-    JSpinner spinnerGioDen = createTimeSpinner();
+      // Đặt giờ mặc định
+      setDefaultTimes(spinnerGioKhoiHanh, spinnerGioDen);
 
-    // Đặt giờ mặc định
-    setDefaultTimes(spinnerGioKhoiHanh, spinnerGioDen);
+      JSpinner spinnerSoGhe = GUIUtils.createNumberSpinner(150, 50, 500, 10);
 
-    JSpinner spinnerSoGhe = GUIUtils.createNumberSpinner(150, 50, 500, 10);
+      // ComboBox cho mã máy bay
+      String[] mayBay = { "VN-A321", "VN-B787", "VN-A350", "VN-A320", "VN-B777" };
+      JComboBox<String> cbMaMayBay = createStyledComboBox(mayBay);
 
-    // ComboBox cho mã máy bay
-    String[] mayBay = { "VN-A321", "VN-B787", "VN-A350", "VN-A320", "VN-B777" };
-    JComboBox<String> cbMaMayBay = createStyledComboBox(mayBay);
+      JSpinner spinnerGiaCoBan = GUIUtils.createNumberSpinner(1500000.0, 500000.0, 50000000.0, 100000.0);
+      stylePriceSpinner(spinnerGiaCoBan);
 
-    JSpinner spinnerGiaCoBan = GUIUtils.createNumberSpinner(1500000.0, 500000.0, 50000000.0, 100000.0);
-    stylePriceSpinner(spinnerGiaCoBan);
+      // Tự động tạo mã chuyến bay
+      int soChuyenBayHienTai = quanLy.getDsChuyenBay().demSoLuong();
+      String maChuyenTuDong = "CB" + String.format("%03d", soChuyenBayHienTai + 1);
+      JTextField txtMaChuyen = createStyledTextField(maChuyenTuDong, false);
 
-    // Thêm components vào panel với label có icon
-    addFormRowWithIcon(formPanel, gbc, "Mã chuyến bay:", txtMaChuyen);
-    addFormRowWithIcon(formPanel, gbc, "Điểm đi:*", cbDiemDi);
-    addFormRowWithIcon(formPanel, gbc, "Điểm đến:*", cbDiemDen);
-    addFormRowWithIcon(formPanel, gbc, "Giờ khởi hành:*", spinnerGioKhoiHanh);
-    addFormRowWithIcon(formPanel, gbc, "Giờ đến:*", spinnerGioDen);
-    addFormRowWithIcon(formPanel, gbc, "Số ghế:*", spinnerSoGhe);
-    addFormRowWithIcon(formPanel, gbc, "Mã máy bay:*", cbMaMayBay);
-    addFormRowWithIcon(formPanel, gbc, "Giá cơ bản:*", spinnerGiaCoBan);
+      // Thêm components vào panel với label có icon
+      addFormRowWithIcon(formPanel, gbc, "Mã chuyến bay:", txtMaChuyen);
+      addFormRowWithIcon(formPanel, gbc, "Điểm đi:*", cbDiemDi);
+      addFormRowWithIcon(formPanel, gbc, "Điểm đến:*", cbDiemDen);
+      addFormRowWithIcon(formPanel, gbc, "Giờ khởi hành:*", spinnerGioKhoiHanh);
+      addFormRowWithIcon(formPanel, gbc, "Giờ đến:*", spinnerGioDen);
+      addFormRowWithIcon(formPanel, gbc, "Số ghế:*", spinnerSoGhe);
+      addFormRowWithIcon(formPanel, gbc, "Mã máy bay:*", cbMaMayBay);
+      addFormRowWithIcon(formPanel, gbc, "Giá cơ bản:*", spinnerGiaCoBan);
 
-    // Panel hiển thị thông tin
-    JPanel panelThongTin = new JPanel(new BorderLayout());
-    panelThongTin.setBorder(BorderFactory.createTitledBorder(
-        BorderFactory.createLineBorder(new Color(60, 179, 113), 1),
-        "THÔNG TIN CHUYẾN BAY",
-        TitledBorder.LEFT,
-        TitledBorder.TOP,
-        new Font("Arial", Font.BOLD, 12),
-        new Color(60, 179, 113)));
-    panelThongTin.setBackground(Color.WHITE);
+      // Panel hiển thị thông tin
+      JPanel panelThongTin = new JPanel(new BorderLayout());
+      panelThongTin.setBorder(BorderFactory.createTitledBorder(
+          BorderFactory.createLineBorder(new Color(60, 179, 113), 1),
+          "THÔNG TIN CHUYẾN BAY",
+          TitledBorder.LEFT,
+          TitledBorder.TOP,
+          new Font("Arial", Font.BOLD, 12),
+          new Color(60, 179, 113)));
+      panelThongTin.setBackground(Color.WHITE);
 
-    JTextArea txtThongTin = new JTextArea(8, 40);
-    txtThongTin.setEditable(false);
-    txtThongTin.setBackground(new Color(240, 248, 255));
-    txtThongTin.setForeground(new Color(70, 130, 180));
-    txtThongTin.setFont(new Font("Consolas", Font.PLAIN, 12));
-    txtThongTin.setMargin(new Insets(15, 15, 15, 15));
-    txtThongTin.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-    panelThongTin.add(new JScrollPane(txtThongTin), BorderLayout.CENTER);
+      JTextArea txtThongTin = new JTextArea(8, 40);
+      txtThongTin.setEditable(false);
+      txtThongTin.setBackground(new Color(240, 248, 255));
+      txtThongTin.setForeground(new Color(70, 130, 180));
+      txtThongTin.setFont(new Font("Consolas", Font.PLAIN, 12));
+      txtThongTin.setMargin(new Insets(15, 15, 15, 15));
+      txtThongTin.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+      panelThongTin.add(new JScrollPane(txtThongTin), BorderLayout.CENTER);
 
-    // Cập nhật thông tin khi thay đổi dữ liệu
-    Runnable updateChuyenBayInfo = () -> {
-      updateChuyenBayInfo(txtMaChuyen, cbDiemDi, cbDiemDen, spinnerGioKhoiHanh,
-          spinnerGioDen, spinnerSoGhe, cbMaMayBay, spinnerGiaCoBan, txtThongTin);
-    };
+      // Cập nhật thông tin khi thay đổi dữ liệu
+      Runnable updateChuyenBayInfo = () -> {
+        updateChuyenBayInfo(txtMaChuyen, cbDiemDi, cbDiemDen, spinnerGioKhoiHanh,
+            spinnerGioDen, spinnerSoGhe, cbMaMayBay, spinnerGiaCoBan, txtThongTin);
+      };
 
-    ChuyenBay newcb = new ChuyenBay((String) txtMaChuyen.getSelectedText(), (String) cbDiemDi.getSelectedItem(),
-        (String) cbDiemDen.getSelectedItem(), (Date) spinnerGioKhoiHanh.getValue(), (Date) spinnerGioDen.getValue(),
-        ((Number) spinnerSoGhe.getValue()).intValue(), 0, (String) cbMaMayBay.getSelectedItem(),
-        (double) spinnerGiaCoBan.getValue());
-    quanLy.getDsChuyenBay().them(newcb);
-    quanLy.ghiDuLieuRaFile();
+      // Thêm listeners
+      addChuyenBayListeners(cbDiemDi, cbDiemDen, spinnerGioKhoiHanh, spinnerGioDen, spinnerSoGhe, cbMaMayBay,
+          spinnerGiaCoBan, updateChuyenBayInfo);
 
-    // Thêm listeners
-    addChuyenBayListeners(cbDiemDi, cbDiemDen, spinnerGioKhoiHanh, spinnerGioDen, spinnerSoGhe, cbMaMayBay,
-        spinnerGiaCoBan, updateChuyenBayInfo);
+      // Gọi lần đầu
+      updateChuyenBayInfo.run();
 
-    // Gọi lần đầu
-    updateChuyenBayInfo.run();
+      // Panel button
+      JPanel panelButton = createButtonPanel(dialog, txtMaChuyen, cbDiemDi, cbDiemDen,
+          spinnerGioKhoiHanh, spinnerGioDen, spinnerSoGhe,
+          cbMaMayBay, spinnerGiaCoBan, updateChuyenBayInfo);
 
-    // Panel button
-    JPanel panelButton = createButtonPanel(dialog, txtMaChuyen, cbDiemDi, cbDiemDen,
-        spinnerGioKhoiHanh, spinnerGioDen, spinnerSoGhe,
-        cbMaMayBay, spinnerGiaCoBan, updateChuyenBayInfo);
+      // Sắp xếp layout
+      mainContent.add(formPanel, BorderLayout.NORTH);
+      mainContent.add(panelThongTin, BorderLayout.CENTER);
 
-    // Sắp xếp layout
-    mainContent.add(formPanel, BorderLayout.NORTH);
-    mainContent.add(panelThongTin, BorderLayout.CENTER);
+      dialog.add(headerPanel, BorderLayout.NORTH);
+      dialog.add(mainContent, BorderLayout.CENTER);
+      dialog.add(panelButton, BorderLayout.SOUTH);
 
-    dialog.add(headerPanel, BorderLayout.NORTH);
-    dialog.add(mainContent, BorderLayout.CENTER);
-    dialog.add(panelButton, BorderLayout.SOUTH);
-
-    dialog.setVisible(true);
+      dialog.setVisible(true);
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.err.println("Lỗi khi mở dialog thêm chuyến bay: " + e.getMessage());
+      JOptionPane.showMessageDialog(mainGUI, "Không thể mở dialog thêm chuyến bay!\nLỗi: " + e.getMessage(),
+          "Lỗi", JOptionPane.ERROR_MESSAGE);
+    }
   }
 
   // ========== PHƯƠNG THỨC HỖ TRỢ ==========
@@ -262,7 +263,7 @@ public class ChuyenBayDialogs {
       String diemDen = (String) cbDiemDen.getSelectedItem();
       Date gioKhoiHanh = (Date) spinnerGioKhoiHanh.getValue();
       Date gioDen = (Date) spinnerGioDen.getValue();
-      int soGhe = (Integer) spinnerSoGhe.getValue();
+      int soGhe = ((Double) spinnerSoGhe.getValue()).intValue();
       String maMayBay = (String) cbMaMayBay.getSelectedItem();
       double giaCoBan = (Double) spinnerGiaCoBan.getValue();
 
@@ -409,7 +410,7 @@ public class ChuyenBayDialogs {
       String diemDen = (String) cbDiemDen.getSelectedItem();
       Date gioKhoiHanh = (Date) spinnerGioKhoiHanh.getValue();
       Date gioDen = (Date) spinnerGioDen.getValue();
-      int soGhe = (Integer) spinnerSoGhe.getValue();
+      int soGhe = ((Double) spinnerSoGhe.getValue()).intValue();
       String maMayBay = (String) cbMaMayBay.getSelectedItem();
       double giaCoBan = (Double) spinnerGiaCoBan.getValue();
 
@@ -444,6 +445,9 @@ public class ChuyenBayDialogs {
 
       ValidatorUtils.showSuccessDialog(dialog, message);
 
+
+      quanLy.ghiDuLieuRaFile();
+
       // Đóng dialog và cập nhật giao diện
       dialog.dispose();
       mainGUI.capNhatDuLieuGUI();
@@ -472,7 +476,8 @@ public class ChuyenBayDialogs {
     // Reset các giá trị khác
     spinnerSoGhe.setValue(150);
     cbMaMayBay.setSelectedIndex(0);
-    spinnerGiaCoBan.setValue(1500000.0);
+    // Không reset giá cơ bản để giữ giá trị người dùng đã nhập
+    // spinnerGiaCoBan.setValue(1500000.0);
   }
 
   private boolean validateThemChuyenBay(JDialog dialog, JComboBox<String> cbDiemDi,
@@ -739,16 +744,18 @@ public class ChuyenBayDialogs {
       double giaCoBan = (Double) spinnerGiaCoBan.getValue();
       String trangThai = (String) cbTrangThai.getSelectedItem();
 
-      // Cập nhật thông tin chuyến bay
-      cbCanSua.setDiemDi(diemDi);
-      cbCanSua.setDiemDen(diemDen);
-      cbCanSua.setGioKhoiHanh(gioKhoiHanh);
-      cbCanSua.setGioDen(gioDen);
-      cbCanSua.setSoGhe((int) soGhe);
-      cbCanSua.setSoGheTrong((int) soGheTrong);
-      cbCanSua.setMaMayBay(maMayBay);
-      cbCanSua.setGiaCoBan(giaCoBan);
-      cbCanSua.setTrangThai(trangThai);
+      // Tạo đối tượng chuyến bay mới với thông tin cập nhật
+      ChuyenBay chuyenBayMoi = new ChuyenBay(
+          cbCanSua.getMaChuyen(), // Giữ nguyên mã chuyến
+          diemDi, diemDen, gioKhoiHanh, gioDen,
+          (int) soGhe, (int) soGheTrong, maMayBay, giaCoBan);
+      chuyenBayMoi.setTrangThai(trangThai);
+
+      // Cập nhật chuyến bay qua service layer
+      if (!quanLy.suaChuyenBay(cbCanSua.getMaChuyen(), chuyenBayMoi)) {
+        ValidatorUtils.showErrorDialog(dialog, "Không thể cập nhật chuyến bay!");
+        return;
+      }
 
       // Hiển thị thông báo thành công
       String message = String.format(
@@ -767,6 +774,8 @@ public class ChuyenBayDialogs {
           trangThai);
 
       ValidatorUtils.showSuccessDialog(dialog, message);
+
+      quanLy.ghiDuLieuRaFile();
 
       // Đóng dialog và cập nhật giao diện
       dialog.dispose();
@@ -918,6 +927,8 @@ public class ChuyenBayDialogs {
               "✅ Xóa chuyến bay thành công!\n\n" +
                   "🔹 Mã chuyến: " + maChuyen + "\n" +
                   "🛫 Lộ trình: " + diemDi + " → " + diemDen);
+
+          quanLy.ghiDuLieuRaFile();
 
           mainGUI.capNhatDuLieuGUI();
         } else {

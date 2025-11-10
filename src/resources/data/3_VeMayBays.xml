@@ -12,6 +12,9 @@
         <PhuThu>500000.0</PhuThu>
         <SoKgHanhLyKyGui>0.0</SoKgHanhLyKyGui>
         <PhongChoVIP>true</PhongChoVIP>
+        <NgayDat>2025-11-10 23:21:59</NgayDat>
+    </VeMayBay>
+    <VeMayBay>
         <LoaiDoUong>Rượu vang cao cấp</LoaiDoUong>
     </VeThuongGia>
     <VeThuongGia>
@@ -68,49 +71,21 @@
         <PhuThu>400000.0</PhuThu>
         <SoKgHanhLyKyGui>0.0</SoKgHanhLyKyGui>
         <PhongChoVIP>true</PhongChoVIP>
-        <LoaiDoUong>Rượu vang Pháp</LoaiDoUong>
-    </VeThuongGia>
-    <VeThuongGia>
-        <MaVe>VG006</MaVe>
-        <NgayBay>2025-11-08 17:45:00</NgayBay>
-        <GiaVe>735000.0</GiaVe>
-        <MaChuyen>CB008</MaChuyen>
-        <SoGhe>6D</SoGhe>
+        <NgayDat>2025-11-10 23:21:59</NgayDat>
+    </VeMayBay>
+    <VeMayBay>
+        <LoaiDoUong>Rượu vang cao cấp</LoaiDoUong>
+        <MaVe>VG002</MaVe>
         <TrangThai>ĐÃ_ĐẶT</TrangThai>
         <NgayDat>2025-11-11 01:03:16</NgayDat>
         <DichVuDacBiet>Phòng chờ VIP, Đưa đón tận nơi</DichVuDacBiet>
         <PhuThu>350000.0</PhuThu>
         <SoKgHanhLyKyGui>0.0</SoKgHanhLyKyGui>
         <PhongChoVIP>true</PhongChoVIP>
-        <LoaiDoUong>Rượu vang Ý</LoaiDoUong>
-    </VeThuongGia>
-    <VePhoThong>
-        <MaVe>VP001</MaVe>
-        <NgayBay>2025-11-06 08:45:00</NgayBay>
-        <GiaVe>950000.0</GiaVe>
-        <MaChuyen>CB003</MaChuyen>
-        <SoGhe>15C</SoGhe>
-        <TrangThai>ĐÃ_ĐẶT</TrangThai>
-        <NgayDat>2025-11-11 01:03:16</NgayDat>
-        <HanhLyXachTay>true</HanhLyXachTay>
-        <SoKgHanhLyKyGui>20</SoKgHanhLyKyGui>
-        <LoaiGhe>Cửa sổ</LoaiGhe>
-        <DoAn>true</DoAn>
-    </VePhoThong>
-    <VePhoThong>
-        <MaVe>VP002</MaVe>
-        <NgayBay>2025-11-06 16:20:00</NgayBay>
-        <GiaVe>800000.0</GiaVe>
-        <MaChuyen>CB004</MaChuyen>
-        <SoGhe>18D</SoGhe>
-        <TrangThai>ĐÃ_ĐẶT</TrangThai>
-        <NgayDat>2025-11-11 01:03:16</NgayDat>
-        <HanhLyXachTay>true</HanhLyXachTay>
-        <SoKgHanhLyKyGui>15</SoKgHanhLyKyGui>
-        <LoaiGhe>Lối đi</LoaiGhe>
-        <DoAn>false</DoAn>
-    </VePhoThong>
-    <VePhoThong>
+        <NgayDat>2025-11-10 23:21:59</NgayDat>
+    </VeMayBay>
+    <VeMayBay>
+        <LoaiDoUong/>
         <MaVe>VP003</MaVe>
         <NgayBay>2025-11-07 09:15:00</NgayBay>
         <GiaVe>1050000.0</GiaVe>
@@ -181,98 +156,11 @@
         <GiaVe>385000.0</GiaVe>
         <MaChuyen>CB009</MaChuyen>
         <SoGhe>12A</SoGhe>
-        <TrangThai>ĐÃ_ĐẶT</TrangThai>
-        <NgayDat>2025-11-11 01:03:16</NgayDat>
-        <HanhLyXachTay>false</HanhLyXachTay>
-    </VeTietKiem>
-    <VeTietKiem>
-        <MaVe>VT002</MaVe>
-        <NgayBay>2025-11-10 15:45:00</NgayBay>
-        <GiaVe>420000.0</GiaVe>
-        <MaChuyen>CB010</MaChuyen>
-        <SoGhe>18C</SoGhe>
-        <TrangThai>ĐÃ_ĐẶT</TrangThai>
-        <NgayDat>2025-11-11 01:03:16</NgayDat>
-        <HanhLyXachTay>false</HanhLyXachTay>
-    </VeTietKiem>
-    <VeTietKiem>
-        <MaVe>VT003</MaVe>
-        <NgayBay>2025-11-11 11:20:00</NgayBay>
-        <GiaVe>365000.0</GiaVe>
-        <MaChuyen>CB011</MaChuyen>
-        <SoGhe>22B</SoGhe>
-        <TrangThai>ĐÃ_ĐẶT</TrangThai>
-        <NgayDat>2025-11-11 01:03:16</NgayDat>
-        <HanhLyXachTay>false</HanhLyXachTay>
-    </VeTietKiem>
-    <VeTietKiem>
-        <MaVe>VT004</MaVe>
-        <NgayBay>2025-11-12 19:10:00</NgayBay>
-        <GiaVe>450000.0</GiaVe>
-        <MaChuyen>CB012</MaChuyen>
-        <SoGhe>05F</SoGhe>
-        <TrangThai>ĐÃ_ĐẶT</TrangThai>
-        <NgayDat>2025-11-11 01:03:16</NgayDat>
-        <HanhLyXachTay>false</HanhLyXachTay>
-    </VeTietKiem>
-    <VeTietKiem>
-        <MaVe>VT005</MaVe>
-        <NgayBay>2025-11-13 06:45:00</NgayBay>
-        <GiaVe>320000.0</GiaVe>
-        <MaChuyen>CB013</MaChuyen>
-        <SoGhe>15D</SoGhe>
-        <TrangThai>ĐÃ_ĐẶT</TrangThai>
-        <NgayDat>2025-11-11 01:03:16</NgayDat>
-        <HanhLyXachTay>false</HanhLyXachTay>
-    </VeTietKiem>
-    <VeTietKiem>
-        <MaVe>VT006</MaVe>
-        <NgayBay>2025-11-14 13:25:00</NgayBay>
-        <GiaVe>395000.0</GiaVe>
-        <MaChuyen>CB014</MaChuyen>
-        <SoGhe>08E</SoGhe>
-        <TrangThai>ĐÃ_ĐẶT</TrangThai>
-        <NgayDat>2025-11-11 01:03:16</NgayDat>
-        <HanhLyXachTay>false</HanhLyXachTay>
-    </VeTietKiem>
-    <VeTietKiem>
-        <MaVe>VT007</MaVe>
-        <NgayBay>2025-11-15 16:40:00</NgayBay>
-        <GiaVe>410000.0</GiaVe>
-        <MaChuyen>CB015</MaChuyen>
-        <SoGhe>25A</SoGhe>
-        <TrangThai>ĐÃ_ĐẶT</TrangThai>
-        <NgayDat>2025-11-11 01:03:16</NgayDat>
-        <HanhLyXachTay>false</HanhLyXachTay>
-    </VeTietKiem>
-    <VeTietKiem>
-        <MaVe>VT008</MaVe>
-        <NgayBay>2025-11-16 09:15:00</NgayBay>
-        <GiaVe>375000.0</GiaVe>
-        <MaChuyen>CB016</MaChuyen>
-        <SoGhe>30C</SoGhe>
-        <TrangThai>ĐÃ_ĐẶT</TrangThai>
-        <NgayDat>2025-11-11 01:03:16</NgayDat>
-        <HanhLyXachTay>false</HanhLyXachTay>
-    </VeTietKiem>
-    <VeTietKiem>
-        <MaVe>VT009</MaVe>
-        <NgayBay>2025-11-17 21:30:00</NgayBay>
-        <GiaVe>430000.0</GiaVe>
-        <MaChuyen>CB017</MaChuyen>
-        <SoGhe>11B</SoGhe>
-        <TrangThai>ĐÃ_ĐẶT</TrangThai>
-        <NgayDat>2025-11-11 01:03:16</NgayDat>
-        <HanhLyXachTay>false</HanhLyXachTay>
-    </VeTietKiem>
-    <VeTietKiem>
-        <MaVe>VT010</MaVe>
-        <NgayBay>2025-11-18 07:50:00</NgayBay>
-        <GiaVe>355000.0</GiaVe>
-        <MaChuyen>CB018</MaChuyen>
-        <SoGhe>19F</SoGhe>
-        <TrangThai>ĐÃ_ĐẶT</TrangThai>
-        <NgayDat>2025-11-11 01:03:16</NgayDat>
-        <HanhLyXachTay>false</HanhLyXachTay>
-    </VeTietKiem>
+        <NgayBay>2025-11-10 23:21:31</NgayBay>
+        <GiaVe>1040400.0</GiaVe>
+        <PhuThu>0.0</PhuThu>
+        <MaChuyen>CB021</MaChuyen>
+        <PhongChoVIP>false</PhongChoVIP>
+        <NgayDat>2025-11-10 23:21:59</NgayDat>
+    </VeMayBay>
 </VeMayBays>

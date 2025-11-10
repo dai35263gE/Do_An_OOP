@@ -231,4 +231,25 @@
         <PhuongThucTT>THẺ_TÍN_DỤNG</PhuongThucTT>
         <CMND>123456789123</CMND>
     </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD002</MaHoaDon>
+        <TenDangNhap>tranthibinh</TenDangNhap>
+        <Thue>56181.600000000006</Thue>
+        <Email>tran.thi.binh@email.com</Email>
+        <ThanhTien>996213.6000000001</ThanhTien>
+        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+        <SoDT>0923456789</SoDT>
+        <TongTien>1123632.0</TongTien>
+        <GioiTinh>Nữ</GioiTinh>
+        <NgayLap>2025-11-10 23:21:32</NgayLap>
+        <DanhSachMaVe>VP003</DanhSachMaVe>
+        <MaKH>KH002</MaKH>
+        <NgaySinh>1988-08-20 00:00:00</NgaySinh>
+        <DiaChi>456 Lê Lợi, Quận Hoàn Kiếm, Hà Nội</DiaChi>
+        <KhuyenMai>183600.0</KhuyenMai>
+        <HoTen>Trần Thị Bình</HoTen>
+        <MatKhau>0000</MatKhau>
+        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <CMND>001234567890</CMND>
+    </HoaDon>
 </HoaDons>

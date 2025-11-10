@@ -102,6 +102,10 @@ public class QuanLyBanVeMayBay {
     return dsChuyenBay.xoa(maChuyen);
   }
 
+  public boolean suaChuyenBay(String maChuyen, ChuyenBay chuyenBayMoi) {
+    return dsChuyenBay.sua(maChuyen, chuyenBayMoi);
+  }
+
   public boolean themKhachHang(KhachHang khachHang) {
     return dsKhachHang.them(khachHang);
   }
