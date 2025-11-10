@@ -107,7 +107,7 @@ public class TableUtils {
 
     if (quanLy == null)
       return;
-
+    quanLy.docDuLieuTuFile();
     DanhSachHoaDon dsHoaDon = quanLy.getDsHoaDon();
     DanhSachKhachHang dsKH = quanLy.getDsKhachHang();
 

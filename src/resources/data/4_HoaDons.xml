@@ -81,7 +81,7 @@
         <KhuyenMai>0.0</KhuyenMai>
         <HoTen>Phạm Thị Dung</HoTen>
         <MatKhau>password012</MatKhau>
-        <PhuongThucTT>VÍ_ĐIỆN_TỬ</PhuongThucTT>
+        <PhuongThucTT>CHƯA</PhuongThucTT>
         <CMND>001456789012</CMND>
     </HoaDon>
     <HoaDon>
@@ -123,7 +123,7 @@
         <KhuyenMai>0.0</KhuyenMai>
         <HoTen>Vũ Thị Phương</HoTen>
         <MatKhau>password678</MatKhau>
-        <PhuongThucTT>TIỀN_MẶT</PhuongThucTT>
+        <PhuongThucTT>CHƯA</PhuongThucTT>
         <CMND>001678901234</CMND>
     </HoaDon>
     <HoaDon>
@@ -165,7 +165,7 @@
         <KhuyenMai>50000.0</KhuyenMai>
         <HoTen>Mai Thị Hoa</HoTen>
         <MatKhau>password234</MatKhau>
-        <PhuongThucTT>VÍ_ĐIỆN_TỬ</PhuongThucTT>
+        <PhuongThucTT>CHƯA</PhuongThucTT>
         <CMND>001890123456</CMND>
     </HoaDon>
     <HoaDon>
@@ -216,11 +216,11 @@
         <Thue>120692.1875</Thue>
         <Email>nguyen.van.an@email.com</Email>
         <ThanhTien>2263598.4375</ThanhTien>
-        <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
+        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
         <SoDT>0912345678</SoDT>
         <TongTien>2413843.75</TongTien>
         <GioiTinh>Nam</GioiTinh>
-        <NgayLap>2025-11-10 16:17:01</NgayLap>
+        <NgayLap>2025-11-11 01:03:30</NgayLap>
         <DanhSachMaVe>VG003</DanhSachMaVe>
         <MaKH>KH001</MaKH>
         <NgaySinh>1985-05-15 00:00:00</NgaySinh>
@@ -228,7 +228,7 @@
         <KhuyenMai>270937.5</KhuyenMai>
         <HoTen>Nguyễn Văn An</HoTen>
         <MatKhau>0000</MatKhau>
-        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <PhuongThucTT>THẺ_TÍN_DỤNG</PhuongThucTT>
         <CMND>123456789123</CMND>
     </HoaDon>
 </HoaDons>

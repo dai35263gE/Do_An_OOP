@@ -258,19 +258,275 @@ public class UsersGUI extends JFrame {
     String[] columns = { "Mã Hóa Đơn", "Mã Khách Hàng", "Ngày Lập", "DS Vé", "Tổng Tiền", "Thuế", "Thành Tiền",
         "Trạng Thái", "PP Thanh Toán" };
     modelLichSu = new DefaultTableModel(columns, 0) {
-      @Override
-      public boolean isCellEditable(int row, int column) {
-        return false;
-      }
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
     };
     tableLichSu = new JTable(modelLichSu);
     JScrollPane scrollLichSu = new JScrollPane(tableLichSu);
 
+    // Panel button cho lịch sử
+    JPanel panelButton = new JPanel(new FlowLayout());
+    JButton btnXemChiTietHD = new JButton("Xem Chi Tiết HĐ");
+    JButton btnThanhToanHD = new JButton("Thanh Toán HĐ");
+    JButton btnHuyHD = new JButton("Hủy Hóa Đơn");
+
+    panelButton.add(btnXemChiTietHD);
+    panelButton.add(btnThanhToanHD);
+    panelButton.add(btnHuyHD);
+
+    // Thêm sự kiện cho các nút
+    btnXemChiTietHD.addActionListener(e -> xemChiTietHoaDon());
+    btnThanhToanHD.addActionListener(e -> thanhToanHoaDon());
+    btnHuyHD.addActionListener(e -> huyHoaDon());
+
     panel.add(new JLabel("Lịch sử đặt vé:"), BorderLayout.NORTH);
     panel.add(scrollLichSu, BorderLayout.CENTER);
+    panel.add(panelButton, BorderLayout.SOUTH);
 
     return panel;
-  }
+}
+
+// ========== PHƯƠNG THỨC XEM CHI TIẾT HÓA ĐƠN ==========
+private void xemChiTietHoaDon() {
+    int row = tableLichSu.getSelectedRow();
+    if (row < 0) {
+        JOptionPane.showMessageDialog(this, "Vui lòng chọn một hóa đơn!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    String maHoaDon = (String) modelLichSu.getValueAt(row, 0);
+    HoaDon hoaDon = dsHoaDon.timKiemTheoMa(maHoaDon);
+
+    if (hoaDon != null) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== CHI TIẾT HÓA ĐƠN ===\n\n");
+        sb.append("Mã hóa đơn: ").append(hoaDon.getMaHoaDon()).append("\n");
+        sb.append("Ngày lập: ").append(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(hoaDon.getNgayLap())).append("\n");
+        sb.append("Khách hàng: ").append(hoaDon.getKhachHang().getHoTen()).append("\n");
+        sb.append("Số điện thoại: ").append(hoaDon.getKhachHang().getSoDT()).append("\n");
+        sb.append("Email: ").append(hoaDon.getKhachHang().getEmail()).append("\n\n");
+        
+        sb.append("=== DANH SÁCH VÉ ===\n");
+        int stt = 1;
+        for (VeMayBay ve : hoaDon.getDanhSachVe()) {
+            ChuyenBay cb = dsChuyenBay.timKiemTheoMa(ve.getMaChuyen());
+            sb.append(stt++).append(". ").append(ve.getMaVe())
+              .append(" - ").append(cb != null ? cb.getDiemDi() + " → " + cb.getDiemDen() : "N/A")
+              .append(" - ").append(ve.getSoGhe())
+              .append(" - ").append(String.format("%,d VND", (int) ve.getGiaVe()))
+              .append(" - ").append(chuyenTrangThaiSangText(ve.getTrangThai())).append("\n");
+        }
+        
+        sb.append("\n=== THÔNG TIN THANH TOÁN ===\n");
+        sb.append("Tổng tiền: ").append(String.format("%,d VND", (int) hoaDon.getTongTien())).append("\n");
+        sb.append("Giảm giá: ").append(String.format("%,d VND", (int) hoaDon.getKhuyenMai())).append("\n");
+        sb.append("Thuế/VAT: ").append(String.format("%,d VND", (int) hoaDon.getThue())).append("\n");
+        sb.append("Thành tiền: ").append(String.format("%,d VND", (int) hoaDon.getThanhTien())).append("\n");
+        sb.append("Phương thức TT: ").append(chuyenPhuongThucTTSangText(hoaDon.getPhuongThucTT())).append("\n");
+        sb.append("Trạng thái: ").append(chuyenTrangThaiSangText1(hoaDon.getTrangThai())).append("\n");
+
+        JTextArea textArea = new JTextArea(sb.toString());
+        textArea.setEditable(false);
+        textArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(600, 400));
+        
+        JOptionPane.showMessageDialog(this, scrollPane, "Chi Tiết Hóa Đơn " + maHoaDon, 
+            JOptionPane.INFORMATION_MESSAGE);
+    }
+}
+
+// ========== PHƯƠNG THỨC THANH TOÁN HÓA ĐƠN ==========
+private void thanhToanHoaDon() {
+    int row = tableLichSu.getSelectedRow();
+    if (row < 0) {
+        JOptionPane.showMessageDialog(this, "Vui lòng chọn một hóa đơn!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    String maHoaDon = (String) modelLichSu.getValueAt(row, 0);
+    HoaDon hoaDon = dsHoaDon.timKiemTheoMa(maHoaDon);
+
+    if (hoaDon == null) {
+        JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Kiểm tra trạng thái hóa đơn
+    if (hoaDon.getTrangThai().equals(HoaDon.TT_DA_TT)) {
+        JOptionPane.showMessageDialog(this, "Hóa đơn đã được thanh toán!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        return;
+    }
+
+    if (hoaDon.getTrangThai().equals(HoaDon.TT_HUY)) {
+        JOptionPane.showMessageDialog(this, "Hóa đơn đã bị hủy, không thể thanh toán!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Hiển thị dialog chọn phương thức thanh toán
+    String[] ptOptions = { "Tiền mặt", "Chuyển khoản", "Thẻ tín dụng", "Ví điện tử" };
+    String phuongThucTT = (String) JOptionPane.showInputDialog(
+            this,
+            "Chọn phương thức thanh toán cho hóa đơn " + maHoaDon,
+            "Phương Thức Thanh Toán",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            ptOptions,
+            ptOptions[0]);
+
+    if (phuongThucTT == null) {
+        return; // Hủy
+    }
+
+    // Xác nhận thanh toán
+    int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Bạn có chắc chắn muốn thanh toán hóa đơn " + maHoaDon + "?\n" +
+                    "Phương thức thanh toán: " + phuongThucTT + "\n" +
+                    "Số tiền: " + String.format("%,d VND", (int) hoaDon.getThanhTien()),
+            "Xác Nhận Thanh Toán",
+            JOptionPane.YES_NO_OPTION);
+
+    if (confirm != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    try {
+        // Thực hiện thanh toán
+        hoaDon.setTrangThai(HoaDon.TT_DA_TT);
+        hoaDon.setPhuongThucTT(chuyenPhuongThucTextSangMa(phuongThucTT));
+        hoaDon.setNgayLap(new Date());
+
+        // Cập nhật trạng thái các vé trong hóa đơn
+        for (VeMayBay ve : hoaDon.getDanhSachVe()) {
+            ve.setTrangThai(VeMayBay.TRANG_THAI_DA_THANH_TOAN);
+        }
+
+        // Lưu dữ liệu
+        quanLy.ghiDuLieuRaFile();
+
+        // Cập nhật giao diện
+        taiLichSu();
+        taiVeCuaToi();
+
+        JOptionPane.showMessageDialog(this, 
+            "Thanh toán hóa đơn thành công!\nMã hóa đơn: " + maHoaDon, 
+            "Thành Công", 
+            JOptionPane.INFORMATION_MESSAGE);
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "Lỗi khi thanh toán hóa đơn: " + e.getMessage(), 
+            "Lỗi", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+}
+
+// ========== PHƯƠNG THỨC HỦY HÓA ĐƠN ==========
+private void huyHoaDon() {
+    int row = tableLichSu.getSelectedRow();
+    if (row < 0) {
+        JOptionPane.showMessageDialog(this, "Vui lòng chọn một hóa đơn!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    String maHoaDon = (String) modelLichSu.getValueAt(row, 0);
+    HoaDon hoaDon = dsHoaDon.timKiemTheoMa(maHoaDon);
+
+    if (hoaDon == null) {
+        JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Kiểm tra trạng thái hóa đơn
+    if (hoaDon.getTrangThai().equals(HoaDon.TT_HUY)) {
+        JOptionPane.showMessageDialog(this, "Hóa đơn đã bị hủy!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        return;
+    }
+
+    if (hoaDon.getTrangThai().equals(HoaDon.TT_DA_TT)) {
+        JOptionPane.showMessageDialog(this, "Hóa đơn đã thanh toán, không thể hủy!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Hiển thị thông tin vé sẽ bị hủy
+    StringBuilder veInfo = new StringBuilder();
+    veInfo.append("Các vé sau sẽ bị hủy:\n\n");
+    for (VeMayBay ve : hoaDon.getDanhSachVe()) {
+        ChuyenBay cb = dsChuyenBay.timKiemTheoMa(ve.getMaChuyen());
+        veInfo.append("• ").append(ve.getMaVe())
+               .append(" - ").append(cb != null ? cb.getDiemDi() + " → " + cb.getDiemDen() : "N/A")
+               .append(" - ").append(ve.getSoGhe()).append("\n");
+    }
+
+    // Xác nhận hủy
+    int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Bạn có chắc chắn muốn HỦY hóa đơn " + maHoaDon + "?\n\n" +
+                    veInfo.toString() + "\n" +
+                    "Lưu ý: Tất cả vé trong hóa đơn sẽ chuyển sang trạng thái HỦY!",
+            "Xác Nhận Hủy Hóa Đơn",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE);
+
+    if (confirm != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    try {
+        // Thực hiện hủy hóa đơn
+        hoaDon.setTrangThai(HoaDon.TT_HUY);
+
+        // Cập nhật trạng thái các vé trong hóa đơn thành HỦY
+        for (VeMayBay ve : hoaDon.getDanhSachVe()) {
+            ve.setTrangThai(VeMayBay.TRANG_THAI_DA_HUY);
+            
+            // Cập nhật số ghế trống của chuyến bay
+            ChuyenBay cb = dsChuyenBay.timKiemTheoMa(ve.getMaChuyen());
+            if (cb != null) {
+                cb.setSoGheTrong(cb.getSoGheTrong() + 1);
+            }
+        }
+
+        // Lưu dữ liệu
+        quanLy.ghiDuLieuRaFile();
+
+        // Cập nhật giao diện
+        taiLichSu();
+        taiVeCuaToi();
+
+        JOptionPane.showMessageDialog(this, 
+            "Hủy hóa đơn thành công!\nMã hóa đơn: " + maHoaDon + "\nTất cả vé đã được hủy.", 
+            "Thành Công", 
+            JOptionPane.INFORMATION_MESSAGE);
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "Lỗi khi hủy hóa đơn: " + e.getMessage(), 
+            "Lỗi", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+}
+
+// ========== PHƯƠNG THỨC HỖ TRỢ CHUYỂN ĐỔI PHƯƠNG THỨC THANH TOÁN ==========
+private String chuyenPhuongThucTextSangMa(String phuongThucText) {
+    switch (phuongThucText) {
+        case "Tiền mặt":
+            return HoaDon.PT_TIEN_MAT;
+        case "Chuyển khoản":
+            return HoaDon.PT_CHUYEN_KHOAN;
+        case "Thẻ tín dụng":
+            return HoaDon.PT_THE;
+        case "Ví điện tử":
+            return HoaDon.PT_VI_DIEN_TU;
+        default:
+            return HoaDon.PT_CHUYEN_KHOAN;
+    }
+}
 
   private JPanel createTabThongTin() {
     JPanel panel = new JPanel(new BorderLayout(15, 15));

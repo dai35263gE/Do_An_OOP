@@ -131,65 +131,82 @@ public class XMLUtils {
 
   // ========== ĐỌC VÉ MÁY BAY ==========
   private static List<Map<String, String>> docVeMayBays(Document doc) {
-    List<Map<String, String>> danhSach = new ArrayList<>();
-
-    NodeList veMayBayList = doc.getElementsByTagName("VeMayBay");
-    for (int i = 0; i < veMayBayList.getLength(); i++) {
-      Map<String, String> data = docVeMayBay(veMayBayList.item(i));
-      if (data != null && !data.isEmpty()) {
-        danhSach.add(data);
-      }
+        List<Map<String, String>> danhSach = new ArrayList<>();
+        
+        // Đọc Vé Thương Gia
+        NodeList veThuongGiaList = doc.getElementsByTagName("VeThuongGia");
+        for (int i = 0; i < veThuongGiaList.getLength(); i++) {
+            danhSach.add(docVeMayBay(veThuongGiaList.item(i), "VeThuongGia"));
+        }
+        
+        // Đọc Vé Phổ Thông
+        NodeList vePhoThongList = doc.getElementsByTagName("VePhoThong");
+        for (int i = 0; i < vePhoThongList.getLength(); i++) {
+            danhSach.add(docVeMayBay(vePhoThongList.item(i), "VePhoThong"));
+        }
+        
+        // Đọc Vé Tiết Kiệm
+        NodeList veTietKiemList = doc.getElementsByTagName("VeTietKiem");
+        for (int i = 0; i < veTietKiemList.getLength(); i++) {
+            danhSach.add(docVeMayBay(veTietKiemList.item(i), "VeTietKiem"));
+        }
+        return danhSach;
     }
 
-    return danhSach;
-  }
-
-  private static Map<String, String> docVeMayBay(Node node) {
-    Map<String, String> data = new HashMap<>();
-
-    if (node.getNodeType() == Node.ELEMENT_NODE) {
-      Element element = (Element) node;
-
-      // Thông tin chung của tất cả vé
-      String[] commonTags = {
-          "MaKhachHang", "MaVe", "NgayBay", "GiaVe", "MaChuyen", "SoGhe",
-          "TrangThai", "NgayDat"
-      };
-
-      for (String tag : commonTags) {
-        String value = getElementValue(element, tag);
-        if (value != null && !value.isEmpty()) {
-          data.put(tag, value);
+    private static Map<String, String> docVeMayBay(Node node, String loaiVe) {
+        Map<String, String> data = new HashMap<>();
+        data.put("LoaiVe", loaiVe);
+        
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+            Element element = (Element) node;
+            
+            // Thông tin chung của tất cả vé
+            String[] commonTags = {
+                "MaVe","MaKhachHang", "NgayBay", "GiaVe", "MaChuyen", "SoGhe", 
+                "TrangThai", "NgayDat"
+            };
+            
+            for (String tag : commonTags) {
+                data.put(tag, getElementValue(element, tag));
+            }
+            
+            // Thông tin riêng cho từng loại vé
+            switch (loaiVe) {
+                case "VeThuongGia":
+                    String[] thuongGiaTags = {
+                        "DichVuDacBiet", "PhuThu", "SoKgHanhLyMienPhi", 
+                        "PhongChoVIP", "LoaiDoUong"
+                    };
+                    for (String tag : thuongGiaTags) {
+                        data.put(tag, getElementValue(element, tag));
+                    }
+                    break;
+                    
+                case "VePhoThong":
+                    String[] phoThongTags = {
+                        "HanhLyXachTay", "SoKgHanhLyKyGui", 
+                        "PhiHanhLy", "LoaiGhe", "DoAn"
+                    };
+                    for (String tag : phoThongTags) {
+                        data.put(tag, getElementValue(element, tag));
+                    }
+                    break;
+                    
+                case "VeTietKiem":
+                    String[] tietKiemTags = {
+                        "SoGioDatTruoc", "TyLeGiam", "HoanDoi", 
+                        "PhiHoanDoi", "DieuKienGia"
+                    };
+                    for (String tag : tietKiemTags) {
+                        data.put(tag, getElementValue(element, tag));
+                    }
+                    break;
+            }
         }
-      }
-
-      // Xác định loại vé dựa trên các tag đặc trưng
-      if (getElementValue(element, "LoaiDoUong") != null) {
-        // Vé thương gia
-        String[] tgTags = { "DichVuDacBiet", "PhuThu", "PhongChoVIP", "SoKgHanhLyKyGui", "LoaiDoUong" };
-        for (String tag : tgTags) {
-          String value = getElementValue(element, tag);
-          if (value != null)
-            data.put(tag, value);
-        }
-      } else if (getElementValue(element, "DoAn") != null) {
-        // Vé phổ thông
-        String[] ptTags = { "HanhLyXachTay", "SoKgHanhLyKyGui", "LoaiGhe", "DoAn" };
-        for (String tag : ptTags) {
-          String value = getElementValue(element, tag);
-          if (value != null)
-            data.put(tag, value);
-        }
-      } else {
-        // Vé tiết kiệm
-        String value = getElementValue(element, "HanhLyXachTay");
-        if (value != null)
-          data.put("HanhLyXachTay", value);
-      }
+        
+        return data;
     }
 
-    return data;
-  }
 
   // ========== ĐỌC HÓA ĐƠN ==========
   private static List<Map<String, String>> docHoaDons(Document doc) {
@@ -231,53 +248,168 @@ public class XMLUtils {
     return danhSach;
   }
 
-  // ========== GHI FILE XML ==========
-  public static boolean ghiFileXML(String tenFile, List<Map<String, String>> dataList, String rootElementName) {
+  // ========== GHI VÉ MÁY BAY (SỬA LẠI) ==========
+public static boolean ghiVeMayBays(String tenFile, List<Map<String, String>> veMayBays) {
     try {
-      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-      DocumentBuilder builder = factory.newDocumentBuilder();
-      Document doc = builder.newDocument();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document doc = builder.newDocument();
 
-      Element rootElement = doc.createElement(rootElementName);
-      doc.appendChild(rootElement);
+        Element rootElement = doc.createElement("VeMayBays");
+        doc.appendChild(rootElement);
 
-      String childElementName = getChildElementName(rootElementName);
+        for (Map<String, String> ve : veMayBays) {
+            String loaiVe = ve.get("LoaiVe");
+            Element veElement = null;
 
-      for (Map<String, String> data : dataList) {
-        Element itemElement = doc.createElement(childElementName);
+            // Tạo element theo đúng loại vé
+            switch (loaiVe) {
+                case "VeThuongGia":
+                    veElement = doc.createElement("VeThuongGia");
+                    break;
+                case "VePhoThong":
+                    veElement = doc.createElement("VePhoThong");
+                    break;
+                case "VeTietKiem":
+                    veElement = doc.createElement("VeTietKiem");
+                    break;
+                default:
+                    veElement = doc.createElement("VeMayBay"); // fallback
+            }
 
-        for (Map.Entry<String, String> entry : data.entrySet()) {
-          if (!shouldSkipField(entry.getKey(), rootElementName)) {
-            Element fieldElement = doc.createElement(entry.getKey());
-            fieldElement.appendChild(doc.createTextNode(entry.getValue() != null ? entry.getValue() : ""));
-            itemElement.appendChild(fieldElement);
-          }
+            // Thêm các trường thông tin chung
+            String[] commonTags = {
+                "MaVe", "MaKhachHang", "NgayBay", "GiaVe", "MaChuyen", 
+                "SoGhe", "TrangThai", "NgayDat"
+            };
+
+            for (String tag : commonTags) {
+                if (ve.containsKey(tag)) {
+                    Element fieldElement = doc.createElement(tag);
+                    fieldElement.appendChild(doc.createTextNode(ve.get(tag) != null ? ve.get(tag) : ""));
+                    veElement.appendChild(fieldElement);
+                }
+            }
+
+            // Thêm các trường riêng theo loại vé
+            switch (loaiVe) {
+                case "VeThuongGia":
+                    String[] thuongGiaTags = {
+                        "DichVuDacBiet", "PhuThu", "SoKgHanhLyKyGui", 
+                        "PhongChoVIP", "LoaiDoUong"
+                    };
+                    for (String tag : thuongGiaTags) {
+                        if (ve.containsKey(tag)) {
+                            Element fieldElement = doc.createElement(tag);
+                            fieldElement.appendChild(doc.createTextNode(ve.get(tag) != null ? ve.get(tag) : ""));
+                            veElement.appendChild(fieldElement);
+                        }
+                    }
+                    break;
+
+                case "VePhoThong":
+                    String[] phoThongTags = {
+                        "HanhLyXachTay", "SoKgHanhLyKyGui", 
+                        "PhiHanhLy", "LoaiGhe", "DoAn"
+                    };
+                    for (String tag : phoThongTags) {
+                        if (ve.containsKey(tag)) {
+                            Element fieldElement = doc.createElement(tag);
+                            fieldElement.appendChild(doc.createTextNode(ve.get(tag) != null ? ve.get(tag) : ""));
+                            veElement.appendChild(fieldElement);
+                        }
+                    }
+                    break;
+
+                case "VeTietKiem":
+                    String[] tietKiemTags = {
+                        "HanhLyXachTay", "SoGioDatTruoc", "TyLeGiam", "HoanDoi", 
+                        "PhiHoanDoi", "DieuKienGia"
+                    };
+                    for (String tag : tietKiemTags) {
+                        if (ve.containsKey(tag)) {
+                            Element fieldElement = doc.createElement(tag);
+                            fieldElement.appendChild(doc.createTextNode(ve.get(tag) != null ? ve.get(tag) : ""));
+                            veElement.appendChild(fieldElement);
+                        }
+                    }
+                    break;
+            }
+
+            rootElement.appendChild(veElement);
         }
 
-        rootElement.appendChild(itemElement);
-      }
+        // Ghi file
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 
-      // Ghi file
-      TransformerFactory transformerFactory = TransformerFactory.newInstance();
-      Transformer transformer = transformerFactory.newTransformer();
-      transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-      transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-      transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        DOMSource source = new DOMSource(doc);
+        StreamResult result = new StreamResult(new File(tenFile));
+        transformer.transform(source, result);
 
-      DOMSource source = new DOMSource(doc);
-      StreamResult result = new StreamResult(new File(tenFile));
-      transformer.transform(source, result);
-
-      System.out.println("Ghi file XML thành công: " + tenFile);
-      return true;
+        System.out.println("Ghi file vé máy bay XML thành công: " + tenFile);
+        return true;
 
     } catch (Exception e) {
-      System.out.println("Lỗi ghi file XML: " + tenFile);
-      e.printStackTrace();
-      return false;
+        System.out.println("Lỗi ghi file vé máy bay XML: " + tenFile);
+        e.printStackTrace();
+        return false;
     }
-  }
+}
+// ========== GHI FILE XML (SỬA LẠI) ==========
+public static boolean ghiFileXML(String tenFile, List<Map<String, String>> dataList, String rootElementName) {
+    // Xử lý đặc biệt cho vé máy bay
+    if ("VeMayBays".equals(rootElementName)) {
+        return ghiVeMayBays(tenFile, dataList);
+    }
+    
+    try {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document doc = builder.newDocument();
 
+        Element rootElement = doc.createElement(rootElementName);
+        doc.appendChild(rootElement);
+
+        String childElementName = getChildElementName(rootElementName);
+
+        for (Map<String, String> data : dataList) {
+            Element itemElement = doc.createElement(childElementName);
+
+            for (Map.Entry<String, String> entry : data.entrySet()) {
+                if (!shouldSkipField(entry.getKey(), rootElementName)) {
+                    Element fieldElement = doc.createElement(entry.getKey());
+                    fieldElement.appendChild(doc.createTextNode(entry.getValue() != null ? entry.getValue() : ""));
+                    itemElement.appendChild(fieldElement);
+                }
+            }
+
+            rootElement.appendChild(itemElement);
+        }
+
+        // Ghi file
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+
+        DOMSource source = new DOMSource(doc);
+        StreamResult result = new StreamResult(new File(tenFile));
+        transformer.transform(source, result);
+
+        System.out.println("Ghi file XML thành công: " + tenFile);
+        return true;
+
+    } catch (Exception e) {
+        System.out.println("Lỗi ghi file XML: " + tenFile);
+        e.printStackTrace();
+        return false;
+    }
+}
   // ========== GHI THEO ĐỐI TƯỢNG CỤ THỂ ==========
 
   // Ghi danh sách chuyến bay
@@ -290,10 +422,6 @@ public class XMLUtils {
     return ghiFileXML(tenFile, khachHangs, "KhachHangs");
   }
 
-  // Ghi danh sách vé máy bay
-  public static boolean ghiVeMayBays(String tenFile, List<Map<String, String>> veMayBays) {
-    return ghiFileXML(tenFile, veMayBays, "VeMayBays");
-  }
 
   // Ghi danh sách hóa đơn
   public static boolean ghiHoaDons(String tenFile, List<Map<String, String>> hoaDons) {

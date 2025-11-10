@@ -35,6 +35,7 @@ public class HoaDon {
     public static final String PT_CHUYEN_KHOAN = "CHUYỂN_KHOẢN";
     public static final String PT_THE = "THẺ_TÍN_DỤNG";
     public static final String PT_VI_DIEN_TU = "VÍ_ĐIỆN_TỬ";
+    public static final String PT_NONE = "CHƯA";
 
     // CONSTRUCTOR CHÍNH
     public HoaDon(String maHoaDon, KhachHang khachHang, List<VeMayBay> danhSachVe, double khuyenMai, String phuongThucTT) {
@@ -57,7 +58,7 @@ public class HoaDon {
     }
 
     public HoaDon(VeMayBay vmb) {
-        this.maHoaDon = "HD000";
+        this.maHoaDon = "HD999";
         this.ngayLap = new Date();
         this.danhSachVe = new ArrayList<>();
         danhSachVe.add(vmb);

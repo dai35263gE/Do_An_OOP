@@ -126,15 +126,15 @@ public class QuanLyBanVeMayBay {
   }
 
   public void ghiDuLieuRaFile() {
-    // try {
-    //   dsVe.ghiFile("src/resources/data/3_VeMayBays.xml");
-    //   dsChuyenBay.ghiFile("src/resources/data/1_ChuyenBays.xml");
-    //   dsKhachHang.ghiFile("src/resources/data/2_KhachHangs.xml");
-    //   dsHoaDon.ghiFile("src/resources/data/4_HoaDons.xml");
-    //   System.out.println("Đã ghi dữ liệu ra file!");
-    // } catch (Exception e) {
-    //   System.out.println("Lỗi khi ghi dữ liệu ra file: " + e.getMessage());
-    // }
+    try {
+      dsVe.ghiFile("src/resources/data/3_VeMayBays.xml");
+      dsChuyenBay.ghiFile("src/resources/data/1_ChuyenBays.xml");
+      dsKhachHang.ghiFile("src/resources/data/2_KhachHangs.xml");
+      dsHoaDon.ghiFile("src/resources/data/4_HoaDons.xml");
+      System.out.println("Đã ghi dữ liệu ra file!");
+    } catch (Exception e) {
+      System.out.println("Lỗi khi ghi dữ liệu ra file: " + e.getMessage());
+    }
   }
 
   // Getter methods for GUI
