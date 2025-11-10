@@ -445,6 +445,9 @@ public class ChuyenBayDialogs {
 
       ValidatorUtils.showSuccessDialog(dialog, message);
 
+
+      quanLy.ghiDuLieuRaFile();
+
       // Đóng dialog và cập nhật giao diện
       dialog.dispose();
       mainGUI.capNhatDuLieuGUI();
@@ -772,6 +775,8 @@ public class ChuyenBayDialogs {
 
       ValidatorUtils.showSuccessDialog(dialog, message);
 
+      quanLy.ghiDuLieuRaFile();
+
       // Đóng dialog và cập nhật giao diện
       dialog.dispose();
       mainGUI.capNhatDuLieuGUI();
@@ -922,6 +927,8 @@ public class ChuyenBayDialogs {
               "✅ Xóa chuyến bay thành công!\n\n" +
                   "🔹 Mã chuyến: " + maChuyen + "\n" +
                   "🛫 Lộ trình: " + diemDi + " → " + diemDen);
+
+          quanLy.ghiDuLieuRaFile();
 
           mainGUI.capNhatDuLieuGUI();
         } else {

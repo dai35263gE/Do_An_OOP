@@ -552,4 +552,16 @@
         <SoGhe>150</SoGhe>
         <GiaCoBan>1500000</GiaCoBan>
     </ChuyenBay>
+    <ChuyenBay>
+        <DiemDi>Nha Trang (CXR)</DiemDi>
+        <MaMayBay>VN-B787</MaMayBay>
+        <GioDen>2025-11-16 08:00:00</GioDen>
+        <SoGheTrong>150</SoGheTrong>
+        <DiemDen>TP.HCM (SGN)</DiemDen>
+        <TrangThai>CHUA_BAY</TrangThai>
+        <MaChuyen>CB047</MaChuyen>
+        <GioKhoiHanh>2025-11-12 06:00:58</GioKhoiHanh>
+        <SoGhe>150</SoGhe>
+        <GiaCoBan>1700000</GiaCoBan>
+    </ChuyenBay>
 </ChuyenBays>

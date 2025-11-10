@@ -13,7 +13,7 @@
         <PhuThu>500000.0</PhuThu>
         <MaChuyen>CB019</MaChuyen>
         <PhongChoVIP>true</PhongChoVIP>
-        <NgayDat>2025-11-11 00:26:14</NgayDat>
+        <NgayDat>2025-11-11 00:57:49</NgayDat>
     </VeMayBay>
     <VeMayBay>
         <LoaiDoUong>Rượu vang cao cấp</LoaiDoUong>
@@ -28,7 +28,7 @@
         <PhuThu>500000.0</PhuThu>
         <MaChuyen>CB007</MaChuyen>
         <PhongChoVIP>true</PhongChoVIP>
-        <NgayDat>2025-11-11 00:26:14</NgayDat>
+        <NgayDat>2025-11-11 00:57:49</NgayDat>
     </VeMayBay>
     <VeMayBay>
         <LoaiDoUong>Rượu vang cao cấp</LoaiDoUong>
@@ -43,7 +43,7 @@
         <PhuThu>500000.0</PhuThu>
         <MaChuyen>CB025</MaChuyen>
         <PhongChoVIP>true</PhongChoVIP>
-        <NgayDat>2025-11-11 00:26:14</NgayDat>
+        <NgayDat>2025-11-11 00:57:49</NgayDat>
     </VeMayBay>
     <VeMayBay>
         <LoaiDoUong/>
@@ -58,6 +58,21 @@
         <PhuThu>0.0</PhuThu>
         <MaChuyen>CB021</MaChuyen>
         <PhongChoVIP>false</PhongChoVIP>
-        <NgayDat>2025-11-11 00:26:14</NgayDat>
+        <NgayDat>2025-11-11 00:57:49</NgayDat>
+    </VeMayBay>
+    <VeMayBay>
+        <LoaiDoUong/>
+        <MaVe>VP004</MaVe>
+        <TrangThai>ĐÃ_ĐẶT</TrangThai>
+        <SoKgHanhLyKyGui>7.0</SoKgHanhLyKyGui>
+        <MaKhachHang>KH001</MaKhachHang>
+        <DichVuDacBiet/>
+        <SoGhe>12A</SoGhe>
+        <NgayBay>2025-11-11 00:58:56</NgayBay>
+        <GiaVe>1473900.0</GiaVe>
+        <PhuThu>0.0</PhuThu>
+        <MaChuyen>CB047</MaChuyen>
+        <PhongChoVIP>false</PhongChoVIP>
+        <NgayDat>2025-11-11 00:59:10</NgayDat>
     </VeMayBay>
 </VeMayBays>
