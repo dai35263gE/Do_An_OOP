@@ -11,7 +11,7 @@
         <TongTien>2500000.0</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2024-01-15 09:30:00</NgayLap>
-        <DanhSachMaVe>VG001,VT004</DanhSachMaVe>
+        <DanhSachMaVe/>
         <MaKH>KH001</MaKH>
         <NgaySinh>1990-05-15 00:00:00</NgaySinh>
         <DiaChi>Hà Nội</DiaChi>
@@ -32,7 +32,7 @@
         <TongTien>1800000.0</TongTien>
         <GioiTinh>Nữ</GioiTinh>
         <NgayLap>2024-01-16 14:20:00</NgayLap>
-        <DanhSachMaVe>VG003,VT007</DanhSachMaVe>
+        <DanhSachMaVe/>
         <MaKH>KH002</MaKH>
         <NgaySinh>1985-08-20 00:00:00</NgaySinh>
         <DiaChi>TP.HCM</DiaChi>
@@ -53,7 +53,7 @@
         <TongTien>3200000.0</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2024-01-17 10:15:00</NgayLap>
-        <DanhSachMaVe>VG004,VP005</DanhSachMaVe>
+        <DanhSachMaVe/>
         <MaKH>KH003</MaKH>
         <NgaySinh>1992-12-10 00:00:00</NgaySinh>
         <DiaChi>Đà Nẵng</DiaChi>
@@ -74,7 +74,7 @@
         <TongTien>1500000.0</TongTien>
         <GioiTinh>Nữ</GioiTinh>
         <NgayLap>2024-01-18 16:45:00</NgayLap>
-        <DanhSachMaVe>VP006</DanhSachMaVe>
+        <DanhSachMaVe/>
         <MaKH>KH004</MaKH>
         <NgaySinh>1988-03-25 00:00:00</NgaySinh>
         <DiaChi>Cần Thơ</DiaChi>
@@ -95,7 +95,7 @@
         <TongTien>2800000.0</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2024-01-19 11:30:00</NgayLap>
-        <DanhSachMaVe>VT007,VG003</DanhSachMaVe>
+        <DanhSachMaVe/>
         <MaKH>KH005</MaKH>
         <NgaySinh>1995-07-18 00:00:00</NgaySinh>
         <DiaChi>Hải Phòng</DiaChi>
@@ -116,7 +116,7 @@
         <TongTien>1900000.0</TongTien>
         <GioiTinh>Nữ</GioiTinh>
         <NgayLap>2024-01-20 13:20:00</NgayLap>
-        <DanhSachMaVe>VG006</DanhSachMaVe>
+        <DanhSachMaVe/>
         <MaKH>KH006</MaKH>
         <NgaySinh>1993-09-05 00:00:00</NgaySinh>
         <DiaChi>Nha Trang</DiaChi>
@@ -137,7 +137,7 @@
         <TongTien>4200000.0</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2024-01-21 15:10:00</NgayLap>
-        <DanhSachMaVe>VP003,VG002,VP001</DanhSachMaVe>
+        <DanhSachMaVe/>
         <MaKH>KH007</MaKH>
         <NgaySinh>1987-11-30 00:00:00</NgaySinh>
         <DiaChi>Vũng Tàu</DiaChi>
@@ -158,7 +158,7 @@
         <TongTien>1200000.0</TongTien>
         <GioiTinh>Nữ</GioiTinh>
         <NgayLap>2024-01-22 08:45:00</NgayLap>
-        <DanhSachMaVe>VG005</DanhSachMaVe>
+        <DanhSachMaVe/>
         <MaKH>KH008</MaKH>
         <NgaySinh>1991-04-12 00:00:00</NgaySinh>
         <DiaChi>Huế</DiaChi>
@@ -179,7 +179,7 @@
         <TongTien>3500000.0</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2024-01-23 17:30:00</NgayLap>
-        <DanhSachMaVe>VG006,VP007</DanhSachMaVe>
+        <DanhSachMaVe/>
         <MaKH>KH009</MaKH>
         <NgaySinh>1989-06-22 00:00:00</NgaySinh>
         <DiaChi>Quảng Ninh</DiaChi>
@@ -200,7 +200,7 @@
         <TongTien>2000000.0</TongTien>
         <GioiTinh>Nữ</GioiTinh>
         <NgayLap>2024-01-24 12:00:00</NgayLap>
-        <DanhSachMaVe>VT003</DanhSachMaVe>
+        <DanhSachMaVe/>
         <MaKH>KH010</MaKH>
         <NgaySinh>1994-02-14 00:00:00</NgaySinh>
         <DiaChi>Bình Dương</DiaChi>
@@ -221,7 +221,7 @@
         <TongTien>2413843.75</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2025-11-11 01:03:30</NgayLap>
-        <DanhSachMaVe>VG003</DanhSachMaVe>
+        <DanhSachMaVe/>
         <MaKH>KH001</MaKH>
         <NgaySinh>1985-05-15 00:00:00</NgaySinh>
         <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
@@ -230,26 +230,5 @@
         <MatKhau>0000</MatKhau>
         <PhuongThucTT>THẺ_TÍN_DỤNG</PhuongThucTT>
         <CMND>123456789123</CMND>
-    </HoaDon>
-    <HoaDon>
-        <MaHoaDon>HD002</MaHoaDon>
-        <TenDangNhap>tranthibinh</TenDangNhap>
-        <Thue>56181.600000000006</Thue>
-        <Email>tran.thi.binh@email.com</Email>
-        <ThanhTien>996213.6000000001</ThanhTien>
-        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
-        <SoDT>0923456789</SoDT>
-        <TongTien>1123632.0</TongTien>
-        <GioiTinh>Nữ</GioiTinh>
-        <NgayLap>2025-11-10 23:21:32</NgayLap>
-        <DanhSachMaVe>VP003</DanhSachMaVe>
-        <MaKH>KH002</MaKH>
-        <NgaySinh>1988-08-20 00:00:00</NgaySinh>
-        <DiaChi>456 Lê Lợi, Quận Hoàn Kiếm, Hà Nội</DiaChi>
-        <KhuyenMai>183600.0</KhuyenMai>
-        <HoTen>Trần Thị Bình</HoTen>
-        <MatKhau>0000</MatKhau>
-        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
-        <CMND>001234567890</CMND>
     </HoaDon>
 </HoaDons>

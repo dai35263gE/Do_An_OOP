@@ -564,4 +564,16 @@
         <SoGhe>150</SoGhe>
         <GiaCoBan>1700000</GiaCoBan>
     </ChuyenBay>
+    <ChuyenBay>
+        <DiemDi>Hà Nội (HAN)</DiemDi>
+        <MaMayBay>VN-A321</MaMayBay>
+        <GioDen>2025-11-15 08:00:00</GioDen>
+        <SoGheTrong>130</SoGheTrong>
+        <DiemDen>TP.HCM (SGN)</DiemDen>
+        <TrangThai>CHUA_BAY</TrangThai>
+        <MaChuyen>CB048</MaChuyen>
+        <GioKhoiHanh>2025-11-15 06:00:00</GioKhoiHanh>
+        <SoGhe>130</SoGhe>
+        <GiaCoBan>1100000</GiaCoBan>
+    </ChuyenBay>
 </ChuyenBays>
