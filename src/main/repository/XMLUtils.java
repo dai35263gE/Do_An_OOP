@@ -152,7 +152,7 @@ public class XMLUtils {
             switch (loaiVe) {
                 case "VeThuongGia":
                     String[] thuongGiaTags = {
-                        "DichVuDacBiet", "PhuThu", "SoKgHanhLyMienPhi", 
+                        "DichVuDacBiet", "PhuThu", "SoKgHanhLykyGui", 
                         "PhongChoVIP", "LoaiDoUong"
                     };
                     for (String tag : thuongGiaTags) {
@@ -163,7 +163,7 @@ public class XMLUtils {
                 case "VePhoThong":
                     String[] phoThongTags = {
                         "HanhLyXachTay", "SoKgHanhLyKyGui", 
-                        "PhiHanhLy", "LoaiGhe", "DoAn"
+                         "LoaiGhe", "DoAn"
                     };
                     for (String tag : phoThongTags) {
                         data.put(tag, getElementValue(element, tag));
@@ -172,8 +172,7 @@ public class XMLUtils {
                     
                 case "VeTietKiem":
                     String[] tietKiemTags = {
-                        "SoGioDatTruoc", "TyLeGiam", "HoanDoi", 
-                        "PhiHoanDoi", "DieuKienGia"
+                        "HanhLyXachtay"
                     };
                     for (String tag : tietKiemTags) {
                         data.put(tag, getElementValue(element, tag));

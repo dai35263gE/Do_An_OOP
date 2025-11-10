@@ -12,24 +12,16 @@ package model;
 import java.util.Date;
 
 public class VeTietKiem extends VeMayBay {
-    private int soGioDatTruoc;
-    private double tyLeGiam;
-    private boolean hoanDoi;
-    private double phiHoanDoi;
-    private String dieuKienGia;
+    private boolean hanhLyXachTay; // tối đa 7kg
     
-    public VeTietKiem(String maKH,String maVe,Date ngayBay, double giaVe, String maChuyenBay, String soGhe,int soGioDatTruoc, double tyLeGiam, boolean hoanDoi,double phiHoanDoi, String dieuKienGia) {
+    public VeTietKiem(String maKH,String maVe,Date ngayBay, double giaVe, String maChuyenBay, String soGhe,boolean hanhLyXachTay) {
         super(maKH,maVe, ngayBay, giaVe, maChuyenBay, soGhe);
-        this.soGioDatTruoc = soGioDatTruoc;
-        this.tyLeGiam = tyLeGiam;
-        this.hoanDoi = hoanDoi;
-        this.phiHoanDoi = phiHoanDoi;
-        this.dieuKienGia = dieuKienGia;
+        this.hanhLyXachTay = hanhLyXachTay; 
     }
     
     @Override
     public double tinhThue() {
-        double giaSauGiam = giaVe * (1 - tyLeGiam);
+        double giaSauGiam = giaVe * (1 - 0.1);
         return giaSauGiam * 0.05; // Thuế 5% trên giá sau giảm
     }
     
@@ -40,25 +32,16 @@ public class VeTietKiem extends VeMayBay {
     
     @Override
     public String chiTietLoaiVe() {
-        return String.format("Đặt trước: %d giờ, Giảm: %.1f%%, Hoàn đổi: %b, Điều kiện: %s",
-                           soGioDatTruoc, tyLeGiam * 100, hoanDoi, dieuKienGia);
+        return String.format("Hành lý xách tay: %s",
+                           hanhLyXachTay);
     }
     
     @Override
     public double tinhTongTien() {
-        double giaSauGiam = giaVe * (1 - tyLeGiam);
+        double giaSauGiam = giaVe * (1 - 0.1);
         return giaSauGiam + tinhThue();
     }
     
     // Getters and Setters
-    public int getSoGioDatTruoc() { return soGioDatTruoc; }
-    public void setSoGioDatTruoc(int soGioDatTruoc) { this.soGioDatTruoc = soGioDatTruoc; }
-    public double getTyLeGiam() { return tyLeGiam; }
-    public void setTyLeGiam(double tyLeGiam) { this.tyLeGiam = tyLeGiam; }
-    public boolean isHoanDoi() { return hoanDoi; }
-    public void setHoanDoi(boolean hoanDoi) { this.hoanDoi = hoanDoi; }
-    public double getPhiHoanDoi() { return phiHoanDoi; }
-    public void setPhiHoanDoi(double phiHoanDoi) { this.phiHoanDoi = phiHoanDoi; }
-    public String getDieuKienGia() { return dieuKienGia; }
-    public void setDieuKienGia(String dieuKienGia) { this.dieuKienGia = dieuKienGia; }
+    public boolean hanhLyXachTay() { return this.hanhLyXachTay; }
 }

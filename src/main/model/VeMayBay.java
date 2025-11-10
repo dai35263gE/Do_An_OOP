@@ -21,6 +21,8 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
     public static final String TRANG_THAI_DA_THANH_TOAN = "ĐÃ_THANH_TOÁN";
     public static final String TRANG_THAI_DA_HUY = "ĐÃ_HỦY";
     public static final String TRANG_THAI_DA_BAY = "ĐÃ_BAY";
+
+    public static final int PHI_HANH_LY= 15000; // 1 KG
     
     private static final long THOI_GIAN_HUY_TOI_THIEU = 4 * 60 * 60 * 1000; // 4 tiếng tính bằng milliseconds
     //thoi gian doi se gap doi thoi gian huy ( toi thieu)

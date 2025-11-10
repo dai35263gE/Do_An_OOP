@@ -10,6 +10,7 @@ import java.awt.*;
 import java.util.Map;
 
 import Sevice.QuanLyBanVeMayBay;
+import model.*;
 
 public class MainGUI extends JFrame {
     private QuanLyBanVeMayBay quanLy;
@@ -19,6 +20,7 @@ public class MainGUI extends JFrame {
     private VeDialogs veDialogs;
     private ChuyenBayDialogs chuyenBayDialogs;
     private KhachHangDialogs khachHangDialogs;
+    private ThongKeDialogs thongKeDialogs;
 
     public MainGUI() {
         this.quanLy = new QuanLyBanVeMayBay();
@@ -34,6 +36,7 @@ public class MainGUI extends JFrame {
         this.veDialogs = new VeDialogs(this, quanLy, tabManager.getTableVe());
         this.chuyenBayDialogs = new ChuyenBayDialogs(this, quanLy, tabManager.getTableChuyenBay());
         this.khachHangDialogs = new KhachHangDialogs(quanLy, this);
+        this.thongKeDialogs = new ThongKeDialogs(quanLy, this);
     }
 
     private void initComponents() {
@@ -73,7 +76,7 @@ public class MainGUI extends JFrame {
             capNhatTrangThaiGUI();
             
             // Hiển thị thông báo thành công (tùy chọn)
-            showStatusMessage("Du lieu da duoc cap nhat thanh cong!");
+            showStatusMessage("Dữ liệu đã được cập nhật thành công!");
             
         } catch (Exception ex) {
             ValidatorUtils.showExceptionDialog(this, "Lỗi khi cập nhật dữ liệu GUI", ex);
@@ -91,7 +94,9 @@ public class MainGUI extends JFrame {
         tabManager.capNhatTableKhachHang();
     }
 
-    //Cập nhật thống kê trang chủ
+    /**
+     * Cập nhật thống kê trang chủ
+     */
     public void capNhatThongKeTrangChu() {
         statCardManager.capNhatThongKeTrangChu();
     }
@@ -167,10 +172,10 @@ public class MainGUI extends JFrame {
         
         String trangThai = String.format(
             "Hệ thống: %d vé | %d chuyến bay | %d khách hàng | Doanh thu: %,.0f VND",
-            thongKe.get("TongVe"),
-            thongKe.get("TongChuyenBay"),
-            thongKe.get("TongKhachHang"),
-            thongKe.get("TongDoanhThu")
+            thongKe.get("tongVe"),
+            thongKe.get("tongChuyenBay"),
+            thongKe.get("tongKhachHang"),
+            thongKe.get("tongDoanhThu")
         );
         
         // Lưu trạng thái để có thể hiển thị ở đâu đó
@@ -185,7 +190,7 @@ public class MainGUI extends JFrame {
         System.out.println("STATUS: " + message);
         
         // Hiển thị dialog auto-close cho các thao tác quan trọng
-        if (message.contains("thành công") || message.contains("thành công")) {
+        if (message.contains("thành công") || message.contains("success")) {
             ValidatorUtils.showAutoCloseDialog(this, message, 2000);
         }
     }
@@ -242,6 +247,9 @@ public class MainGUI extends JFrame {
     public void onTabChanged(String tabName, int tabIndex) {
         // Cập nhật dữ liệu cho tab được chọn
         switch (tabIndex) {
+            case 0: // Trang chủ
+                capNhatThongKeTrangChu();
+                break;
             case 1: // Quản lý vé
                 capNhatTableVe();
                 break;
@@ -267,15 +275,17 @@ public class MainGUI extends JFrame {
                 tabManager.chuyenTab(1); // Tab quản lý vé
                 veDialogs.moDialogDatVe();
                 break;
-            case "Tìm chuyến bay":
+            case "Thêm chuyến bay":
                 tabManager.chuyenTab(2); // Tab chuyến bay
-                
+                chuyenBayDialogs.moDialogThemChuyenBay();
                 break;
-            case "Thống kê":
+            case "Thêm khách hàng":
+                tabManager.chuyenTab(3); // Tab khách hàng
+                khachHangDialogs.moDialogThemKhachHang();
+                break;
+            case "Thống kê nâng cao":
                 tabManager.chuyenTab(4); // Tab thống kê
-                break;
-            case "Quản lý":
-                // Có thể mở dialog quản lý hệ thống
+                thongKeDialogs.hienThiThongKeNangCao();
                 break;
         }
     }
@@ -308,14 +318,8 @@ public class MainGUI extends JFrame {
             case "Tìm kiếm":
                 veDialogs.moDialogTimKiemVe();
                 break;
-            case "Lọc":
-                // Gọi dialog lọc vé
-                break;
             case "Làm mới":
                 capNhatTableVe();
-                break;
-            case "Xem chi tiết":
-                // veDialogs.xemChiTietVe();
                 break;
         }
     }
@@ -331,15 +335,6 @@ public class MainGUI extends JFrame {
             case "Xóa chuyến":
                 chuyenBayDialogs.xoaChuyenBay();
                 break;
-            case "Tìm kiếm":
-                // Gọi dialog tìm kiếm chuyến bay
-                break;
-            case "Lọc":
-                // Gọi dialog lọc chuyến bay
-                break;
-            case "Xem chi tiết":
-                // Gọi dialog xem chi tiết chuyến bay
-                break;
             case "Làm mới":
                 capNhatTableChuyenBay();
                 break;
@@ -351,30 +346,48 @@ public class MainGUI extends JFrame {
             case "Thêm KH":
                 khachHangDialogs.moDialogThemKhachHang();
                 break;
-            case "Làm mới":
-                capNhatTableKhachHang();
-                break;
             case "Sửa KH":
                 khachHangDialogs.suaKhachHang();
                 break;
             case "Xóa KH":
-                capNhatTableKhachHang();
+                khachHangDialogs.xoaKhachHang();
                 break;
             case "Tìm kiếm":
                 khachHangDialogs.moDialogTimKiemLoc();
                 break;
-            case "Lọc":
-                capNhatTableKhachHang();
+            case "Xem chi tiết":
+                khachHangDialogs.xemChiTietKhachHang();
                 break;
-            case "Xem hóa đơn":
-                khachHangDialogs.xemChiTietHoaDon();
+            case "Làm mới":
+                capNhatTableKhachHang();
                 break;
         }
     }
 
-    public void hienThiThongKe(String loai) {
-        // Xử lý hiển thị thống kê
-        // Có thể gọi từ TabManager
+    public void xuLyThongKe(String action) {
+        switch (action) {
+            case "Thống kê tổng quan":
+                thongKeDialogs.hienThiThongKe("Thống kê tổng quan", tabManager.getTextAreaThongKe());
+                break;
+            case "Doanh thu":
+                thongKeDialogs.hienThiThongKe("Doanh thu", tabManager.getTextAreaThongKe());
+                break;
+            case "Vé theo loại":
+                thongKeDialogs.hienThiThongKe("Vé theo loại", tabManager.getTextAreaThongKe());
+                break;
+            case "Khách hàng":
+                thongKeDialogs.hienThiThongKe("Khách hàng", tabManager.getTextAreaThongKe());
+                break;
+            case "Chuyến bay":
+                thongKeDialogs.hienThiThongKe("Chuyến bay", tabManager.getTextAreaThongKe());
+                break;
+            case "Thống kê nâng cao":
+                thongKeDialogs.hienThiThongKeNangCao();
+                break;
+            case "Làm mới":
+                thongKeDialogs.hienThiThongKe("Làm mới", tabManager.getTextAreaThongKe());
+                break;
+        }
     }
 
     // ========== PHƯƠNG THỨC LƯU VÀ THOÁT ==========
@@ -385,9 +398,9 @@ public class MainGUI extends JFrame {
     public void luuDuLieu() {
         try {
             quanLy.ghiDuLieuRaFile();
-            ValidatorUtils.showSuccessDialog(this, "Đã lưu dữ liệu thành công!");
+            ValidatorUtils.showSuccessDialog(this, "✅ Đã lưu dữ liệu thành công!");
         } catch (Exception e) {
-            ValidatorUtils.showErrorDialog(this, "Lỗi khi lưu dữ liệu: " + e.getMessage());
+            ValidatorUtils.showErrorDialog(this, "❌ Lỗi khi lưu dữ liệu: " + e.getMessage());
         }
     }
 
@@ -407,11 +420,246 @@ public class MainGUI extends JFrame {
         // Nếu CANCEL thì không làm gì
     }
 
+    /**
+     * Xử lý sự kiện từ menu hệ thống
+     */
+    public void xuLyHeThong(String action) {
+        switch (action) {
+            case "Lưu dữ liệu":
+                luuDuLieu();
+                break;
+            case "Tải lại dữ liệu":
+                quanLy.docDuLieuTuFile();
+                capNhatDuLieuGUI();
+                ValidatorUtils.showSuccessDialog(this, "✅ Đã tải lại dữ liệu thành công!");
+                break;
+            case "Thoát":
+                thoatChuongTrinh();
+                break;
+        }
+    }
+
+    /**
+     * Xử lý sự kiện từ menu trợ giúp
+     */
+    public void xuLyTroGiup(String action) {
+        switch (action) {
+            case "Giới thiệu":
+                hienThiGioiThieu();
+                break;
+            case "Hướng dẫn sử dụng":
+                hienThiHuongDan();
+                break;
+            case "Kiểm tra cập nhật":
+                kiemTraCapNhat();
+                break;
+        }
+    }
+
+    private void hienThiGioiThieu() {
+        String message = 
+            "HỆ THỐNG QUẢN LÝ VÉ MÁY BAY\n\n" +
+            "Phiên bản: " + QuanLyBanVeMayBay.getPhienBan() + "\n" +
+            "Phát triển bởi: Nhóm phát triển phần mềm\n\n" +
+            "Chức năng chính:\n" +
+            "• Quản lý vé máy bay\n" +
+            "• Quản lý chuyến bay\n" +
+            "• Quản lý khách hàng\n" +
+            "• Thống kê và báo cáo\n\n" +
+            "© 2024 - All rights reserved";
+        
+        JOptionPane.showMessageDialog(this, message, "Giới thiệu", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void hienThiHuongDan() {
+        String huongDan = 
+            "HƯỚNG DẪN SỬ DỤNG HỆ THỐNG\n\n" +
+            "1. QUẢN LÝ VÉ:\n" +
+            "   - Thêm vé: Chọn tab Quản lý vé → Nhấn 'Thêm vé'\n" +
+            "   - Tìm kiếm: Sử dụng chức năng tìm kiếm đa tiêu chí\n" +
+            "   - Làm mới: Cập nhật lại dữ liệu bảng\n\n" +
+            "2. QUẢN LÝ CHUYẾN BAY:\n" +
+            "   - Thêm chuyến: Tạo chuyến bay mới với đầy đủ thông tin\n" +
+            "   - Sửa chuyến: Chọn chuyến bay và nhấn 'Sửa'\n" +
+            "   - Xóa chuyến: Chỉ xóa được chuyến bay có trạng thái HỦY\n\n" +
+            "3. QUẢN LÝ KHÁCH HÀNG:\n" +
+            "   - Thêm KH: Đăng ký khách hàng mới\n" +
+            "   - Tìm kiếm & Lọc: Tìm kiếm theo nhiều tiêu chí\n" +
+            "   - Xem chi tiết: Xem thông tin đầy đủ của khách hàng\n\n" +
+            "4. THỐNG KÊ:\n" +
+            "   - Xem các báo cáo thống kê chi tiết\n" +
+            "   - Thống kê nâng cao với biểu đồ và bảng\n\n" +
+            "LƯU Ý: Luôn lưu dữ liệu trước khi thoát chương trình!";
+        
+        JTextArea textArea = new JTextArea(huongDan);
+        textArea.setEditable(false);
+        textArea.setFont(new Font("Arial", Font.PLAIN, 12));
+        textArea.setBackground(new Color(240, 240, 240));
+        
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(500, 400));
+        
+        JOptionPane.showMessageDialog(this, scrollPane, "Hướng dẫn sử dụng", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void kiemTraCapNhat() {
+        // Giả lập kiểm tra cập nhật
+        JOptionPane.showMessageDialog(this, 
+            "✅ Bạn đang sử dụng phiên bản mới nhất!\n\n" +
+            "Phiên bản hiện tại: " + QuanLyBanVeMayBay.getPhienBan() + "\n" +
+            "Không có bản cập nhật mới.", 
+            "Kiểm tra cập nhật", 
+            JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    // ========== PHƯƠNG THỨC XỬ LÝ LỖI VÀ THÔNG BÁO ==========
+
+    /**
+     * Hiển thị thông báo lỗi
+     */
+    public void hienThiLoi(String message) {
+        ValidatorUtils.showErrorDialog(this, message);
+    }
+
+    /**
+     * Hiển thị thông báo thành công
+     */
+    public void hienThiThanhCong(String message) {
+        ValidatorUtils.showSuccessDialog(this, message);
+    }
+
+    /**
+     * Hiển thị thông báo cảnh báo
+     */
+    public void hienThiCanhBao(String message) {
+        ValidatorUtils.showWarningDialog(this, message);
+    }
+
+    // ========== PHƯƠNG THỨC QUẢN LÝ TRẠNG THÁI ỨNG DỤNG ==========
+
+    /**
+     * Minimize ứng dụng
+     */
+    public void minimize() {
+        setState(JFrame.ICONIFIED);
+    }
+
+    /**
+     * Maximize ứng dụng
+     */
+    public void maximize() {
+        if (getExtendedState() == JFrame.MAXIMIZED_BOTH) {
+            setExtendedState(JFrame.NORMAL);
+        } else {
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
+        }
+    }
+
+    /**
+     * Kiểm tra xem ứng dụng có đang maximize không
+     */
+    public boolean isMaximized() {
+        return getExtendedState() == JFrame.MAXIMIZED_BOTH;
+    }
+
+    // ========== PHƯƠNG THỨC ĐƯỢC GỌI TỪ CÁC DIALOG ==========
+
+    /**
+     * Được gọi khi thêm thành công một chuyến bay mới
+     */
+    public void onThemChuyenBayThanhCong(ChuyenBay chuyenBay) {
+        capNhatSauKhiThayDoiChuyenBay();
+        hienThiThanhCong("Thêm chuyến bay thành công: " + chuyenBay.getMaChuyen());
+    }
+
+    /**
+     * Được gọi khi sửa thành công chuyến bay
+     */
+    public void onSuaChuyenBayThanhCong(ChuyenBay chuyenBay) {
+        capNhatSauKhiThayDoiChuyenBay();
+        hienThiThanhCong("Cập nhật chuyến bay thành công: " + chuyenBay.getMaChuyen());
+    }
+
+    /**
+     * Được gọi khi xóa thành công chuyến bay
+     */
+    public void onXoaChuyenBayThanhCong(String maChuyen) {
+        capNhatSauKhiThayDoiChuyenBay();
+        hienThiThanhCong("Xóa chuyến bay thành công: " + maChuyen);
+    }
+
+    /**
+     * Được gọi khi thêm thành công khách hàng mới
+     */
+    public void onThemKhachHangThanhCong(KhachHang khachHang) {
+        capNhatSauKhiThayDoiKhachHang();
+        hienThiThanhCong("Thêm khách hàng thành công: " + khachHang.getHoTen());
+    }
+
+    /**
+     * Được gọi khi sửa thành công khách hàng
+     */
+    public void onSuaKhachHangThanhCong(KhachHang khachHang) {
+        capNhatSauKhiThayDoiKhachHang();
+        hienThiThanhCong("Cập nhật khách hàng thành công: " + khachHang.getHoTen());
+    }
+
+    /**
+     * Được gọi khi xóa thành công khách hàng
+     */
+    public void onXoaKhachHangThanhCong(String maKH) {
+        capNhatSauKhiThayDoiKhachHang();
+        hienThiThanhCong("Xóa khách hàng thành công: " + maKH);
+    }
+
+    // ========== PHƯƠNG THỨC KIỂM TRA VÀ VALIDATE ==========
+
+    /**
+     * Kiểm tra xem có dữ liệu nào được chọn trong bảng không
+     */
+    public boolean kiemTraDuocChon(JTable table) {
+        return table.getSelectedRow() >= 0;
+    }
+
+    /**
+     * Hiển thị thông báo yêu cầu chọn dòng
+     */
+    public void hienThiYeuCauChon(String tenDoiTuong) {
+        hienThiCanhBao("Vui lòng chọn một " + tenDoiTuong + " để thực hiện thao tác này!");
+    }
+
+    /**
+     * Lấy dòng được chọn từ bảng
+     */
+    public int getSelectedRow(JTable table) {
+        return table.getSelectedRow();
+    }
+
+    /**
+     * Lấy giá trị từ bảng tại dòng và cột được chỉ định
+     */
+    public Object getValueAt(JTable table, int row, int column) {
+        return table.getValueAt(row, column);
+    }
+
     public static void main(String[] args) {
-       
+        // Set look and feel
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Hiển thị splash screen (tùy chọn)
+        showSplashScreen();
 
         SwingUtilities.invokeLater(() -> {
             new MainGUI().setVisible(true);
         });
+    }
+
+    private static void showSplashScreen() {
+        // Có thể thêm splash screen ở đây nếu cần
+        System.out.println("🚀 Khởi động hệ thống quản lý vé máy bay...");
     }
 }

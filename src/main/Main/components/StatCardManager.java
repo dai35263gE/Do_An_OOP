@@ -26,17 +26,18 @@ public class StatCardManager {
     private void taoStatCards() {
         // Tạo 8 thẻ thống kê
         String[] titles = {
-            "Tổng số vé", "Tổng chuyến bay", "Tổng khách hàng", "Tổng doanh thu", "Tỷ lệ lấp đầy"
+            "Tổng số vé", "Tổng chuyến bay", "Tổng khách hàng", "Tổng doanh thu", 
+            "Tỷ lệ lấp đầy", "Vé thương gia", "Vé phổ thông", "Vé tiết kiệm"
         };
 
-        String[] values = {"0", "0", "0", "0 VND", "0%"};
+        String[] values = {"0", "0", "0", "0 VND", "0%", "0", "0", "0"};
 
         String[] types = {
             "primary", "success", "info", "warning",
-            "primary"
+            "primary", "success", "info", "warning"
         };
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 8; i++) {
             statCards[i] = taoStatCard(titles[i], values[i], types[i]);
             statsPanel.add(statCards[i]);
         }
@@ -110,11 +111,16 @@ public class StatCardManager {
     public void capNhatThongKeTrangChu() {
         quanLy.docDuLieuTuFile();
         Map<String, Object> thongKe = quanLy.thongKeTongQuan();
+        
+        // Cập nhật các thẻ thống kê
         updateStatCard(0, String.valueOf(thongKe.get("tongVe")));
         updateStatCard(1, String.valueOf(thongKe.get("tongChuyenBay")));
         updateStatCard(2, String.valueOf(thongKe.get("tongKhachHang")));
-        updateStatCard(3, String.format("%,.0f", thongKe.get("tongDoanhThu")));
+        updateStatCard(3, String.format("%,.0f VND", thongKe.get("tongDoanhThu")));
         updateStatCard(4, String.format("%.1f%%", thongKe.get("tiLeLapDay")));
+        updateStatCard(5, String.valueOf(thongKe.get("VeThuongGia")));
+        updateStatCard(6, String.valueOf(thongKe.get("VePhoThong")));
+        updateStatCard(7, String.valueOf(thongKe.get("VeTietKiem")));
     }
 
     public void capNhatThongKeTheoLoai(String loai) {
@@ -123,16 +129,16 @@ public class StatCardManager {
         switch (loai) {
             case "ve":
                 updateStatCard(0, String.valueOf(thongKe.get("tongVe")));
-                updateStatCard(4, String.valueOf(thongKe.get("VeThuongGia")));
-                updateStatCard(5, String.valueOf(thongKe.get("VePhoThong")));
-                updateStatCard(6, String.valueOf(thongKe.get("VeTietKiem")));
+                updateStatCard(5, String.valueOf(thongKe.get("VeThuongGia")));
+                updateStatCard(6, String.valueOf(thongKe.get("VePhoThong")));
+                updateStatCard(7, String.valueOf(thongKe.get("VeTietKiem")));
                 break;
             case "chuyenbay":
-                updateStatCard(1, String.valueOf(thongKe.get("TongChuyenBay")));
-                updateStatCard(7, String.format("%.1f%%", thongKe.get("tiLeLapDay")));
+                updateStatCard(1, String.valueOf(thongKe.get("tongChuyenBay")));
+                updateStatCard(4, String.format("%.1f%%", thongKe.get("tiLeLapDay")));
                 break;
             case "doanhthu":
-                updateStatCard(3, String.format("%,.0f VND", thongKe.get("TongDoanhThu")));
+                updateStatCard(3, String.format("%,.0f VND", thongKe.get("tongDoanhThu")));
                 break;
             default:
                 capNhatThongKeTrangChu();
@@ -140,7 +146,7 @@ public class StatCardManager {
     }
 
     public void resetStatCards() {
-        String[] defaultValues = {"0", "0", "0", "0 VND", "0", "0", "0", "0%"};
+        String[] defaultValues = {"0", "0", "0", "0 VND", "0%", "0", "0", "0"};
         for (int i = 0; i < statCards.length; i++) {
             updateStatCard(i, defaultValues[i]);
         }
@@ -259,10 +265,10 @@ public class StatCardManager {
             "Tổng số chuyến bay hiện có",
             "Tổng số khách hàng đã đăng ký",
             "Tổng doanh thu từ tất cả vé đã bán",
+            "Tỷ lệ ghế đã được đặt trên tổng số ghế",
             "Số vé hạng thương gia đã bán",
             "Số vé hạng phổ thông đã bán", 
-            "Số vé hạng tiết kiệm đã bán",
-            "Tỷ lệ ghế đã được đặt trên tổng số ghế"
+            "Số vé hạng tiết kiệm đã bán"
         };
     }
 

@@ -38,9 +38,9 @@ public class ThongKeDialogs {
                         .append("\n\n");
 
                 sb.append("Phân loại vé:\n");
-                sb.append("- Thương gia: ").append(thongKe.get("VeThuongGia")).append(" vé\n");
-                sb.append("- Phổ thông: ").append(thongKe.get("VePhoThong")).append(" vé\n");
-                sb.append("- Tiết kiệm: ").append(thongKe.get("VeTietKiem")).append(" vé\n");
+                sb.append("- Thương gia: ").append(thongKe.get("veThuongGia")).append(" vé\n");
+                sb.append("- Phổ thông: ").append(thongKe.get("vePhoThong")).append(" vé\n");
+                sb.append("- Tiết kiệm: ").append(thongKe.get("veTietKiem")).append(" vé\n");
                 break;
 
             case "Doanh thu":
@@ -87,17 +87,11 @@ public class ThongKeDialogs {
         sb.append("=== THỐNG KÊ VÉ THEO LOẠI ===\n\n");
 
         // Thống kê theo loại vé
-        long veThuongGia = dsVe.getDanhSach().stream()
-                .filter(ve -> ve instanceof VeThuongGia)
-                .count();
+        long veThuongGia = dsVe.getDanhSach().stream().filter(ve -> ve.loaiVe().equals("VeThuongGia")).count();
         
-        long vePhoThong = dsVe.getDanhSach().stream()
-                .filter(ve -> ve instanceof VePhoThong)
-                .count();
+        long vePhoThong = dsVe.getDanhSach().stream().filter(ve -> ve.loaiVe().equals("VePhoThong")).count();
         
-        long veTietKiem = dsVe.getDanhSach().stream()
-                .filter(ve -> !(ve instanceof VeThuongGia) && !(ve instanceof VePhoThong))
-                .count();
+        long veTietKiem = dsVe.getDanhSach().stream().filter(ve -> ve.loaiVe().equals("VeTietKiem")).count();
 
         long tongVe = dsVe.getDanhSach().size();
 

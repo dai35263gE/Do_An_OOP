@@ -121,8 +121,6 @@ public abstract class NguoiDung {
     public void setSoDT(String soDT) { 
         if (soDT == null || soDT.trim().isEmpty()) 
             throw new IllegalArgumentException("Số ĐT không được để trống");
-        if (!validatePhone(soDT.trim())) 
-            throw new IllegalArgumentException("Số điện thoại không hợp lệ");
         this.soDT = soDT.trim();
     }
     

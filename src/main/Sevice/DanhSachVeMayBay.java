@@ -25,10 +25,6 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
     public List<VeMayBay> getDanhSach() {
         return new ArrayList<>(danhSach);
     }
-    public List<VeMayBay> getDanhSachVeMayBay() {
-        return new ArrayList<>(danhSach);
-    }
-
     // ========== IMPLEMENT IQUANLY ==========
     @Override
     public boolean them(VeMayBay ve) {
@@ -307,8 +303,7 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
                         maKH, maVe, ngayBay, giaVe, maChuyen, soGhe,
                         data.get("DichVuDacBiet"),
                         XMLUtils.stringToDouble(data.get("PhuThu")),
-                        XMLUtils.stringToInt(data.get("SoKgHanhLyMienPhi")),
-                        XMLUtils.stringToBoolean(data.get("PhongChoVIP")),
+                        XMLUtils.stringToBoolean(data.get("PhongChoVIP")),XMLUtils.stringToInt(data.get("SoKgHanhLyKyGui")),
                         data.get("LoaiDoUong")
                     );
                     
@@ -317,7 +312,6 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
                         maKH,maVe, ngayBay, giaVe, maChuyen, soGhe,
                         XMLUtils.stringToBoolean(data.get("HanhLyXachTay")),
                         XMLUtils.stringToInt(data.get("SoKgHanhLyKyGui")),
-                        XMLUtils.stringToDouble(data.get("PhiHanhLy")),
                         data.get("LoaiGhe"),
                         XMLUtils.stringToBoolean(data.get("DoAn"))
                     );
@@ -325,11 +319,7 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
                 case "VeTietKiem":
                     return new VeTietKiem(
                         maKH,maVe, ngayBay, giaVe, maChuyen, soGhe,
-                        XMLUtils.stringToInt(data.get("SoGioDatTruoc")),
-                        XMLUtils.stringToDouble(data.get("TyLeGiam")),
-                        XMLUtils.stringToBoolean(data.get("HoanDoi")),
-                        XMLUtils.stringToDouble(data.get("PhiHoanDoi")),
-                        data.get("DieuKienGia")
+                        XMLUtils.stringToBoolean(data.get("HanhLyXachTay"))
                     );
                     
                 default:
@@ -364,7 +354,7 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
                     data.put("LoaiVe", "VeThuongGia");
                     data.put("DichVuDacBiet", vtg.getDichVuDacBiet());
                     data.put("PhuThu", String.valueOf(vtg.getPhuThu()));
-                    data.put("SoKgHanhLyMienPhi", String.valueOf(vtg.getSoKgHanhLyMienPhi()));
+                    data.put("SoKgHanhLyKyGui", String.valueOf(vtg.getSoKgHanhLyKiGui()));
                     data.put("PhongChoVIP", String.valueOf(vtg.isPhongChoVIP()));
                     data.put("LoaiDoUong", vtg.getLoaiDoUong());
                 } 
@@ -372,17 +362,12 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
                     data.put("LoaiVe", "VePhoThong");
                     data.put("HanhLyXachTay", String.valueOf(vpt.isHanhLyXachTay()));
                     data.put("SoKgHanhLyKyGui", String.valueOf(vpt.getSoKgHanhLyKyGui()));
-                    data.put("PhiHanhLy", String.valueOf(vpt.getPhiHanhLy()));
                     data.put("LoaiGhe", vpt.getLoaiGhe());
                     data.put("DoAn", String.valueOf(vpt.isDoAn()));
                 }
                 else if (ve instanceof VeTietKiem vtk) {
                     data.put("LoaiVe", "VeTietKiem");
-                    data.put("SoGioDatTruoc", String.valueOf(vtk.getSoGioDatTruoc()));
-                    data.put("TyLeGiam", String.valueOf(vtk.getTyLeGiam()));
-                    data.put("HoanDoi", String.valueOf(vtk.isHoanDoi()));
-                    data.put("PhiHoanDoi", String.valueOf(vtk.getPhiHoanDoi()));
-                    data.put("DieuKienGia", vtk.getDieuKienGia());
+                    data.put("HanhLyXachTay", String.valueOf(vtk.hanhLyXachTay()));
                 }
                 
                 dataList.add(data);

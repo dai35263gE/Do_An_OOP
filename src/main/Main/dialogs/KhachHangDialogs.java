@@ -611,16 +611,441 @@ public class KhachHangDialogs {
         }
     }
 
-    // ========== CÁC PHƯƠNG THỨC ĐÃ CÓ TRƯỚC ==========
+    // ========== DIALOG THÊM KHÁCH HÀNG MỚI ==========
     public void moDialogThemKhachHang() {
-        // Giữ nguyên code cũ...
+        JDialog dialog = new JDialog(mainGUI, "Thêm Khách Hàng Mới", true);
+        dialog.setSize(500, 600);
+        dialog.setLocationRelativeTo(mainGUI);
+        dialog.setLayout(new BorderLayout());
+
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
+
+        // Header
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(new Color(70, 130, 180));
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+        
+        JLabel lblTitle = new JLabel("👤 THÊM KHÁCH HÀNG MỚI");
+        lblTitle.setFont(new Font("Arial", Font.BOLD, 16));
+        lblTitle.setForeground(Color.WHITE);
+        headerPanel.add(lblTitle, BorderLayout.WEST);
+
+        // Form panel
+        JPanel formPanel = new JPanel(new GridLayout(0, 2, 10, 10));
+        formPanel.setBorder(BorderFactory.createTitledBorder("Thông tin khách hàng"));
+
+        // Tạo mã KH tự động
+        int soKHHienTai = quanLy.getDsKhachHang().demSoLuong();
+        String maKHTuDong = "KH" + String.format("%04d", soKHHienTai + 1);
+
+        JTextField txtMaKH = new JTextField(maKHTuDong);
+        txtMaKH.setEditable(false);
+        txtMaKH.setBackground(new Color(240, 240, 240));
+        
+        JTextField txtHoTen = new JTextField();
+        JTextField txtCMND = new JTextField();
+        JTextField txtSoDT = new JTextField();
+        JTextField txtEmail = new JTextField();
+        JTextField txtNgaySinh = new JTextField();
+        JComboBox<String> cboGioiTinh = new JComboBox<>(new String[]{"Nam", "Nữ"});
+        JTextField txtDiaChi = new JTextField();
+
+        // Thêm components vào form
+        formPanel.add(new JLabel("Mã KH:"));
+        formPanel.add(txtMaKH);
+        formPanel.add(new JLabel("Họ tên:*"));
+        formPanel.add(txtHoTen);
+        formPanel.add(new JLabel("CMND/CCCD:*"));
+        formPanel.add(txtCMND);
+        formPanel.add(new JLabel("Số điện thoại:*"));
+        formPanel.add(txtSoDT);
+        formPanel.add(new JLabel("Email:*"));
+        formPanel.add(txtEmail);
+        formPanel.add(new JLabel("Ngày sinh (dd/MM/yyyy):"));
+        formPanel.add(txtNgaySinh);
+        formPanel.add(new JLabel("Giới tính:"));
+        formPanel.add(cboGioiTinh);
+        formPanel.add(new JLabel("Địa chỉ:"));
+        formPanel.add(txtDiaChi);
+
+        // Panel button
+        JPanel panelButton = new JPanel(new FlowLayout());
+        JButton btnThem = new JButton("Thêm Khách Hàng");
+        JButton btnHuy = new JButton("Hủy");
+        JButton btnLamMoi = new JButton("Làm Mới");
+
+        // Style buttons
+        btnThem.setBackground(new Color(60, 179, 113));
+        btnThem.setForeground(Color.WHITE);
+        btnLamMoi.setBackground(new Color(255, 165, 0));
+        btnLamMoi.setForeground(Color.WHITE);
+
+        btnThem.addActionListener(e -> {
+            if (!validateThemKhachHang(dialog, txtHoTen, txtCMND, txtSoDT, txtEmail)) {
+                return;
+            }
+
+            try {
+                // Lấy dữ liệu từ form
+                String hoTen = txtHoTen.getText().trim();
+                String cmnd = txtCMND.getText().trim();
+                String soDT = txtSoDT.getText().trim();
+                String email = txtEmail.getText().trim();
+                String ngaySinhStr = txtNgaySinh.getText().trim();
+                String gioiTinh = (String) cboGioiTinh.getSelectedItem();
+                String diaChi = txtDiaChi.getText().trim();
+
+                // Parse ngày sinh
+                java.util.Date ngaySinh = null;
+                if (!ngaySinhStr.isEmpty()) {
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        sdf.setLenient(false);
+                        ngaySinh = sdf.parse(ngaySinhStr);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(dialog, 
+                            "Định dạng ngày sinh không hợp lệ!", 
+                            "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+
+                // Kiểm tra CMND đã tồn tại chưa
+                if (quanLy.getDsKhachHang().timKiemTheoCMND(cmnd) != null) {
+                    JOptionPane.showMessageDialog(dialog, 
+                        "CMND/CCCD đã tồn tại trong hệ thống!", 
+                        "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Tạo khách hàng mới
+                KhachHang khachHangMoi = new KhachHang(
+                    maKHTuDong, hoTen,  soDT, email,cmnd,
+                     ngaySinh,gioiTinh, diaChi, maKHTuDong, "0000"
+                );
+
+                // Thêm vào danh sách
+                boolean result = quanLy.getDsKhachHang().them(khachHangMoi);
+                
+                if (result) {
+                    JOptionPane.showMessageDialog(dialog, 
+                        "Thêm khách hàng thành công!\n\n" +
+                        "Mã KH: " + maKHTuDong + "\n" +
+                        "Họ tên: " + hoTen + "\n" +
+                        "CMND: " + cmnd, 
+                        "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                    
+                    // Đóng dialog và cập nhật giao diện
+                    dialog.dispose();
+                    mainGUI.capNhatDuLieuGUI();
+                } else {
+                    JOptionPane.showMessageDialog(dialog, 
+                        "Không thể thêm khách hàng!", 
+                        "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(dialog, 
+                    "Lỗi khi thêm khách hàng: " + ex.getMessage(), 
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
+        });
+
+        btnLamMoi.addActionListener(e -> {
+            // Tạo mã KH mới
+            int soKHMoi = quanLy.getDsKhachHang().demSoLuong();
+            String maKHMoi = "KH" + String.format("%04d", soKHMoi + 1);
+            txtMaKH.setText(maKHMoi);
+            
+            // Reset các field
+            txtHoTen.setText("");
+            txtCMND.setText("");
+            txtSoDT.setText("");
+            txtEmail.setText("");
+            txtNgaySinh.setText("");
+            cboGioiTinh.setSelectedIndex(0);
+            txtDiaChi.setText("");
+            
+            JOptionPane.showMessageDialog(dialog, "Đã làm mới form!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        });
+
+        btnHuy.addActionListener(e -> dialog.dispose());
+
+        panelButton.add(btnThem);
+        panelButton.add(btnLamMoi);
+        panelButton.add(btnHuy);
+
+        mainPanel.add(headerPanel, BorderLayout.NORTH);
+        mainPanel.add(formPanel, BorderLayout.CENTER);
+        mainPanel.add(panelButton, BorderLayout.SOUTH);
+
+        dialog.add(mainPanel);
+        dialog.setVisible(true);
     }
 
+    private boolean validateThemKhachHang(JDialog dialog, JTextField txtHoTen, JTextField txtCMND, 
+                                         JTextField txtSoDT, JTextField txtEmail) {
+        if (txtHoTen.getText().trim().isEmpty() ||
+            txtCMND.getText().trim().isEmpty() ||
+            txtSoDT.getText().trim().isEmpty() ||
+            txtEmail.getText().trim().isEmpty()) {
+
+            JOptionPane.showMessageDialog(dialog,
+                    "Vui lòng nhập đầy đủ thông tin bắt buộc (*)",
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (!ValidatorUtils.isValidCMND(txtCMND.getText().trim())) {
+            JOptionPane.showMessageDialog(dialog,
+                    "CMND/CCCD không hợp lệ! Phải có 9 hoặc 12 số.",
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (!ValidatorUtils.isValidPhoneNumber(txtSoDT.getText().trim())) {
+            JOptionPane.showMessageDialog(dialog,
+                    "Số điện thoại không hợp lệ!",
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (!ValidatorUtils.isValidEmail(txtEmail.getText().trim())) {
+            JOptionPane.showMessageDialog(dialog,
+                    "Email không hợp lệ!",
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }
+
+    // ========== DIALOG XEM CHI TIẾT HÓA ĐƠN ==========
     public void xemChiTietHoaDon() {
-        // Giữ nguyên code cũ...
+        int selectedRow = mainGUI.getTableKhachHang().getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(mainGUI, "Vui lòng chọn một khách hàng!", "Thông báo", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String maKH = (String) mainGUI.getTableKhachHang().getValueAt(selectedRow, 0);
+        KhachHang khachHang = quanLy.getDsKhachHang().timKiemTheoMa(maKH);
+        
+        if (khachHang == null) {
+            JOptionPane.showMessageDialog(mainGUI, "Không tìm thấy thông tin khách hàng!", "Lỗi", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        List<HoaDon> hoaDonList = khachHang.getLichSuHoaDon();
+        if (hoaDonList.isEmpty()) {
+            JOptionPane.showMessageDialog(mainGUI, 
+                "Khách hàng này chưa có hóa đơn nào!", 
+                "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        JDialog dialog = new JDialog(mainGUI, "Lịch Sử Hóa Đơn - " + khachHang.getHoTen(), true);
+        dialog.setSize(800, 600);
+        dialog.setLocationRelativeTo(mainGUI);
+        dialog.setLayout(new BorderLayout());
+
+        // Tạo bảng hiển thị hóa đơn
+        String[] columns = {"Mã HĐ", "Ngày Lập", "Số Vé", "Tổng Tiền", "Trạng Thái", "Phương Thức TT"};
+        DefaultTableModel model = new DefaultTableModel(columns, 0);
+
+        for (HoaDon hd : hoaDonList) {
+            model.addRow(new Object[]{
+                hd.getMaHoaDon(),
+                new SimpleDateFormat("dd/MM/yyyy HH:mm").format(hd.getNgayLap()),
+                hd.getDanhSachVe().size(),
+                String.format("%,d VND", (int) hd.getTongTien()),
+                hd.getTrangThai(),
+                hd.getPhuongThucTT()
+            });
+        }
+
+        JTable table = new JTable(model);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        // Panel button
+        JPanel panelButton = new JPanel(new FlowLayout());
+        JButton btnXemChiTiet = new JButton("Xem Chi Tiết Hóa Đơn");
+        JButton btnInHoaDon = new JButton("In Hóa Đơn");
+        JButton btnDong = new JButton("Đóng");
+
+        btnXemChiTiet.addActionListener(e -> {
+            int selectedHoaDonRow = table.getSelectedRow();
+            if (selectedHoaDonRow < 0) {
+                JOptionPane.showMessageDialog(dialog, "Vui lòng chọn một hóa đơn!", "Thông báo", 
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            String maHD = (String) table.getValueAt(selectedHoaDonRow, 0);
+            HoaDon hoaDon = timHoaDonTheoMa(hoaDonList, maHD);
+            
+            if (hoaDon != null) {
+                hienThiChiTietHoaDon(hoaDon, khachHang);
+            }
+        });
+
+        btnInHoaDon.addActionListener(e -> {
+            int selectedHoaDonRow = table.getSelectedRow();
+            if (selectedHoaDonRow < 0) {
+                JOptionPane.showMessageDialog(dialog, "Vui lòng chọn một hóa đơn!", "Thông báo", 
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            String maHD = (String) table.getValueAt(selectedHoaDonRow, 0);
+            HoaDon hoaDon = timHoaDonTheoMa(hoaDonList, maHD);
+            
+            if (hoaDon != null) {
+                inHoaDon(hoaDon, khachHang);
+            }
+        });
+
+        btnDong.addActionListener(e -> dialog.dispose());
+
+        panelButton.add(btnXemChiTiet);
+        panelButton.add(btnInHoaDon);
+        panelButton.add(btnDong);
+
+        dialog.add(new JLabel("LỊCH SỬ HÓA ĐƠN - " + khachHang.getHoTen(), JLabel.CENTER), BorderLayout.NORTH);
+        dialog.add(scrollPane, BorderLayout.CENTER);
+        dialog.add(panelButton, BorderLayout.SOUTH);
+
+        dialog.setVisible(true);
+    }
+
+    private HoaDon timHoaDonTheoMa(List<HoaDon> hoaDonList, String maHD) {
+        for (HoaDon hd : hoaDonList) {
+            if (hd.getMaHoaDon().equals(maHD)) {
+                return hd;
+            }
+        }
+        return null;
+    }
+
+    private void hienThiChiTietHoaDon(HoaDon hoaDon, KhachHang khachHang) {
+        JDialog dialog = new JDialog(mainGUI, "Chi Tiết Hóa Đơn - " + hoaDon.getMaHoaDon(), true);
+        dialog.setSize(600, 500);
+        dialog.setLocationRelativeTo(mainGUI);
+        dialog.setLayout(new BorderLayout());
+
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
+
+        // Thông tin hóa đơn
+        JPanel panelThongTin = new JPanel(new GridLayout(0, 2, 10, 5));
+        panelThongTin.setBorder(BorderFactory.createTitledBorder("Thông tin hóa đơn"));
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+        panelThongTin.add(new JLabel("Mã hóa đơn:"));
+        panelThongTin.add(new JLabel(hoaDon.getMaHoaDon()));
+        panelThongTin.add(new JLabel("Ngày lập:"));
+        panelThongTin.add(new JLabel(sdf.format(hoaDon.getNgayLap())));
+        panelThongTin.add(new JLabel("Khách hàng:"));
+        panelThongTin.add(new JLabel(khachHang.getHoTen()));
+        panelThongTin.add(new JLabel("Số vé:"));
+        panelThongTin.add(new JLabel(String.valueOf(hoaDon.getDanhSachVe().size())));
+        panelThongTin.add(new JLabel("Tổng tiền:"));
+        panelThongTin.add(new JLabel(String.format("%,d VND", (int) hoaDon.getTongTien())));
+        panelThongTin.add(new JLabel("Trạng thái:"));
+        panelThongTin.add(new JLabel(hoaDon.getTrangThai()));
+        panelThongTin.add(new JLabel("Phương thức TT:"));
+        panelThongTin.add(new JLabel(hoaDon.getPhuongThucTT()));
+
+        // Danh sách vé
+        JPanel panelVe = new JPanel(new BorderLayout());
+        panelVe.setBorder(BorderFactory.createTitledBorder("Danh sách vé"));
+
+        String[] columnsVe = {"Mã Vé", "Chuyến Bay", "Số Ghế", "Loại Vé", "Giá Vé"};
+        DefaultTableModel modelVe = new DefaultTableModel(columnsVe, 0);
+
+        for (VeMayBay ve : hoaDon.getDanhSachVe()) {
+            ChuyenBay cb = quanLy.getDsChuyenBay().timKiemTheoMa(ve.getMaChuyen());
+            String chuyenBay = cb != null ? cb.getDiemDi() + " → " + cb.getDiemDen() : "N/A";
+            
+            modelVe.addRow(new Object[]{
+                ve.getMaVe(),
+                chuyenBay,
+                ve.getSoGhe(),
+                ve.getClass().getSimpleName().replace("Ve", ""),
+                String.format("%,d VND", (int) ve.getGiaVe())
+            });
+        }
+
+        JTable tableVe = new JTable(modelVe);
+        JScrollPane scrollPaneVe = new JScrollPane(tableVe);
+        panelVe.add(scrollPaneVe, BorderLayout.CENTER);
+
+        // Panel button
+        JPanel panelButton = new JPanel(new FlowLayout());
+        JButton btnDong = new JButton("Đóng");
+        JButton btnIn = new JButton("In Hóa Đơn");
+
+        btnIn.addActionListener(e -> inHoaDon(hoaDon, khachHang));
+        btnDong.addActionListener(e -> dialog.dispose());
+
+        panelButton.add(btnIn);
+        panelButton.add(btnDong);
+
+        mainPanel.add(panelThongTin, BorderLayout.NORTH);
+        mainPanel.add(panelVe, BorderLayout.CENTER);
+        mainPanel.add(panelButton, BorderLayout.SOUTH);
+
+        dialog.add(mainPanel);
+        dialog.setVisible(true);
     }
 
     private void inHoaDon(HoaDon hoaDon, KhachHang khachHang) {
-        // Giữ nguyên code cũ...
+        // Tạo nội dung hóa đơn
+        StringBuilder content = new StringBuilder();
+        content.append("=== HÓA ĐƠN BÁN VÉ MÁY BAY ===\n\n");
+        content.append("Mã hóa đơn: ").append(hoaDon.getMaHoaDon()).append("\n");
+        content.append("Ngày lập: ").append(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(hoaDon.getNgayLap())).append("\n");
+        content.append("Khách hàng: ").append(khachHang.getHoTen()).append("\n");
+        content.append("CMND: ").append(khachHang.getCmnd()).append("\n");
+        content.append("Số ĐT: ").append(khachHang.getSoDT()).append("\n\n");
+        
+        content.append("DANH SÁCH VÉ:\n");
+        content.append("----------------------------------------\n");
+        
+        double tongTien = 0;
+        for (VeMayBay ve : hoaDon.getDanhSachVe()) {
+            ChuyenBay cb = quanLy.getDsChuyenBay().timKiemTheoMa(ve.getMaChuyen());
+            String chuyenBay = cb != null ? cb.getDiemDi() + " → " + cb.getDiemDen() : "N/A";
+            
+            content.append("- ").append(ve.getMaVe()).append(" | ")
+                   .append(chuyenBay).append(" | ")
+                   .append(ve.getSoGhe()).append(" | ")
+                   .append(ve.getClass().getSimpleName().replace("Ve", "")).append(" | ")
+                   .append(String.format("%,d", (int) ve.getGiaVe())).append(" VND\n");
+            
+            tongTien += ve.getGiaVe();
+        }
+        
+        content.append("----------------------------------------\n");
+        content.append("TỔNG TIỀN: ").append(String.format("%,d", (int) tongTien)).append(" VND\n");
+        content.append("Phương thức TT: ").append(hoaDon.getPhuongThucTT()).append("\n");
+        content.append("Trạng thái: ").append(hoaDon.getTrangThai()).append("\n\n");
+        content.append("Cảm ơn quý khách!\n");
+
+        // Hiển thị trong dialog
+        JTextArea textArea = new JTextArea(content.toString());
+        textArea.setEditable(false);
+        textArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        
+        JOptionPane.showMessageDialog(mainGUI, 
+            new JScrollPane(textArea), 
+            "Hóa Đơn - " + hoaDon.getMaHoaDon(), 
+            JOptionPane.INFORMATION_MESSAGE);
     }
 }

@@ -13,17 +13,17 @@ package model;
 import java.util.Date;
 
 public class VePhoThong extends VeMayBay {
-    private boolean hanhLyXachTay;
+    private boolean hanhLyXachTay;  // Tối đa 7kg
     private int soKgHanhLyKyGui;
-    private double phiHanhLy; 
-    private String loaiGhe; // Cửa sổ/ lối đi
-    private boolean doAn;
+    private String loaiGhe; // Cửa sổ/ lối đi 
+    private boolean doAn; 
+
+    public static final int SO_KG_MIEN_PHI = 10;//kg
     
-    public VePhoThong(String maKH, String maVe, Date ngayBay, double giaVe, String maChuyen, String soGhe,boolean hanhLyXachTay, int soKgHanhLyKyGui, double phiHanhLy, String loaiGhe, boolean doAn) {
+    public VePhoThong(String maKH, String maVe, Date ngayBay, double giaVe, String maChuyen, String soGhe,boolean hanhLyXachTay, int soKgHanhLyKyGui, String loaiGhe, boolean doAn) {
         super(maKH, maVe, ngayBay, giaVe, maChuyen, soGhe);
         this.hanhLyXachTay = hanhLyXachTay;
         this.soKgHanhLyKyGui = soKgHanhLyKyGui;
-        this.phiHanhLy = phiHanhLy;
         this.loaiGhe = loaiGhe;
         this.doAn = doAn;
     }
@@ -32,7 +32,7 @@ public class VePhoThong extends VeMayBay {
     public double tinhThue() {
         double thue = giaVe * 0.08; // VAT 8%
         if (soKgHanhLyKyGui > 0) {
-            thue += phiHanhLy * 0.1; // Thuế hành lý 10%
+            thue += getPhiHanhLy() * 0.1; // Thuế hành lý 10%
         }
         return thue;
     }
@@ -50,7 +50,7 @@ public class VePhoThong extends VeMayBay {
     
     @Override
     public double tinhTongTien() {
-        return giaVe + phiHanhLy + tinhThue();
+        return giaVe + getPhiHanhLy() + tinhThue();
     }
     
     // Getters and Setters
@@ -58,8 +58,7 @@ public class VePhoThong extends VeMayBay {
     public void setHanhLyXachTay(boolean hanhLyXachTay) { this.hanhLyXachTay = hanhLyXachTay; }
     public int getSoKgHanhLyKyGui() { return soKgHanhLyKyGui; }
     public void setSoKgHanhLyKyGui(int soKgHanhLyKyGui) { this.soKgHanhLyKyGui = soKgHanhLyKyGui; }
-    public double getPhiHanhLy() { return phiHanhLy; }
-    public void setPhiHanhLy(double phiHanhLy) { this.phiHanhLy = phiHanhLy; }
+    public double getPhiHanhLy() { return (soKgHanhLyKyGui - VePhoThong.SO_KG_MIEN_PHI) > 0 ? (soKgHanhLyKyGui - VePhoThong.SO_KG_MIEN_PHI)*VeMayBay.PHI_HANH_LY : 0; }
     public String getLoaiGhe() { return loaiGhe; }
     public void setLoaiGhe(String loaiGhe) { this.loaiGhe = loaiGhe; }
     public boolean isDoAn() { return doAn; }
