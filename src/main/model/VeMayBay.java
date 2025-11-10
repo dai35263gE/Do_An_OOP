@@ -43,6 +43,16 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
         this.ngayDat = new Date();
         this.trangThai = TRANG_THAI_DA_DAT;
     }
+    public VeMayBay(String maKH, String maVe, Date ngayBay, double giaVe, String maChuyen, String soGhe, String trangThai) {
+        this.maKH = maKH;
+        setMaVe(maVe);
+        setNgayBay(ngayBay);
+        setGiaVe(giaVe);
+        setMaChuyen(maChuyen);
+        setSoGhe(soGhe);
+        this.ngayDat = new Date();
+        this.trangThai = trangThai;
+    }
 
     public VeMayBay() {
     }

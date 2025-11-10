@@ -29,18 +29,6 @@ public class DanhSachKhachHang implements IQuanLy<KhachHang>, IFileHandler {
             throw new IllegalStateException("Danh sách khách hàng đã đầy!");
         }
 
-        if (tonTai(khachHang.getMa())) {
-            throw new IllegalArgumentException("Mã khách hàng đã tồn tại: " + khachHang.getMa());
-        }
-
-        if (tonTaiCMND(khachHang.getCmnd(), null)) {
-            throw new IllegalArgumentException("CMND đã tồn tại: " + khachHang.getCmnd());
-        }
-
-        if (tonTaiEmail(khachHang.getEmail(), null)) {
-            throw new IllegalArgumentException("Email đã tồn tại: " + khachHang.getEmail());
-        }
-
         return danhSach.add(khachHang);
     }
 

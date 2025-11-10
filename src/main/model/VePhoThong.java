@@ -27,6 +27,14 @@ public class VePhoThong extends VeMayBay {
         this.loaiGhe = loaiGhe;
         this.doAn = doAn;
     }
+    public VePhoThong(String maKH, String maVe, Date ngayBay, double giaVe, String maChuyen, String soGhe,boolean hanhLyXachTay, int soKgHanhLyKyGui, String loaiGhe, boolean doAn, String  trangThai) {
+        super(maKH, maVe, ngayBay, giaVe, maChuyen, soGhe);
+        this.hanhLyXachTay = hanhLyXachTay;
+        this.soKgHanhLyKyGui = soKgHanhLyKyGui;
+        this.loaiGhe = loaiGhe;
+        this.doAn = doAn;
+        this.trangThai = trangThai;
+    }
     
     @Override
     public double tinhThue() {

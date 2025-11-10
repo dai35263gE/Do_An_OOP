@@ -334,8 +334,11 @@ public class KhachHangDialogs {
         // Panel thống kê
         JPanel panelThongKe = new JPanel(new GridLayout(0, 2, 10, 5));
         panelThongKe.setBorder(BorderFactory.createTitledBorder("Thống kê đặt vé"));
-
         List<HoaDon> hoaDonList = khachHang.getLichSuHoaDon();
+        for(HoaDon hd : quanLy.getDsHoaDon().getDanhSach()){
+            if(hd.getKhachHang().getMa().equals(khachHang.getMa())) hoaDonList.add(hd);
+        }
+        
         int tongHoaDon = hoaDonList.size();
         int tongVe = 0;
         double tongTien = 0;
@@ -511,9 +514,15 @@ public class KhachHangDialogs {
                 }
 
                 // Lưu thay đổi
-                boolean result = quanLy.getDsKhachHang().them(khachHang);
+                int index = -1;
+                for(KhachHang kh : quanLy.getDsKhachHang().getDanhSach()){
+                    index++;
+                    if(kh.getCmnd().equals(khachHang.getCmnd()))
+                    break;
+                }
+                quanLy.getDsKhachHang().getDanhSach().set(index, khachHang);
                 
-                if (result) {
+                if (index > 0) {
                     JOptionPane.showMessageDialog(dialog, 
                         "Cập nhật thông tin khách hàng thành công!", 
                         "Thành công", JOptionPane.INFORMATION_MESSAGE);

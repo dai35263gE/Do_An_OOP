@@ -28,6 +28,15 @@ public class VeThuongGia extends VeMayBay {
         this.SoKgHanhLyKyGui = SoKgHanhLyKyGui;
         this.loaiDoUong = loaiDoUong;
     }
+    public VeThuongGia(String maKH,String maVe, Date ngayBay, double giaVe, String maChuyen, String soGhe,String dichVuDacBiet, double phuThu,boolean phongChoVIP,double SoKgHanhLyKyGui, String loaiDoUong, String trangThai) {
+        super( maKH,maVe, ngayBay, giaVe, maChuyen, soGhe);
+        this.dichVuDacBiet = dichVuDacBiet;
+        this.phuThu = phuThu;
+        this.phongChoVIP = phongChoVIP;
+        this.SoKgHanhLyKyGui = SoKgHanhLyKyGui;
+        this.loaiDoUong = loaiDoUong;
+        this.trangThai = trangThai;
+    }
     
     @Override
     public double tinhThue() {

@@ -299,7 +299,8 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
                         data.get("DichVuDacBiet"),
                         XMLUtils.stringToDouble(data.get("PhuThu")),
                         XMLUtils.stringToBoolean(data.get("PhongChoVIP")),XMLUtils.stringToInt(data.get("SoKgHanhLyKyGui")),
-                        data.get("LoaiDoUong")
+                        data.get("LoaiDoUong"),
+                        trangThai
                     );
                     
                 case "VePhoThong":
@@ -308,13 +309,15 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
                         XMLUtils.stringToBoolean(data.get("HanhLyXachTay")),
                         XMLUtils.stringToInt(data.get("SoKgHanhLyKyGui")),
                         data.get("LoaiGhe"),
-                        XMLUtils.stringToBoolean(data.get("DoAn"))
+                        XMLUtils.stringToBoolean(data.get("DoAn")),
+                        trangThai
                     );
                     
                 case "VeTietKiem":
                     return new VeTietKiem(
                         maKH,maVe, ngayBay, giaVe, maChuyen, soGhe,
-                        XMLUtils.stringToBoolean(data.get("HanhLyXachTay"))
+                        XMLUtils.stringToBoolean(data.get("HanhLyXachTay")),
+                        trangThai
                     );
                     
                 default:

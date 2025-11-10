@@ -18,6 +18,10 @@ public class VeTietKiem extends VeMayBay {
         super(maKH,maVe, ngayBay, giaVe, maChuyenBay, soGhe);
         this.hanhLyXachTay = hanhLyXachTay; 
     }
+    public VeTietKiem(String maKH,String maVe,Date ngayBay, double giaVe, String maChuyenBay, String soGhe,boolean hanhLyXachTay, String trangThai) {
+        super(maKH,maVe, ngayBay, giaVe, maChuyenBay, soGhe);
+        this.trangThai = trangThai;
+    }
     
     @Override
     public double tinhThue() {
