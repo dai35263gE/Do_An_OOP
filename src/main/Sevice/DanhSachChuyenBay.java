@@ -341,7 +341,8 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
       }
 
       if (cb.getMaMayBay().equals(chuyenBayMoi.getMaMayBay())) {
-        long thoiGianTrung = Math.abs(cb.getGioKhoiHanh().getTime() - chuyenBayMoi.getGioKhoiHanh().getTime());
+        long thoiGianTrung = Math.abs(cb.getGioKhoiHanh().getTime() -
+            chuyenBayMoi.getGioKhoiHanh().getTime());
         if (thoiGianTrung < 4 * 60 * 60 * 1000) {
           return true;
         }
