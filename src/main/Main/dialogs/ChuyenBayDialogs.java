@@ -109,7 +109,7 @@ public class ChuyenBayDialogs {
         JPanel panelThongTin = new JPanel(new BorderLayout());
         panelThongTin.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(new Color(60, 179, 113), 1),
-                "📋 THÔNG TIN CHUYẾN BAY",
+                "THÔNG TIN CHUYẾN BAY",
                 TitledBorder.LEFT,
                 TitledBorder.TOP,
                 new Font("Arial", Font.BOLD, 12),
@@ -130,6 +130,10 @@ public class ChuyenBayDialogs {
             updateChuyenBayInfo(txtMaChuyen, cbDiemDi, cbDiemDen, spinnerGioKhoiHanh,
                     spinnerGioDen, spinnerSoGhe, cbMaMayBay, spinnerGiaCoBan, txtThongTin);
         };
+
+        ChuyenBay newcb = new ChuyenBay((String)txtMaChuyen.getSelectedText(), (String)cbDiemDi.getSelectedItem(), (String)cbDiemDen.getSelectedItem(), (Date) spinnerGioKhoiHanh.getValue(), (Date) spinnerGioDen.getValue(),(int) ((Integer)((Double) spinnerSoGhe.getValue())), 0, (String)cbMaMayBay.getSelectedItem(), (double) spinnerGiaCoBan.getValue());
+        quanLy.getDsChuyenBay().them(newcb);
+        quanLy.ghiDuLieuRaFile();
 
         // Thêm listeners
         addChuyenBayListeners(cbDiemDi, cbDiemDen, spinnerGioKhoiHanh, spinnerGioDen,spinnerSoGhe, cbMaMayBay, spinnerGiaCoBan, updateChuyenBayInfo);
@@ -243,15 +247,15 @@ public class ChuyenBayDialogs {
 
             String info = String.format(
                     "🔹 Mã chuyến: %s\n" +
-                            "🛫 Lộ trình: %s → %s\n" +
-                            "⏰ Khởi hành: %s\n" +
-                            "⏱️ Đến nơi: %s\n" +
-                            "⏳ Thời gian bay: %d phút\n" +
-                            "💺 Số ghế: %d\n" +
-                            "✈️ Máy bay: %s\n" +
-                            "💰 Giá cơ bản: %s VND\n" +
-                            "📏 Khoảng cách: %.0f km\n" +
-                            "🎯 Trạng thái: %s",
+                            "Lộ trình: %s → %s\n" +
+                            "Khởi hành: %s\n" +
+                            "Đến nơi: %s\n" +
+                            "Thời gian bay: %d phút\n" +
+                            "Số ghế: %d\n" +
+                            "Máy bay: %s\n" +
+                            "Giá cơ bản: %s VND\n" +
+                            "Khoảng cách: %.0f km\n" +
+                            "Trạng thái: %s",
                     maChuyen,
                     diemDi, diemDen,
                     sdf.format(gioKhoiHanh),
@@ -317,9 +321,9 @@ public class ChuyenBayDialogs {
         panelButton.setBackground(Color.WHITE);
         panelButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JButton btnThem = createStyledButton("✅ Thêm Chuyến Bay", new Color(60, 179, 113));
-        JButton btnHuy = createStyledButton("❌ Hủy", new Color(220, 53, 69));
-        JButton btnLamMoi = createStyledButton("🔄 Làm Mới", new Color(255, 165, 0));
+        JButton btnThem = createStyledButton("Thêm Chuyến Bay", new Color(60, 179, 113));
+        JButton btnHuy = createStyledButton("Hủy", new Color(220, 53, 69));
+        JButton btnLamMoi = createStyledButton("Làm Mới", new Color(255, 165, 0));
 
         btnThem.addActionListener(e -> {
             if (!validateThemChuyenBay(dialog, cbDiemDi, cbDiemDen, spinnerGioKhoiHanh, spinnerGioDen)) {
@@ -332,7 +336,7 @@ public class ChuyenBayDialogs {
         btnLamMoi.addActionListener(e -> {
             resetFormThemChuyenBay(txtMaChuyen, cbDiemDi, cbDiemDen, spinnerGioKhoiHanh,
                     spinnerGioDen, spinnerSoGhe, cbMaMayBay, spinnerGiaCoBan);
-            ValidatorUtils.showSuccessDialog(dialog, "✅ Đã làm mới form với mã chuyến bay mới!");
+            ValidatorUtils.showSuccessDialog(dialog, "Đã làm mới form với mã chuyến bay mới!");
         });
 
         btnHuy.addActionListener(e -> dialog.dispose());
@@ -845,7 +849,7 @@ public class ChuyenBayDialogs {
         // Kiểm tra trạng thái chuyến bay
         if (!trangThai.equals(ChuyenBay.TRANG_THAI_HUY)) {
             ValidatorUtils.showErrorDialog(mainGUI,
-                    "❌ Chỉ có thể xóa chuyến bay có trạng thái HỦY!\n" +
+                    "Chỉ có thể xóa chuyến bay có trạng thái HỦY!\n" +
                             "📊 Trạng thái hiện tại: " + trangThai + "\n\n" +
                             "💡 Vui lòng chuyển trạng thái chuyến bay sang HỦY trước khi xóa.");
             return;

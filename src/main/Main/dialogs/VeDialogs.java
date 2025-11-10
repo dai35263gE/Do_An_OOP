@@ -9,13 +9,9 @@ import model.*;
 import Sevice.*;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -70,7 +66,7 @@ public class VeDialogs {
         JComboBox<String> cbDiemDen = new JComboBox<>(loadDiemDenItems());
         
         JTextField txtSoGhe = new JTextField(10);
-        JComboBox<String> cbLoaiVe = new JComboBox<>(new String[]{"Tất cả", "Thương gia", "Phổ thông", "Tiết kiệm"});
+        JComboBox<String> cbLoaiVe = new JComboBox<>(new String[]{"Tất cả", "VeThuongGia", "VePhoThong", "VeTietKiem"});
         JComboBox<String> cbTrangThai = new JComboBox<>(new String[]{"Tất cả", "Đã đặt", "Đã thanh toán", "Đã hủy", "Đã bay"});
         
         // Khoảng giá
@@ -400,9 +396,7 @@ public class VeDialogs {
         TableUtils.hienThiKetQuaTimKiemVe(model, danhSach, quanLy);
         
         // Tính tổng giá trị
-        double tongGiaTri = danhSach.stream()
-                .mapToDouble(VeMayBay::getGiaVe)
-                .sum();
+        double tongGiaTri = danhSach.stream().mapToDouble(VeMayBay::getGiaVe).sum();
         
         lblSoKetQua.setText(String.format("Tìm thấy: %d vé - Tổng giá trị: %,d VND", 
                                      danhSach.size(), (long)tongGiaTri));

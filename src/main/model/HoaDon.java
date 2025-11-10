@@ -37,8 +37,8 @@ public class HoaDon {
     public static final String PT_VI_DIEN_TU = "VÍ_ĐIỆN_TỬ";
 
     // CONSTRUCTOR CHÍNH
-    public HoaDon(KhachHang khachHang, List<VeMayBay> danhSachVe, double khuyenMai, String phuongThucTT) {
-        this.maHoaDon = generateMaHoaDon();
+    public HoaDon(String maHoaDon, KhachHang khachHang, List<VeMayBay> danhSachVe, double khuyenMai, String phuongThucTT) {
+        this.maHoaDon = maHoaDon;
         this.ngayLap = new Date();
         this.khachHang = khachHang;
         this.danhSachVe = danhSachVe;
@@ -52,12 +52,12 @@ public class HoaDon {
     }
 
     // OVERLOAD CONSTRUCTOR - không có khuyến mãi
-    public HoaDon(KhachHang khachHang, List<VeMayBay> danhSachVe, String phuongThucTT) {
-        this(khachHang, danhSachVe, 0, phuongThucTT);
+    public HoaDon(String maHoaDon, KhachHang khachHang, List<VeMayBay> danhSachVe, String phuongThucTT) {
+        this(maHoaDon, khachHang, danhSachVe, 0, phuongThucTT);
     }
 
     public HoaDon(VeMayBay vmb) {
-        this.maHoaDon = generateMaHoaDon();
+        this.maHoaDon = "HD000";
         this.ngayLap = new Date();
         this.danhSachVe = new ArrayList<>();
         danhSachVe.add(vmb);
@@ -80,9 +80,6 @@ public class HoaDon {
     }
 
     // BUSINESS METHODS
-    private String generateMaHoaDon() {
-        return "HD" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
-    }
 
     public double tinhTongTien() {
         double tong = 0;

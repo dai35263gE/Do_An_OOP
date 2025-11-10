@@ -38,10 +38,6 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
             throw new IllegalStateException("Danh sách hóa đơn đã đầy!");
         }
 
-        if (tonTai(hoaDon.getMaHoaDon())) {
-            throw new IllegalArgumentException("Mã hóa đơn đã tồn tại: " + hoaDon.getMaHoaDon());
-        }
-
         return danhSach.add(hoaDon);
     }
 

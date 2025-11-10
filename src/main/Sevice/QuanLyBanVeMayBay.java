@@ -141,7 +141,7 @@ public class QuanLyBanVeMayBay {
         quanly.docDuLieuTuFile();
         
         for (String key : quanly.thongKeTongQuan().keySet()) {
-            String value = quanly.thongKeTongQuan().get(key).toString();
+            String value = quanly.thongKeDoanhThu().get(key).toString();
             System.out.println(key + " : " + value);
         }
     }

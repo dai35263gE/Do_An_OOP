@@ -288,7 +288,7 @@ public class KhachHangDialogs {
         }
 
         JDialog dialog = new JDialog(mainGUI, "Chi Tiết Khách Hàng - " + khachHang.getHoTen(), true);
-        dialog.setSize(600, 500);
+        dialog.setSize(600, 750);
         dialog.setLocationRelativeTo(mainGUI);
         dialog.setLayout(new BorderLayout(10, 10));
 

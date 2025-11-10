@@ -310,7 +310,7 @@ public class MainGUI extends JFrame {
 
     // ========== PHƯƠNG THỨC XỬ LÝ SỰ KIỆN CÔNG CỤ ==========
 
-    public void xuLyQuanLyVe(String action) {
+    public void xuLyQuanLyVe(String action) { 
         switch (action) {
             case "Thêm vé":
                 veDialogs.moDialogDatVe();
@@ -331,9 +331,6 @@ public class MainGUI extends JFrame {
                 break;
             case "Sửa chuyến":
                 chuyenBayDialogs.moDialogSuaChuyenBay();
-                break;
-            case "Xóa chuyến":
-                chuyenBayDialogs.xoaChuyenBay();
                 break;
             case "Làm mới":
                 capNhatTableChuyenBay();

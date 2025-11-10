@@ -568,7 +568,7 @@ public class UsersGUI extends JFrame {
         if (ve == null)
             return;
 
-        // Áp dụng giảm giá và xác nhận
+        //  xác nhận
         if (xuLyDatVe(ve, chuyenBay)) {
             hienThiThongBaoThanhCong(ve, chuyenBay);
             capNhatDuLieuSauKhiDatVe();
@@ -651,7 +651,10 @@ public class UsersGUI extends JFrame {
         try {
             List<VeMayBay> dsVeHoaDon = new ArrayList<>();
             dsVeHoaDon.add(ve);
-            HoaDon hoaDon = new HoaDon(khachHangDangNhap, dsVeHoaDon, giamGia, "DA_THANH_TOAN");
+            String maHoaDon = "HD" + String.format("%03d", quanLy.getDsHoaDon().getDanhSach().size());
+            HoaDon hoaDon = new HoaDon(maHoaDon,khachHangDangNhap, dsVeHoaDon, giamGia, HoaDon.PT_CHUYEN_KHOAN);
+            dsHoaDon.them(hoaDon);
+            quanLy.getDsHoaDon().ghiFile("src/resources/data/4_HoaDons.xml");
             return dsHoaDon.them(hoaDon);
         } catch (Exception e) {
             System.err.println("Lỗi khi tạo hóa đơn: " + e.getMessage());
@@ -705,7 +708,6 @@ public class UsersGUI extends JFrame {
         timChuyenBay();
     }
 
-    // Phương thức hiển thị xác nhận thông tin vé (cần implement)
     private boolean hienThiThongTinVeXacNhan(VeMayBay ve, ChuyenBay chuyenBay, double giamGia) {
         String message = String.format(
                 "XÁC NHẬN THÔNG TIN VÉ\n\n" +
@@ -986,7 +988,7 @@ public class UsersGUI extends JFrame {
             // Tạo vé theo loại
             switch (loaiVe) {
                 case "THƯƠNG GIA":
-                    String maVe = "VG" + String.format("%d.03", quanLy.getDsVe().demSoLuongTheoLoai("VeThuongGia"));
+                    String maVe = "VG" +  String.format("%03d", quanLy.getDsVe().demSoLuong());
                     String dichVuGiaiTri = (String) cbDichVu1.getSelectedItem();
                     String dichVuAnUong = (String) cbDichVu2.getSelectedItem();
                     double phiDichVuTG = Double.parseDouble(lblPhiDichVu.getText().replaceAll("[^0-9]", ""));
@@ -997,7 +999,7 @@ public class UsersGUI extends JFrame {
                     break;
 
                 case "PHỔ THÔNG":
-                    String maVe1 = "VG016";
+                    String maVe1 = "VP" +  String.format("%03d", quanLy.getDsVe().demSoLuong());
                     String viTriGhe = (String) cbDichVu1.getSelectedItem();
                     boolean coAnUong = !"Không ăn uống".equals(cbDichVu2.getSelectedItem());
                     veResult[0] = new VePhoThong(
@@ -1007,7 +1009,7 @@ public class UsersGUI extends JFrame {
                     break;
 
                 case "TIẾT KIỆM":
-                String maVe2 = "VT016";
+                String maVe2 = "VT" +  String.format("%03d", quanLy.getDsVe().demSoLuong());
                     veResult[0] = new VeTietKiem(
                             khachHangDangNhap.getMa(), maVe2, new Date(), tongGia,
                             chuyenBay.getMaChuyen(), soGhe, true);

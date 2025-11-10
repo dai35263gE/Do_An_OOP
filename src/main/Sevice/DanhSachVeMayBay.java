@@ -34,12 +34,7 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
         
         if (tonTai(ve.getMaVe())) {
             throw new IllegalArgumentException("Mã vé '" + ve.getMaVe() + "' đã tồn tại!");
-        }
-        
-        if (!ve.kiemTraVeHopLe()) {
-            throw new IllegalArgumentException("Thông tin vé không hợp lệ!");
-        }
-        
+        }  
         return danhSach.add(ve);
     }
     
@@ -403,10 +398,7 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
     
     @Override
     public double tinhDoanhThuTheoLoai(String loai) {
-        return danhSach.stream()
-                      .filter(ve -> ve.loaiVe().equals(loai) && ve.isDaThanhToan())
-                      .mapToDouble(VeMayBay::tinhTongTien)
-                      .sum();
+        return danhSach.stream().filter(ve -> ve.loaiVe().equals(loai)).mapToDouble(VeMayBay::tinhTongTien).sum();
     }
     
     @Override
