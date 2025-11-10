@@ -118,9 +118,9 @@ public class StatCardManager {
         updateStatCard(2, String.valueOf(thongKe.get("tongKhachHang")));
         updateStatCard(3, String.format("%,.0f VND", thongKe.get("tongDoanhThu")));
         updateStatCard(4, String.format("%.1f%%", thongKe.get("tiLeLapDay")));
-        updateStatCard(5, String.valueOf(thongKe.get("VeThuongGia")));
-        updateStatCard(6, String.valueOf(thongKe.get("VePhoThong")));
-        updateStatCard(7, String.valueOf(thongKe.get("VeTietKiem")));
+        updateStatCard(5, String.valueOf(thongKe.get("veThuongGia")));
+        updateStatCard(6, String.valueOf(thongKe.get("vePhoThong")));
+        updateStatCard(7, String.valueOf(thongKe.get("veTietKiem")));
     }
 
     public void capNhatThongKeTheoLoai(String loai) {

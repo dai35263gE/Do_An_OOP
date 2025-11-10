@@ -2,12 +2,10 @@ package Main.components;
 
 import Main.MainGUI;
 import Main.utils.TableUtils;
-import model.*;
 import Sevice.QuanLyBanVeMayBay;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Map;
@@ -89,12 +87,10 @@ public class TabManager {
 
         // Sắp xếp layout
         JPanel topPanel = new JPanel(new BorderLayout());
-
         topPanel.add(quickActionsPanel, BorderLayout.SOUTH);
-
         panel.add(headerPanel, BorderLayout.NORTH);
-        panel.add(topPanel, BorderLayout.NORTH);
-        panel.add(systemInfoPanel, BorderLayout.SOUTH);
+        panel.add(topPanel, BorderLayout.SOUTH);
+        panel.add(systemInfoPanel, BorderLayout.NORTH);
         topPanel.add(statsPanel, BorderLayout.CENTER);
 
         return panel;
@@ -170,7 +166,7 @@ public class TabManager {
         sb.append("• Tổng số vé: ").append(thongKe.get("tongVe")).append("\n");
         sb.append("• Tổng chuyến bay: ").append(thongKe.get("tongChuyenBay")).append("\n");
         sb.append("• Tổng khách hàng: ").append(thongKe.get("tongKhachHang")).append("\n");
-        sb.append("• Tổng doanh thu: ").append(String.format("%,.0f VND", thongKe.get("tongDoanhThu"))).append("\n");
+        sb.append("• Tổng doanh thu: ").append(String.format("%,.0f", thongKe.get("tongDoanhThu"))).append("\n");
         sb.append("• Tỷ lệ lấp đầy: ").append(String.format("%.1f%%", thongKe.get("tiLeLapDay"))).append("\n\n");
         
         sb.append("PHÂN LOẠI VÉ:\n");

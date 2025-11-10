@@ -406,7 +406,7 @@
 
     <VeTietKiem>
         <MaVe>VT009</MaVe>
-        <MaKhachHang>KH009</MaKhachHang>
+        <MaKhachHang>KH001</MaKhachHang>
         <NgayBay>2025-11-17 21:30:00</NgayBay>
         <GiaVe>430000</GiaVe>
         <MaChuyen>CB017</MaChuyen>
@@ -418,7 +418,7 @@
 
     <VeTietKiem>
         <MaVe>VT010</MaVe>
-        <MaKhachHang>KH008</MaKhachHang>
+        <MaKhachHang>KH002</MaKhachHang>
         <NgayBay>2025-11-18 07:50:00</NgayBay>
         <GiaVe>355000</GiaVe>
         <MaChuyen>CB018</MaChuyen>

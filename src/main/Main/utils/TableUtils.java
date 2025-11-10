@@ -104,8 +104,9 @@ public class TableUtils {
                 kh != null ? kh.getHoTen() : "N/A",
                 kh != null ? kh.getCmnd() : "N/A",
                 ve.getMaChuyen(),
-                ve.loaiVe(),
+                ve.getSoGhe(),
                 ve.getNgayBay() != null ? DATE_FORMAT.format(ve.getNgayBay()) : "N/A",
+                ve.loaiVe(),
                 String.format("%,.0f VND", ve.getGiaVe()),
                 ve.getTrangThai()
             };
