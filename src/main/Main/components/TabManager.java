@@ -373,9 +373,9 @@ public class TabManager {
     sb.append("Tổng doanh thu: ").append(String.format("%,.0f VND", thongKe.get("tongDoanhThu"))).append("\n\n");
 
     sb.append("Phân loại vé:\n");
-    sb.append("- Thương gia: ").append(thongKe.get("VeThuongGia")).append(" vé\n");
-    sb.append("- Phổ thông: ").append(thongKe.get("VePhoThong")).append(" vé\n");
-    sb.append("- Tiết kiệm: ").append(thongKe.get("VeTietKiem")).append(" vé\n\n");
+    sb.append("- Thương gia: ").append(thongKe.get("veThuongGia")).append(" vé\n");
+    sb.append("- Phổ thông: ").append(thongKe.get("vePhoThong")).append(" vé\n");
+    sb.append("- Tiết kiệm: ").append(thongKe.get("veTietKiem")).append(" vé\n\n");
 
     sb.append("Chọn loại thống kê từ thanh công cụ bên trên...");
 

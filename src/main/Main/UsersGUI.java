@@ -90,6 +90,7 @@ public class UsersGUI extends JFrame {
   private JTextField txtHoTen, txtEmail, txtSoDT, txtDiaChi, txtCmnd, txtNgaySinh;
   private JComboBox<String> cbGioiTinh;
   private JButton btnCapNhatThongTin;
+  private JButton btnDangXuat;
   private JLabel lblDiemTichLuy, lblHangKhachHang;
 
   public UsersGUI(QuanLyBanVeMayBay quanLy) {
@@ -642,6 +643,12 @@ private String chuyenPhuongThucTextSangMa(String phuongThucText) {
     cbGioiTinh = createStyledComboBox(gioiTinhOptions);
 
     btnCapNhatThongTin = createStyledButton("Cập Nhật Thông Tin", new Color(70, 130, 180));
+     btnDangXuat = new JButton("Đăng xuất");
+    btnDangXuat.setFont(new Font("Arial", Font.PLAIN, 12));
+    btnDangXuat.setBackground(new Color(220, 53, 69));
+    btnDangXuat.setForeground(Color.WHITE);
+    btnDangXuat.setFocusPainted(false);
+    btnDangXuat.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
     // Row 1: Họ tên và Email
     gbc.gridx = 0;
@@ -698,6 +705,11 @@ private String chuyenPhuongThucTextSangMa(String phuongThucText) {
     gbc.fill = GridBagConstraints.NONE;
     gbc.anchor = GridBagConstraints.CENTER;
     panelThongTin.add(btnCapNhatThongTin, gbc);
+    gbc.gridx = 3;
+    gbc.gridwidth = 1;
+    gbc.fill = GridBagConstraints.NONE;
+    gbc.anchor = GridBagConstraints.EAST;
+    panelThongTin.add(btnDangXuat, gbc);
 
     // === PANEL THÔNG TIN THÀNH VIÊN ===
     JPanel panelThanhVien = new JPanel(new GridBagLayout());
@@ -853,6 +865,7 @@ private String chuyenPhuongThucTextSangMa(String phuongThucText) {
     btnTimChuyen.addActionListener(e -> timChuyenBay());
     btnDatVe.addActionListener(e -> datVe());
     btnXemTatCa.addActionListener(e -> xemTatCa());
+    btnDangXuat.addActionListener(e -> dangXuat());
 
     // Tab Vé của tôi
     btnXemChiTietVe.addActionListener(e -> xemChiTietVe());
@@ -1869,6 +1882,33 @@ private String chuyenPhuongThucTextSangMa(String phuongThucText) {
     }
     return false;
   }
+  private void dangXuat() {
+    int confirm = JOptionPane.showConfirmDialog(
+        this,
+        "Bạn có chắc chắn muốn đăng xuất?",
+        "Xác nhận đăng xuất",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE
+    );
+
+    if (confirm == JOptionPane.YES_OPTION) {
+        // Reset thông tin khách hàng
+        khachHangDangNhap = null;
+        
+        
+        // Hiển thị thông báo
+        JOptionPane.showMessageDialog(
+            this,
+            "Đăng xuất thành công!",
+            "Thông báo",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+        
+        // Đóng cửa sổ hiện tại và hiển thị lại form đăng nhập
+        this.dispose();
+        UsersGUI.showDangNhap(quanLy);
+    }
+}
 
   public static void main(String[] args) {
     QuanLyBanVeMayBay quanLy = new QuanLyBanVeMayBay();

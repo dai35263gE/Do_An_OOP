@@ -32,7 +32,6 @@ public class VeDialogs {
     // ========== DIALOG ĐẶT VÉ MỚI ==========
     public void moDialogDatVe() {
         UsersGUI.showDangNhap(quanLy);
-        mainGUI.dispose();
     }
 
     // ========== DIALOG TÌM KIẾM VÉ ĐA TIÊU CHÍ ==========

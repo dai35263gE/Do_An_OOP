@@ -76,7 +76,7 @@
         <DiemDi>Đà Nẵng (DAD)</DiemDi>
         <MaMayBay>VN-F045</MaMayBay>
         <GioDen>2025-11-13 13:30:00</GioDen>
-        <SoGheTrong>2</SoGheTrong>
+        <SoGheTrong>1</SoGheTrong>
         <DiemDen>Nha Trang (CXR)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
         <MaChuyen>CB007</MaChuyen>
@@ -359,5 +359,17 @@
         <GioKhoiHanh>2025-11-14 19:30:00</GioKhoiHanh>
         <SoGhe>160</SoGhe>
         <GiaCoBan>1350000</GiaCoBan>
+    </ChuyenBay>
+    <ChuyenBay>
+        <DiemDi>Hà Nội (HAN)</DiemDi>
+        <MaMayBay>VN-A320</MaMayBay>
+        <GioDen>2025-11-13 08:00:16</GioDen>
+        <SoGheTrong>150</SoGheTrong>
+        <DiemDen>TP.HCM (SGN)</DiemDen>
+        <TrangThai>CHUA_BAY</TrangThai>
+        <MaChuyen>CB031</MaChuyen>
+        <GioKhoiHanh>2025-11-13 06:00:16</GioKhoiHanh>
+        <SoGhe>150</SoGhe>
+        <GiaCoBan>1500000</GiaCoBan>
     </ChuyenBay>
 </ChuyenBays>
