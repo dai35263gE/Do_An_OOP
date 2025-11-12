@@ -46,9 +46,6 @@ public class MenuManager {
         JMenuItem itemQuanLyChuyenBay = new JMenuItem("Quản lý Chuyến Bay");
         JMenuItem itemQuanLyKhachHang = new JMenuItem("Quản lý Khách Hàng");
 
-        // itemQuanLyVe.addActionListener(e -> mainGUI.getTabbedPane().setSelectedIndex(1));
-        // itemQuanLyChuyenBay.addActionListener(e -> mainGUI.getTabbedPane().setSelectedIndex(2));
-        // itemQuanLyKhachHang.addActionListener(e -> mainGUI.getTabbedPane().setSelectedIndex(3));
 
         menuQuanLy.add(itemQuanLyVe);
         menuQuanLy.add(itemQuanLyChuyenBay);
@@ -60,9 +57,6 @@ public class MenuManager {
         JMenuItem itemThongKeDoanhThu = new JMenuItem("Thống kê Doanh thu");
         JMenuItem itemThongKeVe = new JMenuItem("Thống kê Vé");
 
-        // itemThongKeTongQuan.addActionListener(e -> mainGUI.getTabbedPane().setSelectedIndex(4));
-        // itemThongKeDoanhThu.addActionListener(e -> mainGUI.getTabbedPane().setSelectedIndex(4));
-        // itemThongKeVe.addActionListener(e -> mainGUI.getTabbedPane().setSelectedIndex(4));
 
         menuThongKe.add(itemThongKeTongQuan);
         menuThongKe.add(itemThongKeDoanhThu);

@@ -2,8 +2,6 @@ package Main.dialogs;
 
 import Main.MainGUI;
 import javax.swing.*;
-import Main.utils.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;

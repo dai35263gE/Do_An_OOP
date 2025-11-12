@@ -15,7 +15,6 @@ import java.awt.*;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 import java.util.List;
 
 public class VeDialogs {

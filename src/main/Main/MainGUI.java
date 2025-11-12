@@ -1,46 +1,18 @@
 package Main;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import Main.components.MenuManager;
-import Main.components.StatCardManager;
-import Main.components.TabManager;
-import Main.dialogs.ChuyenBayDialogs;
-import Main.dialogs.KhachHangDialogs;
-import Main.dialogs.ThongKeDialogs;
-import Main.dialogs.VeDialogs;
+import Main.components.*;
+import Main.dialogs.*;
 import Main.utils.ValidatorUtils;
-import Sevice.DanhSachKhachHang;
-import Sevice.QuanLyBanVeMayBay;
-import model.ChuyenBay;
-import model.HoaDon;
-import model.KhachHang;
-import model.VeMayBay;
+import Sevice.*;
+import model.*;
+
 
 public class MainGUI extends JFrame {
     private QuanLyBanVeMayBay quanLy;
@@ -365,11 +337,15 @@ public class MainGUI extends JFrame {
             case "Sửa chuyến":
                 chuyenBayDialogs.moDialogSuaChuyenBay();
                 break;
+            case "Tra cứu chuyến":
+                chuyenBayDialogs.moDialogTimKiemChuyenBay();
+                break;
             case "Làm mới":
                 capNhatTableChuyenBay();
                 break;
         }
     }
+
 
     public void xuLyQuanLyKhachHang(String action) {
         switch (action) {
@@ -533,7 +509,7 @@ public class MainGUI extends JFrame {
     private void kiemTraCapNhat() {
         // Giả lập kiểm tra cập nhật
         JOptionPane.showMessageDialog(this,
-                "✅ Bạn đang sử dụng phiên bản mới nhất!\n\n" +
+                "Bạn đang sử dụng phiên bản mới nhất!\n\n" +
                         "Phiên bản hiện tại: " + QuanLyBanVeMayBay.getPhienBan() + "\n" +
                         "Không có bản cập nhật mới.",
                 "Kiểm tra cập nhật",
@@ -688,7 +664,7 @@ public class MainGUI extends JFrame {
 
     private static void showSplashScreen() {
         // Có thể thêm splash screen ở đây nếu cần
-        System.out.println("🚀 Khởi động hệ thống quản lý vé máy bay...");
+        System.out.println("KHOI DONG HE THONG QUAN LY BAN VE MAY BAY...");
     }
 
     public void xuLyQuanLyHoaDon(String action) {

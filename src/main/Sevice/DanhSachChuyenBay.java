@@ -85,19 +85,13 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
 
   @Override
   public ChuyenBay timKiemTheoMa(String maChuyen) {
-    return danhSach.stream()
-        .filter(cb -> cb.getMaChuyen().equals(maChuyen))
-        .findFirst()
-        .orElse(null);
+    return danhSach.stream().filter(cb -> cb.getMaChuyen().equals(maChuyen)).findFirst().orElse(null);
   }
 
   @Override
   public List<ChuyenBay> timKiemTheoTen(String ten) {
     String keyword = ten.toLowerCase();
-    return danhSach.stream()
-        .filter(cb -> cb.getDiemDi().toLowerCase().contains(keyword) ||
-            cb.getDiemDen().toLowerCase().contains(keyword))
-        .collect(Collectors.toList());
+    return danhSach.stream().filter(cb -> cb.getDiemDi().toLowerCase().contains(keyword) || cb.getDiemDen().toLowerCase().contains(keyword)).collect(Collectors.toList());
   }
 
   @Override

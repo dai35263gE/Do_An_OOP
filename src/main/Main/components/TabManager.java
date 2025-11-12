@@ -242,6 +242,7 @@ public class TabManager {
 
     String[][] cbActions = {
         { "Thêm chuyến", "✈️", "Thêm chuyến bay mới" },
+        { "Tra cứu chuyến", "✈️", "Tra cứuchuyến bay" },
         { "Sửa chuyến", "✏️", "Sửa chuyến bay" },
         { "Làm mới", "🔄", "Làm mới dữ liệu" }
     };

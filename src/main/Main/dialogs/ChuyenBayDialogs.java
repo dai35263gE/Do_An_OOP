@@ -1,33 +1,15 @@
 package Main.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SpinnerDateModel;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
 import Main.MainGUI;
@@ -204,7 +186,7 @@ public class ChuyenBayDialogs {
     comboBox.setBackground(Color.WHITE);
     comboBox.setBorder(BorderFactory.createCompoundBorder(
         BorderFactory.createLineBorder(new Color(200, 200, 200)),
-        BorderFactory.createEmptyBorder(5, 8, 5, 8)));
+        BorderFactory.createEmptyBorder(0,0,0,0)));
     comboBox.setFont(new Font("Arial", Font.PLAIN, 12));
     return comboBox;
   }
@@ -795,7 +777,7 @@ public class ChuyenBayDialogs {
     String diemDen = (String) cbDiemDen.getSelectedItem();
 
     if (diemDi.equals(diemDen)) {
-      ValidatorUtils.showErrorDialog(dialog, "❌ Điểm đi và điểm đến không được trùng nhau!");
+      ValidatorUtils.showErrorDialog(dialog, "Điểm đi và điểm đến không được trùng nhau!");
       return false;
     }
 
@@ -803,7 +785,7 @@ public class ChuyenBayDialogs {
     Date gioDen = (Date) spinnerGioDen.getValue();
 
     if (!ValidatorUtils.isValidTimeRange(gioKhoiHanh, gioDen)) {
-      ValidatorUtils.showErrorDialog(dialog, "❌ Giờ khởi hành phải trước giờ đến!");
+      ValidatorUtils.showErrorDialog(dialog, "Giờ khởi hành phải trước giờ đến!");
       return false;
     }
 
@@ -811,12 +793,12 @@ public class ChuyenBayDialogs {
     double soGheTrong = (Double) spinnerSoGheTrong.getValue();
 
     if (soGheTrong > soGhe) {
-      ValidatorUtils.showErrorDialog(dialog, "❌ Số ghế trống không được lớn hơn tổng số ghế!");
+      ValidatorUtils.showErrorDialog(dialog, "Số ghế trống không được lớn hơn tổng số ghế!");
       return false;
     }
 
     if (soGheTrong < 0) {
-      ValidatorUtils.showErrorDialog(dialog, "❌ Số ghế trống không được âm!");
+      ValidatorUtils.showErrorDialog(dialog, " Số ghế trống không được âm!");
       return false;
     }
 
@@ -877,7 +859,7 @@ public class ChuyenBayDialogs {
     ChuyenBay cbCanXoa = quanLy.getDsChuyenBay().timKiemTheoMa(maChuyen);
 
     if (cbCanXoa == null) {
-      ValidatorUtils.showErrorDialog(mainGUI, "❌ Không tìm thấy thông tin chuyến bay!");
+      ValidatorUtils.showErrorDialog(mainGUI, "Không tìm thấy thông tin chuyến bay!");
       return;
     }
 
@@ -900,10 +882,10 @@ public class ChuyenBayDialogs {
 
     JTextArea messageArea = new JTextArea(
         "Bạn có chắc chắn muốn xóa chuyến bay này?\n\n" +
-            "🔹 Mã chuyến: " + maChuyen + "\n" +
-            "🛫 Lộ trình: " + diemDi + " → " + diemDen + "\n" +
-            "📊 Trạng thái: " + trangThai + "\n\n" +
-            "❌ Thao tác này không thể hoàn tác!");
+            "Mã chuyến: " + maChuyen + "\n" +
+            "Lộ trình: " + diemDi + " → " + diemDen + "\n" +
+            "Trạng thái: " + trangThai + "\n\n" +
+            "Thao tác này không thể hoàn tác!");
     messageArea.setEditable(false);
     messageArea.setBackground(Color.WHITE);
     messageArea.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -924,20 +906,367 @@ public class ChuyenBayDialogs {
 
         if (xoaThanhCong) {
           ValidatorUtils.showSuccessDialog(mainGUI,
-              "✅ Xóa chuyến bay thành công!\n\n" +
-                  "🔹 Mã chuyến: " + maChuyen + "\n" +
-                  "🛫 Lộ trình: " + diemDi + " → " + diemDen);
+              "Xóa chuyến bay thành công!\n\n" +
+                  "Mã chuyến: " + maChuyen + "\n" +
+                  "Lộ trình: " + diemDi + " → " + diemDen);
 
           quanLy.ghiDuLieuRaFile();
 
           mainGUI.capNhatDuLieuGUI();
         } else {
-          ValidatorUtils.showErrorDialog(mainGUI, "❌ Không thể xóa chuyến bay!");
+          ValidatorUtils.showErrorDialog(mainGUI, " Không thể xóa chuyến bay!");
         }
 
       } catch (Exception ex) {
-        ValidatorUtils.showErrorDialog(mainGUI, "❌ Lỗi khi xóa chuyến bay: " + ex.getMessage());
+        ValidatorUtils.showErrorDialog(mainGUI, " Lỗi khi xóa chuyến bay: " + ex.getMessage());
       }
     }
   }
+  // ========== DIALOG TÌM KIẾM CHUYẾN BAY ==========
+public void moDialogTimKiemChuyenBay() {
+    try {
+        System.out.println("Đang mở dialog tìm kiếm chuyến bay...");
+        JDialog dialog = new JDialog(mainGUI, "Tìm Kiếm Chuyến Bay", true);
+        dialog.setSize(500, 450);
+        dialog.setLocationRelativeTo(mainGUI);
+        dialog.setLayout(new BorderLayout(10, 10));
+        dialog.getContentPane().setBackground(new Color(245, 245, 245));
+
+        // Header
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(new Color(70, 130, 180));
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+
+        JLabel lblTitle = new JLabel("TÌM KIẾM CHUYẾN BAY");
+        lblTitle.setFont(new Font("Arial", Font.BOLD, 18));
+        lblTitle.setForeground(Color.WHITE);
+        headerPanel.add(lblTitle, BorderLayout.WEST);
+
+        JLabel lblSubTitle = new JLabel("Nhập thông tin tìm kiếm bên dưới");
+        lblSubTitle.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblSubTitle.setForeground(new Color(200, 220, 240));
+        headerPanel.add(lblSubTitle, BorderLayout.EAST);
+
+        // Main content panel
+        JPanel mainContent = new JPanel(new BorderLayout(10, 10));
+
+        mainContent.setBackground(Color.WHITE);
+
+        // Panel tìm kiếm cơ bản
+        JPanel panelTimKiemCoBan = createTimKiemCoBanPanel();
+        
+        // Panel tìm kiếm nâng cao
+        JPanel panelTimKiemNangCao = createTimKiemNangCaoPanel();
+
+
+        // Tabbed pane để chuyển đổi giữa tìm kiếm cơ bản và nâng cao
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.setFont(new Font("Arial", Font.BOLD, 12));
+        
+        tabbedPane.addTab(" Tìm Kiếm Cơ Bản", panelTimKiemCoBan);
+        tabbedPane.addTab("Tìm Kiếm Nâng Cao", panelTimKiemNangCao);
+        
+        // Panel button
+        JPanel panelButton = createTimKiemButtonPanel(dialog, tabbedPane);
+
+        // Sắp xếp layout
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(tabbedPane, BorderLayout.CENTER);
+        
+        mainContent.add(topPanel, BorderLayout.NORTH);
+
+        dialog.add(headerPanel, BorderLayout.NORTH);
+        dialog.add(mainContent, BorderLayout.CENTER);
+        dialog.add(panelButton, BorderLayout.SOUTH);
+
+        dialog.setVisible(true);
+    } catch (Exception e) {
+        e.printStackTrace();
+        System.err.println("Lỗi khi mở dialog tìm kiếm chuyến bay: " + e.getMessage());
+        JOptionPane.showMessageDialog(mainGUI, "Không thể mở dialog tìm kiếm chuyến bay!\nLỗi: " + e.getMessage(),
+                "Lỗi", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+private JPanel createTimKiemCoBanPanel() {
+    JPanel panel = new JPanel(new GridBagLayout());
+    panel.setBackground(Color.WHITE);
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.fill = GridBagConstraints.HORIZONTAL;
+    gbc.insets = new Insets(8, 8, 8, 8);
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+
+    // Tìm kiếm theo từ khóa
+    JTextField txtTimKiem = new JTextField(20);
+    txtTimKiem.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(200, 200, 200)),
+            BorderFactory.createEmptyBorder(5, 8, 5, 8)));
+    txtTimKiem.setFont(new Font("Arial", Font.PLAIN, 12));
+
+    // ComboBox điểm đi và điểm đến
+    String[] diaDiem = { "Tất cả", "Hà Nội (HAN)", "TP.HCM (SGN)", "Đà Nẵng (DAD)", "Nha Trang (CXR)", "Phú Quốc (PQC)", "Huế (HUI)" };
+    JComboBox<String> cbDiemDi = createStyledComboBox(diaDiem);
+    JComboBox<String> cbDiemDen = createStyledComboBox(diaDiem);
+
+    // ComboBox trạng thái
+    String[] trangThai = { "Tất cả", ChuyenBay.TRANG_THAI_CHUA_BAY, ChuyenBay.TRANG_THAI_DANG_BAY, 
+                          ChuyenBay.TRANG_THAI_DA_BAY, ChuyenBay.TRANG_THAI_HUY };
+    JComboBox<String> cbTrangThai = createStyledComboBox(trangThai);
+
+    // Checkbox chỉ hiển thị chuyến bay còn chỗ
+    JCheckBox chkConCho = new JCheckBox("Chỉ hiển thị chuyến bay còn chỗ trống");
+    chkConCho.setBackground(Color.WHITE);
+    chkConCho.setFont(new Font("Arial", Font.PLAIN, 12));
+
+    // Thêm components
+    addFormRowWithIcon(panel, gbc, "Từ khóa tìm kiếm:", txtTimKiem);
+    addFormRowWithIcon(panel, gbc, "Điểm đi:", cbDiemDi);
+    addFormRowWithIcon(panel, gbc, "Điểm đến:", cbDiemDen);
+    addFormRowWithIcon(panel, gbc, "Trạng thái:", cbTrangThai);
+    
+    gbc.gridx = 0;
+    gbc.gridwidth = 2;
+    panel.add(chkConCho, gbc);
+    gbc.gridwidth = 1;
+
+    // Lưu references
+    panel.putClientProperty("components", new HashMap<String, Object>() {
+        {
+            put("txtTimKiem", txtTimKiem);
+            put("cbDiemDi", cbDiemDi);
+            put("cbDiemDen", cbDiemDen);
+            put("cbTrangThai", cbTrangThai);
+            put("chkConCho", chkConCho);
+        }
+    });
+
+    return panel;
+}
+
+private JPanel createTimKiemNangCaoPanel() {
+    JPanel panel = new JPanel(new GridBagLayout());
+    panel.setBackground(Color.WHITE);
+
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.fill = GridBagConstraints.HORIZONTAL;
+    gbc.insets = new Insets(8, 8, 8, 8);
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+
+    // Mã máy bay
+    String[] mayBay = { "Tất cả", "VN-A321", "VN-B787", "VN-A350", "VN-A320", "VN-B777" };
+    JComboBox<String> cbMaMayBay = createStyledComboBox(mayBay);
+
+    // Khoảng giá
+    JSpinner spinnerGiaMin = GUIUtils.createNumberSpinner(0.0, 0.0, 50000000.0, 100000.0);
+    JSpinner spinnerGiaMax = GUIUtils.createNumberSpinner(50000000.0, 0.0, 50000000.0, 100000.0);
+    stylePriceSpinner(spinnerGiaMin);
+    stylePriceSpinner(spinnerGiaMax);
+
+    // Khoảng thời gian
+    JSpinner spinnerTuNgay = createTimeSpinner();
+    JSpinner spinnerDenNgay = createTimeSpinner();
+    
+    // Đặt thời gian mặc định (7 ngày tới)
+    Calendar cal = Calendar.getInstance();
+    spinnerTuNgay.setValue(cal.getTime());
+    cal.add(Calendar.DAY_OF_MONTH, 7);
+    spinnerDenNgay.setValue(cal.getTime());
+
+    // Số ghế trống tối thiểu
+    JSpinner spinnerGheTrongMin = GUIUtils.createNumberSpinner(0, 0, 500, 1);
+
+    // Thêm components
+    addFormRowWithIcon(panel, gbc, "Mã máy bay:", cbMaMayBay);
+    addFormRowWithIcon(panel, gbc, "Giá tối thiểu (VND):", spinnerGiaMin);
+    addFormRowWithIcon(panel, gbc, "Giá tối đa (VND):", spinnerGiaMax);
+    addFormRowWithIcon(panel, gbc, "Từ ngày:", spinnerTuNgay);
+    addFormRowWithIcon(panel, gbc, "Đến ngày:", spinnerDenNgay);
+    addFormRowWithIcon(panel, gbc, "Số ghế trống tối thiểu:", spinnerGheTrongMin);
+
+    // Lưu references
+    panel.putClientProperty("components", new HashMap<String, Object>() {
+        {
+            put("cbMaMayBay", cbMaMayBay);
+            put("spinnerGiaMin", spinnerGiaMin);
+            put("spinnerGiaMax", spinnerGiaMax);
+            put("spinnerTuNgay", spinnerTuNgay);
+            put("spinnerDenNgay", spinnerDenNgay);
+            put("spinnerGheTrongMin", spinnerGheTrongMin);
+        }
+    });
+
+    return panel;
+}
+
+private JPanel createTimKiemButtonPanel(JDialog dialog, JTabbedPane tabbedPane) {
+    JPanel panelButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 15));
+    panelButton.setBackground(Color.WHITE);
+    panelButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+    JButton btnTimKiem = createStyledButton("Tìm Kiếm", new Color(70, 130, 180));
+    JButton btnXoaHet = createStyledButton("Xóa Hết", new Color(220, 53, 69));
+    JButton btnDong = createStyledButton("Đóng", new Color(108, 117, 125));
+
+    btnTimKiem.addActionListener(e -> {
+        handleTimKiemChuyenBay(tabbedPane);
+    });
+
+    btnXoaHet.addActionListener(e -> {
+        resetTimKiemForm(tabbedPane);
+    });
+
+    btnDong.addActionListener(e -> dialog.dispose());
+
+    panelButton.add(btnTimKiem);
+    panelButton.add(btnXoaHet);
+    panelButton.add(btnDong);
+
+    return panelButton;
+}
+
+private void handleTimKiemChuyenBay(JTabbedPane tabbedPane) {
+    try {
+        Map<String, Object> filters = new HashMap<>();
+        
+        // Lấy tab hiện tại
+        int selectedTab = tabbedPane.getSelectedIndex();
+        JPanel currentPanel = (JPanel) tabbedPane.getComponentAt(selectedTab);
+        Map<String, Object> components = (Map<String, Object>) currentPanel.getClientProperty("components");
+
+        if (selectedTab == 0) { // Tab tìm kiếm cơ bản
+            String keyword = ((JTextField) components.get("txtTimKiem")).getText().trim();
+            String diemDi = (String) ((JComboBox<String>) components.get("cbDiemDi")).getSelectedItem();
+            String diemDen = (String) ((JComboBox<String>) components.get("cbDiemDen")).getSelectedItem();
+            String trangThai = (String) ((JComboBox<String>) components.get("cbTrangThai")).getSelectedItem();
+            boolean conCho = ((JCheckBox) components.get("chkConCho")).isSelected();
+
+            if (!keyword.isEmpty()) {
+                filters.put("keyword", keyword);
+            }
+            if (!diemDi.equals("Tất cả")) {
+                filters.put("diemDi", diemDi);
+            }
+            if (!diemDen.equals("Tất cả")) {
+                filters.put("diemDen", diemDen);
+            }
+            if (!trangThai.equals("Tất cả")) {
+                filters.put("trangThai", trangThai);
+            }
+            if (conCho) {
+                filters.put("conCho", true);
+            }
+        } else { // Tab tìm kiếm nâng cao
+            String maMayBay = (String) ((JComboBox<String>) components.get("cbMaMayBay")).getSelectedItem();
+            double giaMin = (Double) ((JSpinner) components.get("spinnerGiaMin")).getValue();
+            double giaMax = (Double) ((JSpinner) components.get("spinnerGiaMax")).getValue();
+            Date tuNgay = (Date) ((JSpinner) components.get("spinnerTuNgay")).getValue();
+            Date denNgay = (Date) ((JSpinner) components.get("spinnerDenNgay")).getValue();
+            int gheTrongMin = ((Double) ((JSpinner) components.get("spinnerGheTrongMin")).getValue()).intValue();
+
+            if (!maMayBay.equals("Tất cả")) {
+                filters.put("maMayBay", maMayBay);
+            }
+            if (giaMin > 0) {
+                filters.put("giaMin", giaMin);
+            }
+            if (giaMax < 50000000.0) {
+                filters.put("giaMax", giaMax);
+            }
+            filters.put("tuNgay", tuNgay);
+            filters.put("denNgay", denNgay);
+            if (gheTrongMin > 0) {
+                filters.put("gheTrongMin", gheTrongMin);
+            }
+        }
+
+        // Thực hiện tìm kiếm
+        List<ChuyenBay> ketQua = quanLy.getDsChuyenBay().timKiemChuyenBay(filters);
+        
+        // Hiển thị kết quả lên table chính
+        hienThiKetQuaLenTableChinh(ketQua);
+        
+        // Đóng dialog
+        Window dialog = SwingUtilities.windowForComponent(tabbedPane);
+        if (dialog != null) {
+            dialog.dispose();
+        }
+
+        // Hiển thị thông báo
+        String message = String.format("Tìm thấy %d chuyến bay phù hợp", ketQua.size());
+        ValidatorUtils.showSuccessDialog(mainGUI, message);
+
+    } catch (Exception e) {
+        ValidatorUtils.showErrorDialog(mainGUI, " Lỗi khi tìm kiếm: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
+
+private void hienThiKetQuaLenTableChinh(List<ChuyenBay> ketQua) {
+    // Lấy table model từ table chính
+    javax.swing.table.DefaultTableModel tableModel = (javax.swing.table.DefaultTableModel) tableChuyenBay.getModel();
+    
+    // Xóa dữ liệu cũ
+    tableModel.setRowCount(0);
+
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+    // Thêm dữ liệu mới từ kết quả tìm kiếm
+    for (ChuyenBay cb : ketQua) {
+        Object[] row = {
+            cb.getMaChuyen(),
+            cb.getDiemDi(),
+            cb.getDiemDen(),
+            sdf.format(cb.getGioKhoiHanh()),
+            sdf.format(cb.getGioDen()),
+            String.format("%d/%d", cb.getSoGhe() - cb.getSoGheTrong(), cb.getSoGhe()),
+            cb.getTrangThai(),
+            String.format("%,.0f VND", cb.getGiaCoBan()),
+            cb.getMaMayBay()
+        };
+        tableModel.addRow(row);
+    }
+}
+
+
+
+private void resetTimKiemForm(JTabbedPane tabbedPane) {
+    // Reset cả hai tab
+    for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+        JPanel panel = (JPanel) tabbedPane.getComponentAt(i);
+        Map<String, Object> components = (Map<String, Object>) panel.getClientProperty("components");
+        
+        for (Object component : components.values()) {
+            if (component instanceof JTextField) {
+                ((JTextField) component).setText("");
+            } else if (component instanceof JComboBox) {
+                ((JComboBox<?>) component).setSelectedIndex(0);
+            } else if (component instanceof JSpinner) {
+                if (i == 0) {
+                    // Tab cơ bản - không có spinner cần reset
+                } else {
+                    // Tab nâng cao
+                    if (component == components.get("spinnerGiaMin")) {
+                        ((JSpinner) component).setValue(0.0);
+                    } else if (component == components.get("spinnerGiaMax")) {
+                        ((JSpinner) component).setValue(50000000.0);
+                    } else if (component == components.get("spinnerGheTrongMin")) {
+                        ((JSpinner) component).setValue(0);
+                    } else if (component == components.get("spinnerTuNgay")) {
+                        ((JSpinner) component).setValue(new Date());
+                    } else if (component == components.get("spinnerDenNgay")) {
+                        Calendar cal = Calendar.getInstance();
+                        cal.add(Calendar.DAY_OF_MONTH, 7);
+                        ((JSpinner) component).setValue(cal.getTime());
+                    }
+                }
+            } else if (component instanceof JCheckBox) {
+                ((JCheckBox) component).setSelected(false);
+            }
+        }
+    }
+    ValidatorUtils.showSuccessDialog(mainGUI, "Đã xóa hết điều kiện tìm kiếm!");
+}
+
 }
