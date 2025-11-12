@@ -84,7 +84,7 @@ public class HoaDon {
     public double tinhTongTien() {
         double tong = 0;
         for (VeMayBay ve : danhSachVe) {
-            tong += ve.tinhTongTien();
+            tong += ve.getGiaVe();
         }
         return tong;
     }
@@ -94,7 +94,7 @@ public class HoaDon {
     }
 
     public double tinhThanhTien() {
-        return tongTien + thue - khuyenMai;
+        return tinhTongTien() + tinhThue() - khuyenMai;
     }
 
     public void thanhToan() throws IllegalStateException {
@@ -185,7 +185,7 @@ public class HoaDon {
     }
 
     public double getTongTien() {
-        return tongTien;
+        return this.tinhTongTien();
     }
     public void setTongTien(double tongTien) {
         if (tongTien < 0) {
@@ -220,7 +220,7 @@ public class HoaDon {
     }
 
     public double getThanhTien() {
-        return thanhTien;
+        return this.tinhThanhTien();
     }
     public void setThanhTien(double thanhTien) {
         this.thanhTien = thanhTien;

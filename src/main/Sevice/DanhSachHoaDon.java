@@ -775,10 +775,12 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
 
   public List<String> getDanhSachPhuongThucTT() {
     return Arrays.asList(
+        HoaDon.PT_NONE,
         HoaDon.PT_TIEN_MAT,
         HoaDon.PT_CHUYEN_KHOAN,
         HoaDon.PT_THE,
         HoaDon.PT_VI_DIEN_TU);
+        
   }
 
   public List<String> getDanhSachMaKhachHang() {

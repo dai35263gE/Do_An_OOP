@@ -39,10 +39,6 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
     if (danhSach.size() >= MAX_SIZE) {
       throw new IllegalStateException("Danh sách vé đã đầy!");
     }
-
-    if (tonTai(ve.getMaVe())) {
-      throw new IllegalArgumentException("Mã vé '" + ve.getMaVe() + "' đã tồn tại!");
-    }
     return danhSach.add(ve);
   }
 

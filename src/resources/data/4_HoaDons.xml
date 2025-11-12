@@ -5,10 +5,10 @@
         <TenDangNhap>nguyenvanan</TenDangNhap>
         <Thue>200000.0</Thue>
         <Email>nguyenvanan@email.com</Email>
-        <ThanhTien>2600000.0</ThanhTien>
+        <ThanhTien>2831800.0</ThanhTien>
         <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
         <SoDT>0912345678</SoDT>
-        <TongTien>2500000.0</TongTien>
+        <TongTien>2880000.0</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2024-01-15 09:30:00</NgayLap>
         <DanhSachMaVe>VG001,VT004</DanhSachMaVe>
@@ -26,10 +26,10 @@
         <TenDangNhap>tranthibinh</TenDangNhap>
         <Thue>144000.0</Thue>
         <Email>tranthibinh@email.com</Email>
-        <ThanhTien>1894000.0</ThanhTien>
+        <ThanhTien>3059110.0</ThanhTien>
         <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
         <SoDT>0923456789</SoDT>
-        <TongTien>1800000.0</TongTien>
+        <TongTien>3051000.0</TongTien>
         <GioiTinh>Nữ</GioiTinh>
         <NgayLap>2024-01-16 14:20:00</NgayLap>
         <DanhSachMaVe>VG003,VT007</DanhSachMaVe>
@@ -47,10 +47,10 @@
         <TenDangNhap>levancuong</TenDangNhap>
         <Thue>256000.0</Thue>
         <Email>levancuong@email.com</Email>
-        <ThanhTien>3306000.0</ThanhTien>
+        <ThanhTien>2756410.0</ThanhTien>
         <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
         <SoDT>0934567890</SoDT>
-        <TongTien>3200000.0</TongTien>
+        <TongTien>2850000.0</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2024-01-17 10:15:00</NgayLap>
         <DanhSachMaVe>VG004,VP005</DanhSachMaVe>
@@ -68,10 +68,10 @@
         <TenDangNhap>phamthidung</TenDangNhap>
         <Thue>120000.0</Thue>
         <Email>phamthidung@email.com</Email>
-        <ThanhTien>1620000.0</ThanhTien>
+        <ThanhTien>1640940.0</ThanhTien>
         <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
         <SoDT>0945678901</SoDT>
-        <TongTien>1500000.0</TongTien>
+        <TongTien>1620000.0</TongTien>
         <GioiTinh>Nữ</GioiTinh>
         <NgayLap>2024-01-18 16:45:00</NgayLap>
         <DanhSachMaVe>VP006</DanhSachMaVe>
@@ -89,10 +89,10 @@
         <TenDangNhap>hoangvanem</TenDangNhap>
         <Thue>224000.0</Thue>
         <Email>hoangvanem@email.com</Email>
-        <ThanhTien>2824000.0</ThanhTien>
+        <ThanhTien>2909110.0</ThanhTien>
         <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
         <SoDT>0956789012</SoDT>
-        <TongTien>2800000.0</TongTien>
+        <TongTien>3051000.0</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2024-01-19 11:30:00</NgayLap>
         <DanhSachMaVe>VT007,VG003</DanhSachMaVe>
@@ -110,10 +110,10 @@
         <TenDangNhap>vuthiphuong</TenDangNhap>
         <Thue>152000.0</Thue>
         <Email>vuthiphuong@email.com</Email>
-        <ThanhTien>2052000.0</ThanhTien>
+        <ThanhTien>753200.0</ThanhTien>
         <TrangThai>HỦY</TrangThai>
         <SoDT>0967890123</SoDT>
-        <TongTien>1900000.0</TongTien>
+        <TongTien>735000.0</TongTien>
         <GioiTinh>Nữ</GioiTinh>
         <NgayLap>2024-01-20 13:20:00</NgayLap>
         <DanhSachMaVe>VG006</DanhSachMaVe>
@@ -131,10 +131,10 @@
         <TenDangNhap>dangvangiang</TenDangNhap>
         <Thue>336000.0</Thue>
         <Email>dangvangiang@email.com</Email>
-        <ThanhTien>4236000.0</ThanhTien>
+        <ThanhTien>3415250.0</ThanhTien>
         <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
         <SoDT>0978901234</SoDT>
-        <TongTien>4200000.0</TongTien>
+        <TongTien>3650000.0</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2024-01-21 15:10:00</NgayLap>
         <DanhSachMaVe>VP003,VG002,VP001</DanhSachMaVe>
@@ -152,10 +152,10 @@
         <TenDangNhap>maithihoa</TenDangNhap>
         <Thue>96000.0</Thue>
         <Email>maithihoa@email.com</Email>
-        <ThanhTien>1246000.0</ThanhTien>
+        <ThanhTien>1606400.0</ThanhTien>
         <TrangThai>HỦY</TrangThai>
         <SoDT>0989012345</SoDT>
-        <TongTien>1200000.0</TongTien>
+        <TongTien>1620000.0</TongTien>
         <GioiTinh>Nữ</GioiTinh>
         <NgayLap>2024-01-22 08:45:00</NgayLap>
         <DanhSachMaVe>VG005</DanhSachMaVe>
@@ -173,10 +173,10 @@
         <TenDangNhap>buivanich</TenDangNhap>
         <Thue>280000.0</Thue>
         <Email>buivanich@email.com</Email>
-        <ThanhTien>3530000.0</ThanhTien>
+        <ThanhTien>1232590.0</ThanhTien>
         <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
         <SoDT>0990123456</SoDT>
-        <TongTien>3500000.0</TongTien>
+        <TongTien>1455000.0</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2024-01-23 17:30:00</NgayLap>
         <DanhSachMaVe>VG006,VP007</DanhSachMaVe>
@@ -194,10 +194,10 @@
         <TenDangNhap>lythikim</TenDangNhap>
         <Thue>160000.0</Thue>
         <Email>lythikim@email.com</Email>
-        <ThanhTien>2060000.0</ThanhTien>
+        <ThanhTien>536300.0</ThanhTien>
         <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
         <SoDT>0901234567</SoDT>
-        <TongTien>2000000.0</TongTien>
+        <TongTien>630000.0</TongTien>
         <GioiTinh>Nữ</GioiTinh>
         <NgayLap>2024-01-24 12:00:00</NgayLap>
         <DanhSachMaVe>VT003</DanhSachMaVe>
@@ -215,13 +215,13 @@
         <TenDangNhap>nguyenvanan</TenDangNhap>
         <Thue>33900.0</Thue>
         <Email>nguyen.van.an@email.com</Email>
-        <ThanhTien>3168900.0</ThanhTien>
+        <ThanhTien>1223900.0</ThanhTien>
         <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
         <SoDT>0912345678</SoDT>
-        <TongTien>3390000.0</TongTien>
+        <TongTien>1445000.0</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2025-11-11 05:42:30</NgayLap>
-        <DanhSachMaVe>VG021</DanhSachMaVe>
+        <DanhSachMaVe>VG007</DanhSachMaVe>
         <MaKH>KH001</MaKH>
         <NgaySinh>1985-05-15 00:00:00</NgaySinh>
         <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
@@ -236,13 +236,13 @@
         <TenDangNhap>nguyenvanan</TenDangNhap>
         <Thue>13413.6</Thue>
         <Email>nguyen.van.an@email.com</Email>
-        <ThanhTien>1230573.6</ThanhTien>
+        <ThanhTien>1516740.0</ThanhTien>
         <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
         <SoDT>0912345678</SoDT>
-        <TongTien>1341360.0</TongTien>
+        <TongTien>1620000.0</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2025-11-11 05:52:47</NgayLap>
-        <DanhSachMaVe>VP022</DanhSachMaVe>
+        <DanhSachMaVe>VP006</DanhSachMaVe>
         <MaKH>KH001</MaKH>
         <NgaySinh>1985-05-15 00:00:00</NgaySinh>
         <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
@@ -257,13 +257,13 @@
         <TenDangNhap>nguyenvanan</TenDangNhap>
         <Thue>34160.0</Thue>
         <Email>nguyen.van.an@email.com</Email>
-        <ThanhTien>3288160.0</ThanhTien>
+        <ThanhTien>1409018.75</ThanhTien>
         <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
         <SoDT>0912345678</SoDT>
-        <TongTien>3416000.0</TongTien>
+        <TongTien>1535312.5</TongTien>
         <GioiTinh>Nam</GioiTinh>
         <NgayLap>2025-11-11 09:29:39</NgayLap>
-        <DanhSachMaVe>VG023</DanhSachMaVe>
+        <DanhSachMaVe>VG009</DanhSachMaVe>
         <MaKH>KH001</MaKH>
         <NgaySinh>1985-05-15 00:00:00</NgaySinh>
         <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
@@ -271,6 +271,27 @@
         <HoTen>Nguyễn Văn An</HoTen>
         <MatKhau>0000</MatKhau>
         <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <CMND>123456789123</CMND>
+    </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD014</MaHoaDon>
+        <TenDangNhap>nguyenvanan</TenDangNhap>
+        <Thue>98700.0</Thue>
+        <Email>nguyen.van.an@email.com</Email>
+        <ThanhTien>3668700.0</ThanhTien>
+        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+        <SoDT>0912345678</SoDT>
+        <TongTien>4335000.0</TongTien>
+        <GioiTinh>Nam</GioiTinh>
+        <NgayLap>2025-11-12 22:23:15</NgayLap>
+        <DanhSachMaVe>VG010,VG010</DanhSachMaVe>
+        <MaKH>KH001</MaKH>
+        <NgaySinh>1985-05-15 00:00:00</NgaySinh>
+        <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
+        <KhuyenMai>765000.0</KhuyenMai>
+        <HoTen>Nguyễn Văn An</HoTen>
+        <MatKhau>0000</MatKhau>
+        <PhuongThucTT>TIỀN_MẶT</PhuongThucTT>
         <CMND>123456789123</CMND>
     </HoaDon>
 </HoaDons>

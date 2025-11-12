@@ -194,8 +194,7 @@ public class XMLUtils {
                     
                 case "VeTietKiem":
                     String[] tietKiemTags = {
-                        "SoGioDatTruoc", "TyLeGiam", "HoanDoi", 
-                        "PhiHoanDoi", "DieuKienGia"
+                        "HanhLyXachTay"
                     };
                     for (String tag : tietKiemTags) {
                         data.put(tag, getElementValue(element, tag));
@@ -241,14 +240,14 @@ public class XMLUtils {
 
         // Thông tin vé (chỉ lưu mã vé)
         data.put("DanhSachMaVe", getElementValue(element, "DanhSachMaVe"));
-
         danhSach.add(data);
       }
     }
     return danhSach;
   }
 
-  // ========== GHI VÉ MÁY BAY (SỬA LẠI) ==========
+  // ========== GHI THEO ĐỐI TƯỢNG CỤ THỂ ==========
+// ========== GHI VÉ MÁY BAY (SỬA LẠI) ==========
 public static boolean ghiVeMayBays(String tenFile, List<Map<String, String>> veMayBays) {
     try {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -323,8 +322,7 @@ public static boolean ghiVeMayBays(String tenFile, List<Map<String, String>> veM
 
                 case "VeTietKiem":
                     String[] tietKiemTags = {
-                        "HanhLyXachTay", "SoGioDatTruoc", "TyLeGiam", "HoanDoi", 
-                        "PhiHoanDoi", "DieuKienGia"
+                        "HanhLyXachTay"
                     };
                     for (String tag : tietKiemTags) {
                         if (ve.containsKey(tag)) {
@@ -359,7 +357,17 @@ public static boolean ghiVeMayBays(String tenFile, List<Map<String, String>> veM
         return false;
     }
 }
-// ========== GHI FILE XML (SỬA LẠI) ==========
+  // Ghi danh sách chuyến bay
+  public static boolean ghiChuyenBays(String tenFile, List<Map<String, String>> chuyenBays) {
+    return ghiFileXML(tenFile, chuyenBays, "ChuyenBays");
+  }
+
+  // Ghi danh sách khách hàng
+  public static boolean ghiKhachHangs(String tenFile, List<Map<String, String>> khachHangs) {
+    return ghiFileXML(tenFile, khachHangs, "KhachHangs");
+  }
+
+ // ========== GHI FILE XML (SỬA LẠI) ==========
 public static boolean ghiFileXML(String tenFile, List<Map<String, String>> dataList, String rootElementName) {
     // Xử lý đặc biệt cho vé máy bay
     if ("VeMayBays".equals(rootElementName)) {
@@ -410,19 +418,6 @@ public static boolean ghiFileXML(String tenFile, List<Map<String, String>> dataL
         return false;
     }
 }
-  // ========== GHI THEO ĐỐI TƯỢNG CỤ THỂ ==========
-
-  // Ghi danh sách chuyến bay
-  public static boolean ghiChuyenBays(String tenFile, List<Map<String, String>> chuyenBays) {
-    return ghiFileXML(tenFile, chuyenBays, "ChuyenBays");
-  }
-
-  // Ghi danh sách khách hàng
-  public static boolean ghiKhachHangs(String tenFile, List<Map<String, String>> khachHangs) {
-    return ghiFileXML(tenFile, khachHangs, "KhachHangs");
-  }
-
-
   // Ghi danh sách hóa đơn
   public static boolean ghiHoaDons(String tenFile, List<Map<String, String>> hoaDons) {
     return ghiFileXML(tenFile, hoaDons, "HoaDons");
