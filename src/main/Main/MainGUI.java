@@ -780,7 +780,11 @@ public class MainGUI extends JFrame {
     if (newStatusCode.equals(HoaDon.TT_DA_TT)) {
         // Giả sử lớp HoaDon có phương thức setPhuongThucThanhToan
         // Nếu chưa có, bạn cần thêm thuộc tính này vào lớp HoaDon
-        hoaDon.setPhuongThucTT(phuongThucThanhToan);
+        if(phuongThucThanhToan.equals("Tiền mặt")) hoaDon.setPhuongThucTT(
+            HoaDon.PT_TIEN_MAT);
+        if(phuongThucThanhToan.equals("Chuyển khoản")) hoaDon.setPhuongThucTT(HoaDon.PT_CHUYEN_KHOAN);
+        if(phuongThucThanhToan.equals("Thẻ tín dụng")) hoaDon.setPhuongThucTT(HoaDon.PT_THE);
+        if(phuongThucThanhToan.equals("Ví điện tử")) hoaDon.setPhuongThucTT(HoaDon.PT_VI_DIEN_TU);
         hoaDon.setNgayLap(new java.util.Date()); // Lưu ngày thanh toán
     }
 
