@@ -1,0 +1,66 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Other/File.java to edit this template
+ */
+package model;
+
+/**
+ *
+ * @author HP
+ */
+// File: VePhoThong.java
+
+import java.util.Date;
+
+public class VePhoThong extends VeMayBay {
+    private boolean hanhLyXachTay;  // Tối đa 7kg
+    private int soKgHanhLyKyGui;
+    private String loaiGhe; // Cửa sổ/ lối đi 
+    private boolean doAn; 
+
+    public static final int SO_KG_MIEN_PHI = 10;//kg
+    
+    public VePhoThong(String maKH, String maVe, Date ngayBay, double giaVe, String maChuyen, String soGhe,boolean hanhLyXachTay, int soKgHanhLyKyGui, String loaiGhe, boolean doAn) {
+        super(maKH, maVe, ngayBay, giaVe, maChuyen, soGhe);
+        this.hanhLyXachTay = hanhLyXachTay;
+        this.soKgHanhLyKyGui = soKgHanhLyKyGui;
+        this.loaiGhe = loaiGhe;
+        this.doAn = doAn;
+    }
+    
+    @Override
+    public double tinhThue() {
+        double thue = giaVe * 0.08; // VAT 8%
+        if (soKgHanhLyKyGui > 0) {
+            thue += getPhiHanhLy() * 0.1; // Thuế hành lý 10%
+        }
+        return thue;
+    }
+    
+    @Override
+    public String loaiVe() {
+        return "VePhoThong";
+    }
+    
+    @Override
+    public String chiTietLoaiVe() {
+        return String.format("Hành lý xách tay: %b, Ký gửi: %dkg, Loại ghế: %s, Đồ ăn: %b",
+                           hanhLyXachTay, soKgHanhLyKyGui, loaiGhe, doAn);
+    }
+    
+    @Override
+    public double tinhTongTien() {
+        return giaVe + getPhiHanhLy() + tinhThue();
+    }
+    
+    // Getters and Setters
+    public boolean isHanhLyXachTay() { return hanhLyXachTay; }
+    public void setHanhLyXachTay(boolean hanhLyXachTay) { this.hanhLyXachTay = hanhLyXachTay; }
+    public int getSoKgHanhLyKyGui() { return soKgHanhLyKyGui; }
+    public void setSoKgHanhLyKyGui(int soKgHanhLyKyGui) { this.soKgHanhLyKyGui = soKgHanhLyKyGui; }
+    public double getPhiHanhLy() { return (soKgHanhLyKyGui - VePhoThong.SO_KG_MIEN_PHI) > 0 ? (soKgHanhLyKyGui - VePhoThong.SO_KG_MIEN_PHI)*VeMayBay.PHI_HANH_LY : 0; }
+    public String getLoaiGhe() { return loaiGhe; }
+    public void setLoaiGhe(String loaiGhe) { this.loaiGhe = loaiGhe; }
+    public boolean isDoAn() { return doAn; }
+    public void setDoAn(boolean doAn) { this.doAn = doAn; }
+}

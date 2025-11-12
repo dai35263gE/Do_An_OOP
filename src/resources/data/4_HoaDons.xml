@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<HoaDons>
+    <HoaDon>
+        <MaHoaDon>HD000</MaHoaDon>
+        <TenDangNhap>nguyenvanan</TenDangNhap>
+        <Thue>120692.1875</Thue>
+        <Email>nguyen.van.an@email.com</Email>
+        <ThanhTien>2263598.4375</ThanhTien>
+        <TrangThai>HỦY</TrangThai>
+        <SoDT>0912345678</SoDT>
+        <TongTien>2413843.75</TongTien>
+        <GioiTinh>Nam</GioiTinh>
+        <NgayLap>2025-11-10 22:56:44</NgayLap>
+        <DanhSachMaVe/>
+        <MaKH>KH001</MaKH>
+        <NgaySinh>1985-05-15 00:00:00</NgaySinh>
+        <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
+        <KhuyenMai>270937.5</KhuyenMai>
+        <HoTen>Nguyễn Văn An</HoTen>
+        <MatKhau>0000</MatKhau>
+        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <CMND>123456789123</CMND>
+    </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD001</MaHoaDon>
+        <TenDangNhap>nguyenvanan</TenDangNhap>
+        <Thue>150495.3125</Thue>
+        <Email>nguyen.van.an@email.com</Email>
+        <ThanhTien>2793839.0625</ThanhTien>
+        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+        <SoDT>0912345678</SoDT>
+        <TongTien>3009906.25</TongTien>
+        <GioiTinh>Nam</GioiTinh>
+        <NgayLap>2025-11-10 23:00:38</NgayLap>
+        <DanhSachMaVe>VG002</DanhSachMaVe>
+        <MaKH>KH001</MaKH>
+        <NgaySinh>1985-05-15 00:00:00</NgaySinh>
+        <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
+        <KhuyenMai>366562.5</KhuyenMai>
+        <HoTen>Nguyễn Văn An</HoTen>
+        <MatKhau>0000</MatKhau>
+        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <CMND>123456789123</CMND>
+    </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD002</MaHoaDon>
+        <TenDangNhap>tranthibinh</TenDangNhap>
+        <Thue>56181.600000000006</Thue>
+        <Email>tran.thi.binh@email.com</Email>
+        <ThanhTien>996213.6000000001</ThanhTien>
+        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+        <SoDT>0923456789</SoDT>
+        <TongTien>1123632.0</TongTien>
+        <GioiTinh>Nữ</GioiTinh>
+        <NgayLap>2025-11-10 23:21:32</NgayLap>
+        <DanhSachMaVe>VP003</DanhSachMaVe>
+        <MaKH>KH002</MaKH>
+        <NgaySinh>1988-08-20 00:00:00</NgaySinh>
+        <DiaChi>456 Lê Lợi, Quận Hoàn Kiếm, Hà Nội</DiaChi>
+        <KhuyenMai>183600.0</KhuyenMai>
+        <HoTen>Trần Thị Bình</HoTen>
+        <MatKhau>0000</MatKhau>
+        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <CMND>001234567890</CMND>
+    </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD003</MaHoaDon>
+        <TenDangNhap>nguyenvanan</TenDangNhap>
+        <Thue>79590.6</Thue>
+        <Email>nguyen.van.an@email.com</Email>
+        <ThanhTien>1411302.6</ThanhTien>
+        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+        <SoDT>0912345678</SoDT>
+        <TongTien>1591812.0</TongTien>
+        <GioiTinh>Nam</GioiTinh>
+        <NgayLap>2025-11-11 00:58:58</NgayLap>
+        <DanhSachMaVe>VP004</DanhSachMaVe>
+        <MaKH>KH001</MaKH>
+        <NgaySinh>1985-05-15 00:00:00</NgaySinh>
+        <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
+        <KhuyenMai>260100.0</KhuyenMai>
+        <HoTen>Nguyễn Văn An</HoTen>
+        <MatKhau>0000</MatKhau>
+        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <CMND>123456789123</CMND>
+    </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD004</MaHoaDon>
+        <TenDangNhap>nguyenvanan</TenDangNhap>
+        <Thue>165396.875</Thue>
+        <Email>nguyen.van.an@email.com</Email>
+        <ThanhTien>3058959.375</ThanhTien>
+        <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
+        <SoDT>0912345678</SoDT>
+        <TongTien>3307937.5</TongTien>
+        <GioiTinh>Nam</GioiTinh>
+        <NgayLap>2025-11-11 14:39:24</NgayLap>
+        <DanhSachMaVe>VG004</DanhSachMaVe>
+        <MaKH>KH001</MaKH>
+        <NgaySinh>1985-05-15 00:00:00</NgaySinh>
+        <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
+        <KhuyenMai>414375.0</KhuyenMai>
+        <HoTen>Nguyễn Văn An</HoTen>
+        <MatKhau>0000</MatKhau>
+        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <CMND>123456789123</CMND>
+    </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD005</MaHoaDon>
+        <TenDangNhap>nguyenvanan</TenDangNhap>
+        <Thue>205134.375</Thue>
+        <Email>nguyen.van.an@email.com</Email>
+        <ThanhTien>3765946.875</ThanhTien>
+        <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
+        <SoDT>0912345678</SoDT>
+        <TongTien>4102687.5</TongTien>
+        <GioiTinh>Nam</GioiTinh>
+        <NgayLap>2025-11-12 09:12:21</NgayLap>
+        <DanhSachMaVe>VG005</DanhSachMaVe>
+        <MaKH>KH001</MaKH>
+        <NgaySinh>1985-05-15 00:00:00</NgaySinh>
+        <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
+        <KhuyenMai>541875.0</KhuyenMai>
+        <HoTen>Nguyễn Văn An</HoTen>
+        <MatKhau>0000</MatKhau>
+        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <CMND>123456789123</CMND>
+    </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD006</MaHoaDon>
+        <TenDangNhap>nguyenvanan</TenDangNhap>
+        <Thue>205134.375</Thue>
+        <Email>nguyen.van.an@email.com</Email>
+        <ThanhTien>3765946.875</ThanhTien>
+        <TrangThai>ĐÃ_THANH_TOÁN</TrangThai>
+        <SoDT>0912345678</SoDT>
+        <TongTien>4102687.5</TongTien>
+        <GioiTinh>Nam</GioiTinh>
+        <NgayLap>2025-11-12 09:16:16</NgayLap>
+        <DanhSachMaVe>VG006</DanhSachMaVe>
+        <MaKH>KH001</MaKH>
+        <NgaySinh>1985-05-15 00:00:00</NgaySinh>
+        <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
+        <KhuyenMai>541875.0</KhuyenMai>
+        <HoTen>Nguyễn Văn An</HoTen>
+        <MatKhau>0000</MatKhau>
+        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <CMND>123456789123</CMND>
+    </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD007</MaHoaDon>
+        <TenDangNhap>nguyenvanan</TenDangNhap>
+        <Thue>205134.375</Thue>
+        <Email>nguyen.van.an@email.com</Email>
+        <ThanhTien>3765946.875</ThanhTien>
+        <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
+        <SoDT>0912345678</SoDT>
+        <TongTien>4102687.5</TongTien>
+        <GioiTinh>Nam</GioiTinh>
+        <NgayLap>2025-11-12 09:16:27</NgayLap>
+        <DanhSachMaVe>VG007</DanhSachMaVe>
+        <MaKH>KH001</MaKH>
+        <NgaySinh>1985-05-15 00:00:00</NgaySinh>
+        <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
+        <KhuyenMai>541875.0</KhuyenMai>
+        <HoTen>Nguyễn Văn An</HoTen>
+        <MatKhau>0000</MatKhau>
+        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <CMND>123456789123</CMND>
+    </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD008</MaHoaDon>
+        <TenDangNhap>nguyenvanan</TenDangNhap>
+        <Thue>205134.375</Thue>
+        <Email>nguyen.van.an@email.com</Email>
+        <ThanhTien>3765946.875</ThanhTien>
+        <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
+        <SoDT>0912345678</SoDT>
+        <TongTien>4102687.5</TongTien>
+        <GioiTinh>Nam</GioiTinh>
+        <NgayLap>2025-11-12 09:28:49</NgayLap>
+        <DanhSachMaVe>VG008</DanhSachMaVe>
+        <MaKH>KH001</MaKH>
+        <NgaySinh>1985-05-15 00:00:00</NgaySinh>
+        <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
+        <KhuyenMai>541875.0</KhuyenMai>
+        <HoTen>Nguyễn Văn An</HoTen>
+        <MatKhau>0000</MatKhau>
+        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <CMND>123456789123</CMND>
+    </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD009</MaHoaDon>
+        <TenDangNhap>nguyenvanan</TenDangNhap>
+        <Thue>225003.125</Thue>
+        <Email>nguyen.van.an@email.com</Email>
+        <ThanhTien>4119440.625</ThanhTien>
+        <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
+        <SoDT>0912345678</SoDT>
+        <TongTien>4500062.5</TongTien>
+        <GioiTinh>Nam</GioiTinh>
+        <NgayLap>2025-11-12 09:51:22</NgayLap>
+        <DanhSachMaVe>VG009</DanhSachMaVe>
+        <MaKH>KH001</MaKH>
+        <NgaySinh>1985-05-15 00:00:00</NgaySinh>
+        <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
+        <KhuyenMai>605625.0</KhuyenMai>
+        <HoTen>Nguyễn Văn An</HoTen>
+        <MatKhau>0000</MatKhau>
+        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <CMND>123456789123</CMND>
+    </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD010</MaHoaDon>
+        <TenDangNhap>nguyenvanan</TenDangNhap>
+        <Thue>225003.125</Thue>
+        <Email>nguyen.van.an@email.com</Email>
+        <ThanhTien>4119440.625</ThanhTien>
+        <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
+        <SoDT>0912345678</SoDT>
+        <TongTien>4500062.5</TongTien>
+        <GioiTinh>Nam</GioiTinh>
+        <NgayLap>2025-11-12 13:10:02</NgayLap>
+        <DanhSachMaVe>VG010</DanhSachMaVe>
+        <MaKH>KH001</MaKH>
+        <NgaySinh>1985-05-15 00:00:00</NgaySinh>
+        <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
+        <KhuyenMai>605625.0</KhuyenMai>
+        <HoTen>Nguyễn Văn An</HoTen>
+        <MatKhau>0000</MatKhau>
+        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <CMND>123456789123</CMND>
+    </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD011</MaHoaDon>
+        <TenDangNhap>nguyenvanan</TenDangNhap>
+        <Thue>205134.375</Thue>
+        <Email>nguyen.van.an@email.com</Email>
+        <ThanhTien>3765946.875</ThanhTien>
+        <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
+        <SoDT>0912345678</SoDT>
+        <TongTien>4102687.5</TongTien>
+        <GioiTinh>Nam</GioiTinh>
+        <NgayLap>2025-11-12 13:25:59</NgayLap>
+        <DanhSachMaVe>VG011</DanhSachMaVe>
+        <MaKH>KH001</MaKH>
+        <NgaySinh>1985-05-15 00:00:00</NgaySinh>
+        <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
+        <KhuyenMai>541875.0</KhuyenMai>
+        <HoTen>Nguyễn Văn An</HoTen>
+        <MatKhau>0000</MatKhau>
+        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <CMND>123456789123</CMND>
+    </HoaDon>
+    <HoaDon>
+        <MaHoaDon>HD012</MaHoaDon>
+        <TenDangNhap>nguyenvanan</TenDangNhap>
+        <Thue>190232.8125</Thue>
+        <Email>nguyen.van.an@email.com</Email>
+        <ThanhTien>3500826.5625</ThanhTien>
+        <TrangThai>CHƯA_THANH_TOÁN</TrangThai>
+        <SoDT>0912345678</SoDT>
+        <TongTien>3804656.25</TongTien>
+        <GioiTinh>Nam</GioiTinh>
+        <NgayLap>2025-11-12 13:52:30</NgayLap>
+        <DanhSachMaVe>VG012</DanhSachMaVe>
+        <MaKH>KH001</MaKH>
+        <NgaySinh>1985-05-15 00:00:00</NgaySinh>
+        <DiaChi>123 Nguyễn Trãi, Quận 1, TP.HCM</DiaChi>
+        <KhuyenMai>494062.5</KhuyenMai>
+        <HoTen>Nguyễn Văn An</HoTen>
+        <MatKhau>0000</MatKhau>
+        <PhuongThucTT>CHUYỂN_KHOẢN</PhuongThucTT>
+        <CMND>123456789123</CMND>
+    </HoaDon>
+</HoaDons>

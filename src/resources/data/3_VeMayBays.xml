@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<VeMayBays>
+    <VeMayBay>
+        <LoaiDoUong>Rượu vang cao cấp</LoaiDoUong>
+        <MaVe>VG000</MaVe>
+        <TrangThai>ĐÃ_ĐẶT</TrangThai>
+        <SoKgHanhLyKyGui>20.0</SoKgHanhLyKyGui>
+        <MaKhachHang/>
+        <DichVuDacBiet>Phòng chờ VIP, Ưu tiên lên máy bay, Xe đưa đón</DichVuDacBiet>
+        <SoGhe>12A</SoGhe>
+        <NgayBay>2025-11-10 22:43:38</NgayBay>
+        <GiaVe>3612500.0</GiaVe>
+        <PhuThu>500000.0</PhuThu>
+        <MaChuyen>CB019</MaChuyen>
+        <PhongChoVIP>true</PhongChoVIP>
+        <NgayDat>2025-11-12 13:50:56</NgayDat>
+    </VeMayBay>
+    <VeMayBay>
+        <LoaiDoUong>Rượu vang cao cấp</LoaiDoUong>
+        <MaVe>VG002</MaVe>
+        <TrangThai>ĐÃ_ĐẶT</TrangThai>
+        <SoKgHanhLyKyGui>20.0</SoKgHanhLyKyGui>
+        <MaKhachHang>KH001</MaKhachHang>
+        <DichVuDacBiet>Phòng chờ VIP, Ưu tiên lên máy bay, Xe đưa đón</DichVuDacBiet>
+        <SoGhe>12A</SoGhe>
+        <NgayBay>2025-11-10 23:00:37</NgayBay>
+        <GiaVe>2077187.5</GiaVe>
+        <PhuThu>500000.0</PhuThu>
+        <MaChuyen>CB025</MaChuyen>
+        <PhongChoVIP>true</PhongChoVIP>
+        <NgayDat>2025-11-12 13:50:56</NgayDat>
+    </VeMayBay>
+    <VeMayBay>
+        <LoaiDoUong/>
+        <MaVe>VP003</MaVe>
+        <TrangThai>ĐÃ_ĐẶT</TrangThai>
+        <SoKgHanhLyKyGui>7.0</SoKgHanhLyKyGui>
+        <MaKhachHang>KH002</MaKhachHang>
+        <DichVuDacBiet/>
+        <SoGhe>12A</SoGhe>
+        <NgayBay>2025-11-10 23:21:31</NgayBay>
+        <GiaVe>1040400.0</GiaVe>
+        <PhuThu>0.0</PhuThu>
+        <MaChuyen>CB021</MaChuyen>
+        <PhongChoVIP>false</PhongChoVIP>
+        <NgayDat>2025-11-12 13:50:56</NgayDat>
+    </VeMayBay>
+    <VeMayBay>
+        <LoaiDoUong/>
+        <MaVe>VP004</MaVe>
+        <TrangThai>ĐÃ_ĐẶT</TrangThai>
+        <SoKgHanhLyKyGui>7.0</SoKgHanhLyKyGui>
+        <MaKhachHang>KH001</MaKhachHang>
+        <DichVuDacBiet/>
+        <SoGhe>12A</SoGhe>
+        <NgayBay>2025-11-11 00:58:56</NgayBay>
+        <GiaVe>1473900.0</GiaVe>
+        <PhuThu>0.0</PhuThu>
+        <MaChuyen>CB047</MaChuyen>
+        <PhongChoVIP>false</PhongChoVIP>
+        <NgayDat>2025-11-12 13:50:56</NgayDat>
+    </VeMayBay>
+    <VeMayBay>
+        <LoaiDoUong>Rượu vang cao cấp</LoaiDoUong>
+        <MaVe>VG004</MaVe>
+        <TrangThai>ĐÃ_ĐẶT</TrangThai>
+        <SoKgHanhLyKyGui>20.0</SoKgHanhLyKyGui>
+        <MaKhachHang>KH001</MaKhachHang>
+        <DichVuDacBiet>Phòng chờ VIP, Ưu tiên lên máy bay, Xe đưa đón</DichVuDacBiet>
+        <SoGhe>41C</SoGhe>
+        <NgayBay>2025-11-11 14:39:19</NgayBay>
+        <GiaVe>2348125.0</GiaVe>
+        <PhuThu>500000.0</PhuThu>
+        <MaChuyen>CB006</MaChuyen>
+        <PhongChoVIP>true</PhongChoVIP>
+        <NgayDat>2025-11-12 13:50:56</NgayDat>
+    </VeMayBay>
+    <VeMayBay>
+        <LoaiDoUong>Rượu vang cao cấp</LoaiDoUong>
+        <MaVe>VG005</MaVe>
+        <TrangThai>ĐÃ_ĐẶT</TrangThai>
+        <SoKgHanhLyKyGui>20.0</SoKgHanhLyKyGui>
+        <MaKhachHang>KH001</MaKhachHang>
+        <DichVuDacBiet>Phòng chờ VIP, Ưu tiên lên máy bay, Xe đưa đón</DichVuDacBiet>
+        <SoGhe>16B</SoGhe>
+        <NgayBay>2025-11-12 09:12:18</NgayBay>
+        <GiaVe>3070625.0</GiaVe>
+        <PhuThu>500000.0</PhuThu>
+        <MaChuyen>CB037</MaChuyen>
+        <PhongChoVIP>true</PhongChoVIP>
+        <NgayDat>2025-11-12 13:50:56</NgayDat>
+    </VeMayBay>
+    <VeMayBay>
+        <LoaiDoUong>Rượu vang cao cấp</LoaiDoUong>
+        <MaVe>VG006</MaVe>
+        <TrangThai>ĐÃ_ĐẶT</TrangThai>
+        <SoKgHanhLyKyGui>20.0</SoKgHanhLyKyGui>
+        <MaKhachHang>KH001</MaKhachHang>
+        <DichVuDacBiet>Phòng chờ VIP, Ưu tiên lên máy bay, Xe đưa đón</DichVuDacBiet>
+        <SoGhe>38B</SoGhe>
+        <NgayBay>2025-11-12 09:16:14</NgayBay>
+        <GiaVe>3070625.0</GiaVe>
+        <PhuThu>500000.0</PhuThu>
+        <MaChuyen>CB037</MaChuyen>
+        <PhongChoVIP>true</PhongChoVIP>
+        <NgayDat>2025-11-12 13:50:56</NgayDat>
+    </VeMayBay>
+    <VeMayBay>
+        <LoaiDoUong>Rượu vang cao cấp</LoaiDoUong>
+        <MaVe>VG007</MaVe>
+        <TrangThai>ĐÃ_ĐẶT</TrangThai>
+        <SoKgHanhLyKyGui>20.0</SoKgHanhLyKyGui>
+        <MaKhachHang>KH001</MaKhachHang>
+        <DichVuDacBiet>Phòng chờ VIP, Ưu tiên lên máy bay, Xe đưa đón</DichVuDacBiet>
+        <SoGhe>38B</SoGhe>
+        <NgayBay>2025-11-12 09:16:26</NgayBay>
+        <GiaVe>3070625.0</GiaVe>
+        <PhuThu>500000.0</PhuThu>
+        <MaChuyen>CB037</MaChuyen>
+        <PhongChoVIP>true</PhongChoVIP>
+        <NgayDat>2025-11-12 13:50:56</NgayDat>
+    </VeMayBay>
+    <VeMayBay>
+        <LoaiDoUong>Rượu vang cao cấp</LoaiDoUong>
+        <MaVe>VG008</MaVe>
+        <TrangThai>ĐÃ_ĐẶT</TrangThai>
+        <SoKgHanhLyKyGui>20.0</SoKgHanhLyKyGui>
+        <MaKhachHang>KH001</MaKhachHang>
+        <DichVuDacBiet>Phòng chờ VIP, Ưu tiên lên máy bay, Xe đưa đón</DichVuDacBiet>
+        <SoGhe>9C</SoGhe>
+        <NgayBay>2025-11-12 09:28:47</NgayBay>
+        <GiaVe>3070625.0</GiaVe>
+        <PhuThu>500000.0</PhuThu>
+        <MaChuyen>CB035</MaChuyen>
+        <PhongChoVIP>true</PhongChoVIP>
+        <NgayDat>2025-11-12 13:50:56</NgayDat>
+    </VeMayBay>
+    <VeMayBay>
+        <LoaiDoUong>Rượu vang cao cấp</LoaiDoUong>
+        <MaVe>VG009</MaVe>
+        <TrangThai>ĐÃ_ĐẶT</TrangThai>
+        <SoKgHanhLyKyGui>20.0</SoKgHanhLyKyGui>
+        <MaKhachHang>KH001</MaKhachHang>
+        <DichVuDacBiet>Phòng chờ VIP, Ưu tiên lên máy bay, Xe đưa đón</DichVuDacBiet>
+        <SoGhe>9B</SoGhe>
+        <NgayBay>2025-11-12 09:51:20</NgayBay>
+        <GiaVe>3431875.0</GiaVe>
+        <PhuThu>500000.0</PhuThu>
+        <MaChuyen>CB047</MaChuyen>
+        <PhongChoVIP>true</PhongChoVIP>
+        <NgayDat>2025-11-12 13:50:56</NgayDat>
+    </VeMayBay>
+    <VeMayBay>
+        <LoaiDoUong>Rượu vang cao cấp</LoaiDoUong>
+        <MaVe>VG010</MaVe>
+        <TrangThai>ĐÃ_ĐẶT</TrangThai>
+        <SoKgHanhLyKyGui>20.0</SoKgHanhLyKyGui>
+        <MaKhachHang>KH001</MaKhachHang>
+        <DichVuDacBiet>Phòng chờ VIP, Ưu tiên lên máy bay, Xe đưa đón</DichVuDacBiet>
+        <SoGhe>11A</SoGhe>
+        <NgayBay>2025-11-12 13:10:01</NgayBay>
+        <GiaVe>3431875.0</GiaVe>
+        <PhuThu>500000.0</PhuThu>
+        <MaChuyen>CB047</MaChuyen>
+        <PhongChoVIP>true</PhongChoVIP>
+        <NgayDat>2025-11-12 13:50:56</NgayDat>
+    </VeMayBay>
+    <VeMayBay>
+        <LoaiDoUong>Rượu vang cao cấp</LoaiDoUong>
+        <MaVe>VG011</MaVe>
+        <TrangThai>ĐÃ_ĐẶT</TrangThai>
+        <SoKgHanhLyKyGui>20.0</SoKgHanhLyKyGui>
+        <MaKhachHang>KH001</MaKhachHang>
+        <DichVuDacBiet>Phòng chờ VIP, Ưu tiên lên máy bay, Xe đưa đón</DichVuDacBiet>
+        <SoGhe>9B</SoGhe>
+        <NgayBay>2025-11-12 13:25:58</NgayBay>
+        <GiaVe>3070625.0</GiaVe>
+        <PhuThu>500000.0</PhuThu>
+        <MaChuyen>CB045</MaChuyen>
+        <PhongChoVIP>true</PhongChoVIP>
+        <NgayDat>2025-11-12 13:50:56</NgayDat>
+    </VeMayBay>
+    <VeMayBay>
+        <LoaiDoUong>Rượu vang cao cấp</LoaiDoUong>
+        <MaVe>VG012</MaVe>
+        <TrangThai>ĐÃ_ĐẶT</TrangThai>
+        <SoKgHanhLyKyGui>20.0</SoKgHanhLyKyGui>
+        <MaKhachHang>KH001</MaKhachHang>
+        <DichVuDacBiet>Phòng chờ VIP, Ưu tiên lên máy bay, Xe đưa đón</DichVuDacBiet>
+        <SoGhe>1A</SoGhe>
+        <NgayBay>2025-11-12 13:52:29</NgayBay>
+        <GiaVe>2799687.5</GiaVe>
+        <PhuThu>500000.0</PhuThu>
+        <MaChuyen>CB010</MaChuyen>
+        <PhongChoVIP>true</PhongChoVIP>
+        <NgayDat>2025-11-12 13:52:29</NgayDat>
+    </VeMayBay>
+</VeMayBays>

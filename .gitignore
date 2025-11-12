@@ -1,0 +1,29 @@
+# Build directories
+bin/
+build/
+out/
+target/
+*.class
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Data files (if you don't want to track them)
+# src/resources/data/*.xml
