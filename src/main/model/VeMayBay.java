@@ -18,7 +18,7 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
     protected Date ngayDat;
 
     public static double thue = 0.05;
-    public static int feeHL  = 15000;
+    public static int feeHL  = 15000; // 1 kí
     
     public static final String TRANG_THAI_DA_DAT = "ĐÃ_ĐẶT";
     public static final String TRANG_THAI_DA_THANH_TOAN = "ĐÃ_THANH_TOÁN";
@@ -33,7 +33,7 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
     
     // tao format mave va so ghe
     private static final Pattern MA_VE_PATTERN = Pattern.compile("^(VG|VP|VT)[0-9]{3}$");
-    private static final Pattern SO_GHE_PATTERN = Pattern.compile("^[0-9]{1,2}[A-Z]$");
+    private static final Pattern SO_GHE_PATTERN = Pattern.compile("^[0-9]{1,2}[A-F]$");  // Format: 1A, 12B, 25F, etc.
     
     // CONSTRUCTOR CHÍNH
     public VeMayBay(String maKH, String maVe, Date ngayBay, double giaVe, String maChuyen, String soGhe) {
@@ -207,7 +207,7 @@ public abstract class VeMayBay implements Comparable<VeMayBay> {
             throw new IllegalArgumentException("Số ghế không được để trống");
         }
         if (!validateSoGhe(soGhe.trim())) {
-            throw new IllegalArgumentException("Số ghế không hợp lệ. Format: 1A, 12B, 25C");
+            throw new IllegalArgumentException("Số ghế không hợp lệ. Format: 1A, 12B, 25F (hàng 1-30, cột A-F)");
         }
         this.soGhe = soGhe.trim().toUpperCase();
     }

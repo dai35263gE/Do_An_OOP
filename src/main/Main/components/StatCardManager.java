@@ -30,7 +30,7 @@ public class StatCardManager {
             "Tỷ lệ lấp đầy", "Vé thương gia", "Vé phổ thông", "Vé tiết kiệm"
         };
 
-        String[] values = {"0", "0", "0", "0 VND", "0%", "0", "0", "0"};
+        String[] values = {"0", "0", "0", "0 ", "0%", "0", "0", "0"};
 
         String[] types = {
             "primary", "success", "info", "warning",
@@ -116,7 +116,7 @@ public class StatCardManager {
         updateStatCard(0, String.valueOf(thongKe.get("tongVe")));
         updateStatCard(1, String.valueOf(thongKe.get("tongChuyenBay")));
         updateStatCard(2, String.valueOf(thongKe.get("tongKhachHang")));
-        updateStatCard(3, String.format("%,.0f VND", thongKe.get("tongDoanhThu")));
+        updateStatCard(3, String.format("%,.0f ", thongKe.get("tongDoanhThu")));
         updateStatCard(4, String.format("%.1f%%", thongKe.get("tiLeLapDay")));
         updateStatCard(5, String.valueOf(thongKe.get("veThuongGia")));
         updateStatCard(6, String.valueOf(thongKe.get("vePhoThong")));
@@ -138,7 +138,7 @@ public class StatCardManager {
                 updateStatCard(4, String.format("%.1f%%", thongKe.get("tiLeLapDay")));
                 break;
             case "doanhthu":
-                updateStatCard(3, String.format("%,.0f VND", thongKe.get("tongDoanhThu")));
+                updateStatCard(3, String.format("%,.0f ", thongKe.get("tongDoanhThu")));
                 break;
             default:
                 capNhatThongKeTrangChu();
@@ -146,7 +146,7 @@ public class StatCardManager {
     }
 
     public void resetStatCards() {
-        String[] defaultValues = {"0", "0", "0", "0 VND", "0%", "0", "0", "0"};
+        String[] defaultValues = {"0", "0", "0", "0 ", "0%", "0", "0", "0"};
         for (int i = 0; i < statCards.length; i++) {
             updateStatCard(i, defaultValues[i]);
         }

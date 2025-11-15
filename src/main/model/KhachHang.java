@@ -7,6 +7,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Calendar;
 
 /**
  *
@@ -26,14 +27,15 @@ public class KhachHang extends NguoiDung {
     public static final String HANG_GOLD = "GOLD"; // hoa don tren 5,000,000
     public static final String HANG_PLATINUM = "PLATINUM"; // hoa don tren 10,000,000
     
-    // Ngưỡng điểm cho các hạng, 1000vnd = 1d
-    private static final int DIEM_SILVER = 1000;
-    private static final int DIEM_GOLD = 5000;
-    private static final int DIEM_PLATINUM = 10000;
+
+    // Monthly spending thresholds (VND) for tiers — reset/reevaluated every month
+    private static final double THRESHOLD_SILVER = 2_000_000.0;
+    private static final double THRESHOLD_GOLD = 5_000_000.0;
+    private static final double THRESHOLD_PLATINUM = 10_000_000.0;
     
 
-    public KhachHang(String ma, String hoTen, String soDT, String email, String cmnd, Date ngaySinh, String gioiTinh, String diaChi,  String tenDangNhap, String matKhau) {
-        super(ma, hoTen, soDT, email, cmnd, ngaySinh, gioiTinh, diaChi, tenDangNhap, matKhau);
+    public KhachHang(String ma, String hoTen, String soDT, String email, String cmnd, Date ngaySinh, String gioiTinh, String diaChi, String matKhau) {
+        super(ma, hoTen, soDT, email, cmnd, ngaySinh, gioiTinh, diaChi, matKhau);
         this.hangKhachHang = HANG_BRONZE;
         this.diemTichLuy = 0;
         this.ngayDangKy = new Date();
@@ -42,8 +44,8 @@ public class KhachHang extends NguoiDung {
     }
     
     // OVERLOAD CONSTRUCTOR - từ file
-    public KhachHang(String ma, String hoTen, String soDT, String email, String cmnd, Date ngaySinh, String gioiTinh, String diaChi,String tenDangNhap, String matKhau, String hangKhachHang, int diemTichLuy, Date ngayDangKy) {
-        super(ma, hoTen, soDT, email, cmnd, ngaySinh, gioiTinh, diaChi, tenDangNhap, matKhau);
+    public KhachHang(String ma, String hoTen, String soDT, String email, String cmnd, Date ngaySinh, String gioiTinh, String diaChi, String matKhau, String hangKhachHang, int diemTichLuy, Date ngayDangKy) {
+        super(ma, hoTen, soDT, email, cmnd, ngaySinh, gioiTinh, diaChi, matKhau);
         setHangKhachHang(hangKhachHang);
         setDiemTichLuy(diemTichLuy);
         setNgayDangKy(ngayDangKy);
@@ -148,15 +150,47 @@ public class KhachHang extends NguoiDung {
     }
     
     private void capNhatHangKhachHang() {
-        if (diemTichLuy >= DIEM_PLATINUM) {
+        // New policy: determine tier based on total paid spending in the current month.
+        double tongThang = getTongChiTieuThang();
+        if (tongThang > THRESHOLD_PLATINUM) {
             hangKhachHang = HANG_PLATINUM;
-        } else if (diemTichLuy >= DIEM_GOLD) {
+        } else if (tongThang > THRESHOLD_GOLD) {
             hangKhachHang = HANG_GOLD;
-        } else if (diemTichLuy >= DIEM_SILVER) {
+        } else if (tongThang > THRESHOLD_SILVER) {
             hangKhachHang = HANG_SILVER;
         } else {
             hangKhachHang = HANG_BRONZE;
         }
+    }
+
+    // Public wrapper to allow external callers (GUI/services) to force re-evaluation
+    public void capNhatHangTheoThang() {
+        capNhatHangKhachHang();
+    }
+
+    /**
+     * Tính tổng chi tiêu (đã thanh toán) của khách hàng trong tháng hiện tại.
+     * Dùng để đánh hạng theo yêu cầu: reset mỗi tháng.
+     */
+    public double getTongChiTieuThang() {
+        if (lichSuHoaDon == null || lichSuHoaDon.isEmpty()) return 0.0;
+        Calendar now = Calendar.getInstance();
+        int yearNow = now.get(Calendar.YEAR);
+        int monthNow = now.get(Calendar.MONTH); // 0-based
+
+        double tong = 0.0;
+        for (HoaDon hd : lichSuHoaDon) {
+            if (hd == null) continue;
+            if (!hd.getTrangThai().equals(HoaDon.TT_DA_TT)) continue; // chỉ tính hóa đơn đã thanh toán
+            Date ngay = hd.getNgayLap();
+            if (ngay == null) continue;
+            Calendar c = Calendar.getInstance();
+            c.setTime(ngay);
+            if (c.get(Calendar.YEAR) == yearNow && c.get(Calendar.MONTH) == monthNow) {
+                tong += hd.getThanhTien();
+            }
+        }
+        return tong;
     }
     
     public double tinhTyLeGiamGia() {
@@ -309,8 +343,8 @@ public class KhachHang extends NguoiDung {
     
     public String getThongTinThanhVien() {
         return String.format(
-            "Hạng: %s\nĐiểm tích lũy: %d\nTỷ lệ giảm giá: %.1f%%\nNgày đăng ký: %s\nSố ngày thành viên: %d",
-            hangKhachHang, diemTichLuy, tinhTyLeGiamGia() * 100, ngayDangKy, getSoNgayThanhVien()
+            "Hạng: %s\nĐiểm tích lũy: %d\nTỷ lệ giảm giá: %.1f%%\nTổng chi tiêu tháng này: %,.0f VND\nNgày đăng ký: %s\nSố ngày thành viên: %d",
+            hangKhachHang, diemTichLuy, tinhTyLeGiamGia() * 100, getTongChiTieuThang(), ngayDangKy, getSoNgayThanhVien()
         );
     }
     

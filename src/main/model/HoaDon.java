@@ -9,17 +9,16 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- *
- * @author HP
+ * HoaDon - invoice model. Amount-related fields are computed on demand:
+ * - tongTien = sum of ticket prices
+ * - khuyenMai = computed from `KhachHang.tinhMucGiamGia(tongTien)`
+ * - thue = TAX_RATE * tongTien (TAX_RATE = 0.05)
+ * - thanhTien = tongTien - khuyenMai + thue
  */
-// File: HoaDon.java
 public class HoaDon {
     private String maHoaDon;
     private Date ngayLap;
-    private double tongTien;
-    private double thue;
-    private double khuyenMai;
-    private double thanhTien;
+    private static final double TAX_RATE = 0.05; // fixed tax rate
     private String phuongThucTT;
     private String trangThai;
     private KhachHang khachHang;
@@ -36,65 +35,67 @@ public class HoaDon {
     public static final String PT_VI_DIEN_TU = "VÍ_ĐIỆN_TỬ";
     public static final String PT_NONE = "CHƯA";
 
-    // CONSTRUCTOR CHÍNH
-    public HoaDon(String maHoaDon, KhachHang khachHang, List<VeMayBay> danhSachVe, double khuyenMai, String phuongThucTT) {
+    // Constructors
+    public HoaDon(String maHoaDon, KhachHang khachHang, List<VeMayBay> danhSachVe, String phuongThucTT) {
         this.maHoaDon = maHoaDon;
         this.ngayLap = new Date();
         this.khachHang = khachHang;
-        this.danhSachVe = danhSachVe;
-        setTongTien(tinhTongTien());
-        setThue(tinhThue());
-        setKhuyenMai(khuyenMai);
+        this.danhSachVe = (danhSachVe == null) ? new ArrayList<>() : danhSachVe;
         this.trangThai = TT_CHUA_TT;
-        setPhuongThucTT(phuongThucTT);
-        this.thanhTien = tinhThanhTien();
-        
+        this.phuongThucTT = (phuongThucTT == null) ? PT_NONE : phuongThucTT;
     }
 
-    // OVERLOAD CONSTRUCTOR - không có khuyến mãi
-    public HoaDon(String maHoaDon, KhachHang khachHang, List<VeMayBay> danhSachVe, String phuongThucTT) {
-        this(maHoaDon, khachHang, danhSachVe, 0, phuongThucTT);
+    // Backwards-compatible constructor: old callers that passed a khuyenMai value
+    // will still work but the provided khuyenMai is ignored (discount is calculated from customer tier).
+    public HoaDon(String maHoaDon, KhachHang khachHang, List<VeMayBay> danhSachVe, double ignoredKhuyenMai, String phuongThucTT) {
+        this(maHoaDon, khachHang, danhSachVe, phuongThucTT);
     }
 
     public HoaDon(VeMayBay vmb) {
         this.maHoaDon = "HD999";
         this.ngayLap = new Date();
         this.danhSachVe = new ArrayList<>();
-        danhSachVe.add(vmb);
+        this.danhSachVe.add(vmb);
         this.trangThai = TT_CHUA_TT;
+        this.phuongThucTT = PT_NONE;
     }
 
-    public HoaDon(String maHoaDon, Date ngayLap, KhachHang khachHang, double tongTien, double thue, double khuyenMai,
-            String phuongThucTT, String trangThai, List<VeMayBay> DSVe) {
+    // Constructor used when loading from persistence
+    public HoaDon(String maHoaDon, Date ngayLap, KhachHang khachHang, String phuongThucTT, String trangThai, List<VeMayBay> DSVe) {
         this.maHoaDon = maHoaDon;
-        this.ngayLap = ngayLap;
+        this.ngayLap = (ngayLap == null) ? new Date() : ngayLap;
         this.khachHang = khachHang;
-        this.danhSachVe = new ArrayList<>();
-        this.tongTien = tongTien;
-        this.thue = thue;
-        this.khuyenMai = khuyenMai;
-        this.phuongThucTT = phuongThucTT;
-        this.trangThai = trangThai;
-        this.thanhTien = tinhThanhTien();
-        this.danhSachVe = DSVe;
+        this.danhSachVe = (DSVe == null) ? new ArrayList<>() : DSVe;
+        this.phuongThucTT = (phuongThucTT == null) ? PT_NONE : phuongThucTT;
+        this.trangThai = (trangThai == null) ? TT_CHUA_TT : trangThai;
     }
 
     // BUSINESS METHODS
 
+    // Total of ticket base prices
     public double tinhTongTien() {
         double tong = 0;
+        if (danhSachVe == null) return 0;
         for (VeMayBay ve : danhSachVe) {
             tong += ve.getGiaVe();
         }
         return tong;
     }
 
+    // Tax = TAX_RATE * total
     public double tinhThue() {
-        return tongTien * 0.01;
+        return getTongTien() * TAX_RATE;
     }
 
+    // Discount (khuyến mãi) computed from customer tier
+    public double getKhuyenMai() {
+        if (khachHang == null) return 0;
+        return khachHang.tinhMucGiamGia(getTongTien());
+    }
+
+    // Final amount = total - discount + tax
     public double tinhThanhTien() {
-        return tinhTongTien() + tinhThue() - khuyenMai;
+        return getTongTien() - getKhuyenMai() + getThue();
     }
 
     public void thanhToan() throws IllegalStateException {
@@ -108,7 +109,7 @@ public class HoaDon {
 
         // Cập nhật trạng thái vé sau khi thanh toán
         for (VeMayBay ve : danhSachVe) {
-            ve.setTrangThai("ĐÃ_THANH_TOÁN");
+            ve.setTrangThai(VeMayBay.TRANG_THAI_DA_THANH_TOAN);
         }
     }
 
@@ -127,24 +128,19 @@ public class HoaDon {
 
         this.trangThai = TT_HUY;
 
-        // Cập nhật trạng thái vé và xóa liên kết với hóa đơn
+        // Cập nhật trạng thái vé
         for (VeMayBay ve : danhSachVe) {
             ve.setTrangThai("CÓ_THỂ_ĐẶT");
         }
     }
 
+    // Manual application of discount is not supported — discount depends on customer tier
     public void apDungKhuyenMai(double khuyenMaiMoi) {
-        if (khuyenMaiMoi < 0) {
-            throw new IllegalArgumentException("Khuyến mãi không được âm");
-        }
-        if (khuyenMaiMoi > tongTien * 0.3) {
-            throw new IllegalArgumentException("Khuyến mãi tối đa 30% tổng tiền");
-        }
-        this.khuyenMai = khuyenMaiMoi;
-        this.thanhTien = tinhThanhTien();
+        throw new UnsupportedOperationException("Khuyến mãi được tính tự động theo hạng khách hàng");
     }
 
     public boolean coTheHuy() {
+        if (danhSachVe == null) return true;
         for (VeMayBay ve : danhSachVe) {
             if (!ve.coTheHuy()) {
                 return false;
@@ -157,16 +153,12 @@ public class HoaDon {
         if (trangThai.equals(TT_DA_TT)) {
             throw new IllegalStateException("Không thể xóa vé khỏi hóa đơn đã thanh toán");
         }
-
-        if ((ve.getTrangThai().equals(VeMayBay.TRANG_THAI_DA_DAT) || ve.getTrangThai().equals(VeMayBay.TRANG_THAI_DA_DAT))  && danhSachVe.remove(ve)) {
-            this.tongTien = tinhTongTien();
-            this.thue = tinhThue();
-            this.thanhTien = tinhThanhTien();
-        }
+        if (ve == null) return;
+        danhSachVe.remove(ve);
     }
 
     public int tinhDiemTichLuy() {
-        return (int) (thanhTien / 10000); // 1 điểm cho mỗi 10,000 VND
+        return (int) (getThanhTien() / 10000); // 1 điểm cho mỗi 10,000 VND
     }
 
     // Getters and Setters với VALIDATION
@@ -177,6 +169,7 @@ public class HoaDon {
     public Date getNgayLap() {
         return ngayLap;
     }
+
     public void setNgayLap(Date ngayLap) {
         if (ngayLap != null && ngayLap.after(new Date())) {
             throw new IllegalArgumentException("Ngay lap khong the o tuong lai");
@@ -184,53 +177,25 @@ public class HoaDon {
         this.ngayLap = ngayLap;
     }
 
+    // Derived getters for amounts (keep names to avoid changes elsewhere)
     public double getTongTien() {
-        return this.tinhTongTien();
-    }
-    public void setTongTien(double tongTien) {
-        if (tongTien < 0) {
-            throw new IllegalArgumentException("Tổng tiền không được âm");
-        }
-        this.tongTien = tongTien;
+        return tinhTongTien();
     }
 
     public double getThue() {
-        return thue;
-    }
-    public void setThue(double thue) {
-        if (thue < 0) {
-            throw new IllegalArgumentException("Thuế không được âm");
-        }
-        this.thue = thue;
-        this.thanhTien = tinhThanhTien();
-    }
-
-    public double getKhuyenMai() {
-        return khuyenMai;
-    }
-    public void setKhuyenMai(double khuyenMai) {
-        if (khuyenMai < 0) {
-            throw new IllegalArgumentException("Khuyến mãi không được âm");
-        }
-        if (khuyenMai > tongTien * 0.3) {
-            throw new IllegalArgumentException("Khuyến mãi tối đa 30% tổng tiền");
-        }
-        this.khuyenMai = khuyenMai;
-        this.thanhTien = tinhThanhTien();
+        return tinhThue();
     }
 
     public double getThanhTien() {
-        return this.tinhThanhTien();
+        return tinhThanhTien();
     }
-    public void setThanhTien(double thanhTien) {
-        this.thanhTien = thanhTien;
-    }
-
 
     public String getPhuongThucTT() {
         return phuongThucTT;
     }
+
     public void setPhuongThucTT(String phuongThucTT) {
+        if (phuongThucTT == null) throw new IllegalArgumentException("Phương thức thanh toán không được null");
         if (!phuongThucTT.equals(PT_TIEN_MAT) &&
                 !phuongThucTT.equals(PT_CHUYEN_KHOAN) &&
                 !phuongThucTT.equals(PT_THE) &&
@@ -245,13 +210,13 @@ public class HoaDon {
     public String getTrangThai() {
         return trangThai;
     }
+
     public void setTrangThai(String trangThai) {
         if (!trangThai.equals(TT_CHUA_TT) &&
                 !trangThai.equals(TT_DA_TT) &&
                 !trangThai.equals(TT_HUY)) {
             throw new IllegalArgumentException("Trạng thái hóa đơn không hợp lệ");
         }
-
         this.trangThai = trangThai;
     }
 
@@ -260,10 +225,11 @@ public class HoaDon {
             // Trả về khách hàng mặc định nếu null
             return new KhachHang("KH000", "Khách hàng mặc định", "0000000000",
                     "default@email.com", "000000000000", new Date(),
-                    "Nam", "Địa chỉ mặc định", "default", "password");
+                    "Nam", "Địa chỉ mặc định", "password");
         }
         return khachHang;
     }
+
     public void setKhachHang(KhachHang khachHang) {
         if (khachHang == null) {
             throw new IllegalArgumentException("Khách hàng không được null");
@@ -274,9 +240,10 @@ public class HoaDon {
     public List<VeMayBay> getDanhSachVe() {
         return new ArrayList<>(danhSachVe);
     }
+
     public int getSoLuongVe() {
-        return danhSachVe.size();
+        return (danhSachVe == null) ? 0 : danhSachVe.size();
     }
 
-    
 }
+ 

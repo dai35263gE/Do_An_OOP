@@ -323,10 +323,7 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
       // Lấy thông tin cơ bản
       String maHoaDon = data.get("MaHoaDon");
       Date ngayLap = XMLUtils.stringToDate(data.get("NgayLap"));
-      double tongTien = XMLUtils.stringToDouble(data.get("TongTien"));
-      double thue = XMLUtils.stringToDouble(data.get("Thue"));
-      double khuyenMai = XMLUtils.stringToDouble(data.get("KhuyenMai"));
-      double thanhTien = XMLUtils.stringToDouble(data.get("ThanhTien"));
+      // Amount fields in XML are ignored — values are computed dynamically from tickets and customer tier
       String phuongThucTT = data.get("PhuongThucTT");
       String trangThai = data.get("TrangThai");
 
@@ -340,12 +337,8 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
       dsv.docFile("src/resources/data/3_VeMayBays.xml");
       List<VeMayBay> DSVe = taoDSVeTuData(data, dsv);
 
-      // Tạo hóa đơn với constructor mới
-      HoaDon hoaDon = new HoaDon(maHoaDon, ngayLap, khachHang, tongTien, thue, khuyenMai, phuongThucTT, trangThai,
-          DSVe);
-
-
-      hoaDon.setThanhTien(thanhTien);
+        // Tạo hóa đơn với constructor mới (amounts computed dynamically)
+        HoaDon hoaDon = new HoaDon(maHoaDon, ngayLap, khachHang, phuongThucTT, trangThai, DSVe);
 
       return hoaDon;
 
@@ -368,7 +361,6 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
           XMLUtils.stringToDate(data.get("NgaySinh")),
           data.get("GioiTinh"),
           data.get("DiaChi"),
-          data.get("TenDangNhap"),
           data.get("MatKhau"));
     } catch (Exception e) {
       System.out.println("❌ Lỗi tạo khách hàng từ XML: " + e.getMessage());
@@ -439,7 +431,6 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
         data.put("NgaySinh", XMLUtils.dateToString(kh.getNgaySinh()));
         data.put("GioiTinh", kh.getGioiTinh());
         data.put("DiaChi", kh.getDiaChi());
-        data.put("TenDangNhap", kh.getTenDangNhap());
         data.put("MatKhau", kh.getMatKhau());
 
         // Thông tin vé (chỉ lưu mã vé)
@@ -647,6 +638,16 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
 
     try {
       hd.thanhToan();
+      // Ghi nhận vào lịch sử khách hàng và cập nhật hạng theo tháng
+      try {
+        if (hd.getKhachHang() != null) {
+          hd.getKhachHang().themHoaDon(hd);
+          hd.getKhachHang().capNhatHangTheoThang();
+        }
+      } catch (Exception ex) {
+        // Đừng làm sập quá trình thanh toán nếu cập nhật khách hàng gặp lỗi; log để debug
+        System.err.println("Cảnh báo: không thể cập nhật lịch sử khách hàng sau khi thanh toán: " + ex.getMessage());
+      }
       return true;
     } catch (IllegalStateException e) {
       throw new IllegalStateException("Không thể thanh toán hóa đơn: " + e.getMessage());

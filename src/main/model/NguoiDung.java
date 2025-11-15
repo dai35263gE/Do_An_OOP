@@ -15,7 +15,6 @@ public abstract class NguoiDung {
     protected String ma,hoTen,soDT,email,cmnd,gioiTinh,diaChi;
     protected Date ngaySinh;
     protected Date ngayTao;
-    protected String tenDangNhap;
     protected String matKhau;
     protected boolean trangThaiDangNhap;
     
@@ -29,7 +28,7 @@ public abstract class NguoiDung {
     // CONSTRUCTOR
     public NguoiDung(String ma, String hoTen, String soDT, String email, 
                      String cmnd, Date ngaySinh, String gioiTinh, String diaChi,
-                     String tenDangNhap, String matKhau) {
+                     String matKhau) {
         setMa(ma);
         setHoTen(hoTen);
         setSoDT(soDT);
@@ -38,7 +37,6 @@ public abstract class NguoiDung {
         setNgaySinh(ngaySinh);
         setGioiTinh(gioiTinh);
         setDiaChi(diaChi);
-        setTenDangNhap(tenDangNhap);
         setMatKhau(matKhau);
         this.ngayTao = new Date();
         this.trangThaiDangNhap = false;
@@ -170,12 +168,7 @@ public abstract class NguoiDung {
         this.ngayTao = ngayTao;
     }
     
-    public String getTenDangNhap() { return tenDangNhap; }
-    public void setTenDangNhap(String tenDangNhap) { 
-        if (tenDangNhap == null || tenDangNhap.trim().isEmpty()) 
-            throw new IllegalArgumentException("Tên đăng nhập không được để trống");
-        this.tenDangNhap = tenDangNhap.trim();
-    }
+
     
     public String getMatKhau() { return matKhau; }
     public void setMatKhau(String matKhau) { 

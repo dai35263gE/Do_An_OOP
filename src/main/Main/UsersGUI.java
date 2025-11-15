@@ -115,6 +115,9 @@ public class UsersGUI extends JFrame {
   public boolean dangNhap(String maKH, String matKhau) {
     khachHangDangNhap = dsKhachHang.timKiemTheoMa(maKH);
     if (khachHangDangNhap.dangNhap(maKH, matKhau)) {
+      // Sau khi đăng nhập, cập nhật lịch sử hóa đơn từ danh sách hóa đơn toàn hệ thống
+      capNhatLichSuHoaDonChoKhachHang();
+      
       lblWelcome.setText("Xin chào, " + khachHangDangNhap.getHoTen() + "! - Hạng: "
           + khachHangDangNhap.getHangKhachHangText());
       capNhatThongTinCaNhan();
@@ -123,6 +126,36 @@ public class UsersGUI extends JFrame {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Cập nhật lịch sử hóa đơn cho khách hàng đã đăng nhập từ danh sách hóa đơn toàn hệ thống.
+   * Điều này đảm bảo rằng khách hàng có thể thấy tất cả hóa đơn của họ ngay cả những cái
+   * được tải từ XML hoặc tạo bởi những phiên làm việc khác.
+   */
+  private void capNhatLichSuHoaDonChoKhachHang() {
+    if (khachHangDangNhap == null) return;
+    
+    // Xóa lịch sử hóa đơn hiện tại (sẽ được nạp lại từ danh sách hóa đơn toàn hệ thống)
+    khachHangDangNhap.getLichSuHoaDon().clear();
+    
+    // Lấy tất cả hóa đơn của khách hàng từ danh sách hóa đơn toàn hệ thống
+    for (HoaDon hoaDon : dsHoaDon.getDanhSach()) {
+      // Kiểm tra xem hóa đơn này có thuộc về khách hàng đang đăng nhập không
+      if (hoaDon != null && hoaDon.getKhachHang() != null 
+          && hoaDon.getKhachHang().getMa().equals(khachHangDangNhap.getMa())) {
+        // Thêm hóa đơn vào lịch sử khách hàng (không tính điểm vì đã được cộng khi thanh toán)
+        khachHangDangNhap.getLichSuHoaDon().add(hoaDon);
+      }
+    }
+    
+    // Cập nhật điểm tích lũy dựa trên tất cả hóa đơn đã thanh toán
+    khachHangDangNhap.setDiemTichLuy(0);  // Reset điểm trước
+    for (HoaDon hoaDon : khachHangDangNhap.getLichSuHoaDon()) {
+      if (hoaDon.getTrangThai().equals(HoaDon.TT_DA_TT)) {
+        khachHangDangNhap.tangDiemTichLuy(hoaDon.tinhDiemTichLuy());
+      }
+    }
   }
 
   private void initComponents() {
@@ -731,30 +764,16 @@ public class UsersGUI extends JFrame {
   // === SỬA ĐỔI: Viết lại hàm xuLyDatVe() để hỗ trợ List<VeMayBay> ===
   private boolean xuLyDatVe(List<VeMayBay> danhSachVeMoi, ChuyenBay chuyenBay) {
     try {
-      double tongGiamGia = 0;
-      double tongGiaVeSauGiam = 0;
-
-      // 1. Tính toán giá, giảm giá
-      for (VeMayBay ve : danhSachVeMoi) {
-        double giamGia = khachHangDangNhap.tinhMucGiamGia(ve.getGiaVe());
-        double giaVeSauGiam = ve.getGiaVe() - giamGia;
-
-        ve.setGiaVe(giaVeSauGiam); // Cập nhật giá cuối cùng cho vé
-        tongGiamGia += giamGia;
-        tongGiaVeSauGiam += giaVeSauGiam;
-      }
-
-      // 2. Xác nhận
-      if (!hienThiThongTinVeXacNhan(danhSachVeMoi, chuyenBay, tongGiamGia, tongGiaVeSauGiam)) {
+      // 1. Hiển thị thông tin xác nhận dựa trên một hóa đơn tạm để tính toán tự động
+      if (!hienThiThongTinVeXacNhan(danhSachVeMoi, chuyenBay)) {
         return false;
       }
 
-      // 3. Thêm vé vào hệ thống và chuyến bay
+      // 2. Thêm vé vào hệ thống và chuyến bay (không thay đổi giá gốc trong đối tượng vé)
       for (VeMayBay ve : danhSachVeMoi) {
         if (!dsVe.them(ve)) {
           JOptionPane.showMessageDialog(this, "Lỗi khi thêm vé " + ve.getMaVe() + " vào hệ thống!", "Lỗi",
               JOptionPane.ERROR_MESSAGE);
-          // Cần logic rollback phức tạp ở đây, tạm thời bỏ qua
           return false;
         }
         if (!chuyenBay.themVe(ve)) { // Đã bao gồm cả datGhe()
@@ -765,8 +784,8 @@ public class UsersGUI extends JFrame {
         }
       }
 
-      // 4. Tạo một hóa đơn CHỨA NHIỀU VÉ
-      if (!taoHoaDon(danhSachVeMoi, tongGiamGia)) {
+      // 3. Tạo một hóa đơn CHỨA NHIỀU VÉ (hóa đơn sẽ tính giảm giá + thuế tự động)
+      if (!taoHoaDon(danhSachVeMoi)) {
         JOptionPane.showMessageDialog(this, "Lỗi khi tạo hóa đơn!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         // Rollback
         for (VeMayBay ve : danhSachVeMoi) {
@@ -776,10 +795,7 @@ public class UsersGUI extends JFrame {
         return false;
       }
 
-      // 5. Cập nhật điểm
-      capNhatDiemTichLuy(tongGiaVeSauGiam);
-
-      // 6. Lưu file
+      // 4. Lưu file
       quanLy.ghiDuLieuRaFile();
       return true;
 
@@ -794,25 +810,18 @@ public class UsersGUI extends JFrame {
   }
 
   // === SỬA ĐỔI: Viết lại hàm taoHoaDon() để hỗ trợ List<VeMayBay> ===
-  private boolean taoHoaDon(List<VeMayBay> danhSachVeMoi, double tongGiamGia) {
+  private boolean taoHoaDon(List<VeMayBay> danhSachVeMoi) {
     try {
       // Hàm tạo HoaDon đã hỗ trợ List, chỉ cần truyền vào
       String maHoaDon = "HD" + String.format("%03d", quanLy.getDsHoaDon().getDanhSach().size()+1);
-      HoaDon hoaDon = new HoaDon(maHoaDon, khachHangDangNhap, danhSachVeMoi, tongGiamGia, HoaDon.PT_NONE);
+      HoaDon hoaDon = new HoaDon(maHoaDon, khachHangDangNhap, danhSachVeMoi, HoaDon.PT_NONE);
       dsHoaDon.them(hoaDon);
+      // CHƯA thêm vào lịch sử khách hàng và CHƯA cộng điểm tại đây.
+      // Điểm chỉ được cộng khi hóa đơn được thanh toán (thanhToanHoaDon).
       return true;
     } catch (Exception e) {
       System.err.println("Lỗi khi tạo hóa đơn: " + e.getMessage());
       return false;
-    }
-  }
-
-  private void capNhatDiemTichLuy(double tongGiaVeSauGiam) {
-    try {
-      int diemThuong = (int) (tongGiaVeSauGiam / 1000); // 1 điểm cho mỗi 100,000 VND
-      khachHangDangNhap.tangDiemTichLuy(diemThuong);
-    } catch (Exception e) {
-      System.err.println("Lỗi khi cập nhật điểm tích lũy: " + e.getMessage());
     }
   }
 
@@ -828,8 +837,8 @@ public class UsersGUI extends JFrame {
           ve.getMaVe(), ve.getSoGhe(), getTenLoaiVe(ve)));
     }
 
-    // Giảm giá đã được tính trong tongGia
-    int diemThuong = (int) (tongGia / 1000);
+    // Tính điểm sẽ nhận được khi thanh toán
+    int diemThuong = (int) (tongGia / 10000);
 
     String message = String.format(
         "ĐẶT VÉ THÀNH CÔNG (%d VÉ)\n\n" +
@@ -837,7 +846,9 @@ public class UsersGUI extends JFrame {
             "📋 Thông tin vé:\n" +
             "%s\n" + // Danh sách vé
             "💰 Tổng thành tiền: %s VND\n" +
-            "⭐ Điểm tích lũy nhận được: %d điểm\n\n" +
+            "⭐ Điểm sẽ nhận được khi thanh toán: %d điểm\n\n" +
+            "📌 Ghi chú: Vé đã được tạo nhưng chưa được thanh toán.\n" +
+            "Vui lòng thanh toán hóa đơn để hoàn tất đặt vé và nhận điểm tích lũy.\n\n" +
             "Cảm ơn bạn đã sử dụng dịch vụ!",
         danhSachVeMoi.size(),
         chuyenBay.getDiemDi(),
@@ -861,44 +872,52 @@ public class UsersGUI extends JFrame {
 
   // === SỬA ĐỔI: Viết lại hàm hienThiThongTinVeXacNhan() để hỗ trợ List<VeMayBay>
   // ===
-  private boolean hienThiThongTinVeXacNhan(List<VeMayBay> danhSachVe, ChuyenBay chuyenBay, double tongGiamGia,
-      double tongThanhTien) {
+    private boolean hienThiThongTinVeXacNhan(List<VeMayBay> danhSachVe, ChuyenBay chuyenBay) {
 
-    double tongGiaGoc = tongThanhTien + tongGiamGia;
+    // Tạo một hóa đơn tạm để tận dụng logic tính toán tổng, khuyến mãi, thuế
+    HoaDon tmp = new HoaDon("TMP", khachHangDangNhap, danhSachVe, HoaDon.PT_NONE);
+
+    double tongGiaGoc = tmp.getTongTien();
+    double khuyenMai = tmp.getKhuyenMai();
+    double thue = tmp.getThue();
+    double thanhTien = tmp.getThanhTien();
+
     StringBuilder veInfo = new StringBuilder();
     for (VeMayBay ve : danhSachVe) {
       veInfo.append(String.format("• Vé (Ghế %s, Loại: %s)\n",
-          ve.getSoGhe(), getTenLoaiVe(ve)));
+        ve.getSoGhe(), getTenLoaiVe(ve)));
     }
 
     String message = String.format(
-        "XÁC NHẬN THÔNG TIN ĐẶT VÉ\n\n" +
-            "Chuyến bay: %s → %s\n" +
-            "Số lượng: %d vé\n\n" +
-            "%s\n" + // Danh sách vé
-            "Giá gốc: %s VND\n" +
-            "Giảm giá (Hạng %s): -%s VND\n" +
-            "Tổng thành tiền: %s VND\n\n" +
-            "Bạn có chắc chắn đặt %d vé này?",
-        chuyenBay.getDiemDi(),
-        chuyenBay.getDiemDen(),
-        danhSachVe.size(),
-        veInfo.toString(),
-        String.format("%,d", (int) tongGiaGoc),
-        khachHangDangNhap.getHangKhachHangText(),
-        String.format("%,d", (int) tongGiamGia),
-        String.format("%,d", (int) tongThanhTien),
-        danhSachVe.size());
+      "XÁC NHẬN THÔNG TIN ĐẶT VÉ\n\n" +
+        "Chuyến bay: %s → %s\n" +
+        "Số lượng: %d vé\n\n" +
+        "%s\n" + // Danh sách vé
+        "Giá gốc: %s VND\n" +
+        "Giảm giá (Hạng %s): -%s VND\n" +
+        "Thuế (5%%): +%s VND\n" +
+        "Tổng thành tiền: %s VND\n\n" +
+        "Bạn có chắc chắn đặt %d vé này?",
+      chuyenBay.getDiemDi(),
+      chuyenBay.getDiemDen(),
+      danhSachVe.size(),
+      veInfo.toString(),
+      String.format("%,d", (int) tongGiaGoc),
+      khachHangDangNhap.getHangKhachHangText(),
+      String.format("%,d", (int) khuyenMai),
+      String.format("%,d", (int) thue),
+      String.format("%,d", (int) thanhTien),
+      danhSachVe.size());
 
     int result = JOptionPane.showConfirmDialog(
-        this,
-        message,
-        "Xác Nhận Đặt Vé",
-        JOptionPane.YES_NO_OPTION,
-        JOptionPane.QUESTION_MESSAGE);
+      this,
+      message,
+      "Xác Nhận Đặt Vé",
+      JOptionPane.YES_NO_OPTION,
+      JOptionPane.QUESTION_MESSAGE);
 
     return result == JOptionPane.YES_OPTION;
-  }
+    }
 
   // === SỬA ĐỔI: Sửa chữ ký hàm hienThiDialogDatVe() ===
   private VeMayBay hienThiDialogDatVe(ChuyenBay chuyenBay, String dialogTitle, List<String> gheDaChonTruoc) {
@@ -1147,9 +1166,13 @@ public class UsersGUI extends JFrame {
 
     btnDatVe.addActionListener(e -> {
       String loaiVe = (String) cbLoaiVe.getSelectedItem();
+      
+      // Map Vietnamese names to ticket class codes
+      String loaiVeCode = loaiVe.equals("THƯƠNG GIA") ? "VeThuongGia" :
+                          loaiVe.equals("PHỔ THÔNG") ? "VePhoThong" : "VeTietKiem";
 
-      // === SỬA ĐỔI: Gọi moDialogChonGhe với danh sách ghế đã chọn trước ===
-      String soGhe = moDialogChonGhe(chuyenBay, gheDaChonTruoc);
+      // === SỬA ĐỔI: Gọi moDialogChonGhe với loại vé để lọc ghế ===
+      String soGhe = moDialogChonGhe(chuyenBay, gheDaChonTruoc, loaiVeCode);
       if (soGhe == null) {
         // Người dùng nhấn Hủy trong dialog chọn ghế
         return; // Quay lại dialog đặt vé, không đóng
@@ -1627,8 +1650,9 @@ public class UsersGUI extends JFrame {
         cbGioiTinh.setSelectedItem(gioiTinh);
       }
 
-      // Cập nhật thông tin thành viên
-      lblHangKhachHang.setText("Hạng: " + khachHangDangNhap.getHangKhachHangText());
+      // Cập nhật thông tin thành viên (đảm bảo hạng được đánh giá lại theo tháng)
+      khachHangDangNhap.capNhatHangTheoThang();
+      lblHangKhachHang.setText(String.format("Hạng: %s (Tháng: %,.0f VND)", khachHangDangNhap.getHangKhachHangText(), khachHangDangNhap.getTongChiTieuThang()));
       lblDiemTichLuy.setText("Điểm tích lũy: " + khachHangDangNhap.getDiemTichLuy());
     }
   }
@@ -1737,12 +1761,14 @@ public class UsersGUI extends JFrame {
     formPanel.add(txtMatKhau);
 
     // Panel cho các nút
-    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
     JButton btnDangKy = new JButton("Đăng ký");
+    btnDangKy.setPreferredSize(new Dimension(80, 30));
 
     // Thêm nút Đăng ký vào panel
+    buttonPanel.add(btnDangKy);
     panel.add(formPanel, BorderLayout.CENTER);
-    panel.add(btnDangKy, BorderLayout.SOUTH);
+    panel.add(buttonPanel, BorderLayout.SOUTH);
 
     // Thêm hành động cho nút Đăng ký
     btnDangKy.addActionListener(e -> {
@@ -1932,7 +1958,7 @@ public class UsersGUI extends JFrame {
         KhachHang khachHangMoi = new KhachHang(
             maKH, hoTen, soDT, email, cmnd,
             ngaySinh, gioiTinh, diaChi,
-            maKH, matKhau // Dùng luôn maKH làm tenDangNhap
+            matKhau
         );
 
         // Thêm vào hệ thống
@@ -1968,59 +1994,75 @@ public class UsersGUI extends JFrame {
   }
 
   // === THAY THẾ TOÀN BỘ HÀM NÀY ===
-  private String moDialogChonGhe(ChuyenBay chuyenBay, List<String> gheDaChonTruoc) {
+  private String moDialogChonGhe(ChuyenBay chuyenBay, List<String> gheDaChonTruoc, String loaiVe) {
     JDialog dialog = new JDialog(this, "Chọn Ghế Ngồi - " + chuyenBay.getMaChuyen(), true);
-    dialog.setSize(450, 600);
+    dialog.setSize(600, 650);
     dialog.setLocationRelativeTo(this);
     dialog.setLayout(new BorderLayout(10, 10));
 
-    List<String> gheDaDat = chuyenBay.getDanhSachGheDaDat(); //
-    int tongSoGhe = chuyenBay.getSoGhe(); //
+    List<String> gheDaDat = chuyenBay.getDanhSachGheDaDat();
+    int tongSoGhe = chuyenBay.getSoGheToiDa();
 
-    // === SỬA LỖI LOGIC "1A-48D" ===
-    // Giả sử máy bay có 4 cột (A, B, C, D)
-    final int SO_COT = 4;
+    // 6 columns (A, B, C, D, E, F), rows computed from capacity
+    final int SO_COT = 6;
     int soHang = (int) Math.ceil((double) tongSoGhe / SO_COT);
-    // === KẾT THÚC SỬA LỖI ===
+
+    // Add legend showing ticket class row ranges (dynamic based on capacity)
+    int[] allocation = ChuyenBay.calculateRowAllocation(soHang);
+    int businessEnd = allocation[0];
+    int economyEnd = allocation[1];
+    String legendText = String.format("Hạng vé - Thương gia (1-%d), Phổ thông (%d-%d), Tiết kiệm (%d-%d)", 
+        businessEnd, businessEnd + 1, economyEnd, economyEnd + 1, soHang);
+    JPanel panelLegend = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    panelLegend.add(new JLabel(legendText));
+    dialog.add(panelLegend, BorderLayout.NORTH);
 
     JPanel panelGhe = new JPanel(new GridLayout(soHang, SO_COT, 5, 5));
     panelGhe.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
     final String[] gheDuocChon = { null };
-    int soGheDaTao = 0; // Biến đếm để dừng lại khi đủ số ghế
+    int soGheDaTao = 0;
 
     // Tạo các nút ghế
     for (int i = 1; i <= soHang; i++) {
-      for (char c = 'A'; c <= 'D'; c++) {
-        // Nếu đã tạo đủ số ghế, dừng lại
+      for (char c = 'A'; c < 'A' + SO_COT; c++) {
         if (soGheDaTao >= tongSoGhe) {
-          // Thêm panel rỗng để giữ layout
           panelGhe.add(new JPanel());
           continue;
         }
 
-        String tenGhe = i + "" + c;
+        String tenGhe = i + String.valueOf(c);  // Format: 1A, 12B, 25F (row + column)
+        String seatClassOfThisRow = ChuyenBay.getSeatClassByRow(i, soHang);
+        
         JButton btnGhe = new JButton(tenGhe);
         btnGhe.setFont(new Font("Arial", Font.BOLD, 12));
         btnGhe.setMargin(new Insets(5, 5, 5, 5));
 
-        if (gheDaDat.contains(tenGhe) || gheDaChonTruoc.contains(tenGhe)) {
+        // If user booked a different ticket class, disable seats outside their class
+        boolean seatNotAllowed = !seatClassOfThisRow.equals(loaiVe);
+        boolean seatAlreadyBooked = gheDaDat.contains(tenGhe) || gheDaChonTruoc.contains(tenGhe);
+
+        if (seatNotAllowed) {
+          // Seat exists but is for a different ticket class
+          btnGhe.setEnabled(false);
+          btnGhe.setBackground(new Color(200, 200, 200));  // Gray
+          btnGhe.setText("×");  // Mark unavailable for this class
+        } else if (seatAlreadyBooked) {
           btnGhe.setEnabled(false);
           btnGhe.setBackground(Color.RED);
-          btnGhe.setText("X"); // Đánh dấu ghế đã bị chiếm
+          btnGhe.setText("X");  // Marked booked
         } else {
-          btnGhe.setBackground(new Color(60, 179, 113)); // Màu xanh lá
+          btnGhe.setBackground(new Color(60, 179, 113));  // Green
           btnGhe.setForeground(Color.WHITE);
           btnGhe.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-          // Thêm hành động khi nhấn nút
           btnGhe.addActionListener(e -> {
-            gheDuocChon[0] = tenGhe; // Lưu ghế đã chọn
-            dialog.dispose(); // Đóng dialog
+            gheDuocChon[0] = tenGhe;
+            dialog.dispose();
           });
         }
         panelGhe.add(btnGhe);
-        soGheDaTao++; // Tăng biến đếm
+        soGheDaTao++;
       }
     }
 
@@ -2163,30 +2205,20 @@ public class UsersGUI extends JFrame {
     }
 
     try {
-        // Thực hiện thanh toán
-        hoaDon.setTrangThai(HoaDon.TT_DA_TT);
-        hoaDon.setPhuongThucTT(chuyenPhuongThucTextSangMa(phuongThucTT));
-        hoaDon.setNgayLap(new Date());
-
-        // Trừ điểm tích lũy nếu có sử dụng
+        // Trừ điểm tích lũy nếu có sử dụng trước khi thanh toán
         if (diemSuDung > 0) {
-            khachHangDangNhap.setDiemTichLuy(khachHangDangNhap.getDiemTichLuy() - diemSuDung);
+            khachHangDangNhap.suDungDiemTichLuy(diemSuDung);
         }
 
-        // Cộng điểm tích lũy mới từ hóa đơn này (trừ phần đã dùng điểm)
-        if (thanhTienThucTe > 0) {
-            int diemThuongMoi = (int) (thanhTienThucTe / 1000); // 1 điểm cho mỗi 100,000 VND
-            khachHangDangNhap.tangDiemTichLuy(diemThuongMoi);
+        // Gọi service để thanh toán (sẽ cập nhật trạng thái, đăng ký hóa đơn vào khách hàng, và cộng điểm tự động)
+        try {
+            dsHoaDon.thanhToanHoaDon(maHoaDon);
+        } catch (Exception ex) {
+            throw new Exception("Lỗi khi thực hiện thanh toán qua service: " + ex.getMessage());
         }
 
-        // Cập nhật trạng thái các vé trong hóa đơn
-        for (VeMayBay ve1 : hoaDon.getDanhSachVe()) {
-            for(VeMayBay ve2 : quanLy.getDsVe().getDanhSach()){
-                if(ve1.getMaVe().equals(ve2.getMaVe())){
-                    ve2.setTrangThai(VeMayBay.TRANG_THAI_DA_THANH_TOAN);
-                }
-            }
-        }
+        // Cập nhật phương thức thanh toán
+        hoaDon.setPhuongThucTT(chuyenPhuongThucTextSangMa(phuongThucTT));
 
         // Lưu dữ liệu
         quanLy.ghiDuLieuRaFile();
@@ -2209,7 +2241,7 @@ public class UsersGUI extends JFrame {
         }
         
         if (thanhTienThucTe > 0) {
-            int diemThuongMoi = (int) (thanhTienThucTe / 1000);
+            int diemThuongMoi = (int) (thanhTienThucTe / 10000);
             message.append("Điểm tích lũy nhận được: ").append(diemThuongMoi).append(" điểm\n");
         }
         

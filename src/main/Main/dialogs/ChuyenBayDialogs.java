@@ -18,6 +18,7 @@ import Main.utils.ValidatorUtils;
 import Sevice.QuanLyBanVeMayBay;
 import model.ChuyenBay;
 
+@SuppressWarnings("unchecked")
 public class ChuyenBayDialogs {
   private MainGUI mainGUI;
   private QuanLyBanVeMayBay quanLy;
@@ -403,9 +404,10 @@ public class ChuyenBayDialogs {
       }
 
       // Tạo chuyến bay mới
+      // soGhe is now computed from maMayBay suffix, so pass soGhe as initial soGheTrong
       ChuyenBay chuyenBayMoi = new ChuyenBay(
           maChuyen, diemDi, diemDen, gioKhoiHanh, gioDen,
-          soGhe, soGhe, maMayBay, giaCoBan);
+          soGhe, maMayBay, giaCoBan);
 
       // Thêm vào danh sách
       quanLy.themChuyenBay(chuyenBayMoi);
@@ -613,9 +615,9 @@ public class ChuyenBayDialogs {
     spinnerGioKhoiHanh.setValue(cbCanSua.getGioKhoiHanh());
     spinnerGioDen.setValue(cbCanSua.getGioDen());
 
-    // Số ghế
-    JSpinner spinnerSoGhe = GUIUtils.createNumberSpinner(cbCanSua.getSoGhe(), 50, 500, 10);
-    JSpinner spinnerSoGheTrong = GUIUtils.createNumberSpinner(cbCanSua.getSoGheTrong(), 0, cbCanSua.getSoGhe(), 1);
+    // Số ghế (now computed from aircraft code)
+    JLabel labelSoGhe = new JLabel(String.valueOf(cbCanSua.getSoGheToiDa()));
+    JSpinner spinnerSoGheTrong = GUIUtils.createNumberSpinner(cbCanSua.getSoGheTrong(), 0, cbCanSua.getSoGheToiDa(), 1);
 
     // Máy bay
     String[] mayBay = { "VN-A321", "VN-B787", "VN-A350", "VN-A320", "VN-B777" };
@@ -641,7 +643,7 @@ public class ChuyenBayDialogs {
     addFormRowWithIcon(formPanel, gbc, "Điểm đến:*", cbDiemDen);
     addFormRowWithIcon(formPanel, gbc, "Giờ khởi hành:*", spinnerGioKhoiHanh);
     addFormRowWithIcon(formPanel, gbc, "Giờ đến:*", spinnerGioDen);
-    addFormRowWithIcon(formPanel, gbc, "Tổng số ghế:*", spinnerSoGhe);
+    addFormRowWithIcon(formPanel, gbc, "Tổng số ghế:*", labelSoGhe);  // Read-only, computed from aircraft code
     addFormRowWithIcon(formPanel, gbc, "Số ghế trống:*", spinnerSoGheTrong);
     addFormRowWithIcon(formPanel, gbc, "Mã máy bay:*", cbMaMayBay);
     addFormRowWithIcon(formPanel, gbc, "Giá cơ bản:*", spinnerGiaCoBan);
@@ -655,7 +657,7 @@ public class ChuyenBayDialogs {
         put("cbDiemDen", cbDiemDen);
         put("spinnerGioKhoiHanh", spinnerGioKhoiHanh);
         put("spinnerGioDen", spinnerGioDen);
-        put("spinnerSoGhe", spinnerSoGhe);
+        put("labelSoGhe", labelSoGhe);  // Read-only label
         put("spinnerSoGheTrong", spinnerSoGheTrong);
         put("cbMaMayBay", cbMaMayBay);
         put("spinnerGiaCoBan", spinnerGiaCoBan);
@@ -727,10 +729,11 @@ public class ChuyenBayDialogs {
       String trangThai = (String) cbTrangThai.getSelectedItem();
 
       // Tạo đối tượng chuyến bay mới với thông tin cập nhật
+      // soGhe is now computed from maMayBay suffix, so only pass soGheTrong
       ChuyenBay chuyenBayMoi = new ChuyenBay(
           cbCanSua.getMaChuyen(), // Giữ nguyên mã chuyến
           diemDi, diemDen, gioKhoiHanh, gioDen,
-          (int) soGhe, (int) soGheTrong, maMayBay, giaCoBan);
+          (int) soGheTrong, maMayBay, giaCoBan);
       chuyenBayMoi.setTrangThai(trangThai);
 
       // Cập nhật chuyến bay qua service layer
@@ -812,7 +815,7 @@ public class ChuyenBayDialogs {
     JComboBox<String> cbDiemDen = (JComboBox<String>) components.get("cbDiemDen");
     JSpinner spinnerGioKhoiHanh = (JSpinner) components.get("spinnerGioKhoiHanh");
     JSpinner spinnerGioDen = (JSpinner) components.get("spinnerGioDen");
-    JSpinner spinnerSoGhe = (JSpinner) components.get("spinnerSoGhe");
+    JLabel labelSoGhe = (JLabel) components.get("labelSoGhe");  // Read-only
     JSpinner spinnerSoGheTrong = (JSpinner) components.get("spinnerSoGheTrong");
     JComboBox<String> cbMaMayBay = (JComboBox<String>) components.get("cbMaMayBay");
     JSpinner spinnerGiaCoBan = (JSpinner) components.get("spinnerGiaCoBan");
@@ -823,7 +826,7 @@ public class ChuyenBayDialogs {
     setComboBoxToValue(cbDiemDen, cbCanSua.getDiemDen());
     spinnerGioKhoiHanh.setValue(cbCanSua.getGioKhoiHanh());
     spinnerGioDen.setValue(cbCanSua.getGioDen());
-    spinnerSoGhe.setValue(cbCanSua.getSoGhe());
+    labelSoGhe.setText(String.valueOf(cbCanSua.getSoGheToiDa()));
     spinnerSoGheTrong.setValue(cbCanSua.getSoGheTrong());
     setComboBoxToValue(cbMaMayBay, cbCanSua.getMaMayBay());
     spinnerGiaCoBan.setValue(cbCanSua.getGiaCoBan());
@@ -1220,7 +1223,7 @@ private void hienThiKetQuaLenTableChinh(List<ChuyenBay> ketQua) {
             cb.getDiemDen(),
             sdf.format(cb.getGioKhoiHanh()),
             sdf.format(cb.getGioDen()),
-            String.format("%d/%d", cb.getSoGhe() - cb.getSoGheTrong(), cb.getSoGhe()),
+            String.format("%d/%d", cb.getSoGheToiDa() - cb.getSoGheTrong(), cb.getSoGheToiDa()),
             cb.getTrangThai(),
             String.format("%,.0f VND", cb.getGiaCoBan()),
             cb.getMaMayBay()

@@ -653,12 +653,4 @@ public class DanhSachVeMayBay implements IQuanLy<VeMayBay>, IFileHandler, IThong
         
         return thongKe;
     }
-    
-    // ========== MAIN METHOD FOR TESTING ==========
-    // public static void main(String[] args) {
-    //     DanhSachVeMayBay ds = new DanhSachVeMayBay();
-    //     ds.docFile("src/resources/data/3_VeMayBays.xml");
-    //     ds.hienThiTatCa();
-    //     System.out.println("Tổng doanh thu: " + (long)ds.tinhTongDoanhThu());
-    // }
 }

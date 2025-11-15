@@ -313,7 +313,6 @@ public class DanhSachKhachHang implements IQuanLy<KhachHang>, IFileHandler {
               XMLUtils.stringToDate(data.get("NgaySinh")),
               data.get("GioiTinh"),
               data.get("DiaChi"),
-              data.get("TenDangNhap"),
               data.get("MatKhau"));
 
           // Cập nhật các thuộc tính bổ sung
@@ -362,7 +361,6 @@ public class DanhSachKhachHang implements IQuanLy<KhachHang>, IFileHandler {
         data.put("NgaySinh", XMLUtils.dateToString(kh.getNgaySinh()));
         data.put("GioiTinh", kh.getGioiTinh());
         data.put("DiaChi", kh.getDiaChi());
-        data.put("TenDangNhap", kh.getTenDangNhap());
         data.put("MatKhau", kh.getMatKhau());
         data.put("HangKhachHang", kh.getHangKhachHang());
         data.put("DiemTichLuy", String.valueOf(kh.getDiemTichLuy()));

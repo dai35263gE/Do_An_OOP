@@ -66,7 +66,7 @@ public class TableUtils {
             cb.getDiemDi(),
             cb.getDiemDen(),
             cb.getGioKhoiHanh() != null ? DATE_FORMAT.format(cb.getGioKhoiHanh()) : "N/A",
-            cb.getSoGheTrong() + "/" + cb.getSoGhe(),
+            cb.getSoGheTrong() + "/" + cb.getSoGheToiDa(),
             String.format("%,.0f VND", cb.getGiaCoBan()),
             cb.getTrangThai()
         };
@@ -166,7 +166,7 @@ public class TableUtils {
           cb.getDiemDi(),
           cb.getDiemDen(),
           cb.getGioKhoiHanh() != null ? DATE_FORMAT.format(cb.getGioKhoiHanh()) : "N/A",
-          cb.getSoGheTrong() + "/" + cb.getSoGhe(),
+          cb.getSoGheTrong() + "/" + cb.getSoGheToiDa(),
           String.format("%,.0f VND", cb.getGiaCoBan()),
           cb.getTrangThai()
       };

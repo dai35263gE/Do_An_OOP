@@ -20,6 +20,7 @@ import java.util.List;
 public class VeDialogs {
     private MainGUI mainGUI;
     private QuanLyBanVeMayBay quanLy;
+    @SuppressWarnings("unused")
     private JTable tableVe;
 
     public VeDialogs(MainGUI mainGUI, QuanLyBanVeMayBay quanLy, JTable tableVe) {

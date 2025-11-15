@@ -56,7 +56,7 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
       throw new IllegalArgumentException("Không tìm thấy chuyến bay với mã: " + maChuyen);
     }
 
-    if (chuyenBay.getSoGheTrong() != chuyenBay.getSoGhe()) {
+    if (chuyenBay.getSoGheTrong() != chuyenBay.getSoGheToiDa()) {
       throw new IllegalStateException("Không thể xóa! Đã có vé được đặt cho chuyến này.");
     }
 
@@ -124,7 +124,7 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
       ChuyenBay cb = danhSach.get(i);
       System.out.printf("%d. %s: %s → %s | %s | Ghế: %d/%d | Giá: %,.0f VND | %s%n",
           i + 1, cb.getMaChuyen(), cb.getDiemDi(), cb.getDiemDen(),
-          sdf.format(cb.getGioKhoiHanh()), cb.getSoGheTrong(), cb.getSoGhe(),
+          sdf.format(cb.getGioKhoiHanh()), cb.getSoGheTrong(), cb.getSoGheToiDa(),
           cb.getGiaCoBan(), cb.getTrangThai());
     }
   }
@@ -146,7 +146,7 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
       ChuyenBay cb = ketQua.get(i);
       System.out.printf("%d. %s: %s → %s | %s | Ghế: %d/%d%n",
           i + 1, cb.getMaChuyen(), cb.getDiemDi(), cb.getDiemDen(),
-          sdf.format(cb.getGioKhoiHanh()), cb.getSoGheTrong(), cb.getSoGhe());
+          sdf.format(cb.getGioKhoiHanh()), cb.getSoGheTrong(), cb.getSoGheToiDa());
     }
   }
 
@@ -260,7 +260,6 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
         return true;
       }
 
-      int count = 0;
       for (Map<String, String> data : dataList) {
         try {
           ChuyenBay cb = new ChuyenBay(
@@ -269,7 +268,6 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
               data.get("DiemDen"),
               XMLUtils.stringToDate(data.get("GioKhoiHanh")),
               XMLUtils.stringToDate(data.get("GioDen")),
-              XMLUtils.stringToInt(data.get("SoGhe")),
               XMLUtils.stringToInt(data.get("SoGheTrong")),
               data.get("MaMayBay"),
               XMLUtils.stringToDouble(data.get("GiaCoBan")));
@@ -278,7 +276,6 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
 
           if (!tonTai(cb.getMaChuyen())) {
             danhSach.add(cb);
-            count++;
           }
 
         } catch (Exception e) {
@@ -306,7 +303,7 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
         data.put("DiemDen", cb.getDiemDen());
         data.put("GioKhoiHanh", XMLUtils.dateToString(cb.getGioKhoiHanh()));
         data.put("GioDen", XMLUtils.dateToString(cb.getGioDen()));
-        data.put("SoGhe", String.valueOf(cb.getSoGhe()));
+        // SoGhe is now computed from maMayBay suffix via getSoGheToiDa(), not persisted
         data.put("SoGheTrong", String.valueOf(cb.getSoGheTrong()));
         data.put("MaMayBay", cb.getMaMayBay());
         data.put("GiaCoBan", String.valueOf((int) cb.getGiaCoBan()));
@@ -371,7 +368,7 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
     return danhSach.stream()
         .collect(Collectors.groupingBy(
             cb -> cb.getDiemDi() + " - " + cb.getDiemDen(),
-            Collectors.summingDouble(cb -> cb.getGiaCoBan() * (cb.getSoGhe() - cb.getSoGheTrong()))));
+            Collectors.summingDouble(cb -> cb.getGiaCoBan() * (cb.getSoGheToiDa() - cb.getSoGheTrong()))));
   }
 
   public Map<String, Integer> thongKeTheoTrangThai() {
@@ -386,7 +383,7 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
     thongKe.put("tongChuyenBay", danhSach.size());
     thongKe.put("chuyenBayConCho", getChuyenBayConCho().size());
     thongKe.put("tongGheTrong", danhSach.stream().mapToInt(ChuyenBay::getSoGheTrong).sum());
-    thongKe.put("tongGhe", danhSach.stream().mapToInt(ChuyenBay::getSoGhe).sum());
+    thongKe.put("tongGhe", danhSach.stream().mapToInt(ChuyenBay::getSoGheToiDa).sum());
     thongKe.put("tyLeGheTrong", String.format("%.1f%%",
         (double) thongKe.get("tongGheTrong") / (int) thongKe.get("tongGhe") * 100));
 

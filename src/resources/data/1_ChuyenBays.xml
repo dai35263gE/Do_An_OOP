@@ -2,374 +2,332 @@
 <ChuyenBays>
     <ChuyenBay>
         <DiemDi>Hà Nội (HAN)</DiemDi>
-        <MaMayBay>VN-A003</MaMayBay>
+        <MaMayBay>VN-A001</MaMayBay>
         <GioDen>2025-11-10 09:45:00</GioDen>
-        <SoGheTrong>48</SoGheTrong>
+        <SoGheTrong>117</SoGheTrong>
         <DiemDen>TP.HCM (SGN)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
         <MaChuyen>CB001</MaChuyen>
         <GioKhoiHanh>2025-11-10 07:30:00</GioKhoiHanh>
-        <SoGhe>180</SoGhe>
         <GiaCoBan>1200000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
         <DiemDi>TP.HCM (SGN)</DiemDi>
-        <MaMayBay>VN-F045</MaMayBay>
+        <MaMayBay>VN-F712</MaMayBay>
         <GioDen>2025-11-10 17:35:00</GioDen>
-        <SoGheTrong>28</SoGheTrong>
+        <SoGheTrong>128</SoGheTrong>
         <DiemDen>Hà Nội (HAN)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
         <MaChuyen>CB002</MaChuyen>
         <GioKhoiHanh>2025-11-10 15:20:00</GioKhoiHanh>
-        <SoGhe>160</SoGhe>
         <GiaCoBan>1150000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
         <DiemDi>Đà Nẵng (DAD)</DiemDi>
-        <MaMayBay>VN-A045</MaMayBay>
+        <MaMayBay>VN-A032</MaMayBay>
         <GioDen>2025-11-11 10:30:00</GioDen>
-        <SoGheTrong>14</SoGheTrong>
+        <SoGheTrong>128</SoGheTrong>
         <DiemDen>TP.HCM (SGN)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
         <MaChuyen>CB003</MaChuyen>
         <GioKhoiHanh>2025-11-11 09:15:00</GioKhoiHanh>
-        <SoGhe>120</SoGhe>
         <GiaCoBan>850000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
         <DiemDi>Hà Nội (HAN)</DiemDi>
-        <MaMayBay>VN-G09R</MaMayBay>
+        <MaMayBay>VN-F711</MaMayBay>
         <GioDen>2025-11-11 19:10:00</GioDen>
-        <SoGheTrong>48</SoGheTrong>
+        <SoGheTrong>117</SoGheTrong>
         <DiemDen>Đà Nẵng (DAD)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
         <MaChuyen>CB004</MaChuyen>
         <GioKhoiHanh>2025-11-11 17:45:00</GioKhoiHanh>
-        <SoGhe>140</SoGhe>
         <GiaCoBan>750000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
         <DiemDi>TP.HCM (SGN)</DiemDi>
-        <MaMayBay>VN-NH90</MaMayBay>
+        <MaMayBay>VN-A563</MaMayBay>
         <GioDen>2025-11-12 11:45:00</GioDen>
-        <SoGheTrong>7</SoGheTrong>
+        <SoGheTrong>138</SoGheTrong>
         <DiemDen>Phú Quốc (PQC)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
         <MaChuyen>CB005</MaChuyen>
         <GioKhoiHanh>2025-11-12 10:30:00</GioKhoiHanh>
-        <SoGhe>150</SoGhe>
         <GiaCoBan>950000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
         <DiemDi>Hà Nội (HAN)</DiemDi>
-        <MaMayBay>VN-A003</MaMayBay>
+        <MaMayBay>VN-F023</MaMayBay>
         <GioDen>2025-11-12 16:20:00</GioDen>
-        <SoGheTrong>21</SoGheTrong>
+        <SoGheTrong>138</SoGheTrong>
         <DiemDen>Nha Trang (CXR)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
         <MaChuyen>CB006</MaChuyen>
         <GioKhoiHanh>2025-11-12 14:20:00</GioKhoiHanh>
-        <SoGhe>170</SoGhe>
         <GiaCoBan>1100000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
         <DiemDi>Đà Nẵng (DAD)</DiemDi>
-        <MaMayBay>VN-F045</MaMayBay>
+        <MaMayBay>VN-A004</MaMayBay>
         <GioDen>2025-11-13 13:30:00</GioDen>
-        <SoGheTrong>1</SoGheTrong>
+        <SoGheTrong>146</SoGheTrong>
         <DiemDen>Nha Trang (CXR)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
         <MaChuyen>CB007</MaChuyen>
         <GioKhoiHanh>2025-11-13 12:15:00</GioKhoiHanh>
-        <SoGhe>110</SoGhe>
         <GiaCoBan>650000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
         <DiemDi>TP.HCM (SGN)</DiemDi>
-        <MaMayBay>VN-A045</MaMayBay>
+        <MaMayBay>VN-F714</MaMayBay>
         <GioDen>2025-11-13 19:30:00</GioDen>
-        <SoGheTrong>35</SoGheTrong>
+        <SoGheTrong>148</SoGheTrong>
         <DiemDen>Đà Lạt (DLI)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
         <MaChuyen>CB008</MaChuyen>
         <GioKhoiHanh>2025-11-13 18:30:00</GioKhoiHanh>
-        <SoGhe>130</SoGhe>
         <GiaCoBan>700000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
         <DiemDi>Hà Nội (HAN)</DiemDi>
-        <MaMayBay>VN-G09R</MaMayBay>
+        <MaMayBay>VN-A001</MaMayBay>
         <GioDen>2025-11-14 11:00:00</GioDen>
-        <SoGheTrong>57</SoGheTrong>
+        <SoGheTrong>118</SoGheTrong>
         <DiemDen>Phú Quốc (PQC)</DiemDen>
-        <TrangThai>CHUA_BAY</TrangThai>
+        <TrangThai>DA_BAY</TrangThai>
         <MaChuyen>CB009</MaChuyen>
         <GioKhoiHanh>2025-11-14 08:45:00</GioKhoiHanh>
-        <SoGhe>190</SoGhe>
         <GiaCoBan>1800000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
         <DiemDi>Cần Thơ (VCA)</DiemDi>
-        <MaMayBay>VN-NH90</MaMayBay>
+        <MaMayBay>VN-F712</MaMayBay>
         <GioDen>2025-11-14 23:30:00</GioDen>
-        <SoGheTrong>41</SoGheTrong>
+        <SoGheTrong>129</SoGheTrong>
         <DiemDen>Hà Nội (HAN)</DiemDen>
-        <TrangThai>CHUA_BAY</TrangThai>
+        <TrangThai>DA_BAY</TrangThai>
         <MaChuyen>CB010</MaChuyen>
         <GioKhoiHanh>2025-11-14 21:15:00</GioKhoiHanh>
-        <SoGhe>160</SoGhe>
         <GiaCoBan>1350000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
         <DiemDi>Hà Nội (HAN)</DiemDi>
-        <MaMayBay>VN-A003</MaMayBay>
+        <MaMayBay>VN-A032</MaMayBay>
         <GioDen>2025-11-08 08:45:00</GioDen>
-        <SoGheTrong>0</SoGheTrong>
+        <SoGheTrong>130</SoGheTrong>
         <DiemDen>TP.HCM (SGN)</DiemDen>
         <TrangThai>DA_BAY</TrangThai>
         <MaChuyen>CB011</MaChuyen>
         <GioKhoiHanh>2025-11-08 06:30:00</GioKhoiHanh>
-        <SoGhe>180</SoGhe>
         <GiaCoBan>1200000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
         <DiemDi>TP.HCM (SGN)</DiemDi>
-        <MaMayBay>VN-F045</MaMayBay>
+        <MaMayBay>VN-F711</MaMayBay>
         <GioDen>2025-11-08 19:00:00</GioDen>
-        <SoGheTrong>0</SoGheTrong>
+        <SoGheTrong>120</SoGheTrong>
         <DiemDen>Hà Nội (HAN)</DiemDen>
         <TrangThai>DA_BAY</TrangThai>
         <MaChuyen>CB012</MaChuyen>
         <GioKhoiHanh>2025-11-08 16:45:00</GioKhoiHanh>
-        <SoGhe>160</SoGhe>
         <GiaCoBan>1150000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
-        <DiemDi>Đà Nẵng (DAD)</DiemDi>
-        <MaMayBay>VN-A045</MaMayBay>
-        <GioDen>2025-11-09 11:15:00</GioDen>
-        <SoGheTrong>0</SoGheTrong>
-        <DiemDen>TP.HCM (SGN)</DiemDen>
-        <TrangThai>DA_BAY</TrangThai>
+        <DiemDi>Hà Nội (HAN)</DiemDi>
+        <MaMayBay>VN-A001</MaMayBay>
+        <GioDen>2025-11-14 10:15:00</GioDen>
+        <SoGheTrong>120</SoGheTrong>
+        <DiemDen>Đà Nẵng (DAD)</DiemDen>
+        <TrangThai>CHUA_BAY</TrangThai>
         <MaChuyen>CB013</MaChuyen>
-        <GioKhoiHanh>2025-11-09 10:00:00</GioKhoiHanh>
-        <SoGhe>120</SoGhe>
+        <GioKhoiHanh>2025-11-14 08:00:00</GioKhoiHanh>
         <GiaCoBan>850000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
-        <DiemDi>Hà Nội (HAN)</DiemDi>
-        <MaMayBay>VN-G09R</MaMayBay>
-        <GioDen>2025-11-15 08:40:00</GioDen>
-        <SoGheTrong>0</SoGheTrong>
-        <DiemDen>Đà Nẵng (DAD)</DiemDen>
-        <TrangThai>DANG_BAY</TrangThai>
-        <MaChuyen>CB014</MaChuyen>
-        <GioKhoiHanh>2025-11-15 07:15:00</GioKhoiHanh>
-        <SoGhe>140</SoGhe>
-        <GiaCoBan>750000</GiaCoBan>
-    </ChuyenBay>
-    <ChuyenBay>
         <DiemDi>TP.HCM (SGN)</DiemDi>
-        <MaMayBay>VN-NH90</MaMayBay>
-        <GioDen>2025-11-15 13:00:00</GioDen>
-        <SoGheTrong>0</SoGheTrong>
-        <DiemDen>Phú Quốc (PQC)</DiemDen>
-        <TrangThai>DANG_BAY</TrangThai>
-        <MaChuyen>CB015</MaChuyen>
-        <GioKhoiHanh>2025-11-15 11:45:00</GioKhoiHanh>
-        <SoGhe>150</SoGhe>
-        <GiaCoBan>950000</GiaCoBan>
-    </ChuyenBay>
-    <ChuyenBay>
-        <DiemDi>Hà Nội (HAN)</DiemDi>
-        <MaMayBay>VN-A003</MaMayBay>
-        <GioDen>2025-11-16 15:30:00</GioDen>
-        <SoGheTrong>17</SoGheTrong>
-        <DiemDen>Nha Trang (CXR)</DiemDen>
-        <TrangThai>CHUA_BAY</TrangThai>
-        <MaChuyen>CB016</MaChuyen>
-        <GioKhoiHanh>2025-11-16 13:30:00</GioKhoiHanh>
-        <SoGhe>170</SoGhe>
-        <GiaCoBan>1100000</GiaCoBan>
-    </ChuyenBay>
-    <ChuyenBay>
-        <DiemDi>Đà Nẵng (DAD)</DiemDi>
-        <MaMayBay>VN-F045</MaMayBay>
-        <GioDen>2025-11-16 12:15:00</GioDen>
-        <SoGheTrong>0</SoGheTrong>
-        <DiemDen>Nha Trang (CXR)</DiemDen>
-        <TrangThai>CHUA_BAY</TrangThai>
-        <MaChuyen>CB017</MaChuyen>
-        <GioKhoiHanh>2025-11-16 11:00:00</GioKhoiHanh>
-        <SoGhe>110</SoGhe>
-        <GiaCoBan>650000</GiaCoBan>
-    </ChuyenBay>
-    <ChuyenBay>
-        <DiemDi>TP.HCM (SGN)</DiemDi>
-        <MaMayBay>VN-A045</MaMayBay>
-        <GioDen>2025-11-15 20:15:00</GioDen>
-        <SoGheTrong>0</SoGheTrong>
-        <DiemDen>Đà Lạt (DLI)</DiemDen>
-        <TrangThai>DANG_BAY</TrangThai>
-        <MaChuyen>CB018</MaChuyen>
-        <GioKhoiHanh>2025-11-15 19:15:00</GioKhoiHanh>
-        <SoGhe>130</SoGhe>
-        <GiaCoBan>700000</GiaCoBan>
-    </ChuyenBay>
-    <ChuyenBay>
-        <DiemDi>Hà Nội (HAN)</DiemDi>
-        <MaMayBay>VN-G09R</MaMayBay>
-        <GioDen>2025-11-15 11:45:00</GioDen>
-        <SoGheTrong>67</SoGheTrong>
-        <DiemDen>Phú Quốc (PQC)</DiemDen>
-        <TrangThai>CHUA_BAY</TrangThai>
-        <MaChuyen>CB019</MaChuyen>
-        <GioKhoiHanh>2025-11-15 09:30:00</GioKhoiHanh>
-        <SoGhe>190</SoGhe>
-        <GiaCoBan>1800000</GiaCoBan>
-    </ChuyenBay>
-    <ChuyenBay>
-        <DiemDi>Cần Thơ (VCA)</DiemDi>
-        <MaMayBay>VN-NH90</MaMayBay>
-        <GioDen>2025-11-13 23:00:00</GioDen>
-        <SoGheTrong>0</SoGheTrong>
+        <MaMayBay>VN-F712</MaMayBay>
+        <GioDen>2025-11-14 17:45:00</GioDen>
+        <SoGheTrong>129</SoGheTrong>
         <DiemDen>Hà Nội (HAN)</DiemDen>
-        <TrangThai>HUY</TrangThai>
-        <MaChuyen>CB020</MaChuyen>
-        <GioKhoiHanh>2025-11-13 20:45:00</GioKhoiHanh>
-        <SoGhe>160</SoGhe>
-        <GiaCoBan>1350000</GiaCoBan>
-    </ChuyenBay>
-    <ChuyenBay>
-        <DiemDi>Hà Nội (HAN)</DiemDi>
-        <MaMayBay>VN-A003</MaMayBay>
-        <GioDen>2025-11-13 10:15:00</GioDen>
-        <SoGheTrong>35</SoGheTrong>
-        <DiemDen>TP.HCM (SGN)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
-        <MaChuyen>CB021</MaChuyen>
-        <GioKhoiHanh>2025-11-13 08:00:00</GioKhoiHanh>
-        <SoGhe>180</SoGhe>
+        <MaChuyen>CB014</MaChuyen>
+        <GioKhoiHanh>2025-11-14 15:30:00</GioKhoiHanh>
         <GiaCoBan>1200000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
-        <DiemDi>TP.HCM (SGN)</DiemDi>
-        <MaMayBay>VN-F045</MaMayBay>
-        <GioDen>2025-11-14 16:30:00</GioDen>
-        <SoGheTrong>23</SoGheTrong>
-        <DiemDen>Hà Nội (HAN)</DiemDen>
+        <DiemDi>Nha Trang (CXR)</DiemDi>
+        <MaMayBay>VN-A032</MaMayBay>
+        <GioDen>2025-11-15 12:30:00</GioDen>
+        <SoGheTrong>130</SoGheTrong>
+        <DiemDen>TP.HCM (SGN)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
-        <MaChuyen>CB022</MaChuyen>
-        <GioKhoiHanh>2025-11-14 14:15:00</GioKhoiHanh>
-        <SoGhe>160</SoGhe>
-        <GiaCoBan>1150000</GiaCoBan>
+        <MaChuyen>CB015</MaChuyen>
+        <GioKhoiHanh>2025-11-15 11:00:00</GioKhoiHanh>
+        <GiaCoBan>800000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
         <DiemDi>Đà Nẵng (DAD)</DiemDi>
-        <MaMayBay>VN-A045</MaMayBay>
-        <GioDen>2025-11-14 11:00:00</GioDen>
-        <SoGheTrong>0</SoGheTrong>
+        <MaMayBay>VN-F711</MaMayBay>
+        <GioDen>2025-11-15 20:00:00</GioDen>
+        <SoGheTrong>119</SoGheTrong>
+        <DiemDen>Hà Nội (HAN)</DiemDen>
+        <TrangThai>CHUA_BAY</TrangThai>
+        <MaChuyen>CB016</MaChuyen>
+        <GioKhoiHanh>2025-11-15 18:15:00</GioKhoiHanh>
+        <GiaCoBan>900000</GiaCoBan>
+    </ChuyenBay>
+    <ChuyenBay>
+        <DiemDi>Phú Quốc (PQC)</DiemDi>
+        <MaMayBay>VN-A563</MaMayBay>
+        <GioDen>2025-11-15 14:30:00</GioDen>
+        <SoGheTrong>139</SoGheTrong>
         <DiemDen>TP.HCM (SGN)</DiemDen>
-        <TrangThai>HUY</TrangThai>
-        <MaChuyen>CB023</MaChuyen>
-        <GioKhoiHanh>2025-11-14 09:45:00</GioKhoiHanh>
-        <SoGhe>120</SoGhe>
-        <GiaCoBan>850000</GiaCoBan>
+        <TrangThai>CHUA_BAY</TrangThai>
+        <MaChuyen>CB017</MaChuyen>
+        <GioKhoiHanh>2025-11-15 13:15:00</GioKhoiHanh>
+        <GiaCoBan>1050000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
         <DiemDi>Hà Nội (HAN)</DiemDi>
-        <MaMayBay>VN-G09R</MaMayBay>
-        <GioDen>2025-11-15 19:55:00</GioDen>
-        <SoGheTrong>49</SoGheTrong>
-        <DiemDen>Đà Nẵng (DAD)</DiemDen>
+        <MaMayBay>VN-F023</MaMayBay>
+        <GioDen>2025-11-16 15:50:00</GioDen>
+        <SoGheTrong>140</SoGheTrong>
+        <DiemDen>Nha Trang (CXR)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
-        <MaChuyen>CB024</MaChuyen>
-        <GioKhoiHanh>2025-11-15 18:30:00</GioKhoiHanh>
-        <SoGhe>140</SoGhe>
+        <MaChuyen>CB018</MaChuyen>
+        <GioKhoiHanh>2025-11-16 13:45:00</GioKhoiHanh>
+        <GiaCoBan>1150000</GiaCoBan>
+    </ChuyenBay>
+    <ChuyenBay>
+        <DiemDi>Cần Thơ (VCA)</DiemDi>
+        <MaMayBay>VN-A004</MaMayBay>
+        <GioDen>2025-11-16 11:00:00</GioDen>
+        <SoGheTrong>148</SoGheTrong>
+        <DiemDen>Hà Nội (HAN)</DiemDen>
+        <TrangThai>CHUA_BAY</TrangThai>
+        <MaChuyen>CB019</MaChuyen>
+        <GioKhoiHanh>2025-11-16 08:30:00</GioKhoiHanh>
+        <GiaCoBan>1300000</GiaCoBan>
+    </ChuyenBay>
+    <ChuyenBay>
+        <DiemDi>Đà Lạt (DLI)</DiemDi>
+        <MaMayBay>VN-F714</MaMayBay>
+        <GioDen>2025-11-16 19:45:00</GioDen>
+        <SoGheTrong>150</SoGheTrong>
+        <DiemDen>TP.HCM (SGN)</DiemDen>
+        <TrangThai>CHUA_BAY</TrangThai>
+        <MaChuyen>CB020</MaChuyen>
+        <GioKhoiHanh>2025-11-16 18:45:00</GioKhoiHanh>
         <GiaCoBan>750000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
         <DiemDi>TP.HCM (SGN)</DiemDi>
-        <MaMayBay>VN-NH90</MaMayBay>
-        <GioDen>2025-11-15 13:15:00</GioDen>
-        <SoGheTrong>9</SoGheTrong>
-        <DiemDen>Phú Quốc (PQC)</DiemDen>
+        <MaMayBay>VN-A001</MaMayBay>
+        <GioDen>2025-11-17 09:30:00</GioDen>
+        <SoGheTrong>120</SoGheTrong>
+        <DiemDen>Đà Nẵng (DAD)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
-        <MaChuyen>CB025</MaChuyen>
-        <GioKhoiHanh>2025-11-15 12:00:00</GioKhoiHanh>
-        <SoGhe>150</SoGhe>
-        <GiaCoBan>950000</GiaCoBan>
+        <MaChuyen>CB021</MaChuyen>
+        <GioKhoiHanh>2025-11-17 07:45:00</GioKhoiHanh>
+        <GiaCoBan>880000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
         <DiemDi>Hà Nội (HAN)</DiemDi>
-        <MaMayBay>VN-A003</MaMayBay>
-        <GioDen>2025-11-10 14:45:00</GioDen>
-        <SoGheTrong>31</SoGheTrong>
-        <DiemDen>Nha Trang (CXR)</DiemDen>
+        <MaMayBay>VN-F712</MaMayBay>
+        <GioDen>2025-11-17 18:15:00</GioDen>
+        <SoGheTrong>127</SoGheTrong>
+        <DiemDen>Phú Quốc (PQC)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
-        <MaChuyen>CB026</MaChuyen>
-        <GioKhoiHanh>2025-11-10 12:45:00</GioKhoiHanh>
-        <SoGhe>170</SoGhe>
-        <GiaCoBan>1100000</GiaCoBan>
+        <MaChuyen>CB022</MaChuyen>
+        <GioKhoiHanh>2025-11-17 15:30:00</GioKhoiHanh>
+        <GiaCoBan>1400000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
         <DiemDi>Đà Nẵng (DAD)</DiemDi>
-        <MaMayBay>VN-F045</MaMayBay>
-        <GioDen>2025-11-11 14:35:00</GioDen>
-        <SoGheTrong>7</SoGheTrong>
+        <MaMayBay>VN-A032</MaMayBay>
+        <GioDen>2025-11-17 14:00:00</GioDen>
+        <SoGheTrong>130</SoGheTrong>
         <DiemDen>Nha Trang (CXR)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
-        <MaChuyen>CB027</MaChuyen>
-        <GioKhoiHanh>2025-11-11 13:20:00</GioKhoiHanh>
-        <SoGhe>110</SoGhe>
-        <GiaCoBan>650000</GiaCoBan>
-    </ChuyenBay>
-    <ChuyenBay>
-        <DiemDi>TP.HCM (SGN)</DiemDi>
-        <MaMayBay>VN-A045</MaMayBay>
-        <GioDen>2025-11-12 17:00:00</GioDen>
-        <SoGheTrong>46</SoGheTrong>
-        <DiemDen>Đà Lạt (DLI)</DiemDen>
-        <TrangThai>CHUA_BAY</TrangThai>
-        <MaChuyen>CB028</MaChuyen>
-        <GioKhoiHanh>2025-11-12 16:00:00</GioKhoiHanh>
-        <SoGhe>130</SoGhe>
+        <MaChuyen>CB023</MaChuyen>
+        <GioKhoiHanh>2025-11-17 12:45:00</GioKhoiHanh>
         <GiaCoBan>700000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
-        <DiemDi>Hà Nội (HAN)</DiemDi>
-        <MaMayBay>VN-G09R</MaMayBay>
-        <GioDen>2025-11-13 12:45:00</GioDen>
-        <SoGheTrong>67</SoGheTrong>
-        <DiemDen>Phú Quốc (PQC)</DiemDen>
-        <TrangThai>CHUA_BAY</TrangThai>
-        <MaChuyen>CB029</MaChuyen>
-        <GioKhoiHanh>2025-11-13 10:30:00</GioKhoiHanh>
-        <SoGhe>190</SoGhe>
-        <GiaCoBan>1800000</GiaCoBan>
-    </ChuyenBay>
-    <ChuyenBay>
         <DiemDi>Cần Thơ (VCA)</DiemDi>
-        <MaMayBay>VN-NH90</MaMayBay>
-        <GioDen>2025-11-14 21:45:00</GioDen>
-        <SoGheTrong>0</SoGheTrong>
-        <DiemDen>Hà Nội (HAN)</DiemDen>
-        <TrangThai>DA_BAY</TrangThai>
-        <MaChuyen>CB030</MaChuyen>
-        <GioKhoiHanh>2025-11-14 19:30:00</GioKhoiHanh>
-        <SoGhe>160</SoGhe>
-        <GiaCoBan>1350000</GiaCoBan>
+        <MaMayBay>VN-F711</MaMayBay>
+        <GioDen>2025-11-18 19:30:00</GioDen>
+        <SoGheTrong>119</SoGheTrong>
+        <DiemDen>TP.HCM (SGN)</DiemDen>
+        <TrangThai>CHUA_BAY</TrangThai>
+        <MaChuyen>CB024</MaChuyen>
+        <GioKhoiHanh>2025-11-18 18:00:00</GioKhoiHanh>
+        <GiaCoBan>600000</GiaCoBan>
     </ChuyenBay>
     <ChuyenBay>
         <DiemDi>Hà Nội (HAN)</DiemDi>
-        <MaMayBay>VN-A320</MaMayBay>
-        <GioDen>2025-11-13 08:00:16</GioDen>
+        <MaMayBay>VN-A563</MaMayBay>
+        <GioDen>2025-11-18 13:45:00</GioDen>
+        <SoGheTrong>140</SoGheTrong>
+        <DiemDen>Cần Thơ (VCA)</DiemDen>
+        <TrangThai>CHUA_BAY</TrangThai>
+        <MaChuyen>CB025</MaChuyen>
+        <GioKhoiHanh>2025-11-18 11:15:00</GioKhoiHanh>
+        <GiaCoBan>1500000</GiaCoBan>
+    </ChuyenBay>
+    <ChuyenBay>
+        <DiemDi>TP.HCM (SGN)</DiemDi>
+        <MaMayBay>VN-F023</MaMayBay>
+        <GioDen>2025-11-18 17:20:00</GioDen>
+        <SoGheTrong>140</SoGheTrong>
+        <DiemDen>Đà Nẵng (DAD)</DiemDen>
+        <TrangThai>CHUA_BAY</TrangThai>
+        <MaChuyen>CB026</MaChuyen>
+        <GioKhoiHanh>2025-11-18 15:30:00</GioKhoiHanh>
+        <GiaCoBan>1000000</GiaCoBan>
+    </ChuyenBay>
+    <ChuyenBay>
+        <DiemDi>Phú Quốc (PQC)</DiemDi>
+        <MaMayBay>VN-A004</MaMayBay>
+        <GioDen>2025-11-19 10:45:00</GioDen>
+        <SoGheTrong>150</SoGheTrong>
+        <DiemDen>Hà Nội (HAN)</DiemDen>
+        <TrangThai>CHUA_BAY</TrangThai>
+        <MaChuyen>CB027</MaChuyen>
+        <GioKhoiHanh>2025-11-19 09:00:00</GioKhoiHanh>
+        <GiaCoBan>1600000</GiaCoBan>
+    </ChuyenBay>
+    <ChuyenBay>
+        <DiemDi>Nha Trang (CXR)</DiemDi>
+        <MaMayBay>VN-F714</MaMayBay>
+        <GioDen>2025-11-19 20:15:00</GioDen>
         <SoGheTrong>150</SoGheTrong>
         <DiemDen>TP.HCM (SGN)</DiemDen>
         <TrangThai>CHUA_BAY</TrangThai>
-        <MaChuyen>CB031</MaChuyen>
-        <GioKhoiHanh>2025-11-13 06:00:16</GioKhoiHanh>
-        <SoGhe>150</SoGhe>
-        <GiaCoBan>1500000</GiaCoBan>
+        <MaChuyen>CB028</MaChuyen>
+        <GioKhoiHanh>2025-11-19 19:00:00</GioKhoiHanh>
+        <GiaCoBan>650000</GiaCoBan>
+    </ChuyenBay>
+    <ChuyenBay>
+        <DiemDi>Đà Lạt (DLI)</DiemDi>
+        <MaMayBay>VN-A001</MaMayBay>
+        <GioDen>2025-11-20 10:30:00</GioDen>
+        <SoGheTrong>120</SoGheTrong>
+        <DiemDen>Hà Nội (HAN)</DiemDen>
+        <TrangThai>CHUA_BAY</TrangThai>
+        <MaChuyen>CB029</MaChuyen>
+        <GioKhoiHanh>2025-11-20 08:45:00</GioKhoiHanh>
+        <GiaCoBan>1100000</GiaCoBan>
+    </ChuyenBay>
+    <ChuyenBay>
+        <DiemDi>Hà Nội (HAN)</DiemDi>
+        <MaMayBay>VN-F712</MaMayBay>
+        <GioDen>2025-11-20 19:00:00</GioDen>
+        <SoGheTrong>130</SoGheTrong>
+        <DiemDen>TP.HCM (SGN)</DiemDen>
+        <TrangThai>CHUA_BAY</TrangThai>
+        <MaChuyen>CB030</MaChuyen>
+        <GioKhoiHanh>2025-11-20 16:30:00</GioKhoiHanh>
+        <GiaCoBan>1250000</GiaCoBan>
     </ChuyenBay>
 </ChuyenBays>

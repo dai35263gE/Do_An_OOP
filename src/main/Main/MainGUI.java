@@ -152,7 +152,6 @@ public class MainGUI extends JFrame {
         // Lấy số lượng dữ liệu hiện tại
         int soVe = quanLy.getDsVe().demSoLuong();
         int soChuyenBay = quanLy.getDsChuyenBay().demSoLuong();
-        int soKhachHang = quanLy.getDsKhachHang().demSoLuong();
 
         // Có thể cập nhật tooltip hoặc trạng thái nút dựa trên số lượng
         // Ví dụ: hiển thị cảnh báo nếu số vé quá ít
@@ -170,14 +169,14 @@ public class MainGUI extends JFrame {
      */
     private void capNhatTrangThaiHeThong() {
         // Có thể thêm thanh trạng thái (status bar) ở đây
-        Map<String, Object> thongKe = quanLy.thongKeTongQuan();
-
-        String trangThai = String.format(
-                "Hệ thống: %d vé | %d chuyến bay | %d khách hàng | Doanh thu: %,.0f VND",
-                thongKe.get("tongVe"),
-                thongKe.get("tongChuyenBay"),
-                thongKe.get("tongKhachHang"),
-                thongKe.get("tongDoanhThu"));
+        // Build system status string if needed for UI
+        // Map<String, Object> thongKe = quanLy.thongKeTongQuan();
+        // String trangThai = String.format(
+        //         "Hệ thống: %d vé | %d chuyến bay | %d khách hàng | Doanh thu: %,.0f VND",
+        //         thongKe.get("tongVe"),
+        //         thongKe.get("tongChuyenBay"),
+        //         thongKe.get("tongKhachHang"),
+        //         thongKe.get("tongDoanhThu"));
 
         // Lưu trạng thái để có thể hiển thị ở đâu đó
         // statusBar.setText(trangThai);

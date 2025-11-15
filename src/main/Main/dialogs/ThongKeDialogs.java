@@ -219,7 +219,7 @@ public class ThongKeDialogs {
 
         // Tỷ lệ lấp đầy trung bình
         double tyLeLapDayTB = danhSachCB.stream()
-                .mapToDouble(cb -> ((double) (cb.getSoGhe() - cb.getSoGheTrong()) / cb.getSoGhe()) * 100)
+                .mapToDouble(cb -> ((double) (cb.getSoGheToiDa() - cb.getSoGheTrong()) / cb.getSoGheToiDa()) * 100)
                 .average()
                 .orElse(0.0);
 
@@ -229,13 +229,13 @@ public class ThongKeDialogs {
         sb.append("\nTop 5 chuyến bay có tỷ lệ lấp đầy cao nhất:\n");
         danhSachCB.stream()
                 .sorted((cb1, cb2) -> {
-                    double tyLe1 = ((double) (cb1.getSoGhe() - cb1.getSoGheTrong()) / cb1.getSoGhe()) * 100;
-                    double tyLe2 = ((double) (cb2.getSoGhe() - cb2.getSoGheTrong()) / cb2.getSoGhe()) * 100;
+                    double tyLe1 = ((double) (cb1.getSoGheToiDa() - cb1.getSoGheTrong()) / cb1.getSoGheToiDa()) * 100;
+                    double tyLe2 = ((double) (cb2.getSoGheToiDa() - cb2.getSoGheTrong()) / cb2.getSoGheToiDa()) * 100;
                     return Double.compare(tyLe2, tyLe1);
                 })
                 .limit(5)
                 .forEach(cb -> {
-                    double tyLe = ((double) (cb.getSoGhe() - cb.getSoGheTrong()) / cb.getSoGhe()) * 100;
+                    double tyLe = ((double) (cb.getSoGheToiDa() - cb.getSoGheTrong()) / cb.getSoGheToiDa()) * 100;
                     sb.append("- ").append(cb.getMaChuyen()).append(" (")
                       .append(cb.getDiemDi()).append(" → ").append(cb.getDiemDen()).append("): ")
                       .append(String.format("%.1f%%", tyLe)).append("\n");
@@ -495,7 +495,7 @@ public class ThongKeDialogs {
         DanhSachChuyenBay dsChuyenBay = quanLy.getDsChuyenBay();
         if (dsChuyenBay != null && dsChuyenBay.getDanhSach() != null) {
             return dsChuyenBay.getDanhSach().stream()
-                    .mapToDouble(cb -> ((double) (cb.getSoGhe() - cb.getSoGheTrong()) / cb.getSoGhe()) * 100)
+                    .mapToDouble(cb -> ((double) (cb.getSoGheToiDa() - cb.getSoGheTrong()) / cb.getSoGheToiDa()) * 100)
                     .average()
                     .orElse(0.0);
         }
@@ -507,7 +507,7 @@ public class ThongKeDialogs {
         if (dsChuyenBay != null && dsChuyenBay.getDanhSach() != null) {
             return dsChuyenBay.getDanhSach().stream()
                     .mapToDouble(cb -> {
-                        int soVeDaBan = cb.getSoGhe() - cb.getSoGheTrong();
+                        int soVeDaBan = cb.getSoGheToiDa() - cb.getSoGheTrong();
                         return soVeDaBan * cb.getGiaCoBan();
                     })
                     .average()

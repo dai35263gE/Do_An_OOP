@@ -48,7 +48,7 @@ public class QuanLyBanVeMayBay {
     int tongGhe = 0;
     int gheTrong = 0;
     for (ChuyenBay cb : dsChuyenBay.getDanhSach()) {
-      tongGhe += cb.getSoGhe();
+      tongGhe += cb.getSoGheToiDa();
       gheTrong += cb.getSoGheTrong();
     }
     double tiLeLapDay = tongGhe > 0 ? (1 - (double) gheTrong / tongGhe) * 100 : 0;
@@ -119,10 +119,39 @@ public class QuanLyBanVeMayBay {
   }
 
   public void docDuLieuTuFile() {
-      dsVe.docFile("src/resources/data/3_VeMayBays.xml");
+      // Load flights first so we can attach tickets to them and mark seats as occupied
       dsChuyenBay.docFile("src/resources/data/1_ChuyenBays.xml");
-      dsKhachHang.docFile("src/resources/data/2_KhachHangs.xml");
-      dsHoaDon.docFile("src/resources/data/4_HoaDons.xml");
+
+      // Reset each flight's available seats to full capacity; we will recompute from tickets
+      for (model.ChuyenBay cb : dsChuyenBay.getDanhSach()) {
+        try {
+          cb.setSoGheTrong(cb.getSoGheToiDa());
+        } catch (Exception e) {
+          // ignore invalid initial values
+        }
+      }
+
+      // Load tickets and then attach them to flights to update seat occupancy
+      dsVe.docFile("src/resources/data/3_VeMayBays.xml");
+      // After loading tickets, mark seats on corresponding flights as booked
+      for (VeMayBay ve : dsVe.getDanhSach()) {
+        try {
+          if (ve == null) continue;
+          // Ignore cancelled tickets
+          if (ve.isDaHuy()) continue;
+          model.ChuyenBay cb = dsChuyenBay.timKiemTheoMa(ve.getMaChuyen());
+          if (cb != null) {
+            boolean added = cb.themVe(ve);
+            if (!added) {
+              System.out.println("Không thể đánh dấu ghế đã đặt cho vé: " + ve.getMaVe());
+            }
+          }
+        } catch (Exception ex) {
+          System.out.println("Lỗi khi gắn vé vào chuyến: " + ve.getMaVe() + " - " + ex.getMessage());
+        }
+      }
+        dsKhachHang.docFile("src/resources/data/2_KhachHangs.xml");
+        dsHoaDon.docFile("src/resources/data/4_HoaDons.xml");
   }
 
   public void ghiDuLieuRaFile() {

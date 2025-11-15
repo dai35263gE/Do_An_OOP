@@ -88,8 +88,8 @@ public class XMLUtils {
         Map<String, String> data = new HashMap<>();
 
         String[] tags = {
-            "MaChuyen", "DiemDi", "DiemDen", "GioKhoiHanh",
-            "GioDen", "SoGhe", "SoGheTrong", "MaMayBay", "GiaCoBan", "TrangThai"
+          "MaChuyen", "DiemDi", "DiemDen", "GioKhoiHanh",
+          "GioDen", "SoGheTrong", "MaMayBay", "GiaCoBan", "TrangThai"
         };
 
         for (String tag : tags) {
@@ -114,9 +114,9 @@ public class XMLUtils {
         Map<String, String> data = new HashMap<>();
 
         String[] tags = {
-            "MaKH", "HoTen", "SoDT", "Email", "CMND",
-            "NgaySinh", "GioiTinh", "DiaChi", "TenDangNhap", "MatKhau",
-            "HangKhachHang", "DiemTichLuy", "NgayDangKy"
+          "MaKH", "HoTen", "SoDT", "Email", "CMND",
+          "NgaySinh", "GioiTinh", "DiaChi", "MatKhau",
+          "HangKhachHang", "DiemTichLuy", "NgayDangKy"
         };
 
         for (String tag : tags) {
@@ -230,8 +230,8 @@ public class XMLUtils {
 
         // Thông tin khách hàng
         String[] khachHangTags = {
-            "MaKH", "HoTen", "SoDT", "Email", "CMND",
-            "NgaySinh", "GioiTinh", "DiaChi", "TenDangNhap", "MatKhau"
+          "MaKH", "HoTen", "SoDT", "Email", "CMND",
+          "NgaySinh", "GioiTinh", "DiaChi", "MatKhau"
         };
 
         for (String tag : khachHangTags) {
@@ -452,6 +452,11 @@ public static boolean ghiFileXML(String tenFile, List<Map<String, String>> dataL
       // Xử lý này sẽ được thực hiện ở lớp gọi
     }
 
+    // Don't persist total seat count for flights; capacity is computed from `MaMayBay`
+    if ("ChuyenBays".equals(rootElementName) && "SoGhe".equals(fieldName)) {
+      return true;
+    }
+
     return false;
   }
 
@@ -536,7 +541,7 @@ public static boolean ghiFileXML(String tenFile, List<Map<String, String>> dataL
 
   // ========== PHƯƠNG THỨC TẠO DỮ LIỆU MẪU ==========
   public static Map<String, String> taoChuyenBayData(String maChuyen, String diemDi, String diemDen,
-      Date gioKhoiHanh, Date gioDen, int soGhe,
+      Date gioKhoiHanh, Date gioDen, int soGheTrong,
       String maMayBay, double giaCoBan, String trangThai) {
     Map<String, String> data = new HashMap<>();
     data.put("MaChuyen", maChuyen);
@@ -544,7 +549,8 @@ public static boolean ghiFileXML(String tenFile, List<Map<String, String>> dataL
     data.put("DiemDen", diemDen);
     data.put("GioKhoiHanh", dateToString(gioKhoiHanh));
     data.put("GioDen", dateToString(gioDen));
-    data.put("SoGhe", String.valueOf(soGhe));
+    // Persist only available seats; total capacity is computed from MaMayBay
+    data.put("SoGheTrong", String.valueOf(soGheTrong));
     data.put("MaMayBay", maMayBay);
     data.put("GiaCoBan", String.valueOf(giaCoBan));
     data.put("TrangThai", trangThai);
@@ -553,7 +559,7 @@ public static boolean ghiFileXML(String tenFile, List<Map<String, String>> dataL
 
   public static Map<String, String> taoKhachHangData(String maKH, String hoTen, String soDT, String email,
       String cmnd, Date ngaySinh, String gioiTinh, String diaChi,
-      String tenDangNhap, String matKhau, String hangKhachHang,
+      String matKhau, String hangKhachHang,
       int diemTichLuy, Date ngayDangKy) {
     Map<String, String> data = new HashMap<>();
     data.put("MaKH", maKH);
@@ -564,7 +570,6 @@ public static boolean ghiFileXML(String tenFile, List<Map<String, String>> dataL
     data.put("NgaySinh", dateToDateOnlyString(ngaySinh));
     data.put("GioiTinh", gioiTinh);
     data.put("DiaChi", diaChi);
-    data.put("TenDangNhap", tenDangNhap);
     data.put("MatKhau", matKhau);
     data.put("HangKhachHang", hangKhachHang);
     data.put("DiemTichLuy", String.valueOf(diemTichLuy));

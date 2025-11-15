@@ -59,7 +59,7 @@ public class VeThuongGia extends VeMayBay {
     public String getDichVuDacBiet() { return dichVuDacBiet; }
     public void setDichVuDacBiet(String dichVuDacBiet) { this.dichVuDacBiet = dichVuDacBiet; }
     public double getSoKgHanhLyKiGui() { return this.SoKgHanhLyKyGui; }
-    public void setSoKgHanhLyKyGui(double dichVuDaSoKgHanhLyKyGui) { this.SoKgHanhLyKyGui = SoKgHanhLyKyGui; }
+    public void setSoKgHanhLyKyGui(double dichVuDaSoKgHanhLyKyGui) { this.SoKgHanhLyKyGui = dichVuDaSoKgHanhLyKyGui; }
     public double getPhuThu() { return phuThu; }
     public void setPhuThu(double phuThu) { this.phuThu = phuThu; }
     public boolean isPhongChoVIP() { return phongChoVIP; }

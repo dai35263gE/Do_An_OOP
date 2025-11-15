@@ -9,7 +9,6 @@ public class ChuyenBay {
     private String diemDen;
     private Date gioKhoiHanh;
     private Date gioDen;
-    private int soGhe;
     private int soGheTrong;
     private String maMayBay;
     private double giaCoBan;
@@ -21,15 +20,100 @@ public class ChuyenBay {
     public static final String TRANG_THAI_DA_BAY = "DA_BAY";
     public static final String TRANG_THAI_HUY = "HUY";
     
-    public ChuyenBay(String maChuyen, String diemDi, String diemDen, Date gioKhoiHanh, Date gioDen, int soGhe, int soGheTrong, String maMayBay, double giaCoBan) {
+    // Aircraft seat capacity mapping based on suffix
+    public static final int SEAT_CAPACITY_1 = 120;  
+    public static final int SEAT_CAPACITY_2 = 130;  
+    public static final int SEAT_CAPACITY_3 = 140;  
+    public static final int SEAT_CAPACITY_4 = 150;  
+    
+    // Seat layout: 6 columns (A-F), row allocation percentages
+    public static final int SEATS_PER_ROW = 6;  // A, B, C, D, E, F
+    public static final double BUSINESS_PERCENT = 0.30;  // 30%
+    public static final double ECONOMY_PERCENT = 0.50;   // 50%
+    // Budget gets remainder (20%)
+    
+    /**
+     * Calculate row allocation for a flight based on total capacity.
+     * Business: 30% of rows (rounded down), Economy: 50% of rows (rounded down), Budget: remainder
+     * @param totalRows total number of rows in aircraft
+     * @return array [businessEndRow, economyEndRow] where economyEndRow is also budgetStartRow - 1
+     */
+    public static int[] calculateRowAllocation(int totalRows) {
+        int businessRows = (int) Math.floor(totalRows * BUSINESS_PERCENT);
+        int economyRows = (int) Math.floor(totalRows * ECONOMY_PERCENT);
+        
+        // Business: rows 1 to businessRows
+        // Economy: rows (businessRows + 1) to (businessRows + economyRows)
+        // Budget: rows (businessRows + economyRows + 1) to totalRows
+        
+        int businessEnd = businessRows;  // e.g., if businessRows = 6, then businessEnd = 6
+        int economyEnd = businessRows + economyRows;  // e.g., if economyRows = 10, then economyEnd = 16
+        
+        return new int[] { businessEnd, economyEnd };
+    }
+    
+    /**
+     * Determine ticket class based on seat row and aircraft capacity.
+     * Allocates full rows: Business 30%, Economy 50%, Budget remainder.
+     * @param row seat row number (1+)
+     * @param totalRows total rows in aircraft
+     * @return "VeThuongGia", "VePhoThong", or "VeTietKiem"
+     */
+    public static String getSeatClassByRow(int row, int totalRows) {
+        int[] allocation = calculateRowAllocation(totalRows);
+        int businessEnd = allocation[0];
+        int economyEnd = allocation[1];
+        
+        if (row >= 1 && row <= businessEnd) {
+            return "VeThuongGia";
+        } else if (row > businessEnd && row <= economyEnd) {
+            return "VePhoThong";
+        } else {
+            return "VeTietKiem";
+        }
+    }
+    
+    /**
+     * Legacy overload for backward compatibility (uses totalRows = 20 as default)
+     */
+    public static String getSeatClassByRow(int row) {
+        return getSeatClassByRow(row, 20);  // Default for 120-seat aircraft
+    }
+    
+    /**
+     * Get total rows needed for aircraft capacity (with 6 seats per row)
+     */
+    private int getTotalRows() {
+        return (getSoGheToiDa() + SEATS_PER_ROW - 1) / SEATS_PER_ROW;
+    }
+    
+    /**
+     * Get total aircraft seat capacity based on maMayBay suffix.
+     * Suffix mapping: 1→120, 2→130, 3→140, 4→150
+     */
+    public int getSoGheToiDa() {
+        if (maMayBay == null || maMayBay.length() == 0) {
+            return 120; // default
+        }
+        char suffix = maMayBay.charAt(maMayBay.length() - 1);
+        switch (suffix) {
+            case '1': return SEAT_CAPACITY_1;
+            case '2': return SEAT_CAPACITY_2;
+            case '3': return SEAT_CAPACITY_3;
+            case '4': return SEAT_CAPACITY_4;
+            default: return SEAT_CAPACITY_1; // default to smallest
+        }
+    }
+    
+    public ChuyenBay(String maChuyen, String diemDi, String diemDen, Date gioKhoiHanh, Date gioDen, int soGheTrong, String maMayBay, double giaCoBan) {
         setMaChuyen(maChuyen);
         setDiemDi(diemDi);
         setDiemDen(diemDen);
         setGioKhoiHanh(gioKhoiHanh);
         setGioDen(gioDen);
-        setSoGhe(soGhe);
-        setSoGheTrong(soGheTrong);
+        // Ensure aircraft code is set before validating available seats so capacity is known
         setMaMayBay(maMayBay);
+        setSoGheTrong(soGheTrong);
         setGiaCoBan(giaCoBan);
         this.trangThai = TRANG_THAI_CHUA_BAY;
         this.danhSachVe = new ArrayList<>();
@@ -44,7 +128,7 @@ public class ChuyenBay {
     }
     
     public boolean huyGhe() {
-        if (soGheTrong >= soGhe) {
+        if (soGheTrong >= getSoGheToiDa()) {
             return false;
         }
         soGheTrong++;
@@ -78,12 +162,28 @@ public class ChuyenBay {
     }
     
     public List<String> getDanhSachGheTrong() {
+        // Return all available seats (for admin/display purposes)
+        return getDanhSachGheTrongByClass(null);
+    }
+    
+    /**
+     * Get available seats filtered by ticket class
+     * @param loaiVe ticket class ("VeThuongGia", "VePhoThong", "VeTietKiem"), or null for all
+     * @return list of available seat codes (e.g., "A1", "B1", ...)
+     */
+    public List<String> getDanhSachGheTrongByClass(String loaiVe) {
         List<String> gheTrong = new ArrayList<>();
-        int soHang = (int) Math.ceil(soGhe / 4.0);
-        for (int i = 1; i <= soHang; i++) {
-            for (char c = 'A'; c <= 'D'; c++) {
-                if (gheTrong.size() >= soGheTrong) break;
-                String soGhe = String.valueOf(c) + i;
+        int totalRows = getTotalRows();
+        
+        for (int row = 1; row <= totalRows; row++) {
+            // Check if this row matches the requested ticket class
+            String seatClass = getSeatClassByRow(row, totalRows);
+            if (loaiVe != null && !seatClass.equals(loaiVe)) {
+                continue;  // Skip this row if not matching ticket class
+            }
+            
+            for (char col = 'A'; col < 'A' + SEATS_PER_ROW; col++) {
+                String soGhe = String.valueOf(col) + row;
                 if (!kiemTraGheDaDat(soGhe)) {
                     gheTrong.add(soGhe);
                 }
@@ -106,14 +206,14 @@ public class ChuyenBay {
         return soGheTrong;
     }
     public void setSoGheTrong(int soGheTrong) {
-        if (soGheTrong < 0 || soGheTrong > soGhe) {
+        if (soGheTrong < 0 || soGheTrong > getSoGheToiDa()) {
             throw new IllegalArgumentException("Số ghế trống không hợp lệ");
         }
         this.soGheTrong = soGheTrong;
     }
     
     public int getSoGheDaDat() {
-        return soGhe - soGheTrong;
+        return getSoGheToiDa() - soGheTrong;
     }
     public boolean conGheTrong() {
         return soGheTrong > 0;
@@ -163,7 +263,7 @@ public class ChuyenBay {
                gioDen != null && 
                gioKhoiHanh.before(gioDen) && 
                gioKhoiHanh.after(now) &&
-               soGhe > 0 &&
+               getSoGheToiDa() > 0 &&
                giaCoBan > 0;
     }
     
@@ -255,13 +355,7 @@ public class ChuyenBay {
         this.gioDen = gioDen; 
     }
     
-    public int getSoGhe() { return soGhe; }
-    public void setSoGhe(int soGhe) { 
-        if (soGhe <= 0) {
-            throw new IllegalArgumentException("Số ghế phải lớn hơn 0");
-        }
-        this.soGhe = soGhe; 
-    }
+    // getSoGhe() and setSoGhe() removed; use getSoGheToiDa() instead (computed from aircraft code)
     
     public String getMaMayBay() { return maMayBay; }
     public void setMaMayBay(String maMayBay) { 
@@ -309,7 +403,7 @@ public class ChuyenBay {
     public boolean isDaDatHet() { return this.soGheTrong==0; }
     
     public double getTyLeDat() {
-        return soGhe > 0 ? (double) getSoGheDaDat() / soGhe * 100 : 0;
+        return getSoGheToiDa() > 0 ? (double) getSoGheDaDat() / getSoGheToiDa() * 100 : 0;
     }
     
     public String getTyLeDatFormatted() {
@@ -348,7 +442,7 @@ public class ChuyenBay {
         map.put("diemDen", diemDen);
         map.put("gioKhoiHanh", gioKhoiHanh);
         map.put("gioDen", gioDen);
-        map.put("soGhe", soGhe);
+        // soGhe is now computed from maMayBay suffix via getSoGheToiDa(), not persisted
         map.put("soGheTrong", soGheTrong);
         map.put("maMayBay", maMayBay);
         map.put("giaCoBan", giaCoBan);

@@ -730,7 +730,7 @@ public class KhachHangDialogs {
                 // Tạo khách hàng mới
                 KhachHang khachHangMoi = new KhachHang(
                     maKHTuDong, hoTen,  soDT, email,cmnd,
-                     ngaySinh,gioiTinh, diaChi, maKHTuDong, "0000"
+                     ngaySinh,gioiTinh, diaChi, "0000"
                 );
 
                 // Thêm vào danh sách
