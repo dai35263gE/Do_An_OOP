@@ -50,12 +50,12 @@ public class StatCardManager {
         card.setPreferredSize(new Dimension(180, 100));
 
         JLabel lblValue = new JLabel(value, JLabel.CENTER);
-        lblValue.setFont(new Font("Arial", Font.BOLD, 24));
+        lblValue.setFont(new Font("Arial", Font.BOLD, 18));
         lblValue.setForeground(Color.WHITE);
         lblValue.setName("value"); // Đặt tên để dễ tìm
 
         JLabel lblTitle = new JLabel("<html><center>" + title + "</center></html>", JLabel.CENTER);
-        lblTitle.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblTitle.setFont(new Font("Arial", Font.PLAIN, 13));
         lblTitle.setForeground(Color.WHITE);
 
         JPanel contentPanel = new JPanel(new BorderLayout(0, 10));
@@ -193,11 +193,11 @@ public class StatCardManager {
         }
 
         JLabel lblValue = new JLabel(value, JLabel.CENTER);
-        lblValue.setFont(new Font("Arial", Font.BOLD, 20));
+        lblValue.setFont(new Font("Arial", Font.BOLD, 16));
         lblValue.setForeground(Color.WHITE);
 
         JLabel lblTitle = new JLabel("<html><center>" + title + "</center></html>", JLabel.CENTER);
-        lblTitle.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblTitle.setFont(new Font("Arial", Font.PLAIN, 13));
         lblTitle.setForeground(Color.WHITE);
 
         JPanel textPanel = new JPanel(new BorderLayout(0, 5));

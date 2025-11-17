@@ -1,29 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Other/File.java to edit this template
- */
+
 package model;
 
 import java.util.Date;
-import java.util.regex.Pattern;
 
-/**
- *
- * @author HP
- */
+
 public abstract class NguoiDung {
-    protected String ma,hoTen,soDT,email,cmnd,gioiTinh,diaChi;
-    protected Date ngaySinh;
-    protected Date ngayTao;
-    protected String matKhau;
+    protected String ma, hoTen, soDT, email, cmnd, gioiTinh, diaChi, matKhau;
+    protected Date ngaySinh, ngayTao;
     protected boolean trangThaiDangNhap;
     
     public static final String GT_NAM = "Nam";
     public static final String GT_NU = "Nữ";
-    
-    protected static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
-    protected static final Pattern PHONE_PATTERN = Pattern.compile("^(03|05|07|08|09)[0-9]{8}$");
-    protected static final Pattern CMND_PATTERN = Pattern.compile("^[0-9]{9}$|^[0-9]{12}$");
     
     // CONSTRUCTOR
     public NguoiDung(String ma, String hoTen, String soDT, String email, 
@@ -55,18 +42,6 @@ public abstract class NguoiDung {
     
     public void dangXuat() {
         this.trangThaiDangNhap = false;
-    }
-    
-    public static boolean validateEmail(String email) {
-        return email != null && EMAIL_PATTERN.matcher(email).matches();
-    }
-    
-    public static boolean validatePhone(String phone) {
-        return phone != null && PHONE_PATTERN.matcher(phone).matches();
-    }
-    
-    public static boolean validateCMND(String cmnd) {
-        return cmnd != null && CMND_PATTERN.matcher(cmnd).matches();
     }
     
     public int tinhTuoi() {
@@ -126,8 +101,6 @@ public abstract class NguoiDung {
     public void setEmail(String email) { 
         if (email == null || email.trim().isEmpty()) 
             throw new IllegalArgumentException("Email không được để trống");
-        if (!validateEmail(email.trim())) 
-            throw new IllegalArgumentException("Email không hợp lệ");
         this.email = email.trim().toLowerCase();
     }
     
@@ -135,8 +108,6 @@ public abstract class NguoiDung {
     public void setCmnd(String cmnd) { 
         if (cmnd == null || cmnd.trim().isEmpty()) 
             throw new IllegalArgumentException("CMND không được để trống");
-        if (!validateCMND(cmnd.trim())) 
-            throw new IllegalArgumentException("CMND không hợp lệ");
         this.cmnd = cmnd.trim();
     }
     

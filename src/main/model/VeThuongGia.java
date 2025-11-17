@@ -18,7 +18,15 @@ public class VeThuongGia extends VeMayBay {
     private boolean phongChoVIP;
     private String loaiDoUong;
 
-    public static final int SO_KG_MIEN_PHI= 20;
+    // Hành lý
+    public static final int SO_KG_MIEN_PHI = 20;
+    public static final int PHI_HANH_LY_THEM = 15000; // 15k/kg cho phần hành lý vượt quá 20kg
+    
+    // Gói hành lý: 25kg, 30kg, 35kg, 40kg
+    public static final double GÓI_25KG = 25;
+    public static final double GÓI_30KG = 30;
+    public static final double GÓI_35KG = 35;
+    public static final double GÓI_40KG = 40;
 
     public static double hsg = 2.0;
     
@@ -66,5 +74,12 @@ public class VeThuongGia extends VeMayBay {
     public void setPhongChoVIP(boolean phongChoVIP) { this.phongChoVIP = phongChoVIP; }
     public String getLoaiDoUong() { return loaiDoUong; }
     public void setLoaiDoUong(String loaiDoUong) { this.loaiDoUong = loaiDoUong; }
-    public double getPhiHanhLy() { return (SoKgHanhLyKyGui - VeThuongGia.SO_KG_MIEN_PHI) > 0 ? (SoKgHanhLyKyGui - VePhoThong.SO_KG_MIEN_PHI)*VeMayBay.PHI_HANH_LY : 0; }
+    public double getPhiHanhLy() {
+        if (SoKgHanhLyKyGui <= SO_KG_MIEN_PHI) {
+            return 0; // Miễn phí cho 20kg đầu
+        }
+        // Tính từng kg vượt quá 20kg, mỗi kg = 15k
+        double kgVuotQua = SoKgHanhLyKyGui - SO_KG_MIEN_PHI;
+        return kgVuotQua * PHI_HANH_LY_THEM;
+    }
 }

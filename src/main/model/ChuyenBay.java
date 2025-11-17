@@ -20,50 +20,31 @@ public class ChuyenBay {
     public static final String TRANG_THAI_DA_BAY = "DA_BAY";
     public static final String TRANG_THAI_HUY = "HUY";
     
-    // Aircraft seat capacity mapping based on suffix
+    //Với các mã máy bay kết thúc bằng số 1,2,3,4 tướng ngữ với máy bay đó có tổng số ghế: 
     public static final int SEAT_CAPACITY_1 = 120;  
     public static final int SEAT_CAPACITY_2 = 130;  
     public static final int SEAT_CAPACITY_3 = 140;  
     public static final int SEAT_CAPACITY_4 = 150;  
     
-    // Seat layout: 6 columns (A-F), row allocation percentages
+
     public static final int SEATS_PER_ROW = 6;  // A, B, C, D, E, F
     public static final double BUSINESS_PERCENT = 0.30;  // 30%
     public static final double ECONOMY_PERCENT = 0.50;   // 50%
-    // Budget gets remainder (20%)
+
     
-    /**
-     * Calculate row allocation for a flight based on total capacity.
-     * Business: 30% of rows (rounded down), Economy: 50% of rows (rounded down), Budget: remainder
-     * @param totalRows total number of rows in aircraft
-     * @return array [businessEndRow, economyEndRow] where economyEndRow is also budgetStartRow - 1
-     */
-    public static int[] calculateRowAllocation(int totalRows) {
+
+    public static int[] tinhViTriLoaiGhe(int totalRows) {
         int businessRows = (int) Math.floor(totalRows * BUSINESS_PERCENT);
         int economyRows = (int) Math.floor(totalRows * ECONOMY_PERCENT);
-        
-        // Business: rows 1 to businessRows
-        // Economy: rows (businessRows + 1) to (businessRows + economyRows)
-        // Budget: rows (businessRows + economyRows + 1) to totalRows
-        
-        int businessEnd = businessRows;  // e.g., if businessRows = 6, then businessEnd = 6
-        int economyEnd = businessRows + economyRows;  // e.g., if economyRows = 10, then economyEnd = 16
-        
+        int businessEnd = businessRows; 
+        int economyEnd = businessRows + economyRows;
         return new int[] { businessEnd, economyEnd };
     }
     
-    /**
-     * Determine ticket class based on seat row and aircraft capacity.
-     * Allocates full rows: Business 30%, Economy 50%, Budget remainder.
-     * @param row seat row number (1+)
-     * @param totalRows total rows in aircraft
-     * @return "VeThuongGia", "VePhoThong", or "VeTietKiem"
-     */
-    public static String getSeatClassByRow(int row, int totalRows) {
-        int[] allocation = calculateRowAllocation(totalRows);
+    public static String getViTriLoaiGhe(int row, int totalRows) {
+        int[] allocation = tinhViTriLoaiGhe(totalRows);
         int businessEnd = allocation[0];
         int economyEnd = allocation[1];
-        
         if (row >= 1 && row <= businessEnd) {
             return "VeThuongGia";
         } else if (row > businessEnd && row <= economyEnd) {
@@ -72,28 +53,17 @@ public class ChuyenBay {
             return "VeTietKiem";
         }
     }
-    
-    /**
-     * Legacy overload for backward compatibility (uses totalRows = 20 as default)
-     */
-    public static String getSeatClassByRow(int row) {
-        return getSeatClassByRow(row, 20);  // Default for 120-seat aircraft
+
+
+    public static String getViTriLoaiGhe(int row) {
+        return getViTriLoaiGhe(row, 20);
     }
-    
-    /**
-     * Get total rows needed for aircraft capacity (with 6 seats per row)
-     */
     private int getTotalRows() {
         return (getSoGheToiDa() + SEATS_PER_ROW - 1) / SEATS_PER_ROW;
     }
-    
-    /**
-     * Get total aircraft seat capacity based on maMayBay suffix.
-     * Suffix mapping: 1→120, 2→130, 3→140, 4→150
-     */
     public int getSoGheToiDa() {
         if (maMayBay == null || maMayBay.length() == 0) {
-            return 120; // default
+            return 120;
         }
         char suffix = maMayBay.charAt(maMayBay.length() - 1);
         switch (suffix) {
@@ -101,7 +71,7 @@ public class ChuyenBay {
             case '2': return SEAT_CAPACITY_2;
             case '3': return SEAT_CAPACITY_3;
             case '4': return SEAT_CAPACITY_4;
-            default: return SEAT_CAPACITY_1; // default to smallest
+            default: return SEAT_CAPACITY_1; 
         }
     }
     
@@ -111,12 +81,24 @@ public class ChuyenBay {
         setDiemDen(diemDen);
         setGioKhoiHanh(gioKhoiHanh);
         setGioDen(gioDen);
-        // Ensure aircraft code is set before validating available seats so capacity is known
         setMaMayBay(maMayBay);
         setSoGheTrong(soGheTrong);
         setGiaCoBan(giaCoBan);
         this.trangThai = TRANG_THAI_CHUA_BAY;
         this.danhSachVe = new ArrayList<>();
+    }
+
+    public ChuyenBay(String maChuyen, String diemDi, String diemDen, Date gioKhoiHanh, Date gioDen, int soGheTrong, String maMayBay, double giaCoBan, String trangThai, List<VeMayBay> vmb){
+        setMaChuyen(maChuyen);
+        setDiemDi(diemDi);
+        setDiemDen(diemDen);
+        setGioKhoiHanh(gioKhoiHanh);
+        setGioDen(gioDen);
+        setMaMayBay(maMayBay);
+        setSoGheTrong(soGheTrong);
+        setGiaCoBan(giaCoBan);
+        this.trangThai = trangThai;
+        this.danhSachVe = vmb;
     }
 
     public boolean datGhe() {
@@ -162,24 +144,18 @@ public class ChuyenBay {
     }
     
     public List<String> getDanhSachGheTrong() {
-        // Return all available seats (for admin/display purposes)
         return getDanhSachGheTrongByClass(null);
     }
     
-    /**
-     * Get available seats filtered by ticket class
-     * @param loaiVe ticket class ("VeThuongGia", "VePhoThong", "VeTietKiem"), or null for all
-     * @return list of available seat codes (e.g., "A1", "B1", ...)
-     */
+    
     public List<String> getDanhSachGheTrongByClass(String loaiVe) {
         List<String> gheTrong = new ArrayList<>();
         int totalRows = getTotalRows();
         
         for (int row = 1; row <= totalRows; row++) {
-            // Check if this row matches the requested ticket class
-            String seatClass = getSeatClassByRow(row, totalRows);
+            String seatClass = getViTriLoaiGhe(row, totalRows);
             if (loaiVe != null && !seatClass.equals(loaiVe)) {
-                continue;  // Skip this row if not matching ticket class
+                continue; 
             }
             
             for (char col = 'A'; col < 'A' + SEATS_PER_ROW; col++) {
@@ -301,20 +277,7 @@ public class ChuyenBay {
             soGheTrong, String.format("%,d VND", (int)giaCoBan));
     }
     
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        ChuyenBay that = (ChuyenBay) obj;
-        return maChuyen != null && maChuyen.equals(that.maChuyen);
-    }
-    
-    @Override
-    public int hashCode() {
-        return maChuyen != null ? maChuyen.hashCode() : 0;
-    }
-    
-    // GETTERS AND SETTERS với VALIDATION
+    // GETTERS AND SETTERS
     public String getMaChuyen() { return maChuyen; }
     public void setMaChuyen(String maChuyen) { 
         if (maChuyen == null || maChuyen.trim().isEmpty()) {

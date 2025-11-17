@@ -33,7 +33,7 @@ public class HoaDon {
     public static final String PT_CHUYEN_KHOAN = "CHUYỂN_KHOẢN";
     public static final String PT_THE = "THẺ_TÍN_DỤNG";
     public static final String PT_VI_DIEN_TU = "VÍ_ĐIỆN_TỬ";
-    public static final String PT_NONE = "CHƯA";
+    public static final String PT_NONE = "NONE";
 
     // Constructors
     public HoaDon(String maHoaDon, KhachHang khachHang, List<VeMayBay> danhSachVe, String phuongThucTT) {
@@ -158,7 +158,7 @@ public class HoaDon {
     }
 
     public int tinhDiemTichLuy() {
-        return (int) (getThanhTien() / 10000); // 1 điểm cho mỗi 10,000 VND
+        return (int) (getThanhTien() / 100); // 1 điểm cho mỗi 100 VND
     }
 
     // Getters and Setters với VALIDATION

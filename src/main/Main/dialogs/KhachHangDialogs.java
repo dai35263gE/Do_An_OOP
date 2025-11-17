@@ -2,7 +2,6 @@ package Main.dialogs;
 
 import Main.MainGUI;
 import javax.swing.*;
-import Main.utils.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -157,14 +156,14 @@ public class KhachHangDialogs {
 
             // Lọc theo hạng khách hàng
             if (!hang.equals("Tất cả")) {
-                filters.add(RowFilter.regexFilter("(?i)" + hang, 7)); // Cột 7 là hạng
+                filters.add(RowFilter.regexFilter("(?i)" + hang, 5)); // Cột 5 là hạng
             }
 
             // Lọc theo điểm tích lũy
             filters.add(new RowFilter<DefaultTableModel, Object>() {
                 public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
                     try {
-                        String diemStr = entry.getStringValue(5); // Cột 5 là điểm tích lũy
+                        String diemStr = entry.getStringValue(6); // Cột 6 là điểm tích lũy
                         int diem = Integer.parseInt(diemStr.replaceAll("[^0-9]", ""));
                         return diem >= diemTu && diem <= diemDen;
                     } catch (Exception ex) {
@@ -173,9 +172,19 @@ public class KhachHangDialogs {
                 }
             });
 
-            // Lọc theo giới tính
+            // Lọc theo giới tính - lọc từ đối tượng KhachHang
             if (!gioiTinh.equals("Tất cả")) {
-                filters.add(RowFilter.regexFilter("(?i)" + gioiTinh, 8)); // Cột 8 là giới tính
+                filters.add(new RowFilter<DefaultTableModel, Object>() {
+                    public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
+                        try {
+                            String maKH = entry.getStringValue(0); // Cột 0 là mã KH
+                            KhachHang kh = quanLy.getDsKhachHang().timKiemTheoMa(maKH);
+                            return kh != null && kh.getGioiTinh() != null && kh.getGioiTinh().equals(gioiTinh);
+                        } catch (Exception ex) {
+                            return false;
+                        }
+                    }
+                });
             }
 
             if (!filters.isEmpty()) {
@@ -522,13 +531,22 @@ public class KhachHangDialogs {
                 quanLy.getDsKhachHang().getDanhSach().set(index, khachHang);
                 
                 if (index > 0) {
-                    JOptionPane.showMessageDialog(dialog, 
-                        "Cập nhật thông tin khách hàng thành công!", 
-                        "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                    // Ghi dữ liệu vào file XML
+                    boolean ghiFileThanCong = quanLy.getDsKhachHang().ghiFile("src/resources/data/2_KhachHangs.xml");
                     
-                    // Đóng dialog và cập nhật giao diện
-                    dialog.dispose();
-                    mainGUI.capNhatDuLieuGUI();
+                    if (ghiFileThanCong) {
+                        JOptionPane.showMessageDialog(dialog, 
+                            "Cập nhật thông tin khách hàng thành công!", 
+                            "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                        
+                        // Đóng dialog và cập nhật giao diện
+                        dialog.dispose();
+                        mainGUI.capNhatDuLieuGUI();
+                    } else {
+                        JOptionPane.showMessageDialog(dialog, 
+                            "Lỗi ghi file dữ liệu!", 
+                            "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(dialog, 
                         "Không thể cập nhật thông tin khách hàng!", 
@@ -645,7 +663,7 @@ public class KhachHangDialogs {
 
         // Tạo mã KH tự động
         int soKHHienTai = quanLy.getDsKhachHang().demSoLuong();
-        String maKHTuDong = "KH" + String.format("%04d", soKHHienTai + 1);
+        String maKHTuDong = "KH" + String.format("%03d", soKHHienTai + 1);
 
         JTextField txtMaKH = new JTextField(maKHTuDong);
         txtMaKH.setEditable(false);
@@ -737,16 +755,25 @@ public class KhachHangDialogs {
                 boolean result = quanLy.getDsKhachHang().them(khachHangMoi);
                 
                 if (result) {
-                    JOptionPane.showMessageDialog(dialog, 
-                        "Thêm khách hàng thành công!\n\n" +
-                        "Mã KH: " + maKHTuDong + "\n" +
-                        "Họ tên: " + hoTen + "\n" +
-                        "CMND: " + cmnd, 
-                        "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                    // Ghi dữ liệu vào file XML
+                    boolean ghiFileThanCong = quanLy.getDsKhachHang().ghiFile("src/resources/data/2_KhachHangs.xml");
                     
-                    // Đóng dialog và cập nhật giao diện
-                    dialog.dispose();
-                    mainGUI.capNhatDuLieuGUI();
+                    if (ghiFileThanCong) {
+                        JOptionPane.showMessageDialog(dialog, 
+                            "Thêm khách hàng thành công!\n\n" +
+                            "Mã KH: " + maKHTuDong + "\n" +
+                            "Họ tên: " + hoTen + "\n" +
+                            "CMND: " + cmnd, 
+                            "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                        
+                        // Đóng dialog và cập nhật giao diện
+                        dialog.dispose();
+                        mainGUI.capNhatDuLieuGUI();
+                    } else {
+                        JOptionPane.showMessageDialog(dialog, 
+                            "Lỗi ghi file dữ liệu!", 
+                            "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(dialog, 
                         "Không thể thêm khách hàng!", 
@@ -802,27 +829,6 @@ public class KhachHangDialogs {
 
             JOptionPane.showMessageDialog(dialog,
                     "Vui lòng nhập đầy đủ thông tin bắt buộc (*)",
-                    "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        if (!ValidatorUtils.isValidCMND(txtCMND.getText().trim())) {
-            JOptionPane.showMessageDialog(dialog,
-                    "CMND/CCCD không hợp lệ! Phải có 9 hoặc 12 số.",
-                    "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        if (!ValidatorUtils.isValidPhoneNumber(txtSoDT.getText().trim())) {
-            JOptionPane.showMessageDialog(dialog,
-                    "Số điện thoại không hợp lệ!",
-                    "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        if (!ValidatorUtils.isValidEmail(txtEmail.getText().trim())) {
-            JOptionPane.showMessageDialog(dialog,
-                    "Email không hợp lệ!",
                     "Lỗi", JOptionPane.ERROR_MESSAGE);
             return false;
         }

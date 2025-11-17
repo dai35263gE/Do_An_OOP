@@ -253,71 +253,51 @@ public class DanhSachChuyenBay implements IQuanLy<ChuyenBay>, IFileHandler {
 
   @Override
   public boolean docFile(String tenFile) {
-    try {
-      List<Map<String, String>> dataList = XMLUtils.docFileXML(tenFile);
+    List<Map<String, String>> dataList = XMLUtils.docFileXML(tenFile);
 
-      if (dataList.isEmpty()) {
-        return true;
-      }
-
-      for (Map<String, String> data : dataList) {
-        try {
-          ChuyenBay cb = new ChuyenBay(
-              data.get("MaChuyen"),
-              data.get("DiemDi"),
-              data.get("DiemDen"),
-              XMLUtils.stringToDate(data.get("GioKhoiHanh")),
-              XMLUtils.stringToDate(data.get("GioDen")),
-              XMLUtils.stringToInt(data.get("SoGheTrong")),
-              data.get("MaMayBay"),
-              XMLUtils.stringToDouble(data.get("GiaCoBan")));
-
-          cb.setTrangThai(data.get("TrangThai"));
-
-          if (!tonTai(cb.getMaChuyen())) {
-            danhSach.add(cb);
-          }
-
-        } catch (Exception e) {
-          System.err.println("Loi tao chuyen bay: " + e.getMessage());
-        }
-      }
+    if (dataList.isEmpty()) {
       return true;
-
-    } catch (Exception e) {
-      System.err.println("Loi doc file: " + e.getMessage());
-      return false;
     }
+
+    for (Map<String, String> data : dataList) {
+      ChuyenBay cb = new ChuyenBay(
+          data.get("MaChuyen"),
+          data.get("DiemDi"),
+          data.get("DiemDen"),
+          XMLUtils.stringToDate(data.get("GioKhoiHanh")),
+          XMLUtils.stringToDate(data.get("GioDen")),
+          XMLUtils.stringToInt(data.get("SoGheTrong")),
+          data.get("MaMayBay"),
+          XMLUtils.stringToDouble(data.get("GiaCoBan")));
+      if (!tonTai(cb.getMaChuyen())) {
+        danhSach.add(cb);
+      }
+    }
+    return true;
   }
 
   @Override
 
   public boolean ghiFile(String tenFile) {
-    try {
-      List<Map<String, String>> dataList = new ArrayList<>();
+    List<Map<String, String>> dataList = new ArrayList<>();
 
-      for (ChuyenBay cb : danhSach) {
-        Map<String, String> data = new HashMap<>();
-        data.put("MaChuyen", cb.getMaChuyen());
-        data.put("DiemDi", cb.getDiemDi());
-        data.put("DiemDen", cb.getDiemDen());
-        data.put("GioKhoiHanh", XMLUtils.dateToString(cb.getGioKhoiHanh()));
-        data.put("GioDen", XMLUtils.dateToString(cb.getGioDen()));
-        // SoGhe is now computed from maMayBay suffix via getSoGheToiDa(), not persisted
-        data.put("SoGheTrong", String.valueOf(cb.getSoGheTrong()));
-        data.put("MaMayBay", cb.getMaMayBay());
-        data.put("GiaCoBan", String.valueOf((int) cb.getGiaCoBan()));
-        data.put("TrangThai", cb.getTrangThai());
+    for (ChuyenBay cb : danhSach) {
+      Map<String, String> data = new HashMap<>();
+      data.put("MaChuyen", cb.getMaChuyen());
+      data.put("DiemDi", cb.getDiemDi());
+      data.put("DiemDen", cb.getDiemDen());
+      data.put("GioKhoiHanh", XMLUtils.dateToString(cb.getGioKhoiHanh()));
+      data.put("GioDen", XMLUtils.dateToString(cb.getGioDen()));
+      // SoGhe is now computed from maMayBay suffix via getSoGheToiDa(), not persisted
+      data.put("SoGheTrong", String.valueOf(cb.getSoGheTrong()));
+      data.put("MaMayBay", cb.getMaMayBay());
+      data.put("GiaCoBan", String.valueOf((int) cb.getGiaCoBan()));
+      data.put("TrangThai", cb.getTrangThai());
 
-        dataList.add(data);
-      }
-
-      return XMLUtils.ghiFileXML(tenFile, dataList, "ChuyenBays");
-
-    } catch (Exception e) {
-      System.err.println("Loi ghi file XML: " + e.getMessage());
-      return false;
+      dataList.add(data);
     }
+
+    return XMLUtils.ghiFileXML(tenFile, dataList, "ChuyenBays");
   }
 
   // ========== PHƯƠNG THỨC NGHIỆP VỤ CHO GUI ==========

@@ -283,98 +283,78 @@ public class DanhSachKhachHang implements IQuanLy<KhachHang>, IFileHandler {
 
   @Override
   public boolean docFile(String tenFile) {
-    try {
-      List<Map<String, String>> dataList = XMLUtils.docFileXML(tenFile);
+    List<Map<String, String>> dataList = XMLUtils.docFileXML(tenFile);
 
-      if (dataList == null) {
-        return false;
-      }
-
-      if (dataList.isEmpty()) {
-        return true;
-      }
-
-      int count = 0;
-      for (Map<String, String> data : dataList) {
-        try {
-          // Kiểm tra dữ liệu bắt buộc
-          if (data.get("MaKH") == null || data.get("MaKH").isEmpty()) {
-            System.out.println("Bỏ qua dòng thiếu mã khách hàng");
-            continue;
-          }
-
-          // Tạo đối tượng KhachHang từ dữ liệu XML
-          KhachHang kh = new KhachHang(
-              data.get("MaKH"),
-              data.get("HoTen"),
-              data.get("SoDT"),
-              data.get("Email"),
-              data.get("CMND"),
-              XMLUtils.stringToDate(data.get("NgaySinh")),
-              data.get("GioiTinh"),
-              data.get("DiaChi"),
-              data.get("MatKhau"));
-
-          // Cập nhật các thuộc tính bổ sung
-          if (data.containsKey("HangKhachHang") && data.get("HangKhachHang") != null) {
-            kh.setHangKhachHang(data.get("HangKhachHang"));
-          }
-
-          if (data.containsKey("DiemTichLuy") && data.get("DiemTichLuy") != null) {
-            kh.setDiemTichLuy(XMLUtils.stringToInt(data.get("DiemTichLuy")));
-          }
-
-          if (data.containsKey("NgayDangKy") && data.get("NgayDangKy") != null) {
-            kh.setNgayDangKy(XMLUtils.stringToDate(data.get("NgayDangKy")));
-          }
-
-          // Thêm vào danh sách (kiểm tra trùng trước khi thêm)
-          if (!tonTai(kh.getMa())) {
-            danhSach.add(kh);
-            count++;
-          }
-
-        } catch (Exception e) {
-          System.err.println("Lỗi tạo KhachHang từ XML: " + e.getMessage());
-        }
-      }
-      return count > 0;
-
-    } catch (Exception e) {
-      System.err.println("Lỗi đọc file XML: " + e.getMessage());
+    if (dataList == null) {
       return false;
     }
+
+    if (dataList.isEmpty()) {
+      return true;
+    }
+
+    int count = 0;
+    for (Map<String, String> data : dataList) {
+      // Kiểm tra dữ liệu bắt buộc
+      if (data.get("MaKH") == null || data.get("MaKH").isEmpty()) {
+        System.out.println("Bỏ qua dòng thiếu mã khách hàng");
+        continue;
+      }
+
+      // Tạo đối tượng KhachHang từ dữ liệu XML sử dụng constructor overload
+      String hangKhachHang = (data.containsKey("HangKhachHang") && data.get("HangKhachHang") != null) 
+          ? data.get("HangKhachHang") 
+          : "BRONZE";
+      int diemTichLuy = (data.containsKey("DiemTichLuy") && data.get("DiemTichLuy") != null) 
+          ? XMLUtils.stringToInt(data.get("DiemTichLuy")) 
+          : 0;
+      
+      KhachHang kh = new KhachHang(
+          data.get("MaKH"),
+          data.get("HoTen"),
+          data.get("SoDT"),
+          data.get("Email"),
+          data.get("CMND"),
+          XMLUtils.stringToDate(data.get("NgaySinh")),
+          data.get("GioiTinh"),
+          data.get("DiaChi"),
+          data.get("MatKhau"),
+          hangKhachHang,
+          diemTichLuy,
+          XMLUtils.stringToDate(data.get("NgayDangKy")));
+
+      // Thêm vào danh sách (kiểm tra trùng trước khi thêm)
+      if (!tonTai(kh.getMa())) {
+        danhSach.add(kh);
+        count++;
+      }
+    }
+    return count > 0;
   }
 
   @Override
   public boolean ghiFile(String tenFile) {
-    try {
-      List<Map<String, String>> dataList = new ArrayList<>();
+    List<Map<String, String>> dataList = new ArrayList<>();
 
-      for (KhachHang kh : danhSach) {
-        Map<String, String> data = new HashMap<>();
-        data.put("MaKH", kh.getMa());
-        data.put("HoTen", kh.getHoTen());
-        data.put("SoDT", kh.getSoDT());
-        data.put("Email", kh.getEmail());
-        data.put("CMND", kh.getCmnd());
-        data.put("NgaySinh", XMLUtils.dateToString(kh.getNgaySinh()));
-        data.put("GioiTinh", kh.getGioiTinh());
-        data.put("DiaChi", kh.getDiaChi());
-        data.put("MatKhau", kh.getMatKhau());
-        data.put("HangKhachHang", kh.getHangKhachHang());
-        data.put("DiemTichLuy", String.valueOf(kh.getDiemTichLuy()));
-        data.put("NgayDangKy", XMLUtils.dateToString(kh.getNgayDangKy()));
+    for (KhachHang kh : danhSach) {
+      Map<String, String> data = new HashMap<>();
+      data.put("MaKH", kh.getMa());
+      data.put("HoTen", kh.getHoTen());
+      data.put("SoDT", kh.getSoDT());
+      data.put("Email", kh.getEmail());
+      data.put("CMND", kh.getCmnd());
+      data.put("NgaySinh", XMLUtils.dateToString(kh.getNgaySinh()));
+      data.put("GioiTinh", kh.getGioiTinh());
+      data.put("DiaChi", kh.getDiaChi());
+      data.put("MatKhau", kh.getMatKhau());
+      data.put("HangKhachHang", kh.getHangKhachHang());
+      data.put("DiemTichLuy", String.valueOf(kh.getDiemTichLuy()));
+      data.put("NgayDangKy", XMLUtils.dateToString(kh.getNgayDangKy()));
 
-        dataList.add(data);
-      }
-
-      return XMLUtils.ghiFileXML(tenFile, dataList, "KhachHangs");
-
-    } catch (Exception e) {
-      System.err.println("Lỗi ghi file XML: " + e.getMessage());
-      return false;
+      dataList.add(data);
     }
+
+    return XMLUtils.ghiFileXML(tenFile, dataList, "KhachHangs");
   }
 
   // ========== PHƯƠNG THỨC NGHIỆP VỤ ==========

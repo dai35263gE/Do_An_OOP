@@ -361,7 +361,7 @@ public class TabManager {
     textAreaThongKe = new JTextArea(20, 50);
     textAreaThongKe.setEditable(false);
     textAreaThongKe.setBackground(new Color(240, 248, 255));
-    textAreaThongKe.setFont(new Font("Consolas", Font.PLAIN, 12));
+    textAreaThongKe.setFont(new Font("Consolas", Font.PLAIN, 16));
     textAreaThongKe.setBorder(new EmptyBorder(10, 10, 10, 10));
 
     // Hiển thị thống kê tổng quan mặc định

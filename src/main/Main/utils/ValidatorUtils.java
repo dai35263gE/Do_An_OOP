@@ -7,33 +7,9 @@ import java.awt.Dimension;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.regex.Pattern;
 
 public class ValidatorUtils {
     
-    // Validate email
-    public static boolean isValidEmail(String email) {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        return Pattern.compile(emailRegex).matcher(email).matches();
-    }
-    
-    // Validate số điện thoại Việt Nam
-    public static boolean isValidPhoneNumber(String phone) {
-        String phoneRegex = "^(0|\\+84)(\\s|\\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\\d)(\\s|\\.)?(\\d{3})(\\s|\\.)?(\\d{3})$";
-        return Pattern.compile(phoneRegex).matcher(phone).matches();
-    }
-    
-    // Validate CMND/CCCD (9 hoặc 12 số)
-    public static boolean isValidCMND(String cmnd) {
-        String cmndRegex = "^\\d{9}$|^\\d{12}$";
-        return Pattern.compile(cmndRegex).matcher(cmnd).matches();
-    }
-    
-    // Validate số ghế (format: 1A, 12B, 25C)
-    public static boolean isValidSoGhe(String soGhe) {
-        String soGheRegex = "^[1-9]\\d?[A-Z]$";
-        return Pattern.compile(soGheRegex).matcher(soGhe).matches();
-    }
     
     // Validate ngày theo định dạng dd/MM/yyyy
     public static boolean isValidDate(String dateStr) {
@@ -328,8 +304,8 @@ public class ValidatorUtils {
      * Kiểm tra email và hiển thị lỗi nếu cần
      */
     public static boolean validateEmail(Component parent, String email) {
-        if (!isValidEmail(email)) {
-            showErrorDialog(parent, "Email không hợp lệ!");
+        if (email == null || email.trim().isEmpty()) {
+            showErrorDialog(parent, "Email không được để trống!");
             return false;
         }
         return true;
@@ -339,8 +315,8 @@ public class ValidatorUtils {
      * Kiểm tra số điện thoại và hiển thị lỗi nếu cần
      */
     public static boolean validatePhone(Component parent, String phone) {
-        if (!isValidPhoneNumber(phone)) {
-            showErrorDialog(parent, "Số điện thoại không hợp lệ!\nĐịnh dạng: 09xxxxxxxx hoặc 03xxxxxxxx");
+        if (phone == null || phone.trim().isEmpty()) {
+            showErrorDialog(parent, "Số điện thoại không được để trống!");
             return false;
         }
         return true;
@@ -350,8 +326,8 @@ public class ValidatorUtils {
      * Kiểm tra CMND và hiển thị lỗi nếu cần
      */
     public static boolean validateCMND(Component parent, String cmnd) {
-        if (!isValidCMND(cmnd)) {
-            showErrorDialog(parent, "CMND/CCCD không hợp lệ!\nPhải có 9 hoặc 12 số.");
+        if (cmnd == null || cmnd.trim().isEmpty()) {
+            showErrorDialog(parent, "CMND/CCCD không được để trống!");
             return false;
         }
         return true;
@@ -361,8 +337,8 @@ public class ValidatorUtils {
      * Kiểm tra số ghế và hiển thị lỗi nếu cần
      */
     public static boolean validateSoGhe(Component parent, String soGhe) {
-        if (!isValidSoGhe(soGhe)) {
-            showErrorDialog(parent, "Số ghế không hợp lệ!\nĐịnh dạng: 1A, 12B, 25C");
+        if (soGhe == null || soGhe.trim().isEmpty()) {
+            showErrorDialog(parent, "Số ghế không được để trống!");
             return false;
         }
         return true;

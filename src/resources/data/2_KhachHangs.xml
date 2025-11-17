@@ -2,7 +2,7 @@
 <KhachHangs>
     <KhachHang>
         <GioiTinh>Nam</GioiTinh>
-        <HangKhachHang>PLATINUM</HangKhachHang>
+        <HangKhachHang>BRONZE</HangKhachHang>
         <Email>nguyen.van.an@email.com</Email>
         <DiemTichLuy>2617</DiemTichLuy>
         <NgayDangKy>2021-01-10 00:00:00</NgayDangKy>
@@ -32,7 +32,7 @@
         <GioiTinh>Nam</GioiTinh>
         <HangKhachHang>BRONZE</HangKhachHang>
         <Email>le.van.cuong@email.com</Email>
-        <DiemTichLuy>8200</DiemTichLuy>
+        <DiemTichLuy>299</DiemTichLuy>
         <NgayDangKy>2023-01-20 00:00:00</NgayDangKy>
         <MaKH>KH003</MaKH>
         <NgaySinh>1992-12-10 00:00:00</NgaySinh>
@@ -58,7 +58,7 @@
     </KhachHang>
     <KhachHang>
         <GioiTinh>Nam</GioiTinh>
-        <HangKhachHang>BRONZE</HangKhachHang>
+        <HangKhachHang>SILVER</HangKhachHang>
         <Email>hoang.van.em@email.com</Email>
         <DiemTichLuy>3200</DiemTichLuy>
         <NgayDangKy>2023-03-10 00:00:00</NgayDangKy>
@@ -72,7 +72,7 @@
     </KhachHang>
     <KhachHang>
         <GioiTinh>Nữ</GioiTinh>
-        <HangKhachHang>BRONZE</HangKhachHang>
+        <HangKhachHang>SILVER</HangKhachHang>
         <Email>dang.thi.hue@email.com</Email>
         <DiemTichLuy>32500</DiemTichLuy>
         <NgayDangKy>2020-05-22 00:00:00</NgayDangKy>
@@ -86,7 +86,7 @@
     </KhachHang>
     <KhachHang>
         <GioiTinh>Nam</GioiTinh>
-        <HangKhachHang>BRONZE</HangKhachHang>
+        <HangKhachHang>SILVER</HangKhachHang>
         <Email>cao.van.hung@email.com</Email>
         <DiemTichLuy>18700</DiemTichLuy>
         <NgayDangKy>2021-09-12 00:00:00</NgayDangKy>
@@ -100,7 +100,7 @@
     </KhachHang>
     <KhachHang>
         <GioiTinh>Nữ</GioiTinh>
-        <HangKhachHang>BRONZE</HangKhachHang>
+        <HangKhachHang>SILVER</HangKhachHang>
         <Email>phan.thi.lan@email.com</Email>
         <DiemTichLuy>11300</DiemTichLuy>
         <NgayDangKy>2022-04-08 00:00:00</NgayDangKy>
@@ -114,7 +114,7 @@
     </KhachHang>
     <KhachHang>
         <GioiTinh>Nam</GioiTinh>
-        <HangKhachHang>BRONZE</HangKhachHang>
+        <HangKhachHang>GOLD</HangKhachHang>
         <Email>vu.van.kien@email.com</Email>
         <DiemTichLuy>6500</DiemTichLuy>
         <NgayDangKy>2023-07-03 00:00:00</NgayDangKy>
@@ -128,7 +128,7 @@
     </KhachHang>
     <KhachHang>
         <GioiTinh>Nữ</GioiTinh>
-        <HangKhachHang>BRONZE</HangKhachHang>
+        <HangKhachHang>GOLD</HangKhachHang>
         <Email>bui.thi.mai@email.com</Email>
         <DiemTichLuy>25800</DiemTichLuy>
         <NgayDangKy>2021-11-25 00:00:00</NgayDangKy>
@@ -142,7 +142,7 @@
     </KhachHang>
     <KhachHang>
         <GioiTinh>Nam</GioiTinh>
-        <HangKhachHang>BRONZE</HangKhachHang>
+        <HangKhachHang>GOLD</HangKhachHang>
         <Email>do.van.loc@email.com</Email>
         <DiemTichLuy>14900</DiemTichLuy>
         <NgayDangKy>2022-08-17 00:00:00</NgayDangKy>
@@ -156,7 +156,7 @@
     </KhachHang>
     <KhachHang>
         <GioiTinh>Nữ</GioiTinh>
-        <HangKhachHang>BRONZE</HangKhachHang>
+        <HangKhachHang>GOLD</HangKhachHang>
         <Email>bach.thi.giang@email.com</Email>
         <DiemTichLuy>9700</DiemTichLuy>
         <NgayDangKy>2022-12-05 00:00:00</NgayDangKy>
@@ -170,7 +170,7 @@
     </KhachHang>
     <KhachHang>
         <GioiTinh>Nam</GioiTinh>
-        <HangKhachHang>BRONZE</HangKhachHang>
+        <HangKhachHang>PLATINUM</HangKhachHang>
         <Email>tran.van.dung@email.com</Email>
         <DiemTichLuy>4100</DiemTichLuy>
         <NgayDangKy>2023-05-19 00:00:00</NgayDangKy>
@@ -184,7 +184,7 @@
     </KhachHang>
     <KhachHang>
         <GioiTinh>Nữ</GioiTinh>
-        <HangKhachHang>BRONZE</HangKhachHang>
+        <HangKhachHang>PLATINUM</HangKhachHang>
         <Email>vu.thi.uyen@email.com</Email>
         <DiemTichLuy>31200</DiemTichLuy>
         <NgayDangKy>2020-03-14 00:00:00</NgayDangKy>
@@ -198,7 +198,7 @@
     </KhachHang>
     <KhachHang>
         <GioiTinh>Nam</GioiTinh>
-        <HangKhachHang>BRONZE</HangKhachHang>
+        <HangKhachHang>PLATINUM</HangKhachHang>
         <Email>ngo.van.thanh@email.com</Email>
         <DiemTichLuy>17400</DiemTichLuy>
         <NgayDangKy>2021-07-30 00:00:00</NgayDangKy>
@@ -212,7 +212,7 @@
     </KhachHang>
     <KhachHang>
         <GioiTinh>Nữ</GioiTinh>
-        <HangKhachHang>BRONZE</HangKhachHang>
+        <HangKhachHang>PLATINUM</HangKhachHang>
         <Email>hoang.thi.linh@email.com</Email>
         <DiemTichLuy>12500</DiemTichLuy>
         <NgayDangKy>2022-02-11 00:00:00</NgayDangKy>
@@ -226,7 +226,7 @@
     </KhachHang>
     <KhachHang>
         <GioiTinh>Nam</GioiTinh>
-        <HangKhachHang>BRONZE</HangKhachHang>
+        <HangKhachHang>PLATINUM</HangKhachHang>
         <Email>phan.van.minh@email.com</Email>
         <DiemTichLuy>7300</DiemTichLuy>
         <NgayDangKy>2023-04-27 00:00:00</NgayDangKy>
@@ -240,7 +240,7 @@
     </KhachHang>
     <KhachHang>
         <GioiTinh>Nữ</GioiTinh>
-        <HangKhachHang>BRONZE</HangKhachHang>
+        <HangKhachHang>PLATINUM</HangKhachHang>
         <Email>duong.thi.thanh@email.com</Email>
         <DiemTichLuy>16800</DiemTichLuy>
         <NgayDangKy>2021-10-09 00:00:00</NgayDangKy>
@@ -254,7 +254,7 @@
     </KhachHang>
     <KhachHang>
         <GioiTinh>Nam</GioiTinh>
-        <HangKhachHang>BRONZE</HangKhachHang>
+        <HangKhachHang>PLATINUM</HangKhachHang>
         <Email>le.van.son@email.com</Email>
         <DiemTichLuy>10600</DiemTichLuy>
         <NgayDangKy>2022-06-28 00:00:00</NgayDangKy>
@@ -268,7 +268,7 @@
     </KhachHang>
     <KhachHang>
         <GioiTinh>Nữ</GioiTinh>
-        <HangKhachHang>BRONZE</HangKhachHang>
+        <HangKhachHang>PLATINUM</HangKhachHang>
         <Email>tran.thi.xuan@email.com</Email>
         <DiemTichLuy>5400</DiemTichLuy>
         <NgayDangKy>2023-08-15 00:00:00</NgayDangKy>

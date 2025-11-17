@@ -278,180 +278,144 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
   // ========== IMPLEMENT IFILEHANDLER ==========
   @Override
   public boolean docFile(String tenFile) {
-    try {
-      List<Map<String, String>> dataList = XMLUtils.docFileXML(tenFile);
+    List<Map<String, String>> dataList = XMLUtils.docFileXML(tenFile);
 
-      if (dataList == null) {
-        return false;
-      }
-
-      if (dataList.isEmpty()) {
-        return true;
-      }
-
-      int countSuccess = 0;
-      for (Map<String, String> data : dataList) {
-        try {
-          HoaDon hoaDon = taoHoaDonTuDataXML(data);
-          if (hoaDon == null) {
-            continue;
-          }
-
-          // Kiểm tra trùng mã hóa đơn
-          if (tonTai(hoaDon.getMaHoaDon())) {
-            continue;
-          }
-
-          // Thêm vào danh sách
-          danhSach.add(hoaDon);
-          countSuccess++;
-
-        } catch (Exception e) {
-          System.out.println("❌ Lỗi xử lý hóa đơn: " + data.get("MaHoaDon") + " - " + e.getMessage());
-        }
-      }
-      return countSuccess > 0;
-
-    } catch (Exception e) {
-      System.out.println("💥 LỖI NGHIÊM TRỌNG khi đọc file: " + e.getMessage());
+    if (dataList == null) {
       return false;
     }
+
+    if (dataList.isEmpty()) {
+      return true;
+    }
+
+    int countSuccess = 0;
+    for (Map<String, String> data : dataList) {
+      HoaDon hoaDon = taoHoaDonTuDataXML(data);
+      if (hoaDon == null) {
+        continue;
+      }
+
+      // Kiểm tra trùng mã hóa đơn
+      if (tonTai(hoaDon.getMaHoaDon())) {
+        continue;
+      }
+
+      // Thêm vào danh sách
+      danhSach.add(hoaDon);
+      countSuccess++;
+    }
+    return countSuccess > 0;
   }
 
   private HoaDon taoHoaDonTuDataXML(Map<String, String> data) {
-    try {
-      // Lấy thông tin cơ bản
-      String maHoaDon = data.get("MaHoaDon");
-      Date ngayLap = XMLUtils.stringToDate(data.get("NgayLap"));
-      // Amount fields in XML are ignored — values are computed dynamically from tickets and customer tier
-      String phuongThucTT = data.get("PhuongThucTT");
-      String trangThai = data.get("TrangThai");
+    // Lấy thông tin cơ bản
+    String maHoaDon = data.get("MaHoaDon");
+    Date ngayLap = XMLUtils.stringToDate(data.get("NgayLap"));
+    // Amount fields in XML are ignored — values are computed dynamically from tickets and customer tier
+    String phuongThucTT = data.get("PhuongThucTT");
+    String trangThai = data.get("TrangThai");
 
-      // Tạo khách hàng từ dữ liệu XML
-      KhachHang khachHang = taoKhachHangTuData(data);
-      if (khachHang == null) {
-        System.out.println("❌ Không thể tạo khách hàng cho hóa đơn: " + maHoaDon);
-        return null;
-      }
-      DanhSachVeMayBay dsv = new DanhSachVeMayBay();
-      dsv.docFile("src/resources/data/3_VeMayBays.xml");
-      List<VeMayBay> DSVe = taoDSVeTuData(data, dsv);
-
-        // Tạo hóa đơn với constructor mới (amounts computed dynamically)
-        HoaDon hoaDon = new HoaDon(maHoaDon, ngayLap, khachHang, phuongThucTT, trangThai, DSVe);
-
-      return hoaDon;
-
-    } catch (Exception e) {
-      System.out.println("❌ Lỗi tạo hóa đơn từ XML data: " + e.getMessage());
-      e.printStackTrace();
+    // Tạo khách hàng từ dữ liệu XML
+    KhachHang khachHang = taoKhachHangTuData(data);
+    if (khachHang == null) {
+      System.out.println("❌ Không thể tạo khách hàng cho hóa đơn: " + maHoaDon);
       return null;
     }
+    DanhSachVeMayBay dsv = new DanhSachVeMayBay();
+    dsv.docFile("src/resources/data/3_VeMayBays.xml");
+    List<VeMayBay> DSVe = taoDSVeTuData(data, dsv);
+
+    // Tạo hóa đơn với constructor mới (amounts computed dynamically)
+    HoaDon hoaDon = new HoaDon(maHoaDon, ngayLap, khachHang, phuongThucTT, trangThai, DSVe);
+
+    return hoaDon;
   }
 
   private KhachHang taoKhachHangTuData(Map<String, String> data) {
-    
-    try {
-      return new KhachHang(
-          data.get("MaKH"),
-          data.get("HoTen"),
-          data.get("SoDT"),
-          data.get("Email"),
-          data.get("CMND"),
-          XMLUtils.stringToDate(data.get("NgaySinh")),
-          data.get("GioiTinh"),
-          data.get("DiaChi"),
-          data.get("MatKhau"));
-    } catch (Exception e) {
-      System.out.println("❌ Lỗi tạo khách hàng từ XML: " + e.getMessage());
-      return null;
-    }
+    return new KhachHang(
+        data.get("MaKH"),
+        data.get("HoTen"),
+        data.get("SoDT"),
+        data.get("Email"),
+        data.get("CMND"),
+        XMLUtils.stringToDate(data.get("NgaySinh")),
+        data.get("GioiTinh"),
+        data.get("DiaChi"),
+        data.get("MatKhau"));
   }
 
   private List<VeMayBay> taoDSVeTuData(Map<String, String> data, DanhSachVeMayBay danhSachVeMayBay) {
-    try {
-      List<VeMayBay> danhSachVe = new ArrayList<>();
+    List<VeMayBay> danhSachVe = new ArrayList<>();
 
-      // Lấy danh sách mã vé từ XML
-      String danhSachMaVe = data.get("DanhSachMaVe");
-      if (danhSachMaVe == null || danhSachMaVe.trim().isEmpty()) {
-        System.out.println("⚠️ Không có danh sách vé cho hóa đơn: " + data.get("MaHoaDon"));
-        return danhSachVe;
-      }
+    // Lấy danh sách mã vé từ XML
+    String danhSachMaVe = data.get("DanhSachMaVe");
+    if (danhSachMaVe == null || danhSachMaVe.trim().isEmpty()) {
+      System.out.println("⚠️ Không có danh sách vé cho hóa đơn: " + data.get("MaHoaDon"));
+      return danhSachVe;
+    }
 
-      // Tách các mã vé bằng dấu phẩy hoặc khoảng trắng
-      String[] maVes = danhSachMaVe.split("[, ]+");
+    // Tách các mã vé bằng dấu phẩy hoặc khoảng trắng
+    String[] maVes = danhSachMaVe.split("[, ]+");
 
-      // Truy xuất vé từ danh sách vé có sẵn
-      for (String maVe : maVes) {
-        String maVeTrim = maVe.trim();
-        if (!maVeTrim.isEmpty()) {
-          // Tìm vé trong danh sách vé máy bay
-          VeMayBay ve = danhSachVeMayBay.timKiemTheoMa(maVeTrim);
-          if (ve != null) {
-            danhSachVe.add(ve);
-          } else {
-            System.out.println("Khong tim thay ve: " + maVeTrim + " trong danh sach ve");
-          }
+    // Truy xuất vé từ danh sách vé có sẵn
+    for (String maVe : maVes) {
+      String maVeTrim = maVe.trim();
+      if (!maVeTrim.isEmpty()) {
+        // Tìm vé trong danh sách vé máy bay
+        VeMayBay ve = danhSachVeMayBay.timKiemTheoMa(maVeTrim);
+        if (ve != null) {
+          danhSachVe.add(ve);
+        } else {
+          System.out.println("Khong tim thay ve: " + maVeTrim + " trong danh sach ve");
         }
       }
-      return danhSachVe;
-
-    } catch (Exception e) {
-      System.out.println("❌ Lỗi tạo danh sách vé từ XML: " + e.getMessage());
-      return new ArrayList<>();
     }
+    return danhSachVe;
   }
 
   @Override
   public boolean ghiFile(String tenFile) {
-    try {
-      List<Map<String, String>> dataList = new ArrayList<>();
+    List<Map<String, String>> dataList = new ArrayList<>();
 
-      for (HoaDon hd : danhSach) {
-        Map<String, String> data = new HashMap<>();
+    for (HoaDon hd : danhSach) {
+      Map<String, String> data = new HashMap<>();
 
-        // Thông tin cơ bản
-        data.put("MaHoaDon", hd.getMaHoaDon());
-        data.put("NgayLap", XMLUtils.dateToString(hd.getNgayLap()));
-        data.put("TongTien", String.valueOf(hd.getTongTien()));
-        data.put("Thue", String.valueOf(hd.getThue()));
-        data.put("KhuyenMai", String.valueOf(hd.getKhuyenMai()));
-        data.put("ThanhTien", String.valueOf(hd.getThanhTien()));
-        data.put("PhuongThucTT", hd.getPhuongThucTT());
-        data.put("TrangThai", hd.getTrangThai());
+      // Thông tin cơ bản
+      data.put("MaHoaDon", hd.getMaHoaDon());
+      data.put("NgayLap", XMLUtils.dateToString(hd.getNgayLap()));
+      data.put("TongTien", String.valueOf(hd.getTongTien()));
+      data.put("Thue", String.valueOf(hd.getThue()));
+      data.put("KhuyenMai", String.valueOf(hd.getKhuyenMai()));
+      data.put("ThanhTien", String.valueOf(hd.getThanhTien()));
+      data.put("PhuongThucTT", hd.getPhuongThucTT());
+      data.put("TrangThai", hd.getTrangThai());
 
-        // Thông tin khách hàng
-        KhachHang kh = hd.getKhachHang();
-        data.put("MaKH", kh.getMa());
-        data.put("HoTen", kh.getHoTen());
-        data.put("SoDT", kh.getSoDT());
-        data.put("Email", kh.getEmail());
-        data.put("CMND", kh.getCmnd());
-        data.put("NgaySinh", XMLUtils.dateToString(kh.getNgaySinh()));
-        data.put("GioiTinh", kh.getGioiTinh());
-        data.put("DiaChi", kh.getDiaChi());
-        data.put("MatKhau", kh.getMatKhau());
+      // Thông tin khách hàng
+      KhachHang kh = hd.getKhachHang();
+      data.put("MaKH", kh.getMa());
+      data.put("HoTen", kh.getHoTen());
+      data.put("SoDT", kh.getSoDT());
+      data.put("Email", kh.getEmail());
+      data.put("CMND", kh.getCmnd());
+      data.put("NgaySinh", XMLUtils.dateToString(kh.getNgaySinh()));
+      data.put("GioiTinh", kh.getGioiTinh());
+      data.put("DiaChi", kh.getDiaChi());
+      data.put("MatKhau", kh.getMatKhau());
 
-        // Thông tin vé (chỉ lưu mã vé)
-        List<String> maVes = hd.getDanhSachVe().stream()
-            .map(VeMayBay::getMaVe)
-            .collect(Collectors.toList());
-        data.put("DanhSachMaVe", String.join(",", maVes));
+      // Thông tin vé (chỉ lưu mã vé)
+      List<String> maVes = hd.getDanhSachVe().stream()
+          .map(VeMayBay::getMaVe)
+          .collect(Collectors.toList());
+      data.put("DanhSachMaVe", String.join(",", maVes));
 
-        dataList.add(data);
-      }
-
-      boolean result = XMLUtils.ghiFileXML(tenFile, dataList, "HoaDons");
-      if (result) {
-        System.out.println("✅ Ghi file XML thành công: " + danhSach.size() + " hóa đơn");
-      }
-      return result;
-
-    } catch (Exception e) {
-      System.out.println("❌ Lỗi ghi file XML: " + e.getMessage());
-      return false;
+      dataList.add(data);
     }
+
+    boolean result = XMLUtils.ghiFileXML(tenFile, dataList, "HoaDons");
+    if (result) {
+      System.out.println("✅ Ghi file XML thành công: " + danhSach.size() + " hóa đơn");
+    }
+    return result;
   }
 
   // ========== IMPLEMENT ITHONGKE ==========
@@ -636,22 +600,13 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
       throw new IllegalArgumentException("Không tìm thấy hóa đơn với mã: " + maHoaDon);
     }
 
-    try {
-      hd.thanhToan();
-      // Ghi nhận vào lịch sử khách hàng và cập nhật hạng theo tháng
-      try {
-        if (hd.getKhachHang() != null) {
-          hd.getKhachHang().themHoaDon(hd);
-          hd.getKhachHang().capNhatHangTheoThang();
-        }
-      } catch (Exception ex) {
-        // Đừng làm sập quá trình thanh toán nếu cập nhật khách hàng gặp lỗi; log để debug
-        System.err.println("Cảnh báo: không thể cập nhật lịch sử khách hàng sau khi thanh toán: " + ex.getMessage());
-      }
-      return true;
-    } catch (IllegalStateException e) {
-      throw new IllegalStateException("Không thể thanh toán hóa đơn: " + e.getMessage());
+    hd.thanhToan();
+    // Ghi nhận vào lịch sử khách hàng và cập nhật hạng theo tháng
+    if (hd.getKhachHang() != null) {
+      hd.getKhachHang().themHoaDon(hd);
+      hd.getKhachHang().capNhatHangTheoThang();
     }
+    return true;
   }
 
   public boolean huyHoaDon(String maHoaDon) {
@@ -660,12 +615,8 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
       throw new IllegalArgumentException("Không tìm thấy hóa đơn với mã: " + maHoaDon);
     }
 
-    try {
-      hd.huyHoaDon();
-      return true;
-    } catch (IllegalStateException e) {
-      throw new IllegalStateException("Không thể hủy hóa đơn: " + e.getMessage());
-    }
+    hd.huyHoaDon();
+    return true;
   }
 
   public boolean kiemTraCoTheHuy(String maHoaDon) {
@@ -679,11 +630,7 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
       throw new IllegalArgumentException("Không tìm thấy hóa đơn với mã: " + maHoaDon);
     }
 
-    try {
-      hd.apDungKhuyenMai(khuyenMai);
-    } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException("Không thể áp dụng khuyến mãi: " + e.getMessage());
-    }
+    hd.apDungKhuyenMai(khuyenMai);
   }
 
   public boolean xoaVeKhoiHoaDon(String maHoaDon, VeMayBay ve) {
@@ -692,12 +639,8 @@ public class DanhSachHoaDon implements IQuanLy<HoaDon>, IFileHandler, IThongKe {
       throw new IllegalArgumentException("Không tìm thấy hóa đơn với mã: " + maHoaDon);
     }
 
-    try {
-      hd.xoaVe(ve);
-      return true;
-    } catch (IllegalStateException e) {
-      throw new IllegalStateException("Không thể xóa vé khỏi hóa đơn: " + e.getMessage());
-    }
+    hd.xoaVe(ve);
+    return true;
   }
 
   // ========== THỐNG KÊ NÂNG CAO CHO GUI ==========

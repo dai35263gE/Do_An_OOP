@@ -374,7 +374,6 @@ public class KhachHang extends NguoiDung {
             throw new IllegalArgumentException("Điểm tích lũy không được âm");
         }
         this.diemTichLuy = diemTichLuy;
-        capNhatHangKhachHang();
     }
     
     public Date getNgayDangKy() { return ngayDangKy; }

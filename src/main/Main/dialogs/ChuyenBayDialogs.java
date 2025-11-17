@@ -90,10 +90,27 @@ public class ChuyenBayDialogs {
       // Đặt giờ mặc định
       setDefaultTimes(spinnerGioKhoiHanh, spinnerGioDen);
 
-      JSpinner spinnerSoGhe = GUIUtils.createNumberSpinner(150, 50, 500, 10);
+      // Mapping máy bay → số ghế
+      Map<String, Integer> mayBayToSoGhe = new HashMap<>();
+      mayBayToSoGhe.put("VN-A001", 120);
+      mayBayToSoGhe.put("VN-F712", 120);
+      mayBayToSoGhe.put("VN-A032", 130);
+      mayBayToSoGhe.put("VN-F711", 130);
+      mayBayToSoGhe.put("VN-A563", 140);
+      mayBayToSoGhe.put("VN-F023", 140);
+      mayBayToSoGhe.put("VN-A004", 150);
+      mayBayToSoGhe.put("VN-F714", 150);
+      
+      // JLabel để hiển thị số ghế (read-only)
+      JLabel lblSoGhe = new JLabel("120");
+      lblSoGhe.setFont(new Font("Arial", Font.PLAIN, 14));
+      
+      // Spinner ẩn để lưu trữ giá trị
+      JSpinner spinnerSoGhe = GUIUtils.createNumberSpinner(116, 50, 500, 10);
+      spinnerSoGhe.setVisible(false);
 
-      // ComboBox cho mã máy bay
-      String[] mayBay = { "VN-A321", "VN-B787", "VN-A350", "VN-A320", "VN-B777" };
+      // ComboBox cho mã máy bay - lấy từ danh sách chuyến bay
+      String[] mayBay = { "VN-A001", "VN-F712", "VN-A032", "VN-F711", "VN-A563", "VN-F023", "VN-A004", "VN-F714" };
       JComboBox<String> cbMaMayBay = createStyledComboBox(mayBay);
 
       JSpinner spinnerGiaCoBan = GUIUtils.createNumberSpinner(1500000.0, 500000.0, 50000000.0, 100000.0);
@@ -110,7 +127,7 @@ public class ChuyenBayDialogs {
       addFormRowWithIcon(formPanel, gbc, "Điểm đến:*", cbDiemDen);
       addFormRowWithIcon(formPanel, gbc, "Giờ khởi hành:*", spinnerGioKhoiHanh);
       addFormRowWithIcon(formPanel, gbc, "Giờ đến:*", spinnerGioDen);
-      addFormRowWithIcon(formPanel, gbc, "Số ghế:*", spinnerSoGhe);
+      addFormRowWithIcon(formPanel, gbc, "Số ghế:*", lblSoGhe);
       addFormRowWithIcon(formPanel, gbc, "Mã máy bay:*", cbMaMayBay);
       addFormRowWithIcon(formPanel, gbc, "Giá cơ bản:*", spinnerGiaCoBan);
 
@@ -137,12 +154,12 @@ public class ChuyenBayDialogs {
       // Cập nhật thông tin khi thay đổi dữ liệu
       Runnable updateChuyenBayInfo = () -> {
         updateChuyenBayInfo(txtMaChuyen, cbDiemDi, cbDiemDen, spinnerGioKhoiHanh,
-            spinnerGioDen, spinnerSoGhe, cbMaMayBay, spinnerGiaCoBan, txtThongTin);
+            spinnerGioDen, lblSoGhe, cbMaMayBay, spinnerGiaCoBan, txtThongTin);
       };
 
       // Thêm listeners
       addChuyenBayListeners(cbDiemDi, cbDiemDen, spinnerGioKhoiHanh, spinnerGioDen, spinnerSoGhe, cbMaMayBay,
-          spinnerGiaCoBan, updateChuyenBayInfo);
+          spinnerGiaCoBan, lblSoGhe, mayBayToSoGhe, updateChuyenBayInfo);
 
       // Gọi lần đầu
       updateChuyenBayInfo.run();
@@ -237,7 +254,7 @@ public class ChuyenBayDialogs {
 
   private void updateChuyenBayInfo(JTextField txtMaChuyen, JComboBox<String> cbDiemDi,
       JComboBox<String> cbDiemDen, JSpinner spinnerGioKhoiHanh,
-      JSpinner spinnerGioDen, JSpinner spinnerSoGhe,
+      JSpinner spinnerGioDen, JLabel lblSoGhe,
       JComboBox<String> cbMaMayBay, JSpinner spinnerGiaCoBan,
       JTextArea txtThongTin) {
     try {
@@ -246,7 +263,7 @@ public class ChuyenBayDialogs {
       String diemDen = (String) cbDiemDen.getSelectedItem();
       Date gioKhoiHanh = (Date) spinnerGioKhoiHanh.getValue();
       Date gioDen = (Date) spinnerGioDen.getValue();
-      int soGhe = ((Double) spinnerSoGhe.getValue()).intValue();
+      int soGhe = Integer.parseInt(lblSoGhe.getText());
       String maMayBay = (String) cbMaMayBay.getSelectedItem();
       double giaCoBan = (Double) spinnerGiaCoBan.getValue();
 
@@ -313,10 +330,19 @@ public class ChuyenBayDialogs {
   private void addChuyenBayListeners(JComboBox<String> cbDiemDi, JComboBox<String> cbDiemDen,
       JSpinner spinnerGioKhoiHanh, JSpinner spinnerGioDen,
       JSpinner spinnerSoGhe, JComboBox<String> cbMaMayBay,
-      JSpinner spinnerGiaCoBan, Runnable updateAction) {
+      JSpinner spinnerGiaCoBan, JLabel lblSoGhe, Map<String, Integer> mayBayToSoGhe, Runnable updateAction) {
     cbDiemDi.addActionListener(e -> updateAction.run());
     cbDiemDen.addActionListener(e -> updateAction.run());
-    cbMaMayBay.addActionListener(e -> updateAction.run());
+    cbMaMayBay.addActionListener(e -> {
+      // Auto-update số ghế dựa trên mã máy bay
+      String maMayBay = (String) cbMaMayBay.getSelectedItem();
+      if (mayBayToSoGhe.containsKey(maMayBay)) {
+        int soGhe = mayBayToSoGhe.get(maMayBay);
+        lblSoGhe.setText(String.valueOf(soGhe));
+        spinnerSoGhe.setValue((double) soGhe);
+      }
+      updateAction.run();
+    });
     spinnerGioKhoiHanh.addChangeListener(e -> updateAction.run());
     spinnerGioDen.addChangeListener(e -> updateAction.run());
     spinnerSoGhe.addChangeListener(e -> updateAction.run());
@@ -620,7 +646,7 @@ public class ChuyenBayDialogs {
     JSpinner spinnerSoGheTrong = GUIUtils.createNumberSpinner(cbCanSua.getSoGheTrong(), 0, cbCanSua.getSoGheToiDa(), 1);
 
     // Máy bay
-    String[] mayBay = { "VN-A321", "VN-B787", "VN-A350", "VN-A320", "VN-B777" };
+    String[] mayBay = { "VN-A001", "VN-F712", "VN-A032", "VN-F711", "VN-A563", "VN-F023", "VN-A004", "VN-F714" };
     JComboBox<String> cbMaMayBay = createStyledComboBox(mayBay);
     setComboBoxToValue(cbMaMayBay, cbCanSua.getMaMayBay());
 
@@ -1058,7 +1084,7 @@ private JPanel createTimKiemNangCaoPanel() {
     gbc.gridy = 0;
 
     // Mã máy bay
-    String[] mayBay = { "Tất cả", "VN-A321", "VN-B787", "VN-A350", "VN-A320", "VN-B777" };
+    String[] mayBay = { "Tất cả", "VN-A001", "VN-F712", "VN-A032", "VN-F711", "VN-A563", "VN-F023", "VN-A004", "VN-F714" };
     JComboBox<String> cbMaMayBay = createStyledComboBox(mayBay);
 
     // Khoảng giá

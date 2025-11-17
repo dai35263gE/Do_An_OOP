@@ -368,7 +368,7 @@ public class UsersGUI extends JFrame {
     txtCmnd = createStyledTextField();
     txtNgaySinh = createStyledTextField();
 
-    String[] gioiTinhOptions = { "Nam", "Nữ", "Khác" };
+    String[] gioiTinhOptions = { "Nam", "Nữ" };
     cbGioiTinh = createStyledComboBox(gioiTinhOptions);
 
     btnCapNhatThongTin = createStyledButton("Cập Nhật Thông Tin", new Color(70, 130, 180));
@@ -1039,7 +1039,12 @@ public class UsersGUI extends JFrame {
           cbDichVu2.addItem("Rượu vang cao cấp");
           cbDichVu2.addItem("Champagne");
           cbDichVu2.addItem("Cocktail đặc biệt");
-          cbHanhLy.addItem("20kg miễn phí");
+          // Hành lý với gói: 25kg, 30kg, 35kg, 40kg (miễn phí 20kg)
+          cbHanhLy.addItem("20kg (miễn phí)");
+          cbHanhLy.addItem("25kg");
+          cbHanhLy.addItem("30kg");
+          cbHanhLy.addItem("35kg");
+          cbHanhLy.addItem("40kg");
           break;
 
         case "PHỔ THÔNG":
@@ -1051,10 +1056,11 @@ public class UsersGUI extends JFrame {
           cbDichVu1.addItem("Giữa");
           cbDichVu2.addItem("Không ăn uống");
           cbDichVu2.addItem("Set ăn phổ thông");
-          cbHanhLy.addItem("7kg xách tay");
-          cbHanhLy.addItem("15kg ký gửi");
-          cbHanhLy.addItem("20kg ký gửi");
-          cbHanhLy.addItem("25kg ký gửi");
+          // Hành lý với gói: 15kg, 20kg, 25kg (miễn phí 10kg)
+          cbHanhLy.addItem("10kg (miễn phí)");
+          cbHanhLy.addItem("15kg");
+          cbHanhLy.addItem("20kg");
+          cbHanhLy.addItem("25kg");
           break;
 
         case "TIẾT KIỆM":
@@ -1090,30 +1096,50 @@ public class UsersGUI extends JFrame {
             phuThu += 100000;
           if ("Suite".equals(loaiGheTG))
             phuThu += 150000;
-          // Thêm phí hành lý
+          // Tính phí hành lý cho vé thương gia dựa trên gói được chọn
           String hanhLyTG = (String) cbHanhLy.getSelectedItem();
-          if ("30kg (thêm 200,000 VND)".equals(hanhLyTG))
-            phiHanhLy = 200000;
-          if ("40kg (thêm 400,000 VND)".equals(hanhLyTG))
-            phiHanhLy = 400000;
+          double soKgHanhLy = 20; // Mặc định 20kg miễn phí
+          if ("25kg".equals(hanhLyTG))
+            soKgHanhLy = 25;
+          else if ("30kg".equals(hanhLyTG))
+            soKgHanhLy = 30;
+          else if ("35kg".equals(hanhLyTG))
+            soKgHanhLy = 35;
+          else if ("40kg".equals(hanhLyTG))
+            soKgHanhLy = 40;
+          
+          // Phí hành lý = (trọng lượng - 20) * 15,000 VND
+          if (soKgHanhLy > VeThuongGia.SO_KG_MIEN_PHI) {
+            phiHanhLy = (soKgHanhLy - VeThuongGia.SO_KG_MIEN_PHI) * VeThuongGia.PHI_HANH_LY_THEM;
+          } else {
+            phiHanhLy = 0;
+          }
           break;
 
         case "PHỔ THÔNG":
           heSoGia = VePhoThong.hsg;
-          // Thêm phí hành lý
+          // Tính phí hành lý cho vé phổ thông dựa trên gói được chọn
           String hanhLyPT = (String) cbHanhLy.getSelectedItem();
-          if ("15kg ký gửi".equals(hanhLyPT))
-            phiHanhLy = 200000;
-          if ("20kg ký gửi".equals(hanhLyPT))
-            phiHanhLy = 300000;
-          if ("25kg ký gửi".equals(hanhLyPT))
-            phiHanhLy = 400000;
+          double soKgHanhLyPT = 10; // Mặc định 10kg miễn phí
+          if ("15kg".equals(hanhLyPT))
+            soKgHanhLyPT = 15;
+          else if ("20kg".equals(hanhLyPT))
+            soKgHanhLyPT = 20;
+          else if ("25kg".equals(hanhLyPT))
+            soKgHanhLyPT = 25;
+          
+          // Phí hành lý = (trọng lượng - 10) * VeMayBay.PHI_HANH_LY
+          if (soKgHanhLyPT > VePhoThong.SO_KG_MIEN_PHI) {
+            phiHanhLy = (soKgHanhLyPT - VePhoThong.SO_KG_MIEN_PHI) * VeMayBay.PHI_HANH_LY;
+          } else {
+            phiHanhLy = 0;
+          }
           // Thêm phí ăn uống
           String anUongPT = (String) cbDichVu2.getSelectedItem();
-          if ("Có".equals(anUongPT))
+          if ("Set ăn phổ thông".equals(anUongPT))
             phuThu = 150000;
-          if ("Không".equals(anUongPT))
-            phuThu = 250000;
+          else
+            phuThu = 0;
           break;
 
         case "TIẾT KIỆM":
@@ -1187,20 +1213,44 @@ public class UsersGUI extends JFrame {
           String dichVuGiaiTri = (String) cbDichVu1.getSelectedItem();
           String dichVuAnUong = (String) cbDichVu2.getSelectedItem();
           double phiDichVuTG = Double.parseDouble(lblPhiDichVu.getText().replaceAll("[^0-9]", ""));
+          
+          // Lấy trọng lượng hành lý từ lựa chọn
+          String hanhLyTG = (String) cbHanhLy.getSelectedItem();
+          double soKgHanhLy = 20;
+          if ("25kg".equals(hanhLyTG))
+            soKgHanhLy = 25;
+          else if ("30kg".equals(hanhLyTG))
+            soKgHanhLy = 30;
+          else if ("35kg".equals(hanhLyTG))
+            soKgHanhLy = 35;
+          else if ("40kg".equals(hanhLyTG))
+            soKgHanhLy = 40;
+          
           veResult[0] = new VeThuongGia(
               khachHangDangNhap.getMa(), maVe, chuyenBay.getGioKhoiHanh(), tongGia, // Sửa: Dùng ngày bay của CB
               chuyenBay.getMaChuyen(), soGhe, dichVuGiaiTri,
-              phiDichVuTG, true, 20, dichVuAnUong);
+              phiDichVuTG, true, soKgHanhLy, dichVuAnUong);
           break;
 
         case "PHỔ THÔNG":
           String maVe1 = "VP" + String.format("%03d", quanLy.getDsVe().demSoLuongTheoLoai("VePhoThong")+1);
           String viTriGhe = (String) cbDichVu1.getSelectedItem();
           boolean coAnUong = !"Không ăn uống".equals(cbDichVu2.getSelectedItem());
+          
+          // Lấy trọng lượng hành lý từ lựa chọn
+          String hanhLyPT2 = (String) cbHanhLy.getSelectedItem();
+          int soKgHanhLyPT2 = 10;
+          if ("15kg".equals(hanhLyPT2))
+            soKgHanhLyPT2 = 15;
+          else if ("20kg".equals(hanhLyPT2))
+            soKgHanhLyPT2 = 20;
+          else if ("25kg".equals(hanhLyPT2))
+            soKgHanhLyPT2 = 25;
+          
           veResult[0] = new VePhoThong(
               khachHangDangNhap.getMa(), maVe1, chuyenBay.getGioKhoiHanh(), tongGia, // Sửa: Dùng ngày bay của CB
               chuyenBay.getMaChuyen(), soGhe, coAnUong,
-              7, viTriGhe, true);
+              soKgHanhLyPT2, viTriGhe, true);
           break;
 
         case "TIẾT KIỆM":
@@ -1923,18 +1973,6 @@ public class UsersGUI extends JFrame {
           ValidatorUtils.showErrorDialog(dialog, "Mật khẩu nhập lại không khớp!");
           return;
         }
-        if (!ValidatorUtils.isValidCMND(cmnd)) {
-          ValidatorUtils.showErrorDialog(dialog, "CMND/CCCD không hợp lệ (phải là 9 hoặc 12 số).");
-          return;
-        }
-        if (!ValidatorUtils.isValidPhoneNumber(soDT)) {
-          ValidatorUtils.showErrorDialog(dialog, "Số điện thoại không hợp lệ.");
-          return;
-        }
-        if (!ValidatorUtils.isValidEmail(email)) {
-          ValidatorUtils.showErrorDialog(dialog, "Email không hợp lệ.");
-          return;
-        }
 
         // Kiểm tra trùng lặp
         DanhSachKhachHang dsKH = quanLy.getDsKhachHang();
@@ -2008,7 +2046,7 @@ public class UsersGUI extends JFrame {
     int soHang = (int) Math.ceil((double) tongSoGhe / SO_COT);
 
     // Add legend showing ticket class row ranges (dynamic based on capacity)
-    int[] allocation = ChuyenBay.calculateRowAllocation(soHang);
+    int[] allocation = ChuyenBay.tinhViTriLoaiGhe(soHang);
     int businessEnd = allocation[0];
     int economyEnd = allocation[1];
     String legendText = String.format("Hạng vé - Thương gia (1-%d), Phổ thông (%d-%d), Tiết kiệm (%d-%d)", 
@@ -2032,7 +2070,7 @@ public class UsersGUI extends JFrame {
         }
 
         String tenGhe = i + String.valueOf(c);  // Format: 1A, 12B, 25F (row + column)
-        String seatClassOfThisRow = ChuyenBay.getSeatClassByRow(i, soHang);
+        String seatClassOfThisRow = ChuyenBay.getViTriLoaiGhe(i, soHang);
         
         JButton btnGhe = new JButton(tenGhe);
         btnGhe.setFont(new Font("Arial", Font.BOLD, 12));
